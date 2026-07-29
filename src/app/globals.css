@@ -124,4 +124,40 @@
     border: 2px solid transparent;
     background-clip: padding-box;
   }
+
+  /* Responsive Canvas Styles (Storefront & Builder) */
+  .responsive-column {
+    width: var(--col-desktop-width, 100%) !important;
+  }
+  
+  @media (max-width: 768px) {
+    .responsive-column {
+      width: 100% !important;
+    }
+    .responsive-section {
+      padding-left: 1rem !important;
+      padding-right: 1rem !important;
+    }
+  }
+
+  .is-mobile-preview .responsive-column {
+    width: 100% !important;
+  }
+  .is-mobile-preview .responsive-section {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  .responsive-text {
+    line-height: 1.2;
+  }
+  @media (max-width: 768px) {
+    .responsive-text {
+      font-size: var(--font-mobile) !important;
+      line-height: 1.1 !important;
+    }
+  }
+  .is-mobile-preview .responsive-text {
+    font-size: var(--font-mobile) !important;
+    line-height: 1.1 !important;
+  }
 }

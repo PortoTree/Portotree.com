@@ -42,7 +42,7 @@ export function EditorPanel(props: EditorPanelProps) {
     allCustomPages, bgBorderRadiusLink, bgBorderWidthLink, borderRadiusLink, borderWidthLink,
     btnBorderRadiusLink, btnPaddingLink, btnStyleMode, categories, client, closeMediaModal,
     contextMenu, copiedElementData, copiedSection, customPage, dragIntentRef, dragReleaseTimeoutRef,
-    draggedWidgetType, editingSection, editorCollapse, expandedSections, findChildrenList, future,
+    draggedWidgetType, editingSection: stateEditingSection, editorCollapse, expandedSections, findChildrenList, future,
     handleAddColumnChild, handleAddElement, handleAddSection, handleCanvasAddElementClick,
     handleContainerClickCapture, handleCopyElementCtx, handleCopySection, handleCustomWidgetClick,
     handleDeleteColumnChild, handleDeleteElement, handleDeleteElementCtx, handleDeleteImage,
@@ -71,6 +71,11 @@ export function EditorPanel(props: EditorPanelProps) {
     theme, updateLocalSection
   } = state;
 
+  const editingSection = stateEditingSection && previewMode === 'mobile' ? { 
+    ...stateEditingSection, 
+    config: { ...stateEditingSection.config, ...(stateEditingSection.config.mobileConfig || {}) } 
+  } : stateEditingSection;
+
   if (!editingSection) return null;
 
   return (
@@ -86,7 +91,11 @@ export function EditorPanel(props: EditorPanelProps) {
                     }
                     return null;
                   };
-                  const activeElement = activeElementId ? findRecursively(editingSection.elements || [], activeElementId) : null;
+                  const activeElementRaw = activeElementId ? findRecursively(editingSection.elements || [], activeElementId) : null;
+                  const activeElement = activeElementRaw && previewMode === 'mobile' ? { 
+                    ...activeElementRaw, 
+                    config: { ...activeElementRaw.config, ...(activeElementRaw.config.mobileConfig || {}) } 
+                  } : activeElementRaw;
 
                   return (
                     <motion.div
@@ -121,7 +130,11 @@ export function EditorPanel(props: EditorPanelProps) {
                                   }
                                   return null;
                                 };
-                                const activeElement = activeElementId ? findRecursively(editingSection.elements || [], activeElementId) : null;
+                                const activeElementRaw = activeElementId ? findRecursively(editingSection.elements || [], activeElementId) : null;
+                  const activeElement = activeElementRaw && previewMode === 'mobile' ? { 
+                    ...activeElementRaw, 
+                    config: { ...activeElementRaw.config, ...(activeElementRaw.config.mobileConfig || {}) } 
+                  } : activeElementRaw;
                                 if (activeElementId && activeElement) {
                                   console.log('[Editor] Menghapus element via header:', activeElement.id);
                                   handleDeleteElement(editingSection.id, activeElement.id);
@@ -5680,7 +5693,7 @@ className="w-4 h-4 object-contain"
                                                 <Monitor className="w-3 h-3 text-zinc-500" />
                                               </div>
                                               <select
-                                                value={String(activeElement.config.lineHeight || '1.6px').replace(/[0-9.]/g, '') || 'px'}
+                                                value={String(activeElement.config.lineHeight || '1.6').replace(/[0-9.]/g, '') || ''}
                                                 onChange={(e) => {
                                                   const num = parseFloat(String(activeElement.config.lineHeight || '1.6')) || 1.6;
                                                   handleUpdateElement(editingSection.id, activeElement.id, { lineHeight: `${num}${e.target.value}` });
@@ -5700,7 +5713,7 @@ className="w-4 h-4 object-contain"
                                                 step="0.1"
                                                 value={parseFloat(String(activeElement.config.lineHeight || '1.6')) || 1.6}
                                                 onChange={(e) => {
-                                                  const unit = String(activeElement.config.lineHeight || '1.6px').replace(/[0-9.]/g, '') || 'px';
+                                                  const unit = String(activeElement.config.lineHeight || '1.6').replace(/[0-9.]/g, '') || '';
                                                   handleUpdateElement(editingSection.id, activeElement.id, { lineHeight: `${e.target.value}${unit}` });
                                                 }}
                                                 className="flex-1 accent-white h-1 bg-zinc-800 rounded-lg cursor-pointer appearance-none"
@@ -5710,7 +5723,7 @@ className="w-4 h-4 object-contain"
                                                 step="0.1"
                                                 value={parseFloat(String(activeElement.config.lineHeight || '1.6')) || 1.6}
                                                 onChange={(e) => {
-                                                  const unit = String(activeElement.config.lineHeight || '1.6px').replace(/[0-9.]/g, '') || 'px';
+                                                  const unit = String(activeElement.config.lineHeight || '1.6').replace(/[0-9.]/g, '') || '';
                                                   handleUpdateElement(editingSection.id, activeElement.id, { lineHeight: `${e.target.value}${unit}` });
                                                 }}
                                                 className="w-12 h-6 px-1 text-center text-xs bg-zinc-900 border border-zinc-800 text-zinc-100 rounded-[4px] outline-none font-bold"
@@ -6227,7 +6240,7 @@ className="w-4 h-4 object-contain"
                                                     textTransform: 'none',
                                                     fontStyle: 'normal',
                                                     textDecoration: 'none',
-                                                    lineHeight: '1.2px',
+                                                    lineHeight: '1.2',
                                                     letterSpacing: '0px',
                                                     wordSpacing: '0px'
                                                   });
@@ -6377,7 +6390,7 @@ className="w-4 h-4 object-contain"
                                                 <Monitor className="w-3 h-3 text-zinc-500" />
                                               </div>
                                               <select
-                                                value={String(activeElement.config.lineHeight || '1.2px').replace(/[0-9.]/g, '') || 'px'}
+                                                value={String(activeElement.config.lineHeight || '1.2').replace(/[0-9.]/g, '') || ''}
                                                 onChange={(e) => {
                                                   const num = parseFloat(String(activeElement.config.lineHeight || '1.2')) || 1.2;
                                                   handleUpdateElement(editingSection.id, activeElement.id, { lineHeight: `${num}${e.target.value}` });
@@ -6397,7 +6410,7 @@ className="w-4 h-4 object-contain"
                                                 step="0.1"
                                                 value={parseFloat(String(activeElement.config.lineHeight || '1.2')) || 1.2}
                                                 onChange={(e) => {
-                                                  const unit = String(activeElement.config.lineHeight || '1.2px').replace(/[0-9.]/g, '') || 'px';
+                                                  const unit = String(activeElement.config.lineHeight || '1.2').replace(/[0-9.]/g, '') || '';
                                                   handleUpdateElement(editingSection.id, activeElement.id, { lineHeight: `${e.target.value}${unit}` });
                                                 }}
                                                 className="flex-1 accent-white h-1 bg-zinc-800 rounded-lg cursor-pointer appearance-none"
@@ -6407,7 +6420,7 @@ className="w-4 h-4 object-contain"
                                                 step="0.1"
                                                 value={parseFloat(String(activeElement.config.lineHeight || '1.2')) || 1.2}
                                                 onChange={(e) => {
-                                                  const unit = String(activeElement.config.lineHeight || '1.2px').replace(/[0-9.]/g, '') || 'px';
+                                                  const unit = String(activeElement.config.lineHeight || '1.2').replace(/[0-9.]/g, '') || '';
                                                   handleUpdateElement(editingSection.id, activeElement.id, { lineHeight: `${e.target.value}${unit}` });
                                                 }}
                                                 className="w-12 h-6 px-1 text-center text-xs bg-zinc-900 border border-zinc-800 text-zinc-100 rounded-[4px] outline-none font-bold"
@@ -8913,7 +8926,7 @@ className="w-4 h-4 object-contain"
                                             <div onClick={(e) => e.stopPropagation()} className="absolute right-0 top-full mt-2 w-[280px] bg-[#18181b] border border-zinc-800 rounded-[4px] p-3 z-50 shadow-2xl space-y-3.5 text-left animate-in fade-in slide-in-from-top-2 duration-150">
                                               <div className="flex items-center justify-between border-b border-zinc-800 pb-1.5">
                                                 <span className="text-xs font-bold text-zinc-200">Penulisan</span>
-                                                <button type="button" onClick={() => { console.log('[Editor BRANDING] Reset penulisan'); handleUpdateElement(editingSection.id, activeElement.id, { fontFamily: 'inherit', fontSize: 16, fontWeight: '600', fontStyle: 'normal', textTransform: 'none', letterSpacing: '0px', lineHeight: '1.2px' }); }} className="text-zinc-500 hover:text-zinc-300"><RotateCcw className="w-3.5 h-3.5" /></button>
+                                                <button type="button" onClick={() => { console.log('[Editor BRANDING] Reset penulisan'); handleUpdateElement(editingSection.id, activeElement.id, { fontFamily: 'inherit', fontSize: 16, fontWeight: '600', fontStyle: 'normal', textTransform: 'none', letterSpacing: '0px', lineHeight: '1.2' }); }} className="text-zinc-500 hover:text-zinc-300"><RotateCcw className="w-3.5 h-3.5" /></button>
                                               </div>
                                               <div className="flex items-center justify-between">
                                                 <span className="text-xs text-zinc-400">Family</span>

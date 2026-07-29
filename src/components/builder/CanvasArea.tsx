@@ -14,7 +14,11 @@ import { LottiePanelTrigger } from "@/components/LottiePanelTrigger";
 
 // Import custom hook, sidebar UI, dan template struktur section
 import { useBuilderState, SECTION_STRUCTURE_TEMPLATES } from "./useBuilderState";
-import BuilderSidebar from "./BuilderSidebar";
+import { FloatingModal } from "./components/FloatingModal";
+import { ThemePopupPanel } from "./panels/ThemePopupPanel";
+import { LibraryPanel } from "./panels/LibraryPanel";
+import { CanvasSettingsPanel } from "./panels/CanvasSettingsPanel";
+import { DataSidebarPanel } from "./panels/DataSidebarPanel";
 
 // Mini component agar bisa pakai useRef/ResizeObserver untuk spacer fixed header di canvas preview
 function CanvasHeaderPreview({ headerSection, isLeftPanelOpen, isDraggingWidget, panelWidth }: {
@@ -76,6 +80,7 @@ function CanvasHeaderPreview({ headerSection, isLeftPanelOpen, isDraggingWidget,
 
 function BuilderContent() {
   const state = useBuilderState();
+  const [showMobilePreview, setShowMobilePreview] = useState(false);
   const {
     CLICK_SUPPRESS_MS,
     activeDragId,
@@ -277,8 +282,8 @@ function BuilderContent() {
   return (
     <div className={`fixed inset-0 ${theme === 'dark' ? 'bg-zinc-950' : 'bg-slate-100'} flex flex-col overflow-hidden transition-colors duration-500`}>
       {/* BUILDER HEADER */}
-      <header className={`h-11 ${theme === 'dark' ? 'bg-zinc-900/90' : 'bg-white/80'} backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-4 shrink-0 z-50`}>
-        <div className="flex items-center gap-3">
+      <header className={`h-11 ${theme === 'dark' ? 'bg-zinc-900/90' : 'bg-white/80'} backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-2 md:px-4 shrink-0 z-50 overflow-x-auto no-scrollbar`}>
+        <div className="flex items-center gap-1.5 md:gap-3 shrink-0">
           <button onClick={() => {
             if (isTemplateMode) {
               window.location.href = "/";
@@ -289,32 +294,64 @@ function BuilderContent() {
             <ArrowLeft className="w-4 h-4" />
           </button>
           <div className={`h-5 w-px ${theme === 'dark' ? 'bg-white/5' : 'bg-slate-200'}`}></div>
-          {!isLeftPanelOpen && (
-            <button
-              onClick={() => setIsLeftPanelOpen(true)}
-              className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'text-zinc-400 hover:text-white hover:bg-zinc-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'}`}
-              title="Buka Panel"
-            >
-              <Layers className="w-4 h-4" />
-            </button>
-          )}
           <button
             onClick={() => {
               setActivePanel('settings');
-              setIsLeftPanelOpen(true);
+              setIsLeftPanelOpen(true); // Meminjam state isLeftPanelOpen sebagai trigger modal
             }}
             className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'text-zinc-400 hover:text-white hover:bg-zinc-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'}`}
             title="Pengaturan Background Canvas"
           >
             <Settings className="w-4 h-4" />
           </button>
-          <h2 className={`text-[10px] font-black uppercase tracking-widest ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
+          <button
+            onClick={() => {
+              setIsLeftPanelOpen(true);
+              setActivePanel('library');
+              setActiveLibraryTab('widget');
+            }}
+            className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'text-zinc-400 hover:text-white hover:bg-zinc-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'}`}
+            title="Tambahkan Widget (Elemen)"
+          >
+            <LayoutGrid className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => {
+              setIsLeftPanelOpen(true);
+              setActivePanel('library');
+              setActiveLibraryTab('global');
+            }}
+            className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'text-zinc-400 hover:text-white hover:bg-zinc-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'}`}
+            title="Manajemen Layer"
+          >
+            <Layers className="w-4 h-4" />
+          </button>
+          <h2 className={`hidden md:block text-[10px] font-black uppercase tracking-widest ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
             {pageId && customPage?.page ? customPage.page.title : 'Visual Builder'}
           </h2>
-
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 md:gap-3 shrink-0">
+          {/* Responsive Toggles */}
+          <div className={`flex items-center p-0.5 rounded-lg ${theme === 'dark' ? 'bg-zinc-800' : 'bg-slate-200'}`}>
+            <button
+              onClick={() => setPreviewMode('desktop')}
+              className={`p-1.5 rounded-md transition-all ${previewMode === 'desktop' ? (theme === 'dark' ? 'bg-zinc-700 text-white shadow-sm' : 'bg-white text-slate-800 shadow-sm') : (theme === 'dark' ? 'text-zinc-500 hover:text-zinc-300' : 'text-slate-500 hover:text-slate-700')}`}
+              title="Desktop View"
+            >
+              <Monitor className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={() => setPreviewMode('mobile')}
+              className={`p-1.5 rounded-md transition-all ${previewMode === 'mobile' ? (theme === 'dark' ? 'bg-zinc-700 text-white shadow-sm' : 'bg-white text-slate-800 shadow-sm') : (theme === 'dark' ? 'text-zinc-500 hover:text-zinc-300' : 'text-slate-500 hover:text-slate-700')}`}
+              title="Mobile View"
+            >
+              <Smartphone className="w-3.5 h-3.5" />
+            </button>
+          </div>
+          
+          <div className={`h-5 w-px ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-200'} mx-1`}></div>
+
           <button
             onClick={handleUndo}
             disabled={past.length === 0}
@@ -333,72 +370,106 @@ function BuilderContent() {
           </button>
           <div className={`h-5 w-px ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-200'} mx-1`}></div>
 
+          {/* Mobile View Toggle */}
+          <button
+            onClick={() => setShowMobilePreview(!showMobilePreview)}
+            className={`md:hidden px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 ${showMobilePreview ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-900 border border-slate-200'}`}
+          >
+            {showMobilePreview ? <Pencil className="w-3 h-3" /> : <Eye className="w-3 h-3" />} 
+            <span>{showMobilePreview ? 'Edit Data' : 'Preview'}</span>
+          </button>
+
           <button
             onClick={handlePreview}
-            className={`px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-200'}`}
+            className={`px-2 md:px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-200'}`}
           >
-            <Globe className="w-3 h-3" /> Preview
+            <Globe className="w-3 h-3" /> <span className="hidden md:inline">Preview</span>
           </button>
           <button
             onClick={handleSave}
             disabled={!hasChanges || isSaving}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all active:scale-95 shadow-sm ${hasChanges ? "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-600/20" : (theme === 'dark' ? "bg-white/5 text-gray-500 cursor-not-allowed opacity-50" : "bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200")}`}
+            className={`flex items-center gap-1.5 px-2 md:px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all active:scale-95 shadow-sm ${hasChanges ? "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-600/20" : (theme === 'dark' ? "bg-white/5 text-gray-500 cursor-not-allowed opacity-50" : "bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200")}`}
           >
             {isSaving ? (
               <Loader2 className="w-3 h-3 animate-spin" />
             ) : (
               <Save className="w-3 h-3" />
             )}
-            {isSaving ? "Saving..." : "Simpan"}
+            <span className="hidden md:inline">{isSaving ? "Saving..." : "Simpan"}</span>
           </button>
         </div>
       </header>
 
-      <main className="flex-1 flex overflow-hidden relative">
-        {/* 1. LEFT PANEL */}
+      <main className="flex-1 flex overflow-hidden relative bg-zinc-100">
+        
+        {/* Desktop Data Sidebar */}
+        <div className={`
+          ${showMobilePreview ? 'hidden md:flex' : 'flex'}
+          w-full md:w-80 lg:w-96 shrink-0 h-full border-r bg-white z-10 relative
+        `}>
+          <DataSidebarPanel state={state} />
+        </div>
 
-        <BuilderSidebar state={state} activeCanvas={activeCanvas} />
-
-        {/* LOTTIE TRIGGER BUTTON - Floating di kiri canvas */}
-        {!isLeftPanelOpen && (
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 z-[60]">
-            <LottiePanelTrigger
-              onOpen={() => {
-                setIsLeftPanelOpen(true);
-                setActivePanel('library');
-                setActiveLibraryTab('widget');
-                console.log('[Lottie Trigger] Membuka panel kiri ke tab widget');
-              }}
-              onOpenWidget={() => {
-                setIsLeftPanelOpen(true);
-                setActivePanel('library');
-                setActiveLibraryTab('widget');
-                console.log('[Lottie Trigger] Shortcut: membuka tab Widget');
-              }}
-              onOpenLayer={() => {
-                setIsLeftPanelOpen(true);
-                setActivePanel('library');
-                setActiveLibraryTab('global');
-                console.log('[Lottie Trigger] Shortcut: membuka tab Layer (global)');
-              }}
-            />
-          </div>
-        )}
-
-        {/* 2. CANVAS */}
-        <div 
-          className="flex-1 overflow-y-auto canvas-scrollbar relative pt-0 pb-48"
-          style={{
-            backgroundColor: canvasBgType === 'solid' ? canvasBgColor : undefined,
-            backgroundImage: canvasBgType === 'gradient' ? canvasBgGradient : undefined,
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-            backgroundAttachment: 'fixed'
-          }}
+        {/* Floating Modals for specific actions if needed (like Settings) */}
+        <FloatingModal
+          isOpen={isLeftPanelOpen && activePanel === 'editor'}
+          onClose={() => setIsLeftPanelOpen(false)}
+          title="Theme / Style Editor"
+          activeElementId={activeElementId}
+          theme={theme}
         >
-          <div className="absolute inset-0 bg-[radial-gradient(#00000005_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
-          <div className="min-h-full w-full transition-all duration-700 flex flex-col">
-            <StorefrontProvider client={client} products={products || []} categories={categories || []} sections={sections} customPages={(allCustomPages as any)?.pages || []}>
+          <ThemePopupPanel state={state} />
+        </FloatingModal>
+
+        <FloatingModal
+          isOpen={isLeftPanelOpen && activePanel === 'settings'}
+          onClose={() => setIsLeftPanelOpen(false)}
+          title="Canvas Settings"
+          theme={theme}
+        >
+          <CanvasSettingsPanel state={state} />
+        </FloatingModal>
+
+        {/* 2. CANVAS AREA */}
+        <div 
+          className={`
+            ${!showMobilePreview ? 'hidden md:flex' : 'flex'}
+            flex-1 overflow-y-auto canvas-scrollbar relative pt-0
+          `}
+          style={{ backgroundColor: '#F2F2F2' }}
+        >
+            <style>{`
+              /* Sembunyikan elemen visual builder (toolbar hover, outline, placeholder) */
+              .group:hover > .hover\\:opacity-100 { display: none !important; opacity: 0 !important; }
+              .group-hover\\/el\\:opacity-100 { display: none !important; opacity: 0 !important; }
+              .border-dashed { border-style: solid !important; border-color: transparent !important; }
+              button[title="Edit Kolom"], button[title="Hapus Kolom"], button[title="Tambah Elemen"] { display: none !important; }
+              .bg-amber-500\\/90, .bg-fuchsia-600 { display: none !important; }
+              .ring-2.ring-blue-500 { ring-color: transparent !important; box-shadow: none !important; }
+              .hover\\:ring-blue-400\\/50 { box-shadow: none !important; }
+              /* Sembunyikan 'Kolom Kosong' placeholder */
+              .min-h-\\[120px\\] > span.text-zinc-400 { display: none !important; }
+              .min-h-\\[120px\\] > span.text-zinc-500 { display: none !important; }
+              .min-h-\\[120px\\] > button { display: none !important; }
+            `}</style>
+            <div className="absolute inset-0 bg-[radial-gradient(#00000005_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
+            
+            {/* Responsive Wrapper */}
+            <div className={`mx-auto transition-all duration-500 ease-in-out min-h-full pb-48 ${
+              previewMode === 'mobile' 
+                ? `max-w-[400px] border-x shadow-2xl ${theme === 'dark' ? 'border-zinc-800' : 'border-slate-300'} is-mobile-preview` 
+                : 'w-full is-desktop-preview'
+            }`}
+            style={{
+              backgroundColor: canvasBgType === 'solid' ? canvasBgColor : undefined,
+              backgroundImage: canvasBgType === 'gradient' ? canvasBgGradient : undefined,
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundAttachment: 'fixed'
+            }}
+            >
+              <div className="min-h-full w-full flex flex-col">
+              <StorefrontProvider client={client} products={products || []} categories={categories || []} sections={sections} customPages={(allCustomPages as any)?.pages || []}>
               {(() => {
                 const headerSection = sections.find(s => s.type === "HEADER");
                 if (!headerSection) return null;
@@ -688,6 +759,7 @@ function BuilderContent() {
             </StorefrontProvider>
           </div>
         </div>
+      </div>
 
         {/* CONTEXT MENU (Right-click) */}
         <AnimatePresence>

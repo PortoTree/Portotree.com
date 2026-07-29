@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 type ToastType = 'success' | 'error' | 'info';
 
 interface Toast {
-  id: number;
+  id: string;
   message: string;
   type: ToastType;
 }
@@ -33,7 +33,7 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
   const [modal, setModal] = useState<ModalOptions | null>(null);
 
   const showToast = useCallback((message: string, type: ToastType = 'success') => {
-    const id = Date.now();
+    const id = Date.now().toString() + Math.random().toString();
     setToasts((prev) => [...prev, { id, message, type }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));

@@ -36,5 +36,6 @@ export interface ElementConfig {
   padding?: string;
   margin?: string;
   textAlign?: string;
+  mobileConfig?: any;
   [key: string]: any;
 }

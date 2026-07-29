@@ -9,6 +9,8 @@ import { Reorder, useDragControls } from "framer-motion";
 import { 
   Plus, Trash2, ChevronRight, Pencil, Type, ChevronUp, ChevronDown 
 } from "lucide-react";
+import { CREATIVE_PORTFOLIO_TEMPLATE } from "@/lib/templates/creativePortfolio";
+import { COMPLETE_PORTFOLIO_TEMPLATE } from "@/lib/templates/completePortfolio";
 
 // Import types & constants
 import { SectionElement, ELEMENT_TYPE_MAP } from "@/components/storefront/sections/BuilderSection";
@@ -729,22 +731,22 @@ export function useBuilderState() {
         setSections(sanitizeSections(JSON.parse(localDraft)));
         console.log('[Builder] Init: Loaded draft template from localStorage');
       } else {
-        const defaults: Section[] = [
-          { id: 'global-settings', type: 'CANVAS_SETTINGS', order: -1, isActive: true, config: { bgType: 'solid', bgColor: '#F3F0EC' } },
-        ];
-        setSections(sanitizeSections(defaults));
+        setSections(sanitizeSections(COMPLETE_PORTFOLIO_TEMPLATE));
+        console.log('[Builder] Init: Created Complete Portfolio Template');
       }
       hasInitialized.current = true;
-    } else if (!pageId && !isTemplateMode && initialSections && !hasInitialized.current) {
-      if (initialSections.length === 0) {
-        // Mulai dengan canvas kosong (hanya settings)
-        const defaults: Section[] = [
-          { id: 'global-settings', type: 'CANVAS_SETTINGS', order: -1, isActive: true, config: { bgType: 'solid', bgColor: '#F3F0EC' } },
-        ];
-        setSections(sanitizeSections(defaults));
-        console.log('[Builder] Init: Created default Header + Section');
+    } else if (!pageId && !isTemplateMode && initialSections !== undefined && !hasInitialized.current) {
+      const isReset = searchParams?.get("reset") === "true";
+      const sectionsArray = initialSections || [];
+      const isPracticallyEmpty = sectionsArray.length === 0 || 
+        (sectionsArray.length === 1 && sectionsArray[0].type === 'CANVAS_SETTINGS') || isReset;
+
+      if (isPracticallyEmpty) {
+        // Mulai dengan template lengkap
+        setSections(sanitizeSections(COMPLETE_PORTFOLIO_TEMPLATE));
+        console.log('[Builder] Init: Created Complete Portfolio Template on Blank Canvas');
       } else {
-        const parsed = initialSections.map((s: any) => {
+        const parsed = sectionsArray.map((s: any) => {
           const cfg = typeof s.config === 'string' ? JSON.parse(s.config) : s.config;
           const extractedElements = s.elements || cfg?.elements || [];
           
@@ -1525,7 +1527,16 @@ export function useBuilderState() {
     const updateRecursively = (elements: SectionElement[]): SectionElement[] => {
       return elements.map(el => {
         if (el.id === elementId) {
-          return { ...el, config: { ...el.config, ...newConfig } };
+          let updatedConfig = { ...el.config };
+          if (previewMode === 'mobile') {
+            updatedConfig = {
+              ...updatedConfig,
+              mobileConfig: { ...(updatedConfig.mobileConfig || {}), ...newConfig }
+            };
+          } else {
+            updatedConfig = { ...updatedConfig, ...newConfig };
+          }
+          return { ...el, config: updatedConfig };
         }
         if (el.children) {
           return { ...el, children: updateRecursively(el.children) };
@@ -1537,7 +1548,31 @@ export function useBuilderState() {
     const elements = updateRecursively(section.elements || []);
     const updated = { ...section, elements };
     updateLocalSection(updated);
-    console.log("[Builder Element Update Debug] Updated element config successfully:", elementId, newConfig);
+    console.log("[Builder Element Update Debug] Updated element config successfully:", elementId, newConfig, "mode:", previewMode);
+  };
+
+  const handleUpdateSection = (id: string, newConfig: Record<string, any>) => {
+    const sectionIndex = sections.findIndex(s => s.id === id);
+    if (sectionIndex === -1) return;
+
+    const section = sections[sectionIndex];
+    let updatedConfig = { ...section.config };
+    
+    if (previewMode === 'mobile') {
+      updatedConfig = {
+        ...updatedConfig,
+        mobileConfig: { ...(updatedConfig.mobileConfig || {}), ...newConfig }
+      };
+    } else {
+      updatedConfig = { ...updatedConfig, ...newConfig };
+    }
+
+    const updated = {
+      ...section,
+      config: updatedConfig
+    };
+    updateLocalSection(updated);
+    console.log("[Builder Section Update Debug] Updated section config successfully:", id, newConfig, "mode:", previewMode);
   };
 
   const handleAddColumnChild = (sectionId: string, columnId: string, childType: string) => {
