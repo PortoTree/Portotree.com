@@ -14,7 +14,7 @@ export const COMPLETE_PORTFOLIO_TEMPLATE: Section[] = [
     id: "hero-section",
     type: "SECTION",
     order: 1,
-    isActive: false,
+    isActive: true,
     config: {
       bgColor: "transparent",
       contentWidth: "boxed",
@@ -118,7 +118,7 @@ export const COMPLETE_PORTFOLIO_TEMPLATE: Section[] = [
     id: "about-section",
     type: "SECTION",
     order: 2,
-    isActive: false,
+    isActive: true,
     config: {
       bgColor: "#121214",
       contentWidth: "boxed",
@@ -196,7 +196,7 @@ export const COMPLETE_PORTFOLIO_TEMPLATE: Section[] = [
     id: "skill-section",
     type: "SECTION",
     order: 3,
-    isActive: false,
+    isActive: true,
     config: {
       bgColor: "transparent",
       contentWidth: "boxed",
@@ -266,7 +266,7 @@ export const COMPLETE_PORTFOLIO_TEMPLATE: Section[] = [
     id: "services-section",
     type: "SECTION",
     order: 4,
-    isActive: false,
+    isActive: true,
     config: {
       bgColor: "#0f0f12",
       contentWidth: "boxed",
@@ -317,7 +317,7 @@ export const COMPLETE_PORTFOLIO_TEMPLATE: Section[] = [
     id: "portfolio-section",
     type: "SECTION",
     order: 5,
-    isActive: false,
+    isActive: true,
     config: {
       bgColor: "transparent",
       contentWidth: "boxed",
@@ -381,7 +381,7 @@ export const COMPLETE_PORTFOLIO_TEMPLATE: Section[] = [
     id: "experience-section",
     type: "SECTION",
     order: 6,
-    isActive: false,
+    isActive: true,
     config: {
       bgColor: "#121214",
       contentWidth: "boxed",
@@ -433,7 +433,7 @@ export const COMPLETE_PORTFOLIO_TEMPLATE: Section[] = [
     id: "stats-section",
     type: "SECTION",
     order: 7,
-    isActive: false,
+    isActive: true,
     config: {
       bgColor: "#2563eb", // Blue-600
       contentWidth: "boxed",
@@ -474,7 +474,7 @@ export const COMPLETE_PORTFOLIO_TEMPLATE: Section[] = [
     id: "tech-section",
     type: "SECTION",
     order: 8,
-    isActive: false,
+    isActive: true,
     config: {
       bgColor: "transparent",
       contentWidth: "boxed",
@@ -521,64 +521,12 @@ export const COMPLETE_PORTFOLIO_TEMPLATE: Section[] = [
       },
     ],
   },
-  // 9. FAQ
-  {
-    id: "faq-section",
-    type: "SECTION",
-    order: 9,
-    isActive: false,
-    config: {
-      bgColor: "#0f0f12",
-      contentWidth: "boxed",
-      maxWidth: "800px",
-      paddingTop: 100,
-      paddingBottom: 100,
-      paddingLeft: 40,
-      paddingRight: 40,
-      layout: "flexbox",
-      direction: "col",
-      align: "center",
-      gap: 48,
-    },
-    elements: [
-      {
-        id: "faq-heading",
-        type: "HEADING",
-        config: {
-          text: "Pertanyaan Umum",
-          fontSize: 48,
-          fontWeight: "800",
-          textColor: "#ffffff",
-          align: "center",
-        },
-      },
-      {
-        id: "faq-list",
-        type: "CATEGORY_LIST",
-        config: {
-          layout: "list",
-          columns: 1,
-          gap: 16,
-          cardBgColor: "#18181b",
-          cardBorderRadius: 12,
-          cardBorderColor: "#27272a",
-          cardPadding: 24,
-          alignText: "left",
-          items: [
-            { id: "f1", title: "Berapa lama estimasi pengerjaan website?", subtitle: "Tergantung kompleksitas, rata-rata memakan waktu 2 hingga 4 minggu." },
-            { id: "f2", title: "Apakah menerima revisi?", subtitle: "Ya, saya memberikan maksimal 3 kali revisi minor tanpa biaya tambahan." },
-            { id: "f3", title: "Bagaimana sistem pembayarannya?", subtitle: "Pembayaran dilakukan 50% di awal sebagai DP, dan 50% setelah proyek selesai." },
-          ],
-        },
-      },
-    ],
-  },
-  // 10. CONTACT
+
   {
     id: "contact-section",
     type: "SECTION",
     order: 10,
-    isActive: false,
+    isActive: true,
     config: {
       bgColor: "transparent",
       contentWidth: "boxed",
@@ -680,52 +628,6 @@ export const COMPLETE_PORTFOLIO_TEMPLATE: Section[] = [
             },
           },
         ],
-      },
-    ],
-  },
-  // 11. FOOTER
-  {
-    id: "footer-section",
-    type: "SECTION",
-    order: 11,
-    isActive: false,
-    config: {
-      bgColor: "#09090b",
-      contentWidth: "boxed",
-      maxWidth: "1200px",
-      paddingTop: 40,
-      paddingBottom: 40,
-      paddingLeft: 40,
-      paddingRight: 40,
-      layout: "flexbox",
-      direction: "col",
-      align: "center",
-      gap: 24,
-      borderTopWidth: 1,
-      borderTopColor: "#27272a",
-      borderTopType: "solid",
-    },
-    elements: [
-      {
-        id: "footer-logo",
-        type: "HEADING",
-        config: {
-          text: "PortoTree",
-          fontSize: 24,
-          fontWeight: "900",
-          textColor: "#ffffff",
-          align: "center",
-        },
-      },
-      {
-        id: "footer-copyright",
-        type: "TEXT",
-        config: {
-          text: "© 2026 PortoTree. All rights reserved.",
-          fontSize: 14,
-          textColor: "#71717a",
-          align: "center",
-        },
       },
     ],
   },

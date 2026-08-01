@@ -293,6 +293,46 @@ const sanitizeSections = (secs: Section[]): Section[] => {
       headerSection.config.contentWidth = 'full';
     }
 
+    
+    // Auto-upgrade header config for precision and canvas snapping
+    if (!headerSection.config._v16_upgraded) {
+      headerSection.config = {
+        ...headerSection.config,
+        layout: "flexbox",
+        direction: "row",
+        align: "center",
+        justifyContent: "space-between",
+        paddingTop: 12,
+        paddingBottom: 12,
+        paddingLeft: 24,
+        paddingRight: 24,
+        gap: 16,
+        margin: 0,
+        borderRadius: 0,
+        contentWidth: 'full',
+        _v16_upgraded: true
+      };
+      
+      // Upgrade columns inside header
+      if (headerSection.elements) {
+        headerSection.elements = headerSection.elements.map(el => {
+          if (el.type === 'COLUMN') {
+            return {
+              ...el,
+              config: {
+                ...el.config,
+                layout: 'flexbox',
+                direction: 'row',
+                align: 'center',
+                gap: el.config?.gap || 16
+              }
+            };
+          }
+          return el;
+        });
+      }
+    }
+
     const headerElements = headerSection.elements || [];
     headerSection.elements = headerElements.map((el, i) => ({ ...el, order: i }));
     headerSection.order = -1;
@@ -731,7 +771,7 @@ export function useBuilderState() {
         setSections(sanitizeSections(JSON.parse(localDraft)));
         console.log('[Builder] Init: Loaded draft template from localStorage');
       } else {
-        setSections(sanitizeSections(COMPLETE_PORTFOLIO_TEMPLATE));
+        setSections(sanitizeSections(GORIB_PORTFOLIO_TEMPLATE));
         console.log('[Builder] Init: Created Complete Portfolio Template');
       }
       hasInitialized.current = true;
@@ -743,7 +783,7 @@ export function useBuilderState() {
 
       if (isPracticallyEmpty) {
         // Mulai dengan template lengkap
-        setSections(sanitizeSections(COMPLETE_PORTFOLIO_TEMPLATE));
+        setSections(sanitizeSections(GORIB_PORTFOLIO_TEMPLATE));
         console.log('[Builder] Init: Created Complete Portfolio Template on Blank Canvas');
       } else {
         const parsed = sectionsArray.map((s: any) => {

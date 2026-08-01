@@ -13,7 +13,7 @@ export const CREATIVE_PORTFOLIO_TEMPLATE: Section[] = [
     id: "hero-section",
     type: "SECTION",
     order: 1,
-    isActive: false,
+    isActive: true,
     config: {
       bgColor: "transparent",
       contentWidth: "boxed",
@@ -32,7 +32,7 @@ export const CREATIVE_PORTFOLIO_TEMPLATE: Section[] = [
         id: "hero-badge",
         type: "BADGE",
         config: {
-          text: "AVAILABLE FOR HIRE",
+          text: "TERSEDIA UNTUK FREELANCE",
           style: "outline",
           textColor: "#10b981", // Emerald-500
           borderColor: "#10b981",
@@ -44,7 +44,7 @@ export const CREATIVE_PORTFOLIO_TEMPLATE: Section[] = [
         id: "hero-title",
         type: "HEADING",
         config: {
-          text: "Crafting Digital Experiences",
+          text: "Membangun Pengalaman Digital yang Luar Biasa",
           fontSize: 72,
           fontWeight: "900",
           textColor: "#ffffff",
@@ -57,7 +57,7 @@ export const CREATIVE_PORTFOLIO_TEMPLATE: Section[] = [
         id: "hero-subtitle",
         type: "TEXT",
         config: {
-          text: "I'm a UI/UX Designer & Developer building modern, responsive, and beautiful web applications that users love.",
+          text: "Saya adalah UI/UX Designer & Developer yang membangun aplikasi web modern, responsif, dan indah yang disukai pengguna.",
           fontSize: 20,
           textColor: "#a1a1aa", // Zinc-400
           align: "center",
@@ -78,7 +78,7 @@ export const CREATIVE_PORTFOLIO_TEMPLATE: Section[] = [
             id: "btn-primary",
             type: "BUTTON",
             config: {
-              text: "View My Works",
+              text: "Lihat Karya Saya",
               style: "primary",
               bgColor: "#3b82f6", // Blue-500
               textColor: "#ffffff",
@@ -97,7 +97,7 @@ export const CREATIVE_PORTFOLIO_TEMPLATE: Section[] = [
     id: "services-section",
     type: "SECTION",
     order: 2,
-    isActive: false,
+    isActive: true,
     config: {
       bgColor: "#18181b", // Zinc-900
       contentWidth: "boxed",
@@ -116,7 +116,7 @@ export const CREATIVE_PORTFOLIO_TEMPLATE: Section[] = [
         id: "service-title",
         type: "HEADING",
         config: {
-          text: "What I Do",
+          text: "Keahlian Saya",
           fontSize: 40,
           fontWeight: "800",
           textColor: "#ffffff",
@@ -160,7 +160,7 @@ export const CREATIVE_PORTFOLIO_TEMPLATE: Section[] = [
                 id: "s1-desc",
                 type: "TEXT",
                 config: {
-                  text: "Designing intuitive interfaces that engage users and solve complex problems elegantly.",
+                  text: "Merancang antarmuka intuitif yang melibatkan pengguna dan menyelesaikan masalah kompleks secara elegan.",
                   textColor: "#a1a1aa",
                   fontSize: 16,
                 },
@@ -195,7 +195,7 @@ export const CREATIVE_PORTFOLIO_TEMPLATE: Section[] = [
                 id: "s2-desc",
                 type: "TEXT",
                 config: {
-                  text: "Building responsive, blazing-fast web applications using React, Next.js, and Tailwind CSS.",
+                  text: "Membangun aplikasi web responsif dan super cepat menggunakan React, Next.js, dan Tailwind CSS.",
                   textColor: "#a1a1aa",
                   fontSize: 16,
                 },
@@ -230,7 +230,7 @@ export const CREATIVE_PORTFOLIO_TEMPLATE: Section[] = [
                 id: "s3-desc",
                 type: "TEXT",
                 config: {
-                  text: "Creating memorable brand identities that resonate with your target audience.",
+                  text: "Menciptakan identitas visual yang mudah diingat dan relevan dengan audiens target Anda.",
                   textColor: "#a1a1aa",
                   fontSize: 16,
                 },
@@ -245,7 +245,7 @@ export const CREATIVE_PORTFOLIO_TEMPLATE: Section[] = [
     id: "cta-section",
     type: "SECTION",
     order: 3,
-    isActive: false,
+    isActive: true,
     config: {
       bgColor: "#3b82f6", // Blue-500
       contentWidth: "boxed",
@@ -264,7 +264,7 @@ export const CREATIVE_PORTFOLIO_TEMPLATE: Section[] = [
         id: "cta-title",
         type: "HEADING",
         config: {
-          text: "Ready to start a project?",
+          text: "Siap memulai proyek?",
           fontSize: 48,
           fontWeight: "800",
           textColor: "#ffffff",
@@ -275,7 +275,7 @@ export const CREATIVE_PORTFOLIO_TEMPLATE: Section[] = [
         id: "cta-btn",
         type: "BUTTON",
         config: {
-          text: "Let's Talk",
+          text: "Mari Berdiskusi",
           style: "primary",
           bgColor: "#ffffff",
           textColor: "#3b82f6",

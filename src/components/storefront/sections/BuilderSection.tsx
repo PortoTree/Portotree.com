@@ -2461,7 +2461,7 @@ const ColumnElement = ({
 
   // Layout classes
   const layoutClass = isGrid
-    ? 'grid'
+    ? 'responsive-grid'
     : c.layout === 'horizontal'
       ? 'flex flex-row flex-wrap'
       : c.layout === 'row-reverse'
@@ -2859,6 +2859,7 @@ const ElementWrapper = ({
     opacity: element.config?.opacity !== undefined ? (Number(element.config.opacity) / 100) : undefined,
     height: '100%',
     width: '100%',
+    whiteSpace: element.type === 'BUTTON' ? 'nowrap' : undefined,
   } : {};
 
   useEffect(() => {
@@ -3226,7 +3227,7 @@ export const BuilderSection = ({
     ? config.direction
     : (config.layout === 'flexbox' ? 'row' : 'col');
   const layoutClass = isGrid
-    ? 'grid'
+    ? 'responsive-grid'
     : (effectiveDirection === 'row' || effectiveDirection === 'row-reverse')
       ? 'flex flex-row flex-wrap'
       : 'flex flex-col';
@@ -3241,9 +3242,9 @@ export const BuilderSection = ({
 
   const gridStyle = isGrid
     ? { 
-        gridTemplateColumns: config.customGridColumns || `repeat(${config.columns ?? 3}, 1fr)`,
-        gridTemplateRows: config.customGridRows || `repeat(${config.rows ?? 2}, 1fr)`,
-      }
+        '--desktop-cols': config.customGridColumns || `repeat(${config.columns ?? 3}, minmax(0, 1fr))`,
+        '--desktop-rows': config.customGridRows || `repeat(${config.rows ?? 2}, minmax(0, 1fr))`,
+      } as React.CSSProperties
     : {};
 
   const placeholderCount = config.placeholderCount ?? ((config.columns ?? 3) * (config.rows ?? 2));

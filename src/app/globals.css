@@ -125,7 +125,64 @@
     background-clip: padding-box;
   }
 
+  /* Canvas scrollbar styling */
+  .canvas-scrollbar::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  .canvas-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .canvas-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+  }
+  .canvas-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+  }
+
+  /* Hide scrollbar on actual mobile devices */
+  @media (max-width: 768px) {
+    .canvas-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .canvas-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  }
+
+  /* Hide scrollbar in mobile preview mode */
+  .is-mobile-preview::-webkit-scrollbar,
+  .is-mobile-preview .canvas-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .is-mobile-preview,
+  .is-mobile-preview .canvas-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
   /* Responsive Canvas Styles (Storefront & Builder) */
+  .responsive-grid {
+    display: grid !important;
+    grid-template-columns: var(--desktop-cols, 1fr) !important;
+    grid-template-rows: var(--desktop-rows, auto) !important;
+  }
+  @media (max-width: 768px) {
+    .responsive-grid {
+      grid-template-columns: 1fr !important;
+      grid-template-rows: auto !important;
+    }
+  }
+  .is-mobile-preview .responsive-grid {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto !important;
+  }
   .responsive-column {
     width: var(--col-desktop-width, 100%) !important;
   }
@@ -161,3 +218,8 @@
     line-height: 1.1 !important;
   }
 }
+
+
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }

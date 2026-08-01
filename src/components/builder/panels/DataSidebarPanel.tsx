@@ -60,6 +60,18 @@ function ElementInput({ element, section, sections, setSections, setActiveElemen
   return null;
 }
 
+const SECTION_TRANSLATIONS: Record<string, string> = {
+  "hero-section": "Beranda",
+  "about-section": "Tentang",
+  "skill-section": "Keahlian",
+  "services-section": "Layanan",
+  "portfolio-section": "Portofolio",
+  "experience-section": "Pengalaman",
+  "stats-section": "Statistik",
+  "tech-section": "Teknologi",
+  "contact-section": "Kontak",
+};
+
 export function DataSidebarPanel({ state }: { state: ReturnType<typeof useBuilderState> }) {
   const { sections, setSections, setActiveElementId, setEditingSection } = state;
 
@@ -114,7 +126,7 @@ export function DataSidebarPanel({ state }: { state: ReturnType<typeof useBuilde
           {sections.filter((s: any) => s.type !== "CANVAS_SETTINGS").map((section: any) => (
             <AccordionItem key={section.id} value={section.id} className="px-5">
               <AccordionTrigger className="text-sm font-semibold capitalize hover:no-underline hover:text-blue-600">
-                {section.id.replace('-section', '').replace('-', ' ')}
+                {SECTION_TRANSLATIONS[section.id] || section.id.replace('-section', '').replace('-', ' ')}
               </AccordionTrigger>
               <AccordionContent className="pb-5">
                 {renderSectionForm(section)}

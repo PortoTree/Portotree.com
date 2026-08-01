@@ -3,12 +3,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Plus, Type, AlignLeft, MousePointerClick, Image as ImageIcon, Minus, Award, GripVertical, Trash2, LayoutGrid, SeparatorHorizontal, Columns, Pencil, ShoppingBag, Folder, ChevronLeft, ChevronRight, Move, Menu } from "lucide-react";
-import { useStorefront } from "../StorefrontProvider";
-import ProductCard from "../ProductCard";
+import { useStorefront } from "../storefront/StorefrontProvider";
+import ProductCard from "../storefront/ProductCard";
 import Link from "next/link";
 import { generateMobileCss } from '@/lib/utils';
 
-// ── TYPES ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ TYPES Ã¢â€â‚¬Ã¢â€â‚¬
 export interface SectionElement {
   id: string;
   type: 'HEADING' | 'TEXT' | 'BUTTON' | 'IMAGE' | 'SPACER' | 'BADGE' | 'GALLERY' | 'DIVIDER' | 'COLUMN' | 'BRANDING' | 'MENU' | 'CART' | 'CATEGORY_LIST' | 'PRODUCT_LIST';
@@ -251,7 +251,7 @@ export const ELEMENT_TYPE_MAP: Record<string, { label: string; icon: any; defaul
   }
 };
 
-// ── HEADING ELEMENT ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ HEADING ELEMENT Ã¢â€â‚¬Ã¢â€â‚¬
 const HeadingElement = ({ config }: { config: any }) => {
   const Tag = config.tag || 'h2';
   const sizeMap: Record<string, string> = {
@@ -352,7 +352,7 @@ const HeadingElement = ({ config }: { config: any }) => {
   return content;
 };
 
-// ── TEXT ELEMENT ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ TEXT ELEMENT Ã¢â€â‚¬Ã¢â€â‚¬
 const TextElement = ({ config, elementId }: { config: any, elementId?: string }) => {
   const [isHovered, setIsHovered] = useState(false);
   const finalId = elementId ? `text-el-${elementId}` : `text-el-${Math.random().toString(36).substr(2, 9)}`;
@@ -424,7 +424,7 @@ const TextElement = ({ config, elementId }: { config: any, elementId?: string })
   );
 };
 
-// ── BUTTON ELEMENT ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ BUTTON ELEMENT Ã¢â€â‚¬Ã¢â€â‚¬
 const ButtonElement = ({ config }: { config: any }) => {
   const [isHovered, setIsHovered] = useState(false);
   const hoverClassRef = useRef(`bh_${Math.random().toString(36).substr(2, 8)}`);
@@ -450,7 +450,7 @@ const ButtonElement = ({ config }: { config: any }) => {
     hoverStyles.push('box-shadow:' + sx + 'px ' + sy + 'px ' + bl + 'px ' + sc + '!important');
   }
 
-  // Base (non-hover) background — CSS :hover overrides for hover state
+  // Base (non-hover) background Ã¢â‚¬â€ CSS :hover overrides for hover state
   let backgroundStyle: string | undefined = undefined;
   let backgroundColorStyle: string | undefined = undefined;
 
@@ -460,7 +460,7 @@ const ButtonElement = ({ config }: { config: any }) => {
     backgroundColorStyle = config.bgColor || '#2563eb';
   }
 
-  // Bayangan Tombol (Box Shadow) — base values; CSS :hover overrides for hover
+  // Bayangan Tombol (Box Shadow) Ã¢â‚¬â€ base values; CSS :hover overrides for hover
   const boxShadowStyle = (config.boxShadowColor || config.boxShadowBlur !== undefined || config.boxShadowOffsetX !== undefined || config.boxShadowOffsetY !== undefined)
     ? `${config.boxShadowOffsetX ?? 0}px ${config.boxShadowOffsetY ?? 0}px ${config.boxShadowBlur ?? 0}px ${config.boxShadowColor || 'rgba(0,0,0,0.15)'}`
     : undefined;
@@ -647,7 +647,7 @@ const ButtonElement = ({ config }: { config: any }) => {
   );
 };
 
-// ── IMAGE ELEMENT ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ IMAGE ELEMENT Ã¢â€â‚¬Ã¢â€â‚¬
 const ImageElement = ({ config }: { config: any }) => {
   useEffect(() => {
     console.log(`[BuilderSection Image Debug] width: ${config.width}, height: ${config.height}, clickUrl: ${config.clickUrl}`);
@@ -745,7 +745,7 @@ const ImageElement = ({ config }: { config: any }) => {
   );
 };
 
-// ── GALLERY ELEMENT ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ GALLERY ELEMENT Ã¢â€â‚¬Ã¢â€â‚¬
 const GalleryElement = ({ config }: { config: any }) => {
   const images = config.images || [
     'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=60',
@@ -832,12 +832,12 @@ const GalleryElement = ({ config }: { config: any }) => {
   );
 };
 
-// ── SPACER ELEMENT ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ SPACER ELEMENT Ã¢â€â‚¬Ã¢â€â‚¬
 const SpacerElement = ({ config }: { config: any }) => (
   <div style={{ height: `${config.height ?? 40}px` }} className="w-full" />
 );
 
-// ── DIVIDER ELEMENT ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ DIVIDER ELEMENT Ã¢â€â‚¬Ã¢â€â‚¬
 const DividerElement = ({ config }: { config: any }) => (
   <div className="w-full flex transition-all">
     <div
@@ -850,7 +850,7 @@ const DividerElement = ({ config }: { config: any }) => (
   </div>
 );
 
-// ── BADGE ELEMENT ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ BADGE ELEMENT Ã¢â€â‚¬Ã¢â€â‚¬
 const BadgeElement = ({ config }: { config: any }) => (
   <div
     className="w-full flex transition-all"
@@ -872,7 +872,7 @@ const BadgeElement = ({ config }: { config: any }) => (
   </div>
 );
 
-// ── BRANDING ELEMENT (Logo & Toko) ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ BRANDING ELEMENT (Logo & Toko) Ã¢â€â‚¬Ã¢â€â‚¬
 interface BrandingElementProps {
   config: any;
   readOnly?: boolean;
@@ -905,8 +905,8 @@ const BrandingElement = ({ config, readOnly, onElementSelect, elementId, activeS
     onElementSelect(elementId, focusType);
   };
 
-  const hoverLogoClass = !readOnly ? 'hover:outline-dashed hover:outline-2 hover:outline-blue-500/40 hover:scale-105 transition-all' : '';
-  const hoverTextClass = !readOnly ? 'hover:outline-dashed hover:outline-1 hover:outline-blue-500/40 rounded px-1 transition-all' : '';
+  const hoverLogoClass = '';
+  const hoverTextClass = '';
 
   // Debug log untuk Aturan 8
   useEffect(() => {
@@ -1039,7 +1039,7 @@ const BrandingElement = ({ config, readOnly, onElementSelect, elementId, activeS
   return content;
 };
 
-// ── MENU ELEMENT ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ MENU ELEMENT Ã¢â€â‚¬Ã¢â€â‚¬
 const MenuElement = ({ config, readOnly, elementId }: { config: any; readOnly?: boolean; elementId?: string }) => {
   const sf = useStorefront();
   const defaultTabs = [
@@ -1186,7 +1186,7 @@ const MenuElement = ({ config, readOnly, elementId }: { config: any; readOnly?: 
   );
 };
 
-// ── CART ELEMENT ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ CART ELEMENT Ã¢â€â‚¬Ã¢â€â‚¬
 const CartElement = ({ config, readOnly }: { config: any; readOnly?: boolean }) => {
   const sf = useStorefront();
   const showCustomIcon = config.iconType === 'custom' && config.customIconSvg;
@@ -1219,7 +1219,7 @@ const CartElement = ({ config, readOnly }: { config: any; readOnly?: boolean }) 
   );
 };
 
-// ── CATEGORY LIST WIDGET ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ CATEGORY LIST WIDGET Ã¢â€â‚¬Ã¢â€â‚¬
 const PLACEHOLDER_CATEGORIES = [
   { id: 'cat-dummy-1', name: 'Nama kategori', image: '/default-kategori.webp' },
   { id: 'cat-dummy-2', name: 'Nama kategori', image: '/default-kategori.webp' },
@@ -1258,9 +1258,9 @@ const CategoryListElement = ({
   console.log("[CategoryListElement Canvas] Render dengan activeSubFocus:", activeSubFocus, "isActive:", isActive);
 
   const showBuilderUI = !readOnly;
-  const hoverTitleClass = !readOnly ? 'hover:bg-blue-500/5 hover:outline-dashed hover:outline-1 hover:outline-blue-500/40 rounded px-1' : '';
-  const hoverImageClass = !readOnly ? 'hover:scale-105 hover:outline-dashed hover:outline-1 hover:outline-blue-500/40' : '';
-  const hoverNameClass = !readOnly ? 'hover:outline-dashed hover:outline-1 hover:outline-blue-500/40 rounded px-1' : '';
+  const hoverTitleClass = '';
+  const hoverImageClass = '';
+  const hoverNameClass = '';
 
   const dbCats = categories || [];
   let displayCategories = [...dbCats];
@@ -1370,7 +1370,7 @@ const CategoryListElement = ({
   const totalPages = Math.ceil(displayCategories.length / itemsPerPage);
   const paginatedCategories = displayCategories.slice(activePage * itemsPerPage, (activePage + 1) * itemsPerPage);
 
-  // ── Hover-aware style computation ──
+  // Ã¢â€â‚¬Ã¢â€â‚¬ Hover-aware style computation Ã¢â€â‚¬Ã¢â€â‚¬
   const getCatShadow = (s?: string) => {
     if (s === 'soft') return '0 2px 10px rgba(0, 0, 0, 0.05)';
     if (s === 'medium') return '0 4px 20px rgba(0, 0, 0, 0.08)';
@@ -1665,7 +1665,7 @@ const CategoryListElement = ({
   );
 };
 
-// ── PRODUCT LIST WIDGET ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ PRODUCT LIST WIDGET Ã¢â€â‚¬Ã¢â€â‚¬
 const PLACEHOLDER_PRODUCTS = [
   { id: 'p-dummy-1', name: 'Nama produk', price: 199000, discountPrice: 299000, images: ['/default-produk.png'], stock: 100 },
   { id: 'p-dummy-2', name: 'Nama produk', price: 199000, discountPrice: 299000, images: ['/default-produk.png'], stock: 100 },
@@ -1702,11 +1702,11 @@ const ProductListElement = ({
   console.log("[ProductListElement Canvas] Render dengan activeSubFocus:", activeSubFocus, "isActive:", isActive);
 
   const showBuilderUI = !readOnly;
-  const hoverTitleClass = !readOnly ? 'hover:bg-blue-500/5 hover:outline-dashed hover:outline-1 hover:outline-blue-500/40 rounded px-1' : '';
-  const hoverCardClass = !readOnly ? 'hover:scale-[1.01] hover:ring-2 hover:ring-blue-500/30' : '';
-  const hoverImageClass = !readOnly ? 'hover:outline-dashed hover:outline-1 hover:outline-blue-500/40' : '';
-  const hoverNameClass = !readOnly ? 'hover:outline-dashed hover:outline-1 hover:outline-blue-500/40 rounded px-1' : '';
-  const hoverPriceClass = !readOnly ? 'hover:outline-dashed hover:outline-1 hover:outline-blue-500/40 rounded p-1' : '';
+  const hoverTitleClass = '';
+  const hoverCardClass = '';
+  const hoverImageClass = '';
+  const hoverNameClass = '';
+  const hoverPriceClass = '';
 
   const source = config?.source || 'ALL';
   const categoryId = config?.categoryId || '';
@@ -1991,7 +1991,7 @@ const ProductListElement = ({
     return 'Rp ' + num.toLocaleString('id-ID');
   };
 
-  // ── Hover-aware style computation ──
+  // Ã¢â€â‚¬Ã¢â€â‚¬ Hover-aware style computation Ã¢â€â‚¬Ã¢â€â‚¬
   const getProdShadow = (s?: string) => {
     if (s === 'soft') return '0 2px 10px rgba(0, 0, 0, 0.05)';
     if (s === 'medium') return '0 4px 20px rgba(0, 0, 0, 0.08)';
@@ -2403,603 +2403,103 @@ const ProductListElement = ({
   );
 };
 
-// ── COLUMN ELEMENT (nested container) ──
-const ColumnElement = ({
+// Ã¢â€â‚¬Ã¢â€â‚¬ COLUMN ELEMENT (nested container) Ã¢â€â‚¬Ã¢â€â‚¬
+const PreviewColumn = ({
   element,
   activeElementId,
   onElementSelect,
-  onElementContextMenu,
-  onAddElementClick,
-  onElementSelectOnly,
-  onElementEdit,
-  onDeleteElement,
-  newlyAddedElementId,
-  sectionId,
-  onDropWidget,
-  isDraggingWidget,
-  activeSubFocus,
-  isLeftPanelOpen,
-  onOpenEditPanel,
-  isLocalNavigatorOpen,
-  onSectionSelect,
-  hidePlaceholder,
-  readOnly = false,
-}: {
-  element: SectionElement;
-  activeElementId: string | null;
-  onElementSelect: (id: string, subFocus?: string | null) => void;
-  onElementContextMenu?: (elementId: string, x: number, y: number) => void;
-  onAddElementClick?: (parentId: string, isColumn: boolean) => void;
-  onElementSelectOnly?: (elementId: string) => void;
-  onElementEdit?: (elementId: string) => void;
-  onDeleteElement?: (elementId: string) => void;
-  newlyAddedElementId?: string | null;
-  sectionId?: string;
-  onDropWidget?: (targetId: string, widgetType: string) => void;
-  isDraggingWidget?: boolean;
-  activeSubFocus?: string | null;
-  isLeftPanelOpen?: boolean;
-  onOpenEditPanel?: (elementId: string) => void;
-  isLocalNavigatorOpen?: boolean;
-  onSectionSelect?: () => void;
-  hidePlaceholder?: boolean;
-  readOnly?: boolean;
-}) => {
-  const [hoveredChild, setHoveredChild] = useState<string | null>(null);
-  const [isDragOver, setIsDragOver] = useState(false);
-  const [isColumnHovered, setIsColumnHovered] = useState(false);
+}: any) => {
+  const config = element.config || {};
+  const isActive = activeElementId === element.id;
 
-  // Debug Log rendering properti kolom (Aturan 8)
-  useEffect(() => {
-    console.log(`[CANVAS COLUMN ${element.id}] Render element dengan Layout: ${element.config.containerLayout || 'flex'}, Bg: ${element.config.bgColor || 'transparent'}, Radius: ${element.config.borderRadius ?? 0}px`);
-  }, [element.id, element.config.containerLayout, element.config.bgColor, element.config.borderRadius]);
-
-  const children = (element.children || []).sort((a, b) => a.order - b.order);
-  const c = element.config;
-  const isHoriz = c.layout === 'horizontal' || c.layout === 'row-reverse';
-  const isGrid = c.containerLayout === 'grid';
-
-  // Layout classes
-  const layoutClass = isGrid
-    ? 'grid'
-    : c.layout === 'horizontal'
-      ? 'flex flex-row flex-wrap'
-      : c.layout === 'row-reverse'
-        ? 'flex flex-row-reverse flex-wrap'
-        : c.layout === 'col-reverse'
-          ? 'flex flex-col-reverse'
-          : 'flex flex-col';
-
-  // Box Shadow Mapper
-  const getShadow = (s?: string) => {
-    if (s === 'soft') return '0 2px 10px rgba(0, 0, 0, 0.05)';
-    if (s === 'medium') return '0 4px 20px rgba(0, 0, 0, 0.08)';
-    if (s === 'strong') return '0 10px 30px rgba(0, 0, 0, 0.12)';
-    return undefined;
+  const getGridMappingClass = (columns: any) => {
+    if (!columns) return "";
+    let cls = "";
+    if (typeof columns === 'number') {
+      cls += `grid-cols-${columns} `;
+    }
+    if (typeof columns === 'string') {
+      const parts = columns.split(' ');
+      parts.forEach((p: string) => {
+        if (p.includes(':')) {
+          cls += `${p.split(':')[0]}:grid-cols-${p.split(':')[1]} `;
+        } else {
+          cls += `grid-cols-${p} `;
+        }
+      });
+    }
+    return cls.trim();
   };
 
-  // Order Mapper
-  const getOrder = () => {
-    if (c.order === 'start') return -9999;
-    if (c.order === 'end') return 9999;
-    if (c.order === 'custom') return c.customOrder ?? 0;
-    return undefined;
+  const layout = config.layout || 'flexbox';
+  
+  const containerStyle: React.CSSProperties = {
+    paddingTop: formatStyleValue(config.paddingTop),
+    paddingBottom: formatStyleValue(config.paddingBottom),
+    paddingLeft: formatStyleValue(config.paddingLeft),
+    paddingRight: formatStyleValue(config.paddingRight),
+    marginTop: formatStyleValue(config.marginTop),
+    marginBottom: formatStyleValue(config.marginBottom),
+    backgroundColor: config.bgColor || 'transparent',
+    borderRadius: formatStyleValue(config.borderRadius),
+    borderWidth: formatStyleValue(config.borderWidth),
+    borderColor: config.borderColor || 'transparent',
+    borderStyle: config.borderType || 'solid',
+    boxShadow: config.boxShadowType && config.boxShadowType !== 'none' && config.shadowColor ? `${config.shadowOffsetX || 0}px ${config.shadowOffsetY || 4}px ${config.shadowBlur || 6}px ${config.shadowSpread || -1}px ${config.shadowColor}` : 'none',
+    display: layout === 'flexbox' ? 'flex' : 'grid',
+    gap: formatStyleValue(config.gap, 16),
   };
 
-  // Width/Sizing Mapper
-  const getWidth = () => {
-    if (c.sizing === 'full') return '100%';
-    if (c.sizing === 'fit') return 'fit-content';
-    if (c.sizing === 'custom') return c.customWidth ? `${c.customWidth}px` : undefined;
-    return c.contentWidth === 'boxed' ? undefined : '100%';
-  };
+  if (layout === 'flexbox') {
+    containerStyle.flexDirection = config.direction || 'col';
+    containerStyle.alignItems = config.align || 'flex-start';
+    containerStyle.justifyContent = config.justify || 'flex-start';
+    containerStyle.flexWrap = config.flexWrap || 'nowrap';
+  }
 
-  // ── Hover-aware style computation (sama seperti Section) ──
-  const resolvedBgColor = isColumnHovered && c.hoverBgColor && c.hoverBgColor !== 'transparent'
-    ? c.hoverBgColor
-    : (c.bgColor || 'transparent');
-
-  const resolvedBgImage = (() => {
-    if (isColumnHovered && c.hoverBgType === 'gradient') {
-      return c.hoverBgGradientType === 'radial'
-        ? `radial-gradient(circle at ${c.hoverBgGradientRadialPos || 'center center'}, ${c.hoverBgGradientColor1 || 'transparent'} ${c.hoverBgGradientLoc1 ?? 0}%, ${c.hoverBgGradientColor2 || 'transparent'} ${c.hoverBgGradientLoc2 ?? 100}%)`
-        : `linear-gradient(${c.hoverBgGradientAngle ?? 180}deg, ${c.hoverBgGradientColor1 || 'transparent'} ${c.hoverBgGradientLoc1 ?? 0}%, ${c.hoverBgGradientColor2 || 'transparent'} ${c.hoverBgGradientLoc2 ?? 100}%)`;
-    }
-    if (c.bgType === 'gradient') {
-      return c.bgGradientType === 'radial'
-        ? `radial-gradient(circle at ${c.bgGradientRadialPos || 'center center'}, ${c.bgGradientColor1 || '#ffffff'} ${c.bgGradientLoc1 ?? 0}%, ${c.bgGradientColor2 || '#e83a65'} ${c.bgGradientLoc2 ?? 100}%)`
-        : `linear-gradient(${c.bgGradientAngle ?? 180}deg, ${c.bgGradientColor1 || '#ffffff'} ${c.bgGradientLoc1 ?? 0}%, ${c.bgGradientColor2 || '#e83a65'} ${c.bgGradientLoc2 ?? 100}%)`;
-    }
-    if (c.bgImageUrl) return `url(${c.bgImageUrl})`;
-    return undefined;
-  })();
-
-  const resolvedBorderTopLeftRadius = formatStyleValue(
-    isColumnHovered ? (c.hoverBorderRadiusTop ?? c.hoverBorderRadius ?? c.borderRadiusTop ?? c.borderRadius) : (c.borderRadiusTop ?? c.borderRadius), 0);
-  const resolvedBorderTopRightRadius = formatStyleValue(
-    isColumnHovered ? (c.hoverBorderRadiusRight ?? c.hoverBorderRadius ?? c.borderRadiusRight ?? c.borderRadius) : (c.borderRadiusRight ?? c.borderRadius), 0);
-  const resolvedBorderBottomRightRadius = formatStyleValue(
-    isColumnHovered ? (c.hoverBorderRadiusBottom ?? c.hoverBorderRadius ?? c.borderRadiusBottom ?? c.borderRadius) : (c.borderRadiusBottom ?? c.borderRadius), 0);
-  const resolvedBorderBottomLeftRadius = formatStyleValue(
-    isColumnHovered ? (c.hoverBorderRadiusLeft ?? c.hoverBorderRadius ?? c.borderRadiusLeft ?? c.borderRadius) : (c.borderRadiusLeft ?? c.borderRadius), 0);
-
-  const resolvedBorderStyle = (() => {
-    const bt = isColumnHovered ? (c.hoverBorderType || c.borderType) : c.borderType;
-    return bt && bt !== 'none' && bt !== 'Asali' ? bt : undefined;
-  })();
-
-  const resolvedBorderTopWidth = (() => {
-    const bw = isColumnHovered
-      ? (c.hoverBorderWidthTop ?? c.hoverBorderWidth ?? c.borderWidthTop ?? c.borderWidth)
-      : (c.borderWidthTop ?? c.borderWidth);
-    return bw !== undefined ? `${bw}px` : undefined;
-  })();
-  const resolvedBorderRightWidth = (() => {
-    const bw = isColumnHovered
-      ? (c.hoverBorderWidthRight ?? c.hoverBorderWidth ?? c.borderWidthRight ?? c.borderWidth)
-      : (c.borderWidthRight ?? c.borderWidth);
-    return bw !== undefined ? `${bw}px` : undefined;
-  })();
-  const resolvedBorderBottomWidth = (() => {
-    const bw = isColumnHovered
-      ? (c.hoverBorderWidthBottom ?? c.hoverBorderWidth ?? c.borderWidthBottom ?? c.borderWidth)
-      : (c.borderWidthBottom ?? c.borderWidth);
-    return bw !== undefined ? `${bw}px` : undefined;
-  })();
-  const resolvedBorderLeftWidth = (() => {
-    const bw = isColumnHovered
-      ? (c.hoverBorderWidthLeft ?? c.hoverBorderWidth ?? c.borderWidthLeft ?? c.borderWidth)
-      : (c.borderWidthLeft ?? c.borderWidth);
-    return bw !== undefined ? `${bw}px` : undefined;
-  })();
-
-  const resolvedBorderColor = isColumnHovered
-    ? (c.hoverBorderColor || c.borderColor || undefined)
-    : (c.borderColor || undefined);
-
-  const resolvedBoxShadow = (() => {
-    if (isColumnHovered && c.hoverBoxShadowType === 'custom') {
-      return `${c.hoverShadowOffsetX ?? 0}px ${c.hoverShadowOffsetY ?? 0}px ${c.hoverShadowBlur ?? 10}px ${c.hoverShadowSpread ?? 0}px ${c.hoverShadowColor || 'rgba(0,0,0,0.5)'}`;
-    }
-    if (isColumnHovered && c.hoverBoxShadow) {
-      return c.hoverBoxShadow;
-    }
-    if (c.boxShadowType === 'custom') {
-      return `${c.shadowOffsetX ?? 0}px ${c.shadowOffsetY ?? 0}px ${c.shadowBlur ?? 10}px ${c.shadowSpread ?? 0}px ${c.shadowColor || 'rgba(0,0,0,0.5)'}`;
-    }
-    return getShadow(c.boxShadow) || c.boxShadow || undefined;
-  })();
-
-  const resolvedTransition = c.hoverTransitionDuration !== undefined
-    ? `background-color ${c.hoverTransitionDuration}s ease, background-image ${c.hoverTransitionDuration}s ease, border-color ${c.hoverTransitionDuration}s ease, border-width ${c.hoverTransitionDuration}s ease, border-radius ${c.hoverTransitionDuration}s ease, box-shadow ${c.hoverTransitionDuration}s ease`
-    : undefined;
-
-  const styleObj: React.CSSProperties = {
-    // Gap
-    columnGap: `${c.columnGap ?? c.gap ?? 16}px`,
-    rowGap: `${c.rowGap ?? c.gap ?? 16}px`,
-
-    // Background & Visual (hover-aware)
-    backgroundColor: resolvedBgColor,
-    backgroundImage: resolvedBgImage,
-    backgroundSize: c.bgImageUrl ? 'cover' : undefined,
-    backgroundPosition: c.bgImageUrl ? 'center' : undefined,
-    borderTopLeftRadius: resolvedBorderTopLeftRadius,
-    borderTopRightRadius: resolvedBorderTopRightRadius,
-    borderBottomRightRadius: resolvedBorderBottomRightRadius,
-    borderBottomLeftRadius: resolvedBorderBottomLeftRadius,
-    boxShadow: resolvedBoxShadow,
-    borderStyle: resolvedBorderStyle,
-    borderTopWidth: resolvedBorderTopWidth,
-    borderRightWidth: resolvedBorderRightWidth,
-    borderBottomWidth: resolvedBorderBottomWidth,
-    borderLeftWidth: resolvedBorderLeftWidth,
-    borderColor: resolvedBorderColor,
-
-    // Padding
-    paddingTop: formatStyleValue(c.paddingTop, 16),
-    paddingBottom: formatStyleValue(c.paddingBottom, 16),
-    paddingLeft: formatStyleValue(c.paddingLeft, 16),
-    paddingRight: formatStyleValue(c.paddingRight, 16),
-
-    // Margin
-    marginTop: formatStyleValue(c.marginTop, 0),
-    marginBottom: formatStyleValue(c.marginBottom, 0),
-    marginLeft: formatStyleValue(c.marginLeft, 0),
-    marginRight: formatStyleValue(c.marginRight, 0),
-
-    // Alignment
-    alignItems: c.alignItems || (c.align === 'center' ? 'center' : c.align === 'right' ? 'flex-end' : 'flex-start'),
-    justifyContent: c.justifyContent || 'flex-start',
-    alignSelf: c.alignSelf || 'auto',
-
-    // Width & Height & Grid
-    gridTemplateColumns: isGrid ? `repeat(${c.columns || 2}, 1fr)` : undefined,
-    width: getWidth(),
-    maxWidth: c.contentWidth === 'boxed' ? `${c.width ?? 1000}px` : '100%',
-    minHeight: c.minHeight ? `${c.minHeight}px` : undefined,
-
-    // Advanced
-    order: getOrder(),
-    position: (c.position || 'relative') as any,
-    zIndex: c.zIndex !== undefined ? c.zIndex : undefined,
-
-    // Transition
-    transition: resolvedTransition,
-  };
+  const gridClass = layout === 'grid' ? getGridMappingClass(config.columns || 1) : '';
 
   return (
     <div
-      className={`relative transition-all ${layoutClass} ${!readOnly && isDragOver ? 'outline-dashed outline-2 outline-blue-500 bg-blue-500/10 animate-pulse rounded-lg' : ''}`}
-      style={styleObj}
-      onMouseEnter={!readOnly ? () => setIsColumnHovered(true) : undefined}
-      onMouseLeave={!readOnly ? () => setIsColumnHovered(false) : undefined}
-      onDragOver={!readOnly ? (e) => {
-        if (isDraggingWidget) {
-          e.preventDefault();
-          e.stopPropagation();
-          setIsDragOver(true);
-        }
-      } : undefined}
-      onDragLeave={!readOnly ? () => {
-        setIsDragOver(false);
-      } : undefined}
-      onDrop={!readOnly ? (e) => {
-        if (isDraggingWidget) {
-          e.preventDefault();
-          e.stopPropagation();
-          setIsDragOver(false);
-          const type = e.dataTransfer.getData("text/plain");
-          if (type && onDropWidget) {
-            console.log(`[Drag & Drop COLUMN] Drop widget tipe: "${type}" ke Kolom ID: "${element.id}"`);
-            onDropWidget(element.id, type);
-          }
-        }
-      } : undefined}
+      className={`${gridClass} ${config.customClass || ''} ${isActive ? 'ring-2 ring-blue-500/50 rounded-lg' : 'hover:ring-2 hover:ring-blue-400/40 hover:bg-blue-50/10 rounded-lg'} transition-all cursor-pointer relative group w-full h-full min-h-[50px]`}
+      style={containerStyle}
+      onClick={(e) => {
+        e.stopPropagation();
+        onElementSelect?.(element.id);
+      }}
     >
-      {/* Overlay Background image */}
-      {c.bgImageUrl && c.overlay !== undefined && (
-        <div
-          className="absolute inset-0 bg-black pointer-events-none rounded-[inherit]"
-          style={{ opacity: c.overlay ?? 0.3 }}
+      {(element.children || []).map((child: any) => (
+        <PreviewElement
+          key={child.id}
+          element={child}
+          activeElementId={activeElementId}
+          onElementSelect={onElementSelect}
         />
-      )}
-      {!readOnly && children.length === 0 ? (
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            console.log("[Empty State Click] Kolom kosong diklik, ID:", element.id);
-            if (onAddElementClick) {
-              onAddElementClick(element.id, true);
-            }
-          }}
-          className="w-full py-10 h-full min-h-[120px] flex flex-col items-center justify-center gap-2 border-2 border-dashed border-zinc-200/60 hover:border-blue-400 rounded-xl bg-zinc-50/30 hover:bg-blue-50/20 cursor-pointer transition-all group/colempty"
-        >
-          <div className="w-10 h-10 rounded-xl bg-zinc-100 group-hover/colempty:bg-blue-500/10 flex items-center justify-center transition-colors">
-            <Plus className="w-4 h-4 text-zinc-400 group-hover/colempty:text-blue-600 transition-colors" />
-          </div>
-          <span className="text-[10px] font-bold text-zinc-400 group-hover/colempty:text-blue-600 transition-colors uppercase tracking-widest">Kolom Kosong</span>
-          <span className="text-[8px] text-zinc-400">Klik tombol + untuk menambahkan elemen</span>
-        </div>
-      ) : readOnly && children.length === 0 ? null : (
-        (() => {
-          return children.map((child) => {
-            return (
-            <div key={child.id} className={isHoriz ? 'flex-1 min-w-0' : (c.alignItems === 'stretch' || !c.alignItems ? 'w-full' : 'max-w-full')} onClick={(e) => e.stopPropagation()}>
-              <ElementWrapper
-                element={child}
-                isActive={!readOnly && activeElementId === child.id}
-                isHovered={!readOnly && hoveredChild === child.id}
-                readOnly={readOnly}
-              onSelect={!readOnly ? () => {
-                if (onSectionSelect) onSectionSelect();
-                onElementSelect(child.id);
-              } : undefined}
-              onHover={!readOnly ? () => setHoveredChild(child.id) : undefined}
-              onLeave={!readOnly ? () => setHoveredChild(null) : undefined}
-              onContextMenu={!readOnly ? (e) => {
-                if (onElementContextMenu) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onElementContextMenu(child.id, e.clientX, e.clientY);
-                }
-              } : undefined}
-              activeElementId={activeElementId}
-              parentGap={c.gap ?? 16}
-              parentLayout={c.layout}
-              onElementSelect={onElementSelect}
-              onElementContextMenu={onElementContextMenu}
-              onAddElementClick={onAddElementClick}
-              newlyAddedElementId={newlyAddedElementId}
-              onElementSelectOnly={onElementSelectOnly}
-              onElementEdit={onElementEdit}
-              onDeleteElement={onDeleteElement}
-              sectionId={sectionId}
-              onDropWidget={onDropWidget}
-              isDraggingWidget={isDraggingWidget}
-              activeSubFocus={activeSubFocus}
-              isLeftPanelOpen={isLeftPanelOpen}
-              onOpenEditPanel={onOpenEditPanel}
-              isLocalNavigatorOpen={isLocalNavigatorOpen}
-              onSectionSelect={onSectionSelect}
-            />
-            </div>
-            );
-          });
-        })()
-      )}
+      ))}
     </div>
   );
 };
 
-// ── ELEMENT WRAPPER (hover badge + click) ──
-const ElementWrapper = ({
+const PreviewElement = ({
   element,
-  isActive,
-  isHovered,
-  onSelect,
-  onHover,
-  onLeave,
-  onContextMenu,
   activeElementId,
   onElementSelect,
-  onElementContextMenu,
-  onAddElementClick,
-  newlyAddedElementId,
-  onElementSelectOnly,
-  onElementEdit,
-  onDeleteElement,
-  sectionId,
-  onDropWidget,
-  isDraggingWidget,
-  activeSubFocus,
-  parentGap,
-  parentLayout,
-  isLeftPanelOpen,
-  onOpenEditPanel,
-  isLocalNavigatorOpen,
-  onSectionSelect,
-  readOnly = false,
-}: {
-  element: SectionElement;
-  isActive: boolean;
-  isHovered: boolean;
-  onSelect?: () => void;
-  onHover?: () => void;
-  onLeave?: () => void;
-  onContextMenu?: (e: React.MouseEvent) => void;
-  activeElementId: string | null;
-  onElementSelect: (id: string, subFocus?: string | null) => void;
-  onElementContextMenu?: (elementId: string, x: number, y: number) => void;
-  onAddElementClick?: (parentId: string, isColumn: boolean) => void;
-  newlyAddedElementId?: string | null;
-  onElementSelectOnly?: (elementId: string) => void;
-  onElementEdit?: (elementId: string) => void;
-  onDeleteElement?: (elementId: string) => void;
-  sectionId?: string;
-  onDropWidget?: (targetId: string, widgetType: string) => void;
-  isDraggingWidget?: boolean;
-  activeSubFocus?: string | null;
-  parentGap?: number;
-  parentLayout?: string;
-  isLeftPanelOpen?: boolean;
-  onOpenEditPanel?: (elementId: string) => void;
-  isLocalNavigatorOpen?: boolean;
-  onSectionSelect?: () => void;
-  readOnly?: boolean;
-}) => {
-  const meta = ELEMENT_TYPE_MAP[element.type];
-  const Icon = meta?.icon || Type;
-  const isNewlyAdded = newlyAddedElementId === element.id;
-
-  const isHeader = sectionId === 'global-header';
-
-  const wrapperStyle: React.CSSProperties = {
-    ...(element.type === 'COLUMN' ? {
-      width: (() => {
-        const rawWidth = element.config?.width || (element.config?.sizing === 'full' ? '100%' : element.config?.sizing === 'fit' ? 'fit-content' : element.config?.sizing === 'custom' ? `${element.config?.customWidth}px` : '100%');
-        if (typeof rawWidth === 'string' && rawWidth.endsWith('%') && (parentLayout === 'flexbox' || parentLayout === 'horizontal')) {
-          const pct = parseFloat(rawWidth);
-          if (!isNaN(pct)) {
-            const fraction = pct / 100;
-            const gap = parentGap !== undefined ? parentGap : 16;
-            const calculated = `calc(${rawWidth} - ${(1 - fraction) * gap}px)`;
-            return calculated;
-          }
-        }
-        return rawWidth;
-      })(),
-      flex: element.config?.flex || (element.config?.sizing === 'default' && element.config?.flexGrow ? `${element.config?.flexGrow} ${element.config?.flexShrink || 1} ${element.config?.flexBasis || '0%'}` : undefined),
-      alignSelf: element.config?.alignSelf || undefined,
-    } : {
-      alignSelf: element.config?.alignSelf || undefined,
-      marginTop: formatStyleValue(element.config?.marginTop, 0),
-      marginBottom: formatStyleValue(element.config?.marginBottom, 0),
-      marginLeft: formatStyleValue(element.config?.marginLeft, undefined),
-      marginRight: formatStyleValue(element.config?.marginRight, undefined),
-      zIndex: element.config?.zIndex !== undefined ? Number(element.config.zIndex) : undefined,
-      justifyContent: element.config?.justifyContent || undefined,
-      alignContent: element.config?.alignContent || undefined,
-      position: element.config?.position || undefined,
-      order: element.config?.order !== undefined ? Number(element.config.order) : undefined,
-      width: element.config?.widthType === 'full' ? '100%' : element.config?.widthType === 'custom' ? element.config?.customWidth : undefined,
-      maxWidth: '100%',
-      flex: element.config?.sizing === 'full' ? '1 1 100%' : element.config?.sizing === 'fit' ? '0 0 auto' : element.config?.sizing === 'custom' ? element.config?.flex : undefined,
-    }),
-    ...(sectionId === 'global-header' && element.type === 'CART' ? { marginLeft: 'auto' as const } : {}),
-  };
-
-  const isColumnType = element.type === 'COLUMN';
-  const contentStyle: React.CSSProperties = !isColumnType ? {
-    backgroundColor: element.type === 'BUTTON' ? undefined : ((element.config?.bgType || 'classic') === 'classic' ? (element.config?.bgColor || undefined) : undefined),
-    backgroundImage: element.type === 'BUTTON' ? undefined : (element.config?.bgType === 'gradient'
-      ? (element.config.bgGradientType === 'radial'
-          ? `radial-gradient(circle at ${element.config.bgGradientRadialPos || 'center center'}, ${element.config.bgGradientColor1 || '#ffffff'} ${element.config.bgGradientLoc1 ?? 0}%, ${element.config.bgGradientColor2 || '#e83a65'} ${element.config.bgGradientLoc2 ?? 100}%)`
-          : `linear-gradient(${element.config.bgGradientAngle ?? 180}deg, ${element.config.bgGradientColor1 || '#ffffff'} ${element.config.bgGradientLoc1 ?? 0}%, ${element.config.bgGradientColor2 || '#e83a65'} ${element.config.bgGradientLoc2 ?? 100}%)`)
-      : undefined),
-    color: element.type === 'BUTTON' ? undefined : (element.config?.textColor || undefined),
-    borderRadius: element.type === 'BUTTON' ? undefined : (element.config?.borderRadius !== undefined ? `${element.config.borderRadius}px` : 0),
-    borderWidth: element.type === 'BUTTON' ? undefined : (element.config?.borderWidth !== undefined ? `${element.config.borderWidth}px` : undefined),
-    borderStyle: element.type === 'BUTTON' ? undefined : (element.config?.borderStyle || undefined),
-    borderColor: element.type === 'BUTTON' ? undefined : (element.config?.borderColor || undefined),
-    boxShadow: element.type === 'BUTTON' ? undefined : (element.config?.boxShadow === 'sm'
-      ? '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-      : element.config?.boxShadow === 'md'
-        ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-        : element.config?.boxShadow === 'lg'
-          ? '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
-          : element.config?.boxShadow === 'hover-glow'
-            ? '0 0 15px rgba(59, 130, 246, 0.5)'
-            : undefined),
-    paddingTop: element.type === 'BUTTON' ? undefined : formatStyleValue(element.config?.paddingTop, undefined),
-    paddingBottom: element.type === 'BUTTON' ? undefined : formatStyleValue(element.config?.paddingBottom, undefined),
-    paddingLeft: element.type === 'BUTTON' ? undefined : formatStyleValue(element.config?.paddingLeft, undefined),
-    paddingRight: element.type === 'BUTTON' ? undefined : formatStyleValue(element.config?.paddingRight, undefined),
-    opacity: element.config?.opacity !== undefined ? (Number(element.config.opacity) / 100) : undefined,
-    height: '100%',
-    width: '100%',
-  } : {};
-
-  useEffect(() => {
-    if (element.type === 'COLUMN') {
-      console.log(`[ElementWrapper COLUMN ${element.id}] Menerapkan style wrapper:`, wrapperStyle);
-    } else {
-      console.log(`[ElementWrapper ${element.type} Style Match] Menerapkan style kustom:`, {
-        wrapperStyle,
-        contentStyle,
-        customClass: element.config?.customClass
-      });
-      if (element.type === 'BUTTON') {
-        console.log(`[BuilderSection BUTTON Wrapper Style Debug] Menghindari kebocoran bgColor ke wrapper. contentStyle.backgroundColor:`, contentStyle.backgroundColor);
-      }
-    }
-  }, [element.id, element.type, element.config, wrapperStyle, contentStyle]);
+}: any) => {
+  const isActive = activeElementId === element.id;
+  
+  if (element.type === 'COLUMN') {
+    return <PreviewColumn element={element} activeElementId={activeElementId} onElementSelect={onElementSelect} />;
+  }
 
   return (
-    <>
-      {element.config?.mobileConfig && (
-        <style dangerouslySetInnerHTML={{ __html: generateMobileCss(`.el-${element.id}`, element.config.mobileConfig) }} />
-      )}
-      <div
-        className={`el-${element.id} relative group/el cursor-pointer transition-all ${isNewlyAdded
-          ? 'outline outline-2 outline-blue-500 rounded-none animate-pulse bg-blue-500/10'
-          : isActive
-            ? 'outline outline-2 outline-blue-600 outline-offset-2 rounded-none bg-blue-500/5'
-            : !readOnly ? 'hover:outline-dashed hover:outline-2 hover:outline-blue-500/40 hover:outline-offset-2 hover:rounded-none' : ''
-          }`}
-        style={wrapperStyle}
-      onClick={!readOnly ? (e) => {
+    <div 
+      className={`relative transition-all cursor-pointer rounded-lg hover:ring-2 hover:ring-blue-400/40 ${isActive ? 'ring-2 ring-blue-500/50' : 'hover:bg-blue-50/10'}`}
+      onClick={(e) => {
         e.stopPropagation();
-        if (element.type === 'COLUMN') {
-          if (onElementSelectOnly) onElementSelectOnly(element.id);
-        } else {
-          onSelect?.();
-        }
-      } : undefined}
-      onMouseEnter={!readOnly ? onHover : undefined}
-      onMouseLeave={!readOnly ? onLeave : undefined}
-      onContextMenu={!readOnly ? onContextMenu : undefined}
+        onElementSelect?.(element.id);
+      }}
     >
-      {/* Element Badge di Pojok Kiri Atas */}
-      {!readOnly && (isHovered || isActive) && (
-        <div className="absolute -top-5 left-0 z-[65] flex items-center gap-1 pointer-events-none">
-          <div className={`flex items-center gap-1 ${isActive ? 'bg-blue-700' : 'bg-blue-600'} text-white px-2 py-0.5 rounded shadow-lg`}>
-            <Icon className="w-2.5 h-2.5" />
-            <span className="text-[9px] font-bold">{meta?.label || element.type}</span>
-          </div>
-        </div>
-      )}
-
-
-
-      {/* WordPress Elementor-Style Premium Column Navigator (Melayang Tengah Atas) */}
-      {!readOnly && element.type === 'COLUMN' && (isHovered || isActive) && (
-        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-[99999] flex items-center gap-1.5 bg-zinc-900/60 hover:bg-zinc-900/80 backdrop-blur-md text-white px-2.5 py-0.5 rounded-full shadow-lg border border-white/10 transition-all pointer-events-auto select-none">
-          {/* Tombol Tambah + */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log("[Column Navigator] Plus diklik untuk Kolom ID:", element.id);
-              if (onAddElementClick) {
-                onAddElementClick(element.id, true);
-              }
-            }}
-            className="p-1 hover:text-blue-400 transition-colors flex items-center justify-center cursor-pointer"
-            title="Tambah Elemen ke Kolom"
-          >
-            <Plus className="w-3 h-3 font-extrabold" />
-          </button>
-
-          {/* Divider */}
-          <div className="w-px h-3 bg-white/10" />
-
-          {/* Tombol Move/Navigator 🟢 */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log("[Column Navigator] Move (Navigator) diklik untuk Kolom ID:", element.id);
-              if (onElementSelectOnly) onElementSelectOnly(element.id);
-              console.log("[Column Navigator Debug] Mengirim event builder:openNavigatorPanel untuk Kolom:", element.id, "di Section:", sectionId);
-              window.dispatchEvent(new CustomEvent('builder:openNavigatorPanel', { detail: { elementId: element.id, sectionId } }));
-            }}
-            className={`p-1 transition-colors flex items-center justify-center cursor-pointer ${isLocalNavigatorOpen ? 'text-emerald-300' : 'text-emerald-400 hover:text-emerald-300'}`}
-            title="Buka Navigator Posisi"
-          >
-            <Move className="w-2.5 h-2.5" />
-          </button>
-
-          {/* Divider */}
-          <div className="w-px h-3 bg-white/10" />
-
-          {/* Tombol Edit/Pensil ✏️ */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log("[Column Navigator] Edit (Pencil) diklik untuk Kolom ID:", element.id);
-              if (onElementEdit) {
-                onElementEdit(element.id);
-              }
-            }}
-            className="p-1 hover:text-amber-400 transition-colors flex items-center justify-center cursor-pointer"
-            title="Edit Kolom"
-          >
-            <Pencil className="w-2.5 h-2.5" />
-          </button>
-
-          {/* Divider */}
-          <div className="w-px h-3 bg-white/10" />
-
-          {/* Tombol Hapus/Sampah 🗑️ */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log("[Column Navigator] Delete (Trash) diklik untuk Kolom ID:", element.id);
-              if (onDeleteElement) {
-                onDeleteElement(element.id);
-              }
-            }}
-            className="p-1 hover:text-red-400 transition-colors flex items-center justify-center cursor-pointer"
-            title="Hapus Kolom"
-          >
-            <Trash2 className="w-3 h-3" />
-          </button>
-        </div>
-      )}
-
-      {/* Element Content */}
-      <div
-        className={`${(element.type === 'COLUMN' || element.type === 'CATEGORY_LIST' || element.type === 'PRODUCT_LIST' || element.type === 'BRANDING') ? '' : 'pointer-events-none'} ${element.config?.customClass || ''} transition-all`}
-        style={contentStyle}
-      >
+      <div className={`${element.config?.customClass || ''}`}>
         {element.type === 'HEADING' && <HeadingElement config={element.config} />}
         {element.type === 'TEXT' && <TextElement config={element.config} elementId={element.id} />}
         {element.type === 'BUTTON' && <ButtonElement config={element.config} />}
@@ -3008,668 +2508,69 @@ const ElementWrapper = ({
         {element.type === 'SPACER' && <SpacerElement config={element.config} />}
         {element.type === 'DIVIDER' && <DividerElement config={element.config} />}
         {element.type === 'BADGE' && <BadgeElement config={element.config} />}
-        {element.type === 'BRANDING' && (
-          <BrandingElement
-            config={element.config}
-            onElementSelect={onElementSelect}
-            elementId={element.id}
-            activeSubFocus={activeSubFocus}
-            isActive={isActive}
-            readOnly={readOnly}
-          />
-        )}
-        {element.type === 'MENU' && <MenuElement config={element.config} readOnly={readOnly} elementId={element.id} />}
-        {element.type === 'CART' && <CartElement config={element.config} readOnly={readOnly} />}
-        {element.type === 'CATEGORY_LIST' && (
-          <CategoryListElement
-            config={element.config}
-            onElementSelect={onElementSelect}
-            elementId={element.id}
-            activeSubFocus={activeSubFocus}
-            isActive={isActive}
-            readOnly={readOnly}
-          />
-        )}
-        {element.type === 'PRODUCT_LIST' && (
-          <ProductListElement
-            config={element.config}
-            onElementSelect={onElementSelect}
-            elementId={element.id}
-            activeSubFocus={activeSubFocus}
-            isActive={isActive}
-            readOnly={readOnly}
-          />
-        )}
-        {element.type === 'COLUMN' && (
-          <ColumnElement
-            element={element}
-            activeElementId={activeElementId}
-            onElementSelect={onElementSelect}
-            onElementContextMenu={onElementContextMenu}
-            onAddElementClick={onAddElementClick}
-            onElementSelectOnly={onElementSelectOnly}
-            onElementEdit={onElementEdit}
-            onDeleteElement={onDeleteElement}
-            newlyAddedElementId={newlyAddedElementId}
-            sectionId={sectionId}
-            onDropWidget={onDropWidget}
-            isDraggingWidget={isDraggingWidget}
-            activeSubFocus={activeSubFocus}
-            isLeftPanelOpen={isLeftPanelOpen}
-            onOpenEditPanel={onOpenEditPanel}
-            isLocalNavigatorOpen={isLocalNavigatorOpen}
-            onSectionSelect={onSectionSelect}
-            readOnly={readOnly}
-          />
-        )}
+        {element.type === 'BRANDING' && <BrandingElement config={element.config} />}
+        {element.type === 'MENU' && <MenuElement config={element.config} />}
+        {element.type === 'CART' && <CartElement config={element.config} />}
       </div>
-
-      {/* Hover action buttons — pojok kanan atas elemen */}
-      {!readOnly && !isHeader && element.type !== 'COLUMN' && isHovered && (
-        <div className="absolute top-1 right-1 z-[60] flex items-center gap-0.5 pointer-events-auto">
-          {/* Tombol Move 🟢 */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log('[Element Hover Move] Navigator diklik untuk elemen:', element.id);
-              onSelect?.();
-              console.log("[Element Hover Move Debug] Mengirim event builder:openNavigatorPanel untuk Elemen:", element.id, "di Section:", sectionId);
-              window.dispatchEvent(new CustomEvent('builder:openNavigatorPanel', { detail: { elementId: element.id, sectionId } }));
-            }}
-            className={`p-1.5 rounded-l-md transition-all flex items-center justify-center cursor-pointer opacity-0 group-hover/el:opacity-100 ${isLocalNavigatorOpen ? 'bg-emerald-600 text-white' : 'bg-emerald-600/90 hover:bg-emerald-500 text-white'}`}
-            title="Navigator Posisi"
-          >
-            <Move className="w-3 h-3" />
-          </button>
-
-          {/* Tombol Edit 🟡 — hanya saat panel kiri collapse */}
-          {!isLeftPanelOpen && onOpenEditPanel && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                console.log('[Element Hover Edit] Membuka panel edit untuk elemen:', element.id);
-                onOpenEditPanel(element.id);
-              }}
-              className="p-1.5 transition-all flex items-center justify-center cursor-pointer opacity-0 group-hover/el:opacity-100 bg-amber-500/90 hover:bg-amber-400 text-white"
-              title="Edit elemen ini"
-            >
-              <Pencil className="w-3 h-3" />
-            </button>
-          )}
-
-          {/* Tombol Delete 🔴 */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log("[Element Hover Delete] Hapus diklik untuk Elemen ID:", element.id);
-              if (onDeleteElement) {
-                onDeleteElement(element.id);
-              }
-            }}
-            className={`p-1.5 transition-all flex items-center justify-center cursor-pointer opacity-0 group-hover/el:opacity-100 bg-red-600/90 hover:bg-red-600 text-white ${!isLeftPanelOpen && onOpenEditPanel ? 'rounded-r-md' : 'rounded-r-md'}`}
-            title={`Hapus ${meta?.label || element.type}`}
-          >
-            <Trash2 className="w-3 h-3" />
-          </button>
-        </div>
-      )}
     </div>
-    </>
   );
 };
 
-// ── MAIN SECTION COMPONENT ──
-export const BuilderSection = ({
-  id,
-  config,
+export const PreviewSection = ({
+  section,
   elements,
   activeElementId,
   onElementSelect,
-  onSectionSelect,
-  isActive,
-  onAddElement,
-  onElementContextMenu,
-  onAddElementClick,
-  newlyAddedElementId,
-  onDeleteSection,
-  onSectionSelectOnly,
-  onElementSelectOnly,
-  onElementEdit,
-  onDeleteElement,
-  onDropWidget,
-  isDraggingWidget,
-  activeSubFocus,
-  isLeftPanelOpen,
-  onOpenEditPanel,
-  panelWidth,
-  readOnly = false,
-}: {
-  id: string;
-  config: BuilderSectionConfig;
-  elements: SectionElement[];
-  activeElementId: string | null;
-  onElementSelect: (elementId: string, subFocus?: string | null) => void;
-  onSectionSelect: () => void;
-  isActive: boolean;
-  onAddElement?: () => void;
-  onElementContextMenu?: (elementId: string, x: number, y: number) => void;
-  onAddElementClick?: (parentId: string, isColumn: boolean) => void;
-  newlyAddedElementId?: string | null;
-  onDeleteSection?: (id: string) => void;
-  onSectionSelectOnly?: () => void;
-  onElementSelectOnly?: (elementId: string) => void;
-  onElementEdit?: (elementId: string) => void;
-  onDeleteElement?: (elementId: string) => void;
-  onDropWidget?: (targetId: string, widgetType: string) => void;
-  isDraggingWidget?: boolean;
-  activeSubFocus?: string | null;
-  isLeftPanelOpen?: boolean;
-  onOpenEditPanel?: (elementId: string) => void;
-  onOpenNavigatorPanel?: () => void;
-  isNavigatorPanelOpen?: boolean;
-  panelWidth?: number;
-  readOnly?: boolean;
-}) => {
-  const [hoveredElementId, setHoveredElementId] = useState<string | null>(null);
-  const [isSectionHovered, setIsSectionHovered] = useState(false);
-  const [isDragOver, setIsDragOver] = useState(false);
+  isHovered,
+  isActive
+}: any) => {
+  const config = section.config || {};
   
-  // DEBUG: Log section config for header
-  if (id === 'global-header' || id?.includes('header')) {
-    console.log("[BuilderSection DEBUG] Header section received:", {
-      id,
-      contentWidth: config?.contentWidth,
-      maxWidth: config?.maxWidth,
-      position: config?.position,
-      isLeftPanelOpen,
-      panelWidth,
-      readOnly
-    });
+  const containerStyle: React.CSSProperties = {
+    backgroundColor: config.bgColor || 'transparent',
+    paddingTop: formatStyleValue(config.paddingTop),
+    paddingBottom: formatStyleValue(config.paddingBottom),
+    paddingLeft: formatStyleValue(config.paddingLeft),
+    paddingRight: formatStyleValue(config.paddingRight),
+    marginTop: formatStyleValue(config.marginTop),
+    marginBottom: formatStyleValue(config.marginBottom),
+  };
+
+  if (config.bgImageUrl) {
+    containerStyle.backgroundImage = `url(${config.bgImageUrl})`;
+    containerStyle.backgroundSize = config.bgWidth === 'fit' ? 'contain' : 'cover';
+    containerStyle.backgroundPosition = 'center';
+    containerStyle.backgroundRepeat = 'no-repeat';
   }
-  const [isLocalNavigatorOpen, setIsLocalNavigatorOpen] = useState(false);
 
-  // Sync local state dengan event global
-  useEffect(() => {
-    const handleOpen = () => setIsLocalNavigatorOpen(true);
-    const handleClose = () => setIsLocalNavigatorOpen(false);
-    window.addEventListener('builder:navigatorPanelOpened', handleOpen);
-    window.addEventListener('builder:navigatorPanelClosed', handleClose);
-    return () => {
-      window.removeEventListener('builder:navigatorPanelOpened', handleOpen);
-      window.removeEventListener('builder:navigatorPanelClosed', handleClose);
-    };
-  }, []);
-
-  // Debug log untuk letak floating navigator global-header
-  useEffect(() => {
-    if (id === 'global-header' && (isSectionHovered || isActive)) {
-      console.log("[Header Navigator Debug] Floating Section Navigator untuk global-header diposisikan di bawah (-bottom-5) agar tidak terpotong header visual builder");
-    }
-  }, [id, isSectionHovered, isActive]);
-
-  const sorted = [...elements].sort((a, b) => a.order - b.order);
-
-  useEffect(() => {
-    console.log("[BuilderSection] Rendered section active state:", isActive, "Elements count:", elements.length, "Highlighting ID:", newlyAddedElementId);
-  }, [isActive, elements, newlyAddedElementId]);
-
-  // Layout classes
-  const isGrid = config.layout === 'grid';
-  // config.direction (row/col/row-reverse/col-reverse) takes precedence over legacy config.layout
-  const effectiveDirection = config.direction
-    ? config.direction
-    : (config.layout === 'flexbox' ? 'row' : 'col');
-  const layoutClass = isGrid
-    ? 'grid'
-    : (effectiveDirection === 'row' || effectiveDirection === 'row-reverse')
-      ? 'flex flex-row flex-wrap'
-      : 'flex flex-col';
-
-  const alignClass = isGrid 
-    ? (config.align === 'stretch' ? 'items-stretch' : config.align === 'center' ? 'items-center text-center' : config.align === 'right' ? 'items-end text-right' : 'items-start text-left')
-    : (config.align === 'center'
-      ? 'items-center text-center'
-      : config.align === 'right'
-        ? 'items-end text-right'
-        : 'items-start text-left');
-
-  const gridStyle = isGrid
-    ? { 
-        gridTemplateColumns: config.customGridColumns || `repeat(${config.columns ?? 3}, 1fr)`,
-        gridTemplateRows: config.customGridRows || `repeat(${config.rows ?? 2}, 1fr)`,
-      }
-    : {};
-
-  const placeholderCount = config.placeholderCount ?? ((config.columns ?? 3) * (config.rows ?? 2));
-
-  // Compute CSS hover styles using native :hover pseudo-class to override inline styles
-  const hoverBorderRadiusTop = config.hoverBorderRadiusTop !== undefined ? config.hoverBorderRadiusTop : (config.borderRadiusTop ?? config.borderRadius);
-  const hoverBorderRadiusRight = config.hoverBorderRadiusRight !== undefined ? config.hoverBorderRadiusRight : (config.borderRadiusRight ?? config.borderRadius);
-  const hoverBorderRadiusBottom = config.hoverBorderRadiusBottom !== undefined ? config.hoverBorderRadiusBottom : (config.borderRadiusBottom ?? config.borderRadius);
-  const hoverBorderRadiusLeft = config.hoverBorderRadiusLeft !== undefined ? config.hoverBorderRadiusLeft : (config.borderRadiusLeft ?? config.borderRadius);
-
-  const hoverBorderType = config.hoverBorderType && config.hoverBorderType !== 'none' && config.hoverBorderType !== 'Asali' && config.hoverBorderType !== 'asali'
-    ? config.hoverBorderType 
-    : (config.borderType && config.borderType !== 'none' && config.borderType !== 'Asali' && config.borderType !== 'asali' ? config.borderType : 'none');
-
-  const hoverBorderColor = (config.hoverBorderColor && config.hoverBorderColor !== 'transparent') ? config.hoverBorderColor : (config.borderColor || 'transparent');
-
-  const hoverBorderWidthTop = config.hoverBorderWidthTop !== undefined ? `${config.hoverBorderWidthTop}px` : (config.hoverBorderWidth ? `${config.hoverBorderWidth}px` : undefined);
-  const hoverBorderWidthRight = config.hoverBorderWidthRight !== undefined ? `${config.hoverBorderWidthRight}px` : (config.hoverBorderWidth ? `${config.hoverBorderWidth}px` : undefined);
-  const hoverBorderWidthBottom = config.hoverBorderWidthBottom !== undefined ? `${config.hoverBorderWidthBottom}px` : (config.hoverBorderWidth ? `${config.hoverBorderWidth}px` : undefined);
-  const hoverBorderWidthLeft = config.hoverBorderWidthLeft !== undefined ? `${config.hoverBorderWidthLeft}px` : (config.hoverBorderWidth ? `${config.hoverBorderWidth}px` : undefined);
-
-  const hoverBoxShadow = config.hoverBoxShadowType === 'custom'
-    ? `${config.hoverShadowOffsetX ?? 0}px ${config.hoverShadowOffsetY ?? 0}px ${config.hoverShadowBlur ?? 10}px ${config.hoverShadowSpread ?? 0}px ${config.hoverShadowColor || 'rgba(0,0,0,0.5)'}`
-    : (config.hoverBoxShadow || 'none');
+  const contentWidthClass = config.contentWidth === 'boxed' ? (config.maxWidth || 'max-w-7xl mx-auto') : 'w-full';
 
   return (
-    <>
-      {config?.mobileConfig && (
-        <style dangerouslySetInnerHTML={{ __html: generateMobileCss(`#section-${id}`, config.mobileConfig) }} />
-      )}
-      {!readOnly && <style>{`
-        #section-${id}:hover {
-          border-top-left-radius: ${formatStyleValue(hoverBorderRadiusTop, 0)} !important;
-          border-top-right-radius: ${formatStyleValue(hoverBorderRadiusRight, 0)} !important;
-          border-bottom-right-radius: ${formatStyleValue(hoverBorderRadiusBottom, 0)} !important;
-          border-bottom-left-radius: ${formatStyleValue(hoverBorderRadiusLeft, 0)} !important;
-          border-style: ${hoverBorderType} !important;
-          ${hoverBorderWidthTop !== undefined ? `border-top-width: ${hoverBorderWidthTop} !important;` : ''}
-          ${hoverBorderWidthRight !== undefined ? `border-right-width: ${hoverBorderWidthRight} !important;` : ''}
-          ${hoverBorderWidthBottom !== undefined ? `border-bottom-width: ${hoverBorderWidthBottom} !important;` : ''}
-          ${hoverBorderWidthLeft !== undefined ? `border-left-width: ${hoverBorderWidthLeft} !important;` : ''}
-          border-color: ${hoverBorderColor} !important;
-          box-shadow: ${hoverBoxShadow} !important;
-        }
-      `}</style>}
-      <div
-        id={`section-${id}`}
-        className={`relative transition-all ${id === 'global-header' ? 'w-full' : 'mx-auto w-full'} ${!readOnly && isActive
-        ? 'after:absolute after:inset-0 after:border-2 after:border-blue-600 after:pointer-events-none after:z-[50] after:rounded-[inherit]'
-        : !readOnly ? 'hover:after:absolute hover:after:inset-0 hover:after:border-2 hover:after:border-blue-500/30 hover:after:pointer-events-none hover:after:z-[50] hover:after:rounded-[inherit]'
-        : ''
-        } ${!readOnly && isDragOver ? 'after:absolute after:inset-0 after:border-2 after:border-dashed after:border-blue-500 after:bg-blue-500/10 after:pointer-events-none after:z-[50] after:rounded-[inherit] after:animate-pulse' : ''}`}
-      onClick={!readOnly ? (e) => {
-        if (e.target !== e.currentTarget) return;
-        e.stopPropagation();
-        console.log("[Canvas Click] Section area diklik biasa (hanya sorot), ID:", id);
-        if (onSectionSelectOnly) {
-          onSectionSelectOnly();
-        } else {
-          onSectionSelect();
-        }
-      } : undefined}
-      onMouseEnter={!readOnly ? () => setIsSectionHovered(true) : undefined}
-      onMouseLeave={!readOnly ? () => setIsSectionHovered(false) : undefined}
-      onDragOver={!readOnly ? (e) => {
-        if (isDraggingWidget) {
-          e.preventDefault();
-          setIsDragOver(true);
-        }
-      } : undefined}
-      onDragLeave={!readOnly ? () => {
-        setIsDragOver(false);
-      } : undefined}
-      onDrop={!readOnly ? (e) => {
-        if (isDraggingWidget) {
-          e.preventDefault();
-          e.stopPropagation();
-          setIsDragOver(false);
-          const type = e.dataTransfer.getData("text/plain");
-          if (type && onDropWidget) {
-            console.log(`[Drag & Drop SECTION] Drop widget tipe: "${type}" ke Section ID: "${id}"`);
-            onDropWidget(id, type);
-          }
-        }
-      } : undefined}
-      style={{
-        // ── Latar Belakang ──
-        backgroundColor: isSectionHovered && config.hoverBgColor && config.hoverBgColor !== 'transparent'
-          ? config.hoverBgColor
-          : (config.bgColor || 'transparent'),
-        backgroundImage: isSectionHovered && config.hoverBgType === 'gradient'
-          ? (config.hoverBgGradientType === 'radial'
-              ? `radial-gradient(circle at ${config.hoverBgGradientRadialPos || 'center center'}, ${config.hoverBgGradientColor1 || 'transparent'} ${config.hoverBgGradientLoc1 ?? 0}%, ${config.hoverBgGradientColor2 || 'transparent'} ${config.hoverBgGradientLoc2 ?? 100}%)`
-              : `linear-gradient(${config.hoverBgGradientAngle ?? 180}deg, ${config.hoverBgGradientColor1 || 'transparent'} ${config.hoverBgGradientLoc1 ?? 0}%, ${config.hoverBgGradientColor2 || 'transparent'} ${config.hoverBgGradientLoc2 ?? 100}%)`)
-          : config.bgType === 'gradient'
-            ? (config.bgGradientType === 'radial'
-                ? `radial-gradient(circle at ${config.bgGradientRadialPos || 'center center'}, ${config.bgGradientColor1 || '#ffffff'} ${config.bgGradientLoc1 ?? 0}%, ${config.bgGradientColor2 || '#e83a65'} ${config.bgGradientLoc2 ?? 100}%)`
-                : `linear-gradient(${config.bgGradientAngle ?? 180}deg, ${config.bgGradientColor1 || '#ffffff'} ${config.bgGradientLoc1 ?? 0}%, ${config.bgGradientColor2 || '#e83a65'} ${config.bgGradientLoc2 ?? 100}%)`)
-            : undefined,
-
-        // ── Radius ──
-        borderTopLeftRadius: formatStyleValue(
-          isSectionHovered ? (config.hoverBorderRadiusTop ?? config.hoverBorderRadius ?? config.borderRadiusTop ?? config.borderRadius)
-                           : (config.borderRadiusTop ?? config.borderRadius), 0),
-        borderTopRightRadius: formatStyleValue(
-          isSectionHovered ? (config.hoverBorderRadiusRight ?? config.hoverBorderRadius ?? config.borderRadiusRight ?? config.borderRadius)
-                           : (config.borderRadiusRight ?? config.borderRadius), 0),
-        borderBottomRightRadius: formatStyleValue(
-          isSectionHovered ? (config.hoverBorderRadiusBottom ?? config.hoverBorderRadius ?? config.borderRadiusBottom ?? config.borderRadius)
-                           : (config.borderRadiusBottom ?? config.borderRadius), 0),
-        borderBottomLeftRadius: formatStyleValue(
-          isSectionHovered ? (config.hoverBorderRadiusLeft ?? config.hoverBorderRadius ?? config.borderRadiusLeft ?? config.borderRadius)
-                           : (config.borderRadiusLeft ?? config.borderRadius), 0),
-
-        // ── Border ──
-        borderStyle: (() => {
-          const bt = isSectionHovered ? (config.hoverBorderType || config.borderType) : config.borderType;
-          return bt && bt !== 'none' && bt !== 'Asali' ? bt : undefined;
-        })(),
-        borderTopWidth: (() => {
-          const bw = isSectionHovered
-            ? (config.hoverBorderWidthTop ?? config.hoverBorderWidth ?? config.borderWidthTop ?? config.borderWidth)
-            : (config.borderWidthTop ?? config.borderWidth);
-          return bw !== undefined ? `${bw}px` : undefined;
-        })(),
-        borderRightWidth: (() => {
-          const bw = isSectionHovered
-            ? (config.hoverBorderWidthRight ?? config.hoverBorderWidth ?? config.borderWidthRight ?? config.borderWidth)
-            : (config.borderWidthRight ?? config.borderWidth);
-          return bw !== undefined ? `${bw}px` : undefined;
-        })(),
-        borderBottomWidth: (() => {
-          const bw = isSectionHovered
-            ? (config.hoverBorderWidthBottom ?? config.hoverBorderWidth ?? config.borderWidthBottom ?? config.borderWidth)
-            : (config.borderWidthBottom ?? config.borderWidth);
-          return bw !== undefined ? `${bw}px` : undefined;
-        })(),
-        borderLeftWidth: (() => {
-          const bw = isSectionHovered
-            ? (config.hoverBorderWidthLeft ?? config.hoverBorderWidth ?? config.borderWidthLeft ?? config.borderWidth)
-            : (config.borderWidthLeft ?? config.borderWidth);
-          return bw !== undefined ? `${bw}px` : undefined;
-        })(),
-        borderColor: isSectionHovered
-          ? (config.hoverBorderColor || config.borderColor || undefined)
-          : (config.borderColor || undefined),
-
-        // ── Box Shadow ──
-        boxShadow: (() => {
-          if (isSectionHovered && config.hoverBoxShadowType === 'custom') {
-            return `${config.hoverShadowOffsetX ?? 0}px ${config.hoverShadowOffsetY ?? 0}px ${config.hoverShadowBlur ?? 10}px ${config.hoverShadowSpread ?? 0}px ${config.hoverShadowColor || 'rgba(0,0,0,0.5)'}`;
-          }
-          if (config.boxShadowType === 'custom') {
-            return `${config.shadowOffsetX ?? 0}px ${config.shadowOffsetY ?? 0}px ${config.shadowBlur ?? 10}px ${config.shadowSpread ?? 0}px ${config.shadowColor || 'rgba(0,0,0,0.5)'}`;
-          }
-          return config.boxShadow || undefined;
-        })(),
-
-        // ── Spacing & Size ──
-        paddingTop: formatStyleValue(config.paddingTop, 40),
-        paddingBottom: formatStyleValue(config.paddingBottom, 40),
-        paddingLeft: formatStyleValue(config.paddingLeft, 40),
-        paddingRight: formatStyleValue(config.paddingRight, 40),
-        marginTop: formatStyleValue(config.marginTop, 0),
-        marginBottom: formatStyleValue(config.marginBottom, 0),
-        maxWidth: config.contentWidth === 'full' ? '100%' : (config.maxWidth || '1200px'),
-        width: id === 'global-header' && !readOnly && config.position === 'fixed' ? 'auto' : '100%',
-        minHeight: isGrid ? '200px' : undefined,
-
-        // ── Position & Stacking ──
-        position: (config.position || 'relative') as any,
-        zIndex: config.zIndex !== undefined ? config.zIndex : undefined,
-        ...(id === 'global-header' && !readOnly && config.position === 'fixed' ? {
-          left: isLeftPanelOpen ? `${panelWidth ?? 320}px` : '0px',
-          right: '0px'
-        } : {}),
-
-        // ── Transition (aktif jika ada hover setting apapun) ──
-        transition: config.hoverTransitionDuration !== undefined
-          ? `background-color ${config.hoverTransitionDuration}s ease, background-image ${config.hoverTransitionDuration}s ease, border-color ${config.hoverTransitionDuration}s ease, border-width ${config.hoverTransitionDuration}s ease, border-radius ${config.hoverTransitionDuration}s ease, box-shadow ${config.hoverTransitionDuration}s ease`
-          : undefined,
-      }}
+    <section 
+      id={section.id} 
+      style={containerStyle} 
+      className={`relative w-full transition-all cursor-pointer ${isActive ? 'ring-2 ring-blue-500/20' : 'hover:ring-2 hover:ring-blue-400/20'}`}
+      onClick={() => onElementSelect?.(section.id)}
     >
-      {/* Background Image Layer (with opacity and blur) */}
-      {((isSectionHovered && config.hoverBgType === 'classic') || (!isSectionHovered && (config.bgType === 'classic' || !config.bgType))) && (isSectionHovered && config.hoverBgImageUrl ? config.hoverBgImageUrl : config.bgImageUrl) && (
-        <div className="absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none z-0">
-          <img 
-            src={isSectionHovered && config.hoverBgImageUrl ? config.hoverBgImageUrl : config.bgImageUrl} 
-            alt="Section Background" 
-            className={`w-full h-full object-cover ${config.hoverTransitionDuration ? 'transition-all' : ''}`}
-            style={{
-              opacity: (config.bgImageOpacity ?? 100) / 100,
-              filter: (config.bgImageBlur ?? 0) > 0 ? `blur(${config.bgImageBlur}px)` : 'none',
-              transform: (config.bgImageBlur ?? 0) > 0 ? `scale(1.1)` : 'none',
-              transitionDuration: config.hoverTransitionDuration ? `${config.hoverTransitionDuration}s` : undefined
-            }}
-          />
-          {((isSectionHovered ? (config.hoverOverlay ?? config.overlay) : config.overlay) !== undefined && (isSectionHovered ? (config.hoverOverlay ?? config.overlay) : config.overlay)! > 0) && (
-            <div className={`absolute inset-0 bg-black ${config.hoverTransitionDuration ? 'transition-all' : ''}`} style={{ 
-              opacity: isSectionHovered ? (config.hoverOverlay ?? config.overlay ?? 0) : (config.overlay ?? 0),
-              transitionDuration: config.hoverTransitionDuration ? `${config.hoverTransitionDuration}s` : undefined
-            }}></div>
-          )}
-        </div>
+      {config.bgImageUrl && config.overlay > 0 && (
+        <div className="absolute inset-0 bg-black" style={{ opacity: config.overlay / 100 }} />
       )}
-
-      {/* Grid Outline Visuals */}
-      {isGrid && (config.showGridOutline ?? true) && (
-        <div 
-           className={`absolute inset-0 z-0 pointer-events-none ${config.customGridClass ?? ''}`}
-           style={{
-             display: 'grid',
-             columnGap: `${config.columnGap ?? config.gap ?? 16}px`,
-             rowGap: `${config.rowGap ?? config.gap ?? 16}px`,
-             paddingTop: formatStyleValue(config.paddingTop, 40),
-             paddingBottom: formatStyleValue(config.paddingBottom, 40),
-             paddingLeft: formatStyleValue(config.paddingLeft, 40),
-             paddingRight: formatStyleValue(config.paddingRight, 40),
-             ...gridStyle,
-           }}
-        >
-           {Array.from({ length: placeholderCount }).map((_, i) => {
-             const col = sorted[i];
-             const isFilled = col && col.type === 'COLUMN' && col.children && col.children.length > 0;
-             // Kisi terisi: tidak tampilkan outline dashed
-             if (isFilled) return <div key={i} />;
-             return <div key={i} className="border border-dashed border-zinc-400/50 bg-zinc-500/5 rounded" />;
-           })}
-        </div>
-      )}
-
-      {/* WordPress Elementor-Style Premium Section Navigator (Melayang Tengah Atas / Bawah jika Header) */}
-      {!readOnly && (isSectionHovered || isActive) && (
-        <div className={`absolute ${id === 'global-header' ? '-bottom-5' : 'top-2'} left-1/2 -translate-x-1/2 z-[99999] flex items-center gap-1.5 bg-fuchsia-600 hover:bg-fuchsia-700 text-white px-3 py-1 rounded-full shadow-lg border border-fuchsia-500 transition-all pointer-events-auto select-none`}>
-           {/* Tombol Tambah + — tampil untuk semua section termasuk global-header */}
-           <button
-             type="button"
-             onClick={(e) => {
-               e.stopPropagation();
-               e.preventDefault();
-               console.log("[Section Navigator] Plus diklik untuk Section ID:", id);
-               if (onAddElementClick) {
-                 onAddElementClick(id, false);
-               }
-             }}
-             className="p-1 hover:text-fuchsia-200 transition-colors flex items-center justify-center cursor-pointer"
-             title="Tambah Elemen ke Section"
-           >
-             <Plus className="w-3.5 h-3.5 font-extrabold" />
-           </button>
-
-           {/* Divider */}
-           <div className="w-px h-3.5 bg-fuchsia-400/40" />
-
-          {/* Tombol Move/Navigator 🟢 — selalu muncul */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log("[Section Navigator] Move (Navigator) diklik untuk Section ID:", id);
-              onSectionSelect();
-              window.dispatchEvent(new CustomEvent('builder:openNavigatorPanel', { detail: { sectionId: id, elementId: null } }));
-            }}
-            className={`p-1 transition-colors flex items-center justify-center cursor-pointer ${isLocalNavigatorOpen ? 'text-emerald-300' : 'text-emerald-400 hover:text-emerald-300'}`}
-            title="Buka Navigator Posisi"
-          >
-            <Move className="w-3.5 h-3.5" />
-          </button>
-
-          {/* Divider */}
-          <div className="w-px h-3.5 bg-fuchsia-400/40" />
-
-          {/* Tombol Edit/Pensil ✏️ */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log("[Section Navigator] Edit (Pencil) diklik untuk Section ID:", id);
-              onSectionSelect();
-            }}
-            className="p-1 hover:text-fuchsia-200 transition-colors flex items-center justify-center cursor-pointer"
-            title="Edit Section"
-          >
-            <Pencil className="w-3.5 h-3.5" />
-          </button>
-
-          {id !== 'global-header' && (
-            <>
-              {/* Divider */}
-              <div className="w-px h-3.5 bg-fuchsia-400/40" />
-
-              {/* Tombol Hapus/Sampah 🗑️ */}
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  console.log("[Section Navigator] Delete (Trash) diklik untuk Section ID:", id);
-                  if (onDeleteSection) {
-                    onDeleteSection(id);
-                  }
-                }}
-                className="p-1 hover:text-red-200 transition-colors flex items-center justify-center cursor-pointer"
-                title="Hapus Section"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
-            </>
-          )}
-        </div>
-      )}
-
-      {/* BG Image + Overlay (Legacy div backgrounds, only rendered if not classic type, or maybe it's redundant but kept for safety if used without bgType flag) */}
-      {!(config.bgType === 'classic' || !config.bgType) && (isSectionHovered && config.hoverBgImageUrl ? config.hoverBgImageUrl : config.bgImageUrl) && (
-        <div
-          className={`absolute inset-0 bg-cover bg-center ${config.hoverTransitionDuration ? 'transition-all' : ''}`}
-          style={{ 
-            backgroundImage: `url(${isSectionHovered && config.hoverBgImageUrl ? config.hoverBgImageUrl : config.bgImageUrl})`, 
-            borderRadius: `${config.borderRadius ?? 0}px`,
-            transitionDuration: config.hoverTransitionDuration ? `${config.hoverTransitionDuration}s` : undefined
-          }}
-        />
-      )}
-      {!(config.bgType === 'classic' || !config.bgType) && (isSectionHovered && config.hoverBgImageUrl ? config.hoverBgImageUrl : config.bgImageUrl) && (
-        <div
-          className={`absolute inset-0 bg-black ${config.hoverTransitionDuration ? 'transition-all' : ''}`}
-          style={{ 
-            opacity: isSectionHovered ? (config.hoverOverlay ?? config.overlay ?? 0.3) : (config.overlay ?? 0.3), 
-            borderRadius: `${config.borderRadius ?? 0}px`,
-            transitionDuration: config.hoverTransitionDuration ? `${config.hoverTransitionDuration}s` : undefined
-          }}
-        />
-      )}
-
-      {/* Elements */}
-      <div
-        className={`relative z-10 ${layoutClass} ${alignClass} ${id === 'global-header' ? 'w-full' : ''} ${config.customGridClass ?? ''}`}
-        style={{
-          columnGap: `${config.columnGap ?? config.gap ?? 16}px`,
-          rowGap: `${config.rowGap ?? config.gap ?? 16}px`,
-          ...gridStyle,
-          flexDirection: !isGrid
-            ? (effectiveDirection === 'col' ? 'column'
-                : effectiveDirection === 'col-reverse' ? 'column-reverse'
-                : effectiveDirection === 'row-reverse' ? 'row-reverse'
-                : 'row')
-            : undefined,
-          flexWrap: (config.layout !== 'grid' && config.flexWrap)
-            ? config.flexWrap
-            : undefined,
-          justifyContent: (config.layout !== 'grid' && config.justify)
-            ? (config.justify === 'start' ? 'flex-start' : config.justify === 'end' ? 'flex-end' : config.justify === 'between' ? 'space-between' : config.justify === 'around' ? 'space-around' : config.justify === 'evenly' ? 'space-evenly' : 'center')
-            : undefined,
-          alignItems: (config.layout !== 'grid' && config.align)
-            ? (config.align === 'start' ? 'flex-start' : config.align === 'end' ? 'flex-end' : config.align === 'stretch' ? 'stretch' : 'center')
-            : undefined
-        }}
-      >
-        {!readOnly && sorted.length === 0 ? (
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log("[Empty State Click] Section kosong diklik, ID:", id);
-              if (onAddElementClick) {
-                onAddElementClick(id, false);
-              }
-            }}
-            className="w-full py-16 flex flex-col items-center justify-center gap-3 border-2 border-dashed border-zinc-200 hover:border-blue-400 rounded-xl bg-zinc-50/50 hover:bg-blue-50/20 cursor-pointer transition-all group/empty"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-zinc-100 group-hover/empty:bg-blue-500/10 flex items-center justify-center transition-colors">
-              <Plus className="w-5 h-5 text-zinc-400 group-hover/empty:text-blue-600 transition-colors" />
-            </div>
-            <p className="text-[11px] font-bold text-zinc-400 group-hover/empty:text-blue-600 transition-colors uppercase tracking-widest">Section Kosong</p>
-            <p className="text-[10px] text-zinc-400">Klik tombol + untuk menambahkan elemen</p>
-          </div>
-        ) : readOnly && sorted.length === 0 ? null : (
-          (() => {
-            return sorted.map((el) => {
-              return (
-              <ElementWrapper
+      
+      <div className={`relative z-10 ${contentWidthClass}`}>
+        {elements && elements.length > 0 && (
+          <div className="flex flex-col">
+            {elements.map((el: any) => (
+              <PreviewElement
                 key={el.id}
                 element={el}
-                isActive={!readOnly && activeElementId === el.id}
-                isHovered={!readOnly && hoveredElementId === el.id}
-                readOnly={readOnly}
-              onSelect={!readOnly ? () => {
-                onSectionSelect();
-                onElementSelect(el.id);
-              } : undefined}
-              onHover={() => setHoveredElementId(el.id)}
-              onLeave={() => setHoveredElementId(null)}
-              onContextMenu={(e) => {
-                if (onElementContextMenu) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onElementContextMenu(el.id, e.clientX, e.clientY);
-                }
-              }}
-              activeElementId={activeElementId}
-              parentGap={config.gap ?? 16}
-              parentLayout={config.layout}
-              onElementSelect={onElementSelect}
-              onElementContextMenu={onElementContextMenu}
-              onAddElementClick={onAddElementClick}
-              newlyAddedElementId={newlyAddedElementId}
-              onElementSelectOnly={onElementSelectOnly}
-              onElementEdit={onElementEdit}
-              onDeleteElement={onDeleteElement}
-              sectionId={id}
-              onDropWidget={onDropWidget}
-              isDraggingWidget={isDraggingWidget}
-              activeSubFocus={activeSubFocus}
-              isLeftPanelOpen={isLeftPanelOpen}
-              onOpenEditPanel={onOpenEditPanel}
-              isLocalNavigatorOpen={isLocalNavigatorOpen}
-              onSectionSelect={onSectionSelect}
-            />
-            );
-          });
-        })()
+                activeElementId={activeElementId}
+                onElementSelect={onElementSelect}
+              />
+            ))}
+          </div>
         )}
       </div>
-    </div>
-    </>
+    </section>
   );
 };
+

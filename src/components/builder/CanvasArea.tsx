@@ -19,6 +19,7 @@ import { ThemePopupPanel } from "./panels/ThemePopupPanel";
 import { LibraryPanel } from "./panels/LibraryPanel";
 import { CanvasSettingsPanel } from "./panels/CanvasSettingsPanel";
 import { DataSidebarPanel } from "./panels/DataSidebarPanel";
+import { PreviewSection } from "./PreviewSection";
 
 // Mini component agar bisa pakai useRef/ResizeObserver untuk spacer fixed header di canvas preview
 function CanvasHeaderPreview({ headerSection, isLeftPanelOpen, isDraggingWidget, panelWidth }: {
@@ -304,31 +305,7 @@ function BuilderContent() {
           >
             <Settings className="w-4 h-4" />
           </button>
-          <button
-            onClick={() => {
-              setIsLeftPanelOpen(true);
-              setActivePanel('library');
-              setActiveLibraryTab('widget');
-            }}
-            className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'text-zinc-400 hover:text-white hover:bg-zinc-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'}`}
-            title="Tambahkan Widget (Elemen)"
-          >
-            <LayoutGrid className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => {
-              setIsLeftPanelOpen(true);
-              setActivePanel('library');
-              setActiveLibraryTab('global');
-            }}
-            className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'text-zinc-400 hover:text-white hover:bg-zinc-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'}`}
-            title="Manajemen Layer"
-          >
-            <Layers className="w-4 h-4" />
-          </button>
-          <h2 className={`hidden md:block text-[10px] font-black uppercase tracking-widest ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
-            {pageId && customPage?.page ? customPage.page.title : 'Visual Builder'}
-          </h2>
+
         </div>
 
         <div className="flex items-center gap-1.5 md:gap-3 shrink-0">
@@ -434,9 +411,9 @@ function BuilderContent() {
         <div 
           className={`
             ${!showMobilePreview ? 'hidden md:flex' : 'flex'}
-            flex-1 overflow-y-auto canvas-scrollbar relative pt-0
+            flex-1 overflow-y-auto canvas-scrollbar scrollbar-hide relative pt-0 md:px-4 lg:px-6 md:pb-4 lg:pb-6
           `}
-          style={{ backgroundColor: '#F2F2F2' }}
+          style={{ backgroundColor: '#C9C9C9' }}
         >
             <style>{`
               /* Sembunyikan elemen visual builder (toolbar hover, outline, placeholder) */
@@ -457,7 +434,7 @@ function BuilderContent() {
             {/* Responsive Wrapper */}
             <div className={`mx-auto transition-all duration-500 ease-in-out min-h-full pb-48 ${
               previewMode === 'mobile' 
-                ? `max-w-[400px] border-x shadow-2xl ${theme === 'dark' ? 'border-zinc-800' : 'border-slate-300'} is-mobile-preview` 
+                ? `w-full md:max-w-[400px] md:border-x shadow-2xl ${theme === 'dark' ? 'md:border-zinc-800' : 'md:border-slate-300'} is-mobile-preview` 
                 : 'w-full is-desktop-preview'
             }`}
             style={{
@@ -487,98 +464,25 @@ function BuilderContent() {
 
               {activeCanvas === 'homepage' && (
               <div className="flex-1 flex flex-col">
-                {sections.filter(s => s.type === "SECTION").map((section, index) => {
-                  return (
-                    <div
-                      key={section.id}
-                      onContextMenu={(e: React.MouseEvent) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setContextMenu({ x: e.clientX, y: e.clientY, section });
-                        console.log("[Builder] Section Context Menu:", section.id);
+                {sections.filter((s: any) => s.type === "SECTION").map((section: any, index: number) => (
+                  <div key={section.id}>
+                    <PreviewSection
+                      section={section}
+                      elements={section.elements || []}
+                      activeElementId={editingSection?.id === section.id ? activeElementId : null}
+                      onElementSelect={(elId: string) => {
+                        setEditingSection(section);
+                        setActiveElementId(elId);
+                        setIsLeftPanelOpen(true);
+                        setActivePanel('editor');
                       }}
-                      className="relative group transition-all"
-                      style={{ borderRadius: `${section.config?.borderRadius ?? 0}px` }}
-                    >
-                      <BuilderSection
-                        id={section.id}
-                        config={section.config}
-                        elements={section.elements || []}
-                        activeElementId={editingSection?.id === section.id ? activeElementId : null}
-                        activeSubFocus={activeSubFocus}
-                        onElementSelect={(elementId, subFocus) => {
-                          // Klik langsung elemen non-COLUMN otomatis menyorot dan membuka panel edit
-                          setEditingSection(section);
-                          setActiveElementId(elementId);
-                          setActivePanel('editor');
-                          setActiveSubFocus(subFocus || null);
-                          console.log("[Builder Debug] Element non-COLUMN terpilih dengan subFocus:", subFocus, "ID:", elementId);
-                        }}
-                        onElementSelectOnly={(elementId) => {
-                          setEditingSection(section);
-                          setActiveElementId(elementId);
-                          console.log("[Builder Debug] COLUMN tersorot (tanpa membuka panel) untuk ID:", elementId);
-                        }}
-                        onElementEdit={(elementId) => {
-                          // Klik Pensil COLUMN menyorot dan membuka panel edit
-                          setEditingSection(section);
-                          setActiveElementId(elementId);
-                          setIsLeftPanelOpen(true);
-                          setActivePanel('editor');
-                          console.log("[Builder Debug] COLUMN panel editor dibuka via Pensil untuk ID:", elementId);
-                        }}
-                        onDeleteElement={(elementId) => {
-                          // Hapus kolom / elemen via tombol sampah navigator
-                          console.log("[Builder Debug] Menghapus COLUMN/Elemen ID:", elementId);
-                          handleDeleteElement(section.id, elementId);
-                        }}
-                        onSectionSelect={() => {
-                          // Klik Pensil Section membuka panel editor
-                          setEditingSection(section);
-                          setIsLeftPanelOpen(true);
-                          setActivePanel('editor');
-                          setActiveElementId(null);
-                          console.log("[Builder Debug] Section panel editor dibuka via Pensil untuk ID:", section.id);
-                        }}
-                        onSectionSelectOnly={() => {
-                          // Klik biasa Section hanya menyorot, tidak membuka panel edit
-                          setEditingSection(section);
-                          setActiveElementId(null);
-                          console.log("[Builder Debug] Section tersorot saja (tidak membuka editor panel) untuk ID:", section.id);
-                        }}
-                        onDeleteSection={(sectionId) => {
-                          // Hapus section via tombol sampah navigator
-                          console.log("[Builder Debug] Menghapus Section ID:", sectionId);
-                          handleDeleteSection(sectionId);
-                        }}
-                        isActive={editingSection?.id === section.id && !activeElementId}
-                        onAddElement={() => {
-                          setEditingSection(section);
-                          setActivePanel('library');
-                        }}
-                        onElementContextMenu={(elementId, x, y) => {
-                          setContextMenu({ x, y, section, elementId });
-                          console.log("[Builder Debug] Element Context Menu dipicu:", elementId);
-                        }}
-                        onAddElementClick={handleCanvasAddElementClick}
-                        newlyAddedElementId={newlyAddedElementId}
-                        onDropWidget={handleDropWidget}
-                        isDraggingWidget={isDraggingWidget}
-                        isLeftPanelOpen={isLeftPanelOpen}
-                        onOpenEditPanel={(elementId) => {
-                          setEditingSection(section);
-                          setActiveElementId(elementId);
-                          setIsLeftPanelOpen(true);
-                          setActivePanel('editor');
-                          console.log('[Builder] Pensil badge: Membuka panel edit untuk Element:', elementId);
-                        }}
-                      />
-                    </div>
-                  );
-                })}
+                      isActive={editingSection?.id === section.id}
+                    />
+                  </div>
+                ))}
 
                 {/* ═══ PEMILIH STRUKTUR LAYOUT INLINE DI CANVAS (WordPress Elementor Style) ═══ */}
-                {isStructureModalOpen ? (
+                {isStructureModalOpen && (
                   <motion.div
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -624,17 +528,6 @@ function BuilderContent() {
                       ))}
                     </div>
                   </motion.div>
-                ) : (
-                  /* Add Section Button at bottom of canvas */
-                  <div className="flex justify-center py-8">
-                    <button
-                      onClick={handleAddSection}
-                      className="flex items-center gap-2 px-6 py-3 bg-white/80 hover:bg-white border border-dashed border-zinc-300 hover:border-blue-400 rounded-xl text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-blue-600 transition-all active:scale-95 shadow-sm"
-                    >
-                      <Plus className="w-4 h-4" />
-                      Tambah Section Baru
-                    </button>
-                  </div>
                 )}
 
                 {/* ═══ FOOTER (below content) ═══ */}
