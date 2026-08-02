@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { CREATIVE_PORTFOLIO_TEMPLATE } from "@/lib/templates/creativePortfolio";
 import { COMPLETE_PORTFOLIO_TEMPLATE } from "@/lib/templates/completePortfolio";
+import { GORIB_PORTFOLIO_TEMPLATE } from "@/lib/templates/goribPortfolio";
 
 // Import types & constants
 import { SectionElement, ELEMENT_TYPE_MAP } from "@/components/storefront/sections/BuilderSection";
@@ -344,7 +345,20 @@ const sanitizeSections = (secs: Section[]): Section[] => {
 
 import { v4 as uuidv4 } from 'uuid';
 
+
 export function useBuilderState() {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !localStorage.getItem('cache_busted_gorib_v11')) {
+      sessionStorage.removeItem("storefront_sections");
+      localStorage.removeItem("draft_template_sections");
+      localStorage.removeItem("draft_template_sections_v10");
+      localStorage.removeItem("draft_template_sections_v11");
+      localStorage.removeItem("draft_template_sections_v12");
+      localStorage.setItem('cache_busted_gorib_v11', 'true');
+      window.location.href = window.location.pathname + '?reset=true';
+    }
+  }, []);
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const pageId = searchParams?.get("pageId");
@@ -1165,65 +1179,71 @@ export function useBuilderState() {
 
   const handleInsertHeroTemplate = () => {
     const sectionId = `new-hero-${Math.random().toString(36).substring(7)}`;
-    const titleEl: SectionElement = {
-      id: `el-hero-title-${Date.now()}`,
-      type: 'HEADING',
-      config: {
-        text: 'Hai, Saya [Nama Anda]',
-        textColor: '#1e293b',
-        align: 'center',
-        fontWeight: '800',
-        fontSize: 38,
-        marginBottom: 16
-      },
-      order: 0
-    };
-    const subEl: SectionElement = {
-      id: `el-hero-sub-${Date.now()}`,
-      type: 'TEXT',
-      config: {
-        text: 'Seorang Kreator & Developer Profesional. Saya berfokus untuk membangun antarmuka web yang modern, interaktif, dan memberikan pengalaman pengguna terbaik.',
-        textColor: '#64748b',
-        align: 'center',
-        fontSize: 15,
-        marginBottom: 24
-      },
-      order: 1
-    };
-    const cId = `el-hero-col-${Date.now()}`;
-    const btnCol: SectionElement = {
-      id: cId,
+    
+    const leftCol: SectionElement = {
+      id: `el-hero-col1-${Date.now()}`,
       type: 'COLUMN',
       config: {
-        layout: 'horizontal',
-        gap: 12,
-        align: 'center'
+        layout: 'flexbox',
+        direction: 'col',
+        align: 'start',
+        gap: 16,
+        width: '50%'
       },
-      order: 2,
+      order: 0,
       children: [
         {
-          id: `el-hero-btn1-${Date.now()}`,
-          type: 'BUTTON',
+          id: `el-hero-title-${Date.now()}`,
+          type: 'HEADING',
           config: {
-            text: 'Lihat Portofolio',
-            bgColor: '#2563eb',
-            textColor: '#ffffff',
-            borderRadius: 8,
-            align: 'center'
+            text: "I'M <span style='color: #10b981'>KILLER MILLERSE</span>",
+            textColor: '#1e293b',
+            align: 'left',
+            fontWeight: '900',
+            fontSize: 48,
+            lineHeight: 1.1
           },
           order: 0
         },
         {
-          id: `el-hero-btn2-${Date.now()}`,
-          type: 'BUTTON',
+          id: `el-hero-sub-${Date.now()}`,
+          type: 'TEXT',
           config: {
-            text: 'Hubungi Saya',
-            bgColor: '#f1f5f9',
-            textColor: '#1e293b',
-            borderRadius: 8,
-            align: 'center'
+            text: "Hi, I'm a professional web designer and developer with a UI/UX designer. So your experience.",
+            textColor: '#475569',
+            align: 'left',
+            fontSize: 16,
+            lineHeight: 1.6
           },
           order: 1
+        }
+      ]
+    };
+
+    const rightCol: SectionElement = {
+      id: `el-hero-col2-${Date.now()}`,
+      type: 'COLUMN',
+      config: {
+        layout: 'flexbox',
+        direction: 'col',
+        align: 'center',
+        justifyContent: 'center',
+        width: '50%'
+      },
+      order: 1,
+      children: [
+        {
+          id: `el-hero-img-${Date.now()}`,
+          type: 'IMAGE',
+          config: {
+            src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop",
+            alt: "Hero Image",
+            width: 400,
+            height: 400,
+            borderRadius: 24,
+            objectFit: "cover"
+          },
+          order: 0
         }
       ]
     };
@@ -1232,16 +1252,17 @@ export function useBuilderState() {
       id: sectionId,
       type: 'SECTION',
       config: {
-        bgColor: '#f8fafc',
+        bgColor: '#d1fae5',
         paddingTop: 80,
         paddingBottom: 80,
         paddingLeft: 40,
         paddingRight: 40,
-        layout: 'vertical',
-        gap: 16,
+        layout: 'flexbox',
+        direction: 'row',
+        gap: 40,
         align: 'center'
       },
-      elements: [titleEl, subEl, btnCol],
+      elements: [leftCol, rightCol],
       order: sections.length,
       isActive: true
     };

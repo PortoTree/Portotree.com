@@ -50,8 +50,8 @@ export const HeroSection = ({ config, onElementClick, activeElementId, onElement
 
   const getClickableClass = (id: string) => {
     if (!onElementClick) return "";
-    const base = "cursor-pointer transition-all hover:outline-dashed hover:outline-2 hover:outline-blue-500/50 hover:outline-offset-4";
-    const active = activeElementId === id ? "outline outline-2 outline-blue-600 outline-offset-4 bg-blue-500/10 rounded-lg" : "";
+    const base = "cursor-pointer transition-all";
+    const active = "";
     return `${base} ${active}`;
   };
 

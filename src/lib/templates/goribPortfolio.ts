@@ -41,7 +41,7 @@ export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
         type: "HEADING",
         order: 0,
         config: {
-          text: "Gorib.",
+          text: "Nama anda.",
           fontSize: 24,
           fontWeight: "800",
           textColor: "#10b981", // Emerald green
@@ -49,10 +49,10 @@ export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
       },
       {
         id: "header-nav",
-        type: "TEXT",
+        type: "NAVIGATION",
         order: 1,
         config: {
-          text: "Home &nbsp; About &nbsp; Portfolio &nbsp; Pages &nbsp; Contact &nbsp; News",
+          showNavigation: true,
           fontSize: 14,
           fontWeight: "600",
           textColor: "#334155",
@@ -64,6 +64,8 @@ export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
         order: 2,
         config: {
           text: "Hire Me",
+          actionType: "whatsapp",
+          link: "",
           size: "sm",
           variant: "solid",
           bgColor: "#10b981",
@@ -139,42 +141,6 @@ export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
               textColor: "#475569",
               lineHeight: 1.6,
             },
-          },
-          {
-            id: "hero-btn-group",
-            type: "COLUMN",
-            order: 3,
-            config: {
-              layout: "flexbox",
-              direction: "row",
-              align: "center",
-              gap: 16,
-            },
-            elements: [
-              {
-                id: "hero-hire-btn",
-                type: "BUTTON",
-                order: 0,
-                config: {
-                  text: "Hire Me",
-                  size: "md",
-                  variant: "solid",
-                  bgColor: "#10b981",
-                  textColor: "#ffffff",
-                  borderRadius: 9999,
-                },
-              },
-              {
-                id: "hero-socials",
-                type: "TEXT",
-                order: 1,
-                config: {
-                  text: "fb tw in ig",
-                  fontSize: 14,
-                  textColor: "#10b981",
-                },
-              }
-            ]
           }
         ],
       },

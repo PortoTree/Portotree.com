@@ -15,6 +15,7 @@ export interface SectionElement {
   columns?: Column[];
   elements?: SectionElement[];
   children?: SectionElement[];
+  order?: number;
 }
 
 export interface Column {

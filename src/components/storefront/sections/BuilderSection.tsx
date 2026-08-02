@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Plus, Type, AlignLeft, MousePointerClick, Image as ImageIcon, Minus, Award, GripVertical, Trash2, LayoutGrid, SeparatorHorizontal, Columns, Pencil, ShoppingBag, Folder, ChevronLeft, ChevronRight, Move, Menu } from "lucide-react";
+import { Plus, Type, AlignLeft, MousePointerClick, Image as ImageIcon, Minus, Navigation, Mail, Phone, Award, GripVertical, Trash2, LayoutGrid, SeparatorHorizontal, Columns, Pencil, ShoppingBag, Folder, ChevronLeft, ChevronRight, Move, Menu } from "lucide-react";
 import { useStorefront } from "../StorefrontProvider";
 import ProductCard from "../ProductCard";
 import Link from "next/link";
@@ -160,6 +160,7 @@ export const ELEMENT_TYPE_MAP: Record<string, { label: string; icon: any; defaul
   SPACER: { label: 'Spacer', icon: Minus },
   DIVIDER: { label: 'Divider', icon: SeparatorHorizontal },
   BADGE: { label: 'Badge', icon: Award },
+  NAVIGATION: { label: 'Navigasi', icon: Navigation, defaultConfig: { fontSize: 14, fontWeight: '600', textColor: '#334155' } },
   COLUMN: {
     label: 'Kolom',
     icon: Columns,
@@ -423,6 +424,71 @@ const TextElement = ({ config, elementId }: { config: any, elementId?: string })
     </>
   );
 };
+
+
+// ── NAVIGATION ELEMENT ──
+const NavigationElement = ({ config }: { config: any }) => {
+  const storefront = useStorefront();
+  const sections = storefront?.sections || [];
+  
+  if (config.showNavigation === false) return null;
+
+  const navLinks = sections
+    .filter((s: any) => s.type === 'SECTION' && s.isActive !== false && !s.id.includes('footer') && !config.hiddenNavItems?.includes(s.id) && s.id !== 'hero-section')
+    .map((s: any, index: number) => {
+      let title = s.id;
+
+      // Extract title from first HEADING element
+      const findHeading = (elements: any[]): string | null => {
+        if (!elements) return null;
+        for (const el of elements) {
+          if (el.type === 'HEADING' && el.config?.text) return el.config.text;
+          if (el.children) {
+            const childHeading = findHeading(el.children);
+            if (childHeading) return childHeading;
+          }
+          if (el.elements) {
+            const subHeading = findHeading(el.elements);
+            if (subHeading) return subHeading;
+          }
+        }
+        return null;
+      };
+      
+      const headingText = findHeading(s.elements);
+      if (headingText) {
+        // Strip HTML if any
+        title = headingText.replace(/<[^>]*>?/gm, '');
+        // Capitalize first letter of each word if it's all caps or messy
+        if (title === title.toUpperCase()) {
+          title = title.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+        }
+      } else {
+        // Fallback to section ID formatted nicely
+        title = s.id.replace(/-/g, ' ').replace(/w/g, l => l.toUpperCase());
+      }
+      return { id: s.id, title };
+    });
+
+  return (
+    <nav className="flex items-center gap-6 flex-1 justify-end" style={{ fontSize: config.fontSize, fontWeight: config.fontWeight, color: config.textColor }}>
+      {navLinks.map(link => (
+        <a 
+          key={link.id}
+          href={`#section-${link.id}`}
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById(`section-${link.id}`)?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className="hover:opacity-70 transition-opacity cursor-pointer"
+        >
+          {link.title}
+        </a>
+      ))}
+    </nav>
+  );
+};
+
 
 // ── BUTTON ELEMENT ──
 const ButtonElement = ({ config }: { config: any }) => {
@@ -905,8 +971,8 @@ const BrandingElement = ({ config, readOnly, onElementSelect, elementId, activeS
     onElementSelect(elementId, focusType);
   };
 
-  const hoverLogoClass = !readOnly ? 'hover:outline-dashed hover:outline-2 hover:outline-blue-500/40 hover:scale-105 transition-all' : '';
-  const hoverTextClass = !readOnly ? 'hover:outline-dashed hover:outline-1 hover:outline-blue-500/40 rounded px-1 transition-all' : '';
+  const hoverLogoClass = '';
+  const hoverTextClass = '';
 
   // Debug log untuk Aturan 8
   useEffect(() => {
@@ -965,7 +1031,7 @@ const BrandingElement = ({ config, readOnly, onElementSelect, elementId, activeS
           alt={name}
           className={`cursor-pointer transition-all duration-200 ${
             isActive && activeSubFocus === 'logo'
-              ? 'outline outline-2 outline-blue-500/60 scale-105 shadow-md'
+              ? ''
               : hoverLogoClass
           }`}
           style={{
@@ -997,7 +1063,7 @@ const BrandingElement = ({ config, readOnly, onElementSelect, elementId, activeS
           }}
           className={`bg-indigo-500/10 flex items-center justify-center shadow-sm cursor-pointer transition-all duration-200 ${
             isActive && activeSubFocus === 'logo'
-              ? 'outline outline-2 outline-blue-500/60 scale-105 shadow-md'
+              ? ''
               : hoverLogoClass
           }`}
           onClick={showBuilderUI ? (e) => handleSubFocusClick(e, 'logo') : undefined}
@@ -1008,7 +1074,7 @@ const BrandingElement = ({ config, readOnly, onElementSelect, elementId, activeS
       <TextTag
         className={`font-extrabold tracking-tight transition-all duration-200 cursor-pointer ${
           isActive && activeSubFocus === 'text'
-            ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105 shadow-sm'
+            ? ''
             : hoverTextClass
         }`}
         style={{
@@ -1258,9 +1324,9 @@ const CategoryListElement = ({
   console.log("[CategoryListElement Canvas] Render dengan activeSubFocus:", activeSubFocus, "isActive:", isActive);
 
   const showBuilderUI = !readOnly;
-  const hoverTitleClass = !readOnly ? 'hover:bg-blue-500/5 hover:outline-dashed hover:outline-1 hover:outline-blue-500/40 rounded px-1' : '';
-  const hoverImageClass = !readOnly ? 'hover:scale-105 hover:outline-dashed hover:outline-1 hover:outline-blue-500/40' : '';
-  const hoverNameClass = !readOnly ? 'hover:outline-dashed hover:outline-1 hover:outline-blue-500/40 rounded px-1' : '';
+  const hoverTitleClass = '';
+  const hoverImageClass = '';
+  const hoverNameClass = '';
 
   const dbCats = categories || [];
   let displayCategories = [...dbCats];
@@ -1503,7 +1569,7 @@ const CategoryListElement = ({
       {title && (
         <h3
           className={`font-extrabold text-xs uppercase tracking-wider px-2 cursor-pointer transition-all ${isActive && activeSubFocus === 'header_title'
-            ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105 shadow-sm'
+            ? ''
             : hoverTitleClass
             }`}
           style={titleStyle}
@@ -1526,7 +1592,7 @@ const CategoryListElement = ({
               >
                 <div
                   className={`w-14 h-14 border border-zinc-200/60 shadow-[0_4px_10px_rgba(0,0,0,0.03)] overflow-hidden flex items-center justify-center bg-zinc-50 transition-all duration-300 ${isActive && activeSubFocus === 'image'
-                    ? 'outline outline-2 outline-blue-500/60 scale-105 shadow-md'
+                    ? ''
                     : hoverImageClass
                     }`}
                   style={{ borderRadius: `${borderRadius}px` }}
@@ -1540,7 +1606,7 @@ const CategoryListElement = ({
                 </div>
                 <span
                   className={`font-bold leading-tight text-center tracking-tight transition-all duration-300 ${isActive && activeSubFocus === 'title'
-                    ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105'
+                    ? ''
                     : hoverNameClass
                     }`}
                   style={itemTitleStyle}
@@ -1590,7 +1656,7 @@ const CategoryListElement = ({
               >
                 <div
                   className={`w-14 h-14 border border-zinc-200/60 shadow-[0_4px_10px_rgba(0,0,0,0.03)] overflow-hidden flex items-center justify-center bg-zinc-50 transition-all duration-300 ${isActive && activeSubFocus === 'image'
-                    ? 'outline outline-2 outline-blue-500/60 scale-105 shadow-md'
+                    ? ''
                     : hoverImageClass
                     }`}
                   style={{ borderRadius: `${borderRadius}px` }}
@@ -1604,7 +1670,7 @@ const CategoryListElement = ({
                 </div>
                 <span
                   className={`font-bold leading-tight text-center tracking-tight transition-all duration-300 ${isActive && activeSubFocus === 'title'
-                    ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105'
+                    ? ''
                     : hoverNameClass
                     }`}
                   style={itemTitleStyle}
@@ -1702,11 +1768,11 @@ const ProductListElement = ({
   console.log("[ProductListElement Canvas] Render dengan activeSubFocus:", activeSubFocus, "isActive:", isActive);
 
   const showBuilderUI = !readOnly;
-  const hoverTitleClass = !readOnly ? 'hover:bg-blue-500/5 hover:outline-dashed hover:outline-1 hover:outline-blue-500/40 rounded px-1' : '';
-  const hoverCardClass = !readOnly ? 'hover:scale-[1.01] hover:ring-2 hover:ring-blue-500/30' : '';
-  const hoverImageClass = !readOnly ? 'hover:outline-dashed hover:outline-1 hover:outline-blue-500/40' : '';
-  const hoverNameClass = !readOnly ? 'hover:outline-dashed hover:outline-1 hover:outline-blue-500/40 rounded px-1' : '';
-  const hoverPriceClass = !readOnly ? 'hover:outline-dashed hover:outline-1 hover:outline-blue-500/40 rounded p-1' : '';
+  const hoverTitleClass = '';
+  const hoverCardClass = '';
+  const hoverImageClass = '';
+  const hoverNameClass = '';
+  const hoverPriceClass = '';
 
   const source = config?.source || 'ALL';
   const categoryId = config?.categoryId || '';
@@ -2125,7 +2191,7 @@ const ProductListElement = ({
       {title && (
         <h3
           className={`font-extrabold text-xs uppercase tracking-wider px-2 cursor-pointer transition-all ${isActive && activeSubFocus === 'header_title'
-            ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105 shadow-sm'
+            ? ''
             : hoverTitleClass
             }`}
           style={titleStyle}
@@ -2145,7 +2211,7 @@ const ProductListElement = ({
               <div
                 key={product.id}
                 className={`group border flex flex-col h-full transition-all duration-500 cursor-pointer ${isActive && activeSubFocus === 'card'
-                  ? 'ring-4 ring-blue-500/50 scale-[1.02] shadow-lg'
+                  ? ''
                   : hoverCardClass
                   }`}
                 style={{
@@ -2159,7 +2225,7 @@ const ProductListElement = ({
                 {/* Image Area */}
                 <div
                   className={`aspect-square overflow-hidden relative transition-all duration-300 w-full ${isActive && activeSubFocus === 'image'
-                    ? 'outline outline-2 outline-blue-500/60 scale-[1.01] shadow-md z-10'
+                    ? ''
                     : hoverImageClass
                     }`}
                   style={{
@@ -2208,7 +2274,7 @@ const ProductListElement = ({
                 >
                   <h3
                     className={`line-clamp-2 transition-all duration-300 mb-2 group-hover:text-zinc-900 ${isActive && activeSubFocus === 'title'
-                      ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105'
+                      ? ''
                       : hoverNameClass
                       }`}
                     style={productNameStyle}
@@ -2219,7 +2285,7 @@ const ProductListElement = ({
 
                   <div
                     className={`flex flex-col mt-auto pt-2.5 border-t border-zinc-50 transition-all duration-300 ${isActive && activeSubFocus === 'price'
-                      ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded p-1 scale-105'
+                      ? ''
                       : hoverPriceClass
                       }`}
                     onClick={showBuilderUI ? (e) => handleSubFocusClick(e, 'price') : undefined}
@@ -2266,7 +2332,7 @@ const ProductListElement = ({
               <div
                 key={product.id}
                 className={`group border flex flex-col w-[170px] shrink-0 snap-start transition-all duration-500 cursor-pointer ${isActive && activeSubFocus === 'card'
-                  ? 'ring-4 ring-blue-500/50 scale-[1.02] shadow-lg'
+                  ? ''
                   : hoverCardClass
                   }`}
                 style={{
@@ -2280,7 +2346,7 @@ const ProductListElement = ({
                 {/* Image Area */}
                 <div
                   className={`aspect-square overflow-hidden relative transition-all duration-300 w-full ${isActive && activeSubFocus === 'image'
-                    ? 'outline outline-2 outline-blue-500/60 scale-[1.01] shadow-md z-10'
+                    ? ''
                     : hoverImageClass
                     }`}
                   style={{
@@ -2329,7 +2395,7 @@ const ProductListElement = ({
                 >
                   <h3
                     className={`line-clamp-2 transition-all duration-300 mb-2 group-hover:text-zinc-900 ${isActive && activeSubFocus === 'title'
-                      ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105'
+                      ? ''
                       : hoverNameClass
                       }`}
                     style={productNameStyle}
@@ -2340,7 +2406,7 @@ const ProductListElement = ({
 
                   <div
                     className={`flex flex-col mt-auto pt-2.5 border-t border-zinc-50 transition-all duration-300 ${isActive && activeSubFocus === 'price'
-                      ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded p-1 scale-105'
+                      ? ''
                       : hoverPriceClass
                       }`}
                     onClick={showBuilderUI ? (e) => handleSubFocusClick(e, 'price') : undefined}
@@ -2630,7 +2696,7 @@ const ColumnElement = ({
 
   return (
     <div
-      className={`relative transition-all ${layoutClass} ${!readOnly && isDragOver ? 'outline-dashed outline-2 outline-blue-500 bg-blue-500/10 animate-pulse rounded-lg' : ''}`}
+      className={`relative transition-all ${layoutClass} ${''}`}
       style={styleObj}
       onMouseEnter={!readOnly ? () => setIsColumnHovered(true) : undefined}
       onMouseLeave={!readOnly ? () => setIsColumnHovered(false) : undefined}
@@ -2883,11 +2949,8 @@ const ElementWrapper = ({
         <style dangerouslySetInnerHTML={{ __html: generateMobileCss(`.el-${element.id}`, element.config.mobileConfig) }} />
       )}
       <div
-        className={`el-${element.id} relative group/el cursor-pointer transition-all ${isNewlyAdded
-          ? 'outline outline-2 outline-blue-500 rounded-none animate-pulse bg-blue-500/10'
-          : isActive
-            ? 'outline outline-2 outline-blue-600 outline-offset-2 rounded-none bg-blue-500/5'
-            : !readOnly ? 'hover:outline-dashed hover:outline-2 hover:outline-blue-500/40 hover:outline-offset-2 hover:rounded-none' : ''
+        className={`el-${element.id} relative group/el transition-all ${isNewlyAdded ? ''
+          : ''
           }`}
         style={wrapperStyle}
       onClick={!readOnly ? (e) => {
@@ -2902,16 +2965,6 @@ const ElementWrapper = ({
       onMouseLeave={!readOnly ? onLeave : undefined}
       onContextMenu={!readOnly ? onContextMenu : undefined}
     >
-      {/* Element Badge di Pojok Kiri Atas */}
-      {!readOnly && (isHovered || isActive) && (
-        <div className="absolute -top-5 left-0 z-[65] flex items-center gap-1 pointer-events-none">
-          <div className={`flex items-center gap-1 ${isActive ? 'bg-blue-700' : 'bg-blue-600'} text-white px-2 py-0.5 rounded shadow-lg`}>
-            <Icon className="w-2.5 h-2.5" />
-            <span className="text-[9px] font-bold">{meta?.label || element.type}</span>
-          </div>
-        </div>
-      )}
-
 
 
       {/* WordPress Elementor-Style Premium Column Navigator (Melayang Tengah Atas) */}
@@ -3003,6 +3056,7 @@ const ElementWrapper = ({
       >
         {element.type === 'HEADING' && <HeadingElement config={element.config} />}
         {element.type === 'TEXT' && <TextElement config={element.config} elementId={element.id} />}
+        {element.type === 'NAVIGATION' && <NavigationElement config={element.config} />}
         {element.type === 'BUTTON' && <ButtonElement config={element.config} />}
         {element.type === 'IMAGE' && <ImageElement config={element.config} />}
         {element.type === 'GALLERY' && <GalleryElement config={element.config} />}
@@ -3064,62 +3118,6 @@ const ElementWrapper = ({
           />
         )}
       </div>
-
-      {/* Hover action buttons — pojok kanan atas elemen */}
-      {!readOnly && !isHeader && element.type !== 'COLUMN' && isHovered && (
-        <div className="absolute top-1 right-1 z-[60] flex items-center gap-0.5 pointer-events-auto">
-          {/* Tombol Move 🟢 */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log('[Element Hover Move] Navigator diklik untuk elemen:', element.id);
-              onSelect?.();
-              console.log("[Element Hover Move Debug] Mengirim event builder:openNavigatorPanel untuk Elemen:", element.id, "di Section:", sectionId);
-              window.dispatchEvent(new CustomEvent('builder:openNavigatorPanel', { detail: { elementId: element.id, sectionId } }));
-            }}
-            className={`p-1.5 rounded-l-md transition-all flex items-center justify-center cursor-pointer opacity-0 group-hover/el:opacity-100 ${isLocalNavigatorOpen ? 'bg-emerald-600 text-white' : 'bg-emerald-600/90 hover:bg-emerald-500 text-white'}`}
-            title="Navigator Posisi"
-          >
-            <Move className="w-3 h-3" />
-          </button>
-
-          {/* Tombol Edit 🟡 — hanya saat panel kiri collapse */}
-          {!isLeftPanelOpen && onOpenEditPanel && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                console.log('[Element Hover Edit] Membuka panel edit untuk elemen:', element.id);
-                onOpenEditPanel(element.id);
-              }}
-              className="p-1.5 transition-all flex items-center justify-center cursor-pointer opacity-0 group-hover/el:opacity-100 bg-amber-500/90 hover:bg-amber-400 text-white"
-              title="Edit elemen ini"
-            >
-              <Pencil className="w-3 h-3" />
-            </button>
-          )}
-
-          {/* Tombol Delete 🔴 */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log("[Element Hover Delete] Hapus diklik untuk Elemen ID:", element.id);
-              if (onDeleteElement) {
-                onDeleteElement(element.id);
-              }
-            }}
-            className={`p-1.5 transition-all flex items-center justify-center cursor-pointer opacity-0 group-hover/el:opacity-100 bg-red-600/90 hover:bg-red-600 text-white ${!isLeftPanelOpen && onOpenEditPanel ? 'rounded-r-md' : 'rounded-r-md'}`}
-            title={`Hapus ${meta?.label || element.type}`}
-          >
-            <Trash2 className="w-3 h-3" />
-          </button>
-        </div>
-      )}
     </div>
     </>
   );
@@ -3292,11 +3290,7 @@ export const BuilderSection = ({
       `}</style>}
       <div
         id={`section-${id}`}
-        className={`relative transition-all ${id === 'global-header' ? 'w-full' : 'mx-auto w-full'} ${!readOnly && isActive
-        ? 'after:absolute after:inset-0 after:border-2 after:border-blue-600 after:pointer-events-none after:z-[50] after:rounded-[inherit]'
-        : !readOnly ? 'hover:after:absolute hover:after:inset-0 hover:after:border-2 hover:after:border-blue-500/30 hover:after:pointer-events-none hover:after:z-[50] hover:after:rounded-[inherit]'
-        : ''
-        } ${!readOnly && isDragOver ? 'after:absolute after:inset-0 after:border-2 after:border-dashed after:border-blue-500 after:bg-blue-500/10 after:pointer-events-none after:z-[50] after:rounded-[inherit] after:animate-pulse' : ''}`}
+        className={`relative transition-all ${id === 'global-header' ? 'w-full' : 'mx-auto w-full'}`}
       onClick={!readOnly ? (e) => {
         if (e.target !== e.currentTarget) return;
         e.stopPropagation();
@@ -3597,8 +3591,8 @@ export const BuilderSection = ({
           flexWrap: (config.layout !== 'grid' && config.flexWrap)
             ? config.flexWrap
             : undefined,
-          justifyContent: (config.layout !== 'grid' && config.justify)
-            ? (config.justify === 'start' ? 'flex-start' : config.justify === 'end' ? 'flex-end' : config.justify === 'between' ? 'space-between' : config.justify === 'around' ? 'space-around' : config.justify === 'evenly' ? 'space-evenly' : 'center')
+          justifyContent: (config.layout !== 'grid')
+            ? (config.justify === 'start' ? 'flex-start' : config.justify === 'end' ? 'flex-end' : config.justify === 'between' ? 'space-between' : config.justify === 'around' ? 'space-around' : config.justify === 'evenly' ? 'space-evenly' : config.justify === 'center' ? 'center' : (config.justifyContent || 'center'))
             : undefined,
           alignItems: (config.layout !== 'grid' && config.align)
             ? (config.align === 'start' ? 'flex-start' : config.align === 'end' ? 'flex-end' : config.align === 'stretch' ? 'stretch' : 'center')

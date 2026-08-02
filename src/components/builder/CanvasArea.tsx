@@ -262,9 +262,9 @@ function BuilderContent() {
     return (
       <div className={`fixed inset-0 ${theme === 'dark' ? 'bg-black' : 'bg-slate-50'} flex flex-col items-center justify-center space-y-8 z-[200]`}>
         <div className="w-20 h-20 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        <div className="text-center space-y-2">
-          <h2 className={`text-xl font-black ${theme === 'dark' ? 'text-white' : 'text-slate-950'} uppercase tracking-[0.4em] animate-pulse`}>Initializing Canvas</h2>
-          <p className={`text-slate-500 text-[10px] font-bold uppercase tracking-widest`}>Menyiapkan lingkungan desain visual...</p>
+        <div className="text-center space-y-2 px-4 w-full">
+          <h2 className={`text-base sm:text-xl font-black ${theme === 'dark' ? 'text-white' : 'text-slate-950'} uppercase tracking-[0.2em] sm:tracking-[0.4em] animate-pulse`}>Initializing Canvas</h2>
+          <p className={`text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest`}>Menyiapkan lingkungan desain visual...</p>
         </div>
       </div>
     );
@@ -329,24 +329,6 @@ function BuilderContent() {
           
           <div className={`h-5 w-px ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-200'} mx-1`}></div>
 
-          <button
-            onClick={handleUndo}
-            disabled={past.length === 0}
-            className={`p-1.5 rounded-lg transition-all ${past.length > 0 ? (theme === 'dark' ? 'text-white hover:bg-white/10' : 'text-slate-700 hover:bg-slate-200') : (theme === 'dark' ? 'text-white/20 cursor-not-allowed' : 'text-slate-300 cursor-not-allowed')}`}
-            title="Kembali (Undo)"
-          >
-            <Undo2 className="w-4 h-4" />
-          </button>
-          <button
-            onClick={handleRedo}
-            disabled={future.length === 0}
-            className={`p-1.5 rounded-lg transition-all ${future.length > 0 ? (theme === 'dark' ? 'text-white hover:bg-white/10' : 'text-slate-700 hover:bg-slate-200') : (theme === 'dark' ? 'text-white/20 cursor-not-allowed' : 'text-slate-300 cursor-not-allowed')}`}
-            title="Maju (Redo)"
-          >
-            <Redo2 className="w-4 h-4" />
-          </button>
-          <div className={`h-5 w-px ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-200'} mx-1`}></div>
-
           {/* Mobile View Toggle */}
           <button
             onClick={() => setShowMobilePreview(!showMobilePreview)}
@@ -387,16 +369,7 @@ function BuilderContent() {
           <DataSidebarPanel state={state} />
         </div>
 
-        {/* Floating Modals for specific actions if needed (like Settings) */}
-        <FloatingModal
-          isOpen={isLeftPanelOpen && activePanel === 'editor'}
-          onClose={() => setIsLeftPanelOpen(false)}
-          title="Theme / Style Editor"
-          activeElementId={activeElementId}
-          theme={theme}
-        >
-          <ThemePopupPanel state={state} />
-        </FloatingModal>
+
 
         <FloatingModal
           isOpen={isLeftPanelOpen && activePanel === 'settings'}
@@ -795,8 +768,9 @@ export default function VisualPageBuilder() {
     <Suspense fallback={
       <div className="fixed inset-0 bg-black flex flex-col items-center justify-center space-y-8 z-[200]">
         <div className="w-20 h-20 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        <div className="text-center space-y-2">
-          <h2 className="text-xl font-black text-white uppercase tracking-[0.4em] animate-pulse">Initializing Canvas</h2>
+        <div className="text-center space-y-2 px-4 w-full">
+          <h2 className="text-base sm:text-xl font-black text-white uppercase tracking-[0.2em] sm:tracking-[0.4em] animate-pulse">Initializing Canvas</h2>
+          <p className="text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">Menyiapkan lingkungan desain visual...</p>
         </div>
       </div>
     }>

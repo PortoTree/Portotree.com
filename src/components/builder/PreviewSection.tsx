@@ -330,9 +330,8 @@ const HeadingElement = ({ config }: { config: any }) => {
     <Tag
       className={`responsive-text ${config.fontSize ? '' : (sizeMap[Tag] || 'text-2xl')} transition-all`}
       style={headingStyle}
-    >
-      {config.text || 'Awesome Heading'}
-    </Tag>
+      dangerouslySetInnerHTML={{ __html: config.text || 'Awesome Heading' }}
+    />
   );
 
   // Jika Lebar Latar adalah "Sesuai Teks" (fit), bungkus dengan div beralignment agar posisi teks tetap di kiri/tengah/kanan kolom kontainer dengan benar
@@ -965,7 +964,7 @@ const BrandingElement = ({ config, readOnly, onElementSelect, elementId, activeS
           alt={name}
           className={`cursor-pointer transition-all duration-200 ${
             isActive && activeSubFocus === 'logo'
-              ? 'outline outline-2 outline-blue-500/60 scale-105 shadow-md'
+              ? ''
               : hoverLogoClass
           }`}
           style={{
@@ -997,7 +996,7 @@ const BrandingElement = ({ config, readOnly, onElementSelect, elementId, activeS
           }}
           className={`bg-indigo-500/10 flex items-center justify-center shadow-sm cursor-pointer transition-all duration-200 ${
             isActive && activeSubFocus === 'logo'
-              ? 'outline outline-2 outline-blue-500/60 scale-105 shadow-md'
+              ? ''
               : hoverLogoClass
           }`}
           onClick={showBuilderUI ? (e) => handleSubFocusClick(e, 'logo') : undefined}
@@ -1008,7 +1007,7 @@ const BrandingElement = ({ config, readOnly, onElementSelect, elementId, activeS
       <TextTag
         className={`font-extrabold tracking-tight transition-all duration-200 cursor-pointer ${
           isActive && activeSubFocus === 'text'
-            ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105 shadow-sm'
+            ? ''
             : hoverTextClass
         }`}
         style={{
@@ -1503,7 +1502,7 @@ const CategoryListElement = ({
       {title && (
         <h3
           className={`font-extrabold text-xs uppercase tracking-wider px-2 cursor-pointer transition-all ${isActive && activeSubFocus === 'header_title'
-            ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105 shadow-sm'
+            ? ''
             : hoverTitleClass
             }`}
           style={titleStyle}
@@ -1526,7 +1525,7 @@ const CategoryListElement = ({
               >
                 <div
                   className={`w-14 h-14 border border-zinc-200/60 shadow-[0_4px_10px_rgba(0,0,0,0.03)] overflow-hidden flex items-center justify-center bg-zinc-50 transition-all duration-300 ${isActive && activeSubFocus === 'image'
-                    ? 'outline outline-2 outline-blue-500/60 scale-105 shadow-md'
+                    ? ''
                     : hoverImageClass
                     }`}
                   style={{ borderRadius: `${borderRadius}px` }}
@@ -1540,7 +1539,7 @@ const CategoryListElement = ({
                 </div>
                 <span
                   className={`font-bold leading-tight text-center tracking-tight transition-all duration-300 ${isActive && activeSubFocus === 'title'
-                    ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105'
+                    ? ''
                     : hoverNameClass
                     }`}
                   style={itemTitleStyle}
@@ -1590,7 +1589,7 @@ const CategoryListElement = ({
               >
                 <div
                   className={`w-14 h-14 border border-zinc-200/60 shadow-[0_4px_10px_rgba(0,0,0,0.03)] overflow-hidden flex items-center justify-center bg-zinc-50 transition-all duration-300 ${isActive && activeSubFocus === 'image'
-                    ? 'outline outline-2 outline-blue-500/60 scale-105 shadow-md'
+                    ? ''
                     : hoverImageClass
                     }`}
                   style={{ borderRadius: `${borderRadius}px` }}
@@ -1604,7 +1603,7 @@ const CategoryListElement = ({
                 </div>
                 <span
                   className={`font-bold leading-tight text-center tracking-tight transition-all duration-300 ${isActive && activeSubFocus === 'title'
-                    ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105'
+                    ? ''
                     : hoverNameClass
                     }`}
                   style={itemTitleStyle}
@@ -2125,7 +2124,7 @@ const ProductListElement = ({
       {title && (
         <h3
           className={`font-extrabold text-xs uppercase tracking-wider px-2 cursor-pointer transition-all ${isActive && activeSubFocus === 'header_title'
-            ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105 shadow-sm'
+            ? ''
             : hoverTitleClass
             }`}
           style={titleStyle}
@@ -2145,7 +2144,7 @@ const ProductListElement = ({
               <div
                 key={product.id}
                 className={`group border flex flex-col h-full transition-all duration-500 cursor-pointer ${isActive && activeSubFocus === 'card'
-                  ? 'ring-4 ring-blue-500/50 scale-[1.02] shadow-lg'
+                  ? ''
                   : hoverCardClass
                   }`}
                 style={{
@@ -2159,7 +2158,7 @@ const ProductListElement = ({
                 {/* Image Area */}
                 <div
                   className={`aspect-square overflow-hidden relative transition-all duration-300 w-full ${isActive && activeSubFocus === 'image'
-                    ? 'outline outline-2 outline-blue-500/60 scale-[1.01] shadow-md z-10'
+                    ? ''
                     : hoverImageClass
                     }`}
                   style={{
@@ -2208,7 +2207,7 @@ const ProductListElement = ({
                 >
                   <h3
                     className={`line-clamp-2 transition-all duration-300 mb-2 group-hover:text-zinc-900 ${isActive && activeSubFocus === 'title'
-                      ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105'
+                      ? ''
                       : hoverNameClass
                       }`}
                     style={productNameStyle}
@@ -2219,7 +2218,7 @@ const ProductListElement = ({
 
                   <div
                     className={`flex flex-col mt-auto pt-2.5 border-t border-zinc-50 transition-all duration-300 ${isActive && activeSubFocus === 'price'
-                      ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded p-1 scale-105'
+                      ? ''
                       : hoverPriceClass
                       }`}
                     onClick={showBuilderUI ? (e) => handleSubFocusClick(e, 'price') : undefined}
@@ -2266,7 +2265,7 @@ const ProductListElement = ({
               <div
                 key={product.id}
                 className={`group border flex flex-col w-[170px] shrink-0 snap-start transition-all duration-500 cursor-pointer ${isActive && activeSubFocus === 'card'
-                  ? 'ring-4 ring-blue-500/50 scale-[1.02] shadow-lg'
+                  ? ''
                   : hoverCardClass
                   }`}
                 style={{
@@ -2280,7 +2279,7 @@ const ProductListElement = ({
                 {/* Image Area */}
                 <div
                   className={`aspect-square overflow-hidden relative transition-all duration-300 w-full ${isActive && activeSubFocus === 'image'
-                    ? 'outline outline-2 outline-blue-500/60 scale-[1.01] shadow-md z-10'
+                    ? ''
                     : hoverImageClass
                     }`}
                   style={{
@@ -2329,7 +2328,7 @@ const ProductListElement = ({
                 >
                   <h3
                     className={`line-clamp-2 transition-all duration-300 mb-2 group-hover:text-zinc-900 ${isActive && activeSubFocus === 'title'
-                      ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded px-1 scale-105'
+                      ? ''
                       : hoverNameClass
                       }`}
                     style={productNameStyle}
@@ -2340,7 +2339,7 @@ const ProductListElement = ({
 
                   <div
                     className={`flex flex-col mt-auto pt-2.5 border-t border-zinc-50 transition-all duration-300 ${isActive && activeSubFocus === 'price'
-                      ? 'outline outline-2 outline-blue-500/60 bg-blue-500/10 rounded p-1 scale-105'
+                      ? ''
                       : hoverPriceClass
                       }`}
                     onClick={showBuilderUI ? (e) => handleSubFocusClick(e, 'price') : undefined}
@@ -2448,12 +2447,13 @@ const PreviewColumn = ({
     boxShadow: config.boxShadowType && config.boxShadowType !== 'none' && config.shadowColor ? `${config.shadowOffsetX || 0}px ${config.shadowOffsetY || 4}px ${config.shadowBlur || 6}px ${config.shadowSpread || -1}px ${config.shadowColor}` : 'none',
     display: layout === 'flexbox' ? 'flex' : 'grid',
     gap: formatStyleValue(config.gap, 16),
+    width: config.width || undefined,
   };
 
   if (layout === 'flexbox') {
-    containerStyle.flexDirection = config.direction || 'col';
-    containerStyle.alignItems = config.align || 'flex-start';
-    containerStyle.justifyContent = config.justify || 'flex-start';
+    containerStyle.flexDirection = config.direction === 'row' ? 'row' : config.direction === 'row-reverse' ? 'row-reverse' : config.direction === 'col-reverse' ? 'column-reverse' : 'column';
+    containerStyle.alignItems = config.align === 'center' ? 'center' : config.align === 'end' ? 'flex-end' : config.align === 'stretch' ? 'stretch' : 'flex-start';
+    containerStyle.justifyContent = config.justifyContent === 'center' ? 'center' : config.justifyContent === 'end' ? 'flex-end' : config.justifyContent === 'space-between' ? 'space-between' : config.justifyContent === 'space-around' ? 'space-around' : 'flex-start';
     containerStyle.flexWrap = config.flexWrap || 'nowrap';
   }
 
@@ -2461,14 +2461,14 @@ const PreviewColumn = ({
 
   return (
     <div
-      className={`${gridClass} ${config.customClass || ''} ${isActive ? 'ring-2 ring-blue-500/50 rounded-lg' : 'hover:ring-2 hover:ring-blue-400/40 hover:bg-blue-50/10 rounded-lg'} transition-all cursor-pointer relative group w-full h-full min-h-[50px]`}
+      className={`${gridClass} ${config.customClass || ''} ${isActive ? '' : ''} transition-all cursor-pointer relative group w-full h-full min-h-[50px]`}
       style={containerStyle}
       onClick={(e) => {
         e.stopPropagation();
         onElementSelect?.(element.id);
       }}
     >
-      {(element.children || []).map((child: any) => (
+      {(element.children || element.elements || []).map((child: any) => (
         <PreviewElement
           key={child.id}
           element={child}
@@ -2493,7 +2493,7 @@ const PreviewElement = ({
 
   return (
     <div 
-      className={`relative transition-all cursor-pointer rounded-lg hover:ring-2 hover:ring-blue-400/40 ${isActive ? 'ring-2 ring-blue-500/50' : 'hover:bg-blue-50/10'}`}
+      className={`relative transition-all cursor-pointer rounded-lg ${isActive ? '' : ''}`}
       onClick={(e) => {
         e.stopPropagation();
         onElementSelect?.(element.id);
@@ -2549,7 +2549,7 @@ export const PreviewSection = ({
     <section 
       id={section.id} 
       style={containerStyle} 
-      className={`relative w-full transition-all cursor-pointer ${isActive ? 'ring-2 ring-blue-500/20' : 'hover:ring-2 hover:ring-blue-400/20'}`}
+      className={`relative w-full transition-all cursor-pointer ${isActive ? '' : ''}`}
       onClick={() => onElementSelect?.(section.id)}
     >
       {config.bgImageUrl && config.overlay > 0 && (
@@ -2558,7 +2558,17 @@ export const PreviewSection = ({
       
       <div className={`relative z-10 ${contentWidthClass}`}>
         {elements && elements.length > 0 && (
-          <div className="flex flex-col">
+          <div 
+            className={`w-full ${config.layout === 'grid' ? 'grid' : 'flex'}`}
+            style={{
+              flexDirection: config.layout === 'flexbox' ? (config.direction === 'row' ? 'row' : config.direction === 'row-reverse' ? 'row-reverse' : config.direction === 'col-reverse' ? 'column-reverse' : 'column') : undefined,
+              alignItems: config.layout === 'flexbox' ? (config.align === 'center' ? 'center' : config.align === 'end' ? 'flex-end' : config.align === 'stretch' ? 'stretch' : 'flex-start') : undefined,
+              justifyContent: config.layout === 'flexbox' ? (config.justifyContent === 'center' ? 'center' : config.justifyContent === 'end' ? 'flex-end' : config.justifyContent === 'space-between' ? 'space-between' : config.justifyContent === 'space-around' ? 'space-around' : 'flex-start') : undefined,
+              gap: config.gap ? formatStyleValue(config.gap) : undefined,
+              gridTemplateColumns: config.layout === 'grid' ? `repeat(${config.columns || 1}, minmax(0, 1fr))` : undefined,
+              flexWrap: config.flexWrap || 'wrap',
+            }}
+          >
             {elements.map((el: any) => (
               <PreviewElement
                 key={el.id}
