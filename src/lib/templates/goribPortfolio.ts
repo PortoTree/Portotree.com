@@ -1,5 +1,4 @@
 import { Section } from "@/types/builder";
-import { v4 as uuidv4 } from "uuid";
 
 export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
   {
