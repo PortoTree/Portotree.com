@@ -141,8 +141,8 @@ function ElementInput({ element, section, sections, setSections, setActiveElemen
             onCheckedChange={(checked) => updateConfig('showNavigation', checked)} 
           />
         </div>
-        <p className="text-[11px] text-zinc-500 leading-tight">
-          Otomatis muncul semua komponen yang ada di canvas dan hilang jika "tampilkan bagian ini" dinonaktifkan.
+        <p className={`text-xs text-slate-500 italic px-1 leading-relaxed`}>
+          Otomatis muncul pada versi dekstop, pada versi mobile tetap di sembunyikan
         </p>
 
         {element.config?.showNavigation !== false && (

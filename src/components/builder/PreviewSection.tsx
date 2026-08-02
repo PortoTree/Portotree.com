@@ -714,7 +714,7 @@ const ImageElement = ({ config }: { config: any }) => {
 
   const imageContent = (
     <img
-      src={config.url || '/placeholder-gambar.png'}
+      src={config.src || config.url || '/placeholder-4x4.png'}
       alt={config.alt || 'Visual Storefront'}
       className="max-w-full w-full h-full transition-all"
       style={imageStyles}
@@ -2458,10 +2458,11 @@ const PreviewColumn = ({
   }
 
   const gridClass = layout === 'grid' ? getGridMappingClass(config.columns || 1) : '';
+  const mobileFlexClass = config.mobileDirection === 'col' ? '[.is-mobile-preview_&]:!flex-col' : config.mobileDirection === 'col-reverse' ? '[.is-mobile-preview_&]:!flex-col-reverse' : config.mobileDirection === 'row' ? '[.is-mobile-preview_&]:!flex-row' : config.mobileDirection === 'row-reverse' ? '[.is-mobile-preview_&]:!flex-row-reverse' : '';
 
   return (
     <div
-      className={`${gridClass} ${config.customClass || ''} ${isActive ? '' : ''} transition-all cursor-pointer relative group w-full h-full min-h-[50px]`}
+      className={`${gridClass} ${config.customClass || ''} hover:ring-2 hover:ring-inset hover:ring-blue-400/50 ${isActive ? 'ring-2 ring-inset ring-blue-500 z-50' : ''} transition-all cursor-pointer relative group w-full h-full min-h-[50px] [.is-mobile-preview_&]:!w-full ${mobileFlexClass}`}
       style={containerStyle}
       onClick={(e) => {
         e.stopPropagation();
@@ -2493,7 +2494,7 @@ const PreviewElement = ({
 
   return (
     <div 
-      className={`relative transition-all cursor-pointer rounded-lg ${isActive ? '' : ''}`}
+      className={`relative transition-all cursor-pointer rounded-lg hover:ring-2 hover:ring-inset hover:ring-blue-400/50 ${isActive ? 'ring-2 ring-inset ring-blue-500 z-50' : ''}`}
       onClick={(e) => {
         e.stopPropagation();
         onElementSelect?.(element.id);
@@ -2549,7 +2550,7 @@ export const PreviewSection = ({
     <section 
       id={section.id} 
       style={containerStyle} 
-      className={`relative w-full transition-all cursor-pointer ${isActive ? '' : ''}`}
+      className={`relative w-full transition-all cursor-pointer hover:ring-2 hover:ring-inset hover:ring-fuchsia-400/50 ${config.customClass || ''} ${isActive ? 'ring-2 ring-inset ring-fuchsia-500 z-50' : ''}`}
       onClick={() => onElementSelect?.(section.id)}
     >
       {config.bgImageUrl && config.overlay > 0 && (
@@ -2559,14 +2560,14 @@ export const PreviewSection = ({
       <div className={`relative z-10 ${contentWidthClass}`}>
         {elements && elements.length > 0 && (
           <div 
-            className={`w-full ${config.layout === 'grid' ? 'grid' : 'flex'}`}
+            className={`w-full ${config.layout === 'grid' ? 'grid' : 'flex'} [.is-mobile-preview_&]:!flex-col [.is-mobile-preview_&]:!items-center`}
             style={{
               flexDirection: config.layout === 'flexbox' ? (config.direction === 'row' ? 'row' : config.direction === 'row-reverse' ? 'row-reverse' : config.direction === 'col-reverse' ? 'column-reverse' : 'column') : undefined,
               alignItems: config.layout === 'flexbox' ? (config.align === 'center' ? 'center' : config.align === 'end' ? 'flex-end' : config.align === 'stretch' ? 'stretch' : 'flex-start') : undefined,
               justifyContent: config.layout === 'flexbox' ? (config.justifyContent === 'center' ? 'center' : config.justifyContent === 'end' ? 'flex-end' : config.justifyContent === 'space-between' ? 'space-between' : config.justifyContent === 'space-around' ? 'space-around' : 'flex-start') : undefined,
               gap: config.gap ? formatStyleValue(config.gap) : undefined,
               gridTemplateColumns: config.layout === 'grid' ? `repeat(${config.columns || 1}, minmax(0, 1fr))` : undefined,
-              flexWrap: config.flexWrap || 'wrap',
+              flexWrap: config.flexWrap || 'nowrap',
             }}
           >
             {elements.map((el: any) => (

@@ -348,13 +348,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 export function useBuilderState() {
   useEffect(() => {
-    if (typeof window !== 'undefined' && !localStorage.getItem('cache_busted_gorib_v11')) {
+    if (typeof window !== 'undefined' && !localStorage.getItem('cache_busted_gorib_v23')) {
       sessionStorage.removeItem("storefront_sections");
       localStorage.removeItem("draft_template_sections");
       localStorage.removeItem("draft_template_sections_v10");
       localStorage.removeItem("draft_template_sections_v11");
       localStorage.removeItem("draft_template_sections_v12");
-      localStorage.setItem('cache_busted_gorib_v11', 'true');
+      localStorage.setItem('cache_busted_gorib_v23', 'true');
       window.location.href = window.location.pathname + '?reset=true';
     }
   }, []);
@@ -469,7 +469,7 @@ export function useBuilderState() {
 
   // Panel States
   const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(false);
-  const [activePanel, setActivePanel] = useState<'library' | 'editor' | 'settings'>('library');
+  const [activePanel, setActivePanel] = useState<'library' | 'editor'>('library');
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [activeEditorTab, setActiveEditorTab] = useState<'layout' | 'style' | 'advanced'>('layout');
   const [editorCollapse, setEditorCollapse] = useState<Record<string, boolean>>({
@@ -1236,7 +1236,7 @@ export function useBuilderState() {
           id: `el-hero-img-${Date.now()}`,
           type: 'IMAGE',
           config: {
-            src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop",
+            src: "/placeholder-person-4x4.png",
             alt: "Hero Image",
             width: 400,
             height: 400,

@@ -471,7 +471,7 @@ const NavigationElement = ({ config }: { config: any }) => {
     });
 
   return (
-    <nav className="flex items-center gap-6 flex-1 justify-end" style={{ fontSize: config.fontSize, fontWeight: config.fontWeight, color: config.textColor }}>
+    <nav className="hidden md:flex [.is-mobile-preview_&]:!hidden items-center gap-6 flex-1 justify-end" style={{ fontSize: config.fontSize, fontWeight: config.fontWeight, color: config.textColor }}>
       {navLinks.map(link => (
         <a 
           key={link.id}
@@ -781,7 +781,7 @@ const ImageElement = ({ config }: { config: any }) => {
 
   const imageContent = (
     <img
-      src={config.url || '/placeholder-gambar.png'}
+      src={config.src || config.url || '/placeholder-4x4.png'}
       alt={config.alt || 'Visual Storefront'}
       className="max-w-full w-full h-full transition-all"
       style={imageStyles}
@@ -2520,21 +2520,22 @@ const ColumnElement = ({
     console.log(`[CANVAS COLUMN ${element.id}] Render element dengan Layout: ${element.config.containerLayout || 'flex'}, Bg: ${element.config.bgColor || 'transparent'}, Radius: ${element.config.borderRadius ?? 0}px`);
   }, [element.id, element.config.containerLayout, element.config.bgColor, element.config.borderRadius]);
 
-  const children = (element.children || []).sort((a, b) => a.order - b.order);
+  const children = (element.children || element.elements || []).sort((a: any, b: any) => a.order - b.order);
   const c = element.config;
-  const isHoriz = c.layout === 'horizontal' || c.layout === 'row-reverse';
   const isGrid = c.containerLayout === 'grid';
+  const isHoriz = c.layout === 'horizontal' || c.layout === 'row-reverse' || (c.layout === 'flexbox' && (c.direction === 'row' || c.direction === 'row-reverse'));
 
-  // Layout classes
-  const layoutClass = isGrid
-    ? 'responsive-grid'
-    : c.layout === 'horizontal'
-      ? 'flex flex-row flex-wrap'
-      : c.layout === 'row-reverse'
-        ? 'flex flex-row-reverse flex-wrap'
-        : c.layout === 'col-reverse'
-          ? 'flex flex-col-reverse'
-          : 'flex flex-col';
+  const layoutClass = (() => {
+    if (isGrid) return 'responsive-grid';
+    const isRow = c.layout === 'horizontal' || (c.layout === 'flexbox' && c.direction === 'row');
+    const isRowReverse = c.layout === 'row-reverse' || (c.layout === 'flexbox' && c.direction === 'row-reverse');
+    const isColReverse = c.layout === 'col-reverse' || (c.layout === 'flexbox' && c.direction === 'col-reverse');
+
+    if (isRow) return `flex flex-wrap ${c.mobileDirection === 'col' ? 'flex-col md:flex-row' : c.mobileDirection === 'col-reverse' ? 'flex-col-reverse md:flex-row' : c.mobileDirection === 'row-reverse' ? 'flex-row-reverse md:flex-row' : 'flex-row'}`;
+    if (isRowReverse) return `flex flex-wrap ${c.mobileDirection === 'col' ? 'flex-col md:flex-row-reverse' : c.mobileDirection === 'col-reverse' ? 'flex-col-reverse md:flex-row-reverse' : c.mobileDirection === 'row' ? 'flex-row md:flex-row-reverse' : 'flex-row-reverse'}`;
+    if (isColReverse) return `flex ${c.mobileDirection === 'row' ? 'flex-row md:flex-col-reverse' : c.mobileDirection === 'row-reverse' ? 'flex-row-reverse md:flex-col-reverse' : c.mobileDirection === 'col' ? 'flex-col md:flex-col-reverse' : 'flex-col-reverse'}`;
+    return `flex ${c.mobileDirection === 'row' ? 'flex-row md:flex-col' : c.mobileDirection === 'row-reverse' ? 'flex-row-reverse md:flex-col' : c.mobileDirection === 'col-reverse' ? 'flex-col-reverse md:flex-col' : 'flex-col'}`;
+  })();
 
   // Box Shadow Mapper
   const getShadow = (s?: string) => {
@@ -2893,7 +2894,7 @@ const ElementWrapper = ({
       maxWidth: '100%',
       flex: element.config?.sizing === 'full' ? '1 1 100%' : element.config?.sizing === 'fit' ? '0 0 auto' : element.config?.sizing === 'custom' ? element.config?.flex : undefined,
     }),
-    ...(sectionId === 'global-header' && element.type === 'CART' ? { marginLeft: 'auto' as const } : {}),
+    ...((sectionId === 'global-header' || sectionId === 'header') && (element.type === 'CART' || element.id === 'header-right-col') ? { marginLeft: 'auto' as const } : {}),
   };
 
   const isColumnType = element.type === 'COLUMN';
@@ -3290,7 +3291,7 @@ export const BuilderSection = ({
       `}</style>}
       <div
         id={`section-${id}`}
-        className={`relative transition-all ${id === 'global-header' ? 'w-full' : 'mx-auto w-full'}`}
+        className={`relative transition-all ${id === 'global-header' ? 'w-full' : 'mx-auto w-full'} ${config.customClass || ''}`}
       onClick={!readOnly ? (e) => {
         if (e.target !== e.currentTarget) return;
         e.stopPropagation();
@@ -3462,7 +3463,7 @@ export const BuilderSection = ({
         >
            {Array.from({ length: placeholderCount }).map((_, i) => {
              const col = sorted[i];
-             const isFilled = col && col.type === 'COLUMN' && col.children && col.children.length > 0;
+             const isFilled = col && col.type === 'COLUMN' && (col.children || col.elements) && (col.children || col.elements).length > 0;
              // Kisi terisi: tidak tampilkan outline dashed
              if (isFilled) return <div key={i} />;
              return <div key={i} className="border border-dashed border-zinc-400/50 bg-zinc-500/5 rounded" />;

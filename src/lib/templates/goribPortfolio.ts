@@ -48,30 +48,46 @@ export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
         },
       },
       {
-        id: "header-nav",
-        type: "NAVIGATION",
+        id: "header-right-col",
+        type: "COLUMN",
         order: 1,
         config: {
-          showNavigation: true,
-          fontSize: 14,
-          fontWeight: "600",
-          textColor: "#334155",
+          layout: "flexbox",
+          direction: "row",
+          align: "center",
+          justifyContent: "flex-end",
+          gap: 24,
+          sizing: "fit",
+          customClass: "flex-nowrap",
         },
-      },
-      {
-        id: "header-btn",
-        type: "BUTTON",
-        order: 2,
-        config: {
-          text: "Hire Me",
-          actionType: "whatsapp",
-          link: "",
-          size: "sm",
-          variant: "solid",
-          bgColor: "#10b981",
-          textColor: "#ffffff",
-          borderRadius: 9999,
-        },
+        elements: [
+          {
+            id: "header-nav",
+            type: "NAVIGATION",
+            order: 0,
+            config: {
+              showNavigation: true,
+              fontSize: 14,
+              fontWeight: "600",
+              textColor: "#334155",
+            },
+          },
+          {
+            id: "header-btn",
+            type: "BUTTON",
+            order: 1,
+            config: {
+              text: "Hire Me",
+              actionType: "whatsapp",
+              link: "",
+              size: "sm",
+              variant: "solid",
+              bgColor: "#10b981",
+              textColor: "#ffffff",
+              borderRadius: 9999,
+            },
+          }
+        ]
       }
     ],
   },
@@ -83,6 +99,7 @@ export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
     isActive: true,
     config: {
       bgColor: "#d1fae5", // Light green background
+      customClass: "bg-grid-pattern relative",
       contentWidth: "boxed",
       maxWidth: "1200px",
       paddingTop: 80,
@@ -161,7 +178,7 @@ export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
             type: "IMAGE",
             order: 0,
             config: {
-              src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop",
+              src: "/placeholder-person-4x4.png",
               alt: "Killer Millerse",
               width: 400,
               height: 400,
@@ -212,6 +229,7 @@ export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
         config: {
           layout: "flexbox",
           direction: "row",
+          mobileDirection: "col-reverse",
           align: "start",
           justifyContent: "center",
           gap: 60,
@@ -223,7 +241,7 @@ export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
             type: "IMAGE",
             order: 0,
             config: {
-              src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
+              src: "/placeholder-person.png",
               alt: "About Me",
               width: 300,
               height: 400,
@@ -558,107 +576,6 @@ export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
           },
           { id: "input-msg", type: "TEXT", order: 1, config: { text: "Message", bgColor: "#ffffff", paddingLeft: 16, paddingTop: 12, paddingBottom: 60, borderRadius: 8, width: "100%", textColor: "#94a3b8" } },
           { id: "contact-submit", type: "BUTTON", order: 2, config: { text: "Submit", bgColor: "#10b981", textColor: "#ffffff", borderRadius: 9999, align: "start" } }
-        ]
-      }
-    ]
-  },
-  // 6. BLOG US
-  {
-    id: "blog-section",
-    type: "SECTION",
-    order: 6,
-    isActive: true,
-    config: {
-      bgColor: "#ffffff",
-      contentWidth: "boxed",
-      maxWidth: "1000px",
-      paddingTop: 80,
-      paddingBottom: 80,
-      paddingLeft: 40,
-      paddingRight: 40,
-      layout: "flexbox",
-      direction: "col",
-      align: "center",
-      gap: 40,
-    },
-    elements: [
-      {
-        id: "blog-header",
-        type: "HEADING",
-        order: 0,
-        config: {
-          text: "BLOG US",
-          fontSize: 32,
-          fontWeight: "800",
-          textColor: "#10b981",
-          align: "center",
-        },
-      },
-      {
-        id: "blog-grid",
-        type: "COLUMN",
-        order: 1,
-        config: {
-          layout: "grid",
-          gridCols: 3,
-          gap: 24,
-          width: "100%",
-        },
-        elements: [
-          {
-            id: "blog-1",
-            type: "COLUMN",
-            order: 0,
-            config: {
-              bgColor: "#ffffff",
-              borderWidth: 1, borderColor: "#e2e8f0", borderType: "solid",
-              borderRadius: 8,
-              layout: "flexbox",
-              direction: "col",
-              align: "start",
-            },
-            elements: [
-              { id: "b1-img", type: "IMAGE", order: 0, config: { src: "https://images.unsplash.com/photo-1516961642265-531546e84af2", width: "100%", height: 200, objectFit: "cover" } },
-              { id: "b1-text", type: "TEXT", order: 1, config: { text: "It is a long established fact that a reader will be distracted by the readable content.", fontSize: 14, textColor: "#64748b", paddingLeft: 16, paddingRight: 16, paddingTop: 16 } },
-              { id: "b1-btn", type: "TEXT", order: 2, config: { text: "Read More", fontSize: 14, textColor: "#10b981", fontWeight: "700", paddingLeft: 16, paddingBottom: 16, paddingTop: 8 } }
-            ]
-          },
-          {
-            id: "blog-2",
-            type: "COLUMN",
-            order: 1,
-            config: {
-              bgColor: "#ffffff",
-              borderWidth: 1, borderColor: "#e2e8f0", borderType: "solid",
-              borderRadius: 8,
-              layout: "flexbox",
-              direction: "col",
-              align: "start",
-            },
-            elements: [
-              { id: "b2-img", type: "IMAGE", order: 0, config: { src: "https://images.unsplash.com/photo-1511499767150-a48a237f0083", width: "100%", height: 200, objectFit: "cover" } },
-              { id: "b2-text", type: "TEXT", order: 1, config: { text: "It is a long established fact that a reader will be distracted by the readable content.", fontSize: 14, textColor: "#64748b", paddingLeft: 16, paddingRight: 16, paddingTop: 16 } },
-              { id: "b2-btn", type: "TEXT", order: 2, config: { text: "Read More", fontSize: 14, textColor: "#10b981", fontWeight: "700", paddingLeft: 16, paddingBottom: 16, paddingTop: 8 } }
-            ]
-          },
-          {
-            id: "blog-3",
-            type: "COLUMN",
-            order: 2,
-            config: {
-              bgColor: "#ffffff",
-              borderWidth: 1, borderColor: "#e2e8f0", borderType: "solid",
-              borderRadius: 8,
-              layout: "flexbox",
-              direction: "col",
-              align: "start",
-            },
-            elements: [
-              { id: "b3-img", type: "IMAGE", order: 0, config: { src: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8", width: "100%", height: 200, objectFit: "cover" } },
-              { id: "b3-text", type: "TEXT", order: 1, config: { text: "It is a long established fact that a reader will be distracted by the readable content.", fontSize: 14, textColor: "#64748b", paddingLeft: 16, paddingRight: 16, paddingTop: 16 } },
-              { id: "b3-btn", type: "TEXT", order: 2, config: { text: "Read More", fontSize: 14, textColor: "#10b981", fontWeight: "700", paddingLeft: 16, paddingBottom: 16, paddingTop: 8 } }
-            ]
-          }
         ]
       }
     ]

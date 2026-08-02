@@ -17,7 +17,7 @@ import { useBuilderState, SECTION_STRUCTURE_TEMPLATES } from "./useBuilderState"
 import { FloatingModal } from "./components/FloatingModal";
 import { ThemePopupPanel } from "./panels/ThemePopupPanel";
 import { LibraryPanel } from "./panels/LibraryPanel";
-import { CanvasSettingsPanel } from "./panels/CanvasSettingsPanel";
+
 import { DataSidebarPanel } from "./panels/DataSidebarPanel";
 import { PreviewSection } from "./PreviewSection";
 
@@ -295,17 +295,6 @@ function BuilderContent() {
             <ArrowLeft className="w-4 h-4" />
           </button>
           <div className={`h-5 w-px ${theme === 'dark' ? 'bg-white/5' : 'bg-slate-200'}`}></div>
-          <button
-            onClick={() => {
-              setActivePanel('settings');
-              setIsLeftPanelOpen(true); // Meminjam state isLeftPanelOpen sebagai trigger modal
-            }}
-            className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'text-zinc-400 hover:text-white hover:bg-zinc-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'}`}
-            title="Pengaturan Background Canvas"
-          >
-            <Settings className="w-4 h-4" />
-          </button>
-
         </div>
 
         <div className="flex items-center gap-1.5 md:gap-3 shrink-0">
@@ -360,48 +349,15 @@ function BuilderContent() {
       </header>
 
       <main className="flex-1 flex overflow-hidden relative bg-zinc-100">
-        
-        {/* Desktop Data Sidebar */}
-        <div className={`
-          ${showMobilePreview ? 'hidden md:flex' : 'flex'}
-          w-full md:w-80 lg:w-96 shrink-0 h-full border-r bg-white z-10 relative
-        `}>
-          <DataSidebarPanel state={state} />
-        </div>
-
-
-
-        <FloatingModal
-          isOpen={isLeftPanelOpen && activePanel === 'settings'}
-          onClose={() => setIsLeftPanelOpen(false)}
-          title="Canvas Settings"
-          theme={theme}
-        >
-          <CanvasSettingsPanel state={state} />
-        </FloatingModal>
 
         {/* 2. CANVAS AREA */}
         <div 
           className={`
             ${!showMobilePreview ? 'hidden md:flex' : 'flex'}
-            flex-1 overflow-y-auto canvas-scrollbar scrollbar-hide relative pt-0 md:px-4 lg:px-6 md:pb-4 lg:pb-6
+            flex-1 overflow-y-auto canvas-scrollbar scrollbar-hide relative
           `}
           style={{ backgroundColor: '#C9C9C9' }}
         >
-            <style>{`
-              /* Sembunyikan elemen visual builder (toolbar hover, outline, placeholder) */
-              .group:hover > .hover\\:opacity-100 { display: none !important; opacity: 0 !important; }
-              .group-hover\\/el\\:opacity-100 { display: none !important; opacity: 0 !important; }
-              .border-dashed { border-style: solid !important; border-color: transparent !important; }
-              button[title="Edit Kolom"], button[title="Hapus Kolom"], button[title="Tambah Elemen"] { display: none !important; }
-              .bg-amber-500\\/90, .bg-fuchsia-600 { display: none !important; }
-              .ring-2.ring-blue-500 { ring-color: transparent !important; box-shadow: none !important; }
-              .hover\\:ring-blue-400\\/50 { box-shadow: none !important; }
-              /* Sembunyikan 'Kolom Kosong' placeholder */
-              .min-h-\\[120px\\] > span.text-zinc-400 { display: none !important; }
-              .min-h-\\[120px\\] > span.text-zinc-500 { display: none !important; }
-              .min-h-\\[120px\\] > button { display: none !important; }
-            `}</style>
             <div className="absolute inset-0 bg-[radial-gradient(#00000005_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
             
             {/* Responsive Wrapper */}
