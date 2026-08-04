@@ -131,15 +131,15 @@ function BuilderContent() {
       {/* MAIN WORKSPACE */}
       <main className="flex-1 flex overflow-hidden">
         {/* LEFT SIDEBAR - FORM */}
-        <div className={`${showMobilePreview ? 'hidden' : 'flex'} w-full md:w-[400px] flex-shrink-0 bg-white border-r border-slate-200 z-10 shadow-lg`}>
+        <div className="w-1/3 min-w-[320px] max-w-[400px] flex-shrink-0 bg-white border-r border-slate-200 z-10 shadow-lg flex flex-col h-full overflow-hidden">
           <PortfolioDataForm data={localData} onChange={handleDataChange} />
         </div>
 
         {/* RIGHT CANVAS - PREVIEW */}
-        <div className={`${!showMobilePreview ? 'hidden md:flex' : 'flex'} flex-1 bg-slate-200 overflow-y-auto relative`}>
+        <div className="flex-1 bg-slate-200 overflow-y-auto relative flex flex-col h-full">
           <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
           
-          <div className={`mx-auto transition-all duration-300 min-h-full ${previewMode === 'mobile' ? 'w-full md:max-w-[414px] shadow-2xl bg-white md:my-8 md:rounded-[40px] md:border-8 md:border-slate-800 md:h-fit overflow-hidden' : 'w-full bg-white shadow-xl my-4 rounded-xl max-w-6xl'}`}>
+          <div className={`mx-auto transition-all duration-300 min-h-full ${previewMode === 'mobile' ? 'w-full max-w-[414px] shadow-2xl bg-white my-8 rounded-[40px] border-8 border-slate-800 h-fit overflow-hidden' : 'w-full bg-white shadow-xl my-4 rounded-xl max-w-6xl'}`}>
             <PortfolioViewer data={localData} isMobilePreview={previewMode === 'mobile'} />
           </div>
         </div>
@@ -147,7 +147,7 @@ function BuilderContent() {
         {/* FLOATING MOBILE PREVIEW BUTTON */}
         <button
           onClick={() => setShowMobilePreview(!showMobilePreview)}
-          className={`md:hidden fixed bottom-6 right-6 z-50 px-5 py-3 rounded-full shadow-2xl text-sm font-bold uppercase tracking-widest transition-all flex items-center gap-2 ${showMobilePreview ? 'bg-emerald-600 text-white' : 'bg-slate-50 text-slate-900 border border-slate-200'}`}
+          className={`hidden fixed bottom-6 right-6 z-50 px-5 py-3 rounded-full shadow-2xl text-sm font-bold uppercase tracking-widest transition-all flex items-center gap-2 ${showMobilePreview ? 'bg-emerald-600 text-white' : 'bg-slate-50 text-slate-900 border border-slate-200'}`}
         >
           {showMobilePreview ? <Pencil className="w-5 h-5" /> : <Eye className="w-5 h-5" />} 
           <span>{showMobilePreview ? 'Edit Data' : 'Preview'}</span>
