@@ -6,7 +6,6 @@ import {
   ExternalLink,
   Share2,
   Link as LinkIcon,
-  FileDown,
   Settings,
   Clock,
   Calendar,
@@ -120,12 +119,11 @@ export default function PortfolioPage() {
                 </a>
               </div>
 
-              {/* Share + Edit Link + PDF */}
-              <div className="grid grid-cols-3 gap-2">
+              {/* Share + Edit Link */}
+              <div className="grid grid-cols-2 gap-2">
                 {[
                   { icon: Share2, label: "Share" },
                   { icon: LinkIcon, label: "Edit Link" },
-                  { icon: FileDown, label: "PDF" },
                 ].map(({ icon: Icon, label }) => (
                   <button
                     key={label}
