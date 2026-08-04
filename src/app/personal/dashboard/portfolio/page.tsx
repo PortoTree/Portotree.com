@@ -61,7 +61,7 @@ export default function PortfolioPage() {
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
 
             {/* Area gelap preview */}
-            <div className="bg-slate-900 h-64 relative flex items-center justify-center overflow-hidden">
+            <div className="bg-[#09090b] h-64 relative flex items-center justify-center overflow-hidden">
               {/* Teks vertikal kiri */}
               <span
                 className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-600 text-[10px] font-bold tracking-[0.4em] uppercase select-none"
@@ -85,10 +85,7 @@ export default function PortfolioPage() {
                 </div>
 
                 {/* Tombol preview */}
-                <div className="flex gap-3 justify-center">
-                  <button className="px-5 py-1.5 bg-emerald-400 text-slate-900 text-xs font-bold rounded-full">
-                    Tentang Saya
-                  </button>
+                <div className="flex justify-center">
                   <button className="px-5 py-1.5 bg-transparent border border-slate-400 text-slate-300 text-xs font-bold rounded-full">
                     Lihat Karya
                   </button>
