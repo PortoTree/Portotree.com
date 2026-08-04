@@ -61,32 +61,32 @@ export default function PortfolioPage() {
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
 
             {/* Area gelap preview */}
-            <div className="bg-[#09090b] h-64 relative flex items-center justify-center overflow-hidden">
+            <div className="bg-[#09090b] h-[340px] relative flex flex-col items-center justify-center overflow-hidden">
               {/* Teks vertikal kiri */}
               <span
-                className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-600 text-[10px] font-bold tracking-[0.4em] uppercase select-none"
-                style={{ writingMode: "vertical-rl", transform: "translateY(-50%) rotate(180deg)" }}
+                className="absolute left-3 top-12 text-slate-700 text-[10px] font-bold tracking-[0.4em] uppercase select-none"
+                style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
               >
                 PORTOTREE
               </span>
 
               {/* Konten tengah */}
               <div className="text-center w-full px-4">
-                <div className="text-slate-300 text-xs mb-1">
+                <div className="text-slate-400 text-xs mb-1.5 font-medium">
                   Halo!
                 </div>
-                <h2 className="text-white text-2xl font-bold mb-5">
+                <h2 className="text-white text-[26px] font-extrabold mb-6 tracking-tight">
                   Saya <span className="text-emerald-400">johndoe</span>,
                 </h2>
 
                 {/* Foto placeholder (Arch shape, outline only) */}
-                <div className="w-24 h-32 rounded-t-full mx-auto mb-5 flex items-center justify-center border border-slate-400 bg-transparent">
-                  <span className="text-slate-400 text-[10px]">280 × 340</span>
+                <div className="w-[110px] h-[135px] rounded-t-full mx-auto mb-6 flex items-center justify-center border border-slate-500 bg-transparent">
+                  <span className="text-slate-500 text-[10px]">280 × 340</span>
                 </div>
 
                 {/* Tombol preview */}
                 <div className="flex justify-center">
-                  <button className="px-5 py-1.5 bg-transparent border border-slate-400 text-slate-300 text-xs font-bold rounded-full">
+                  <button className="px-6 py-1.5 bg-transparent border border-slate-500 text-white text-xs font-semibold rounded-full hover:bg-slate-800 transition-colors">
                     Lihat Karya
                   </button>
                 </div>
