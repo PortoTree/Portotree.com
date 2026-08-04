@@ -114,7 +114,7 @@ export default function RegisterPage() {
       }
       
       // 4. Redirect to dashboard
-      router.push("/dashboard");
+      router.push("/personal/dashboard");
     } catch (err: any) {
       console.error("Verify error:", err);
       setError(err.message || "Gagal memverifikasi kode");

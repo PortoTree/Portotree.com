@@ -26,7 +26,7 @@ export function middleware(req: NextRequest) {
   }
 
   // Check for dashboard auth
-  if (url.pathname.startsWith('/dashboard')) {
+  if (url.pathname.startsWith('/personal/dashboard')) {
     const sessionCookie = req.cookies.get('session');
     if (!sessionCookie) {
       return NextResponse.redirect(new URL('/login', req.url));

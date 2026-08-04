@@ -192,7 +192,7 @@ export function Navbar() {
             
             <div className="flex items-center gap-4">
               {/* Tombol Utama (Disembunyikan di Mobile) */}
-              <Link href={isLoggedIn ? "/dashboard" : "/register"} className="hidden md:block">
+              <Link href={isLoggedIn ? "/personal/dashboard" : "/register"} className="hidden md:block">
                 <Button className="rounded-full bg-green-600 hover:bg-green-700 text-white shadow-sm font-semibold px-6">
                   {isLoggedIn ? "Dashboard" : "Daftar Sekarang"}
                 </Button>
@@ -213,7 +213,7 @@ export function Navbar() {
                   {isLoggedIn ? (
                     <>
                       <DropdownMenuItem 
-                        onClick={() => router.push('/dashboard')} 
+                        onClick={() => router.push('/personal/dashboard')} 
                         className="cursor-pointer font-medium w-full"
                       >
                         Dashboard

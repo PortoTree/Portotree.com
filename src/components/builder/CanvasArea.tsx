@@ -289,7 +289,7 @@ function BuilderContent() {
             if (isTemplateMode) {
               window.location.href = "/";
             } else {
-              router.push("/dashboard/storefront");
+              router.push("/personal/dashboard/storefront");
             }
           }} className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'text-zinc-400 hover:text-white hover:bg-zinc-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'}`}>
             <ArrowLeft className="w-4 h-4" />
