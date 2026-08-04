@@ -1,7 +1,7 @@
 "use server";
 
 import { adminAuth, adminDb } from "@/lib/firebase/server";
-import { sendVerificationEmail } from "@/lib/resend";
+import { sendVerificationEmail, sendPasswordResetEmailViaResend } from "@/lib/resend";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -25,17 +25,30 @@ export async function createSession(idToken: string) {
 
 export async function validateTurnstile(token: string) {
   try {
+    const secret = process.env.TURNSTILE_SECRET;
+    if (!secret) {
+      console.error("TURNSTILE_SECRET is not set in environment variables.");
+      return { success: false, error: "Konfigurasi server tidak lengkap (Turnstile Secret hilang)." };
+    }
+
     const r = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        secret: process.env.TURNSTILE_SECRET || "",
+        secret: secret,
         response: token,
       }),
     });
-    if (!r.ok) throw new Error(`siteverify ${r.status}`);
+    
+    if (!r.ok) {
+      const errorText = await r.text();
+      console.error(`Turnstile HTTP error ${r.status}:`, errorText);
+      throw new Error(`siteverify ${r.status}`);
+    }
+    
     const result = await r.json();
     if (!result.success) {
+      console.error("Turnstile failure response:", result);
       return { success: false, error: "Verifikasi captcha gagal" };
     }
     return { success: true };
@@ -102,6 +115,30 @@ export async function verifyOTP(email: string, code: string) {
     return { success: true };
   } catch (error: any) {
     console.error("Error verifying OTP:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function sendPasswordReset(email: string) {
+  try {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+    // Generate reset link that points directly to our custom page
+    const resetLink = await adminAuth.generatePasswordResetLink(email, {
+      url: `${siteUrl}/reset-password`,
+    });
+
+    // Send via Resend with our custom branded template
+    const result = await sendPasswordResetEmailViaResend(email, resetLink);
+    if (!result.success) {
+      throw new Error("Gagal mengirim email reset kata sandi.");
+    }
+    return { success: true };
+  } catch (error: any) {
+    console.error("Password reset error:", error);
+    if (error.code === "auth/user-not-found") {
+      return { success: false, error: "Email tidak terdaftar." };
+    }
     return { success: false, error: error.message };
   }
 }

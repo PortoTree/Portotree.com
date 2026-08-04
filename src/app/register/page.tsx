@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 import { auth } from "@/lib/firebase/client";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { sendVerification, verifyOTP, createSession, validateTurnstile } from "@/app/actions/auth";
@@ -12,6 +13,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   
   // States for UX
@@ -22,6 +24,15 @@ export default function RegisterPage() {
   const [isVerificationMode, setIsVerificationMode] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [resendCountdown, setResendCountdown] = useState(60);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isVerificationMode && resendCountdown > 0) {
+      timer = setTimeout(() => setResendCountdown(resendCountdown - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [isVerificationMode, resendCountdown]);
 
   const handleResendCode = async () => {
     setLoading(true);
@@ -31,6 +42,7 @@ export default function RegisterPage() {
       if (!result.success) {
         throw new Error(result.error || "Gagal mengirim ulang kode");
       }
+      setResendCountdown(60);
       alert("Kode verifikasi telah dikirim ulang ke email Anda.");
     } catch (err: any) {
       console.error("Resend error:", err);
@@ -137,6 +149,40 @@ export default function RegisterPage() {
     }
   };
 
+  const calculatePasswordStrength = (pwd: string) => {
+    let score = 0;
+    if (pwd.length > 0) score += 1;
+    if (pwd.length >= 8) score += 1;
+    if (/\d/.test(pwd)) score += 1;
+    if (/[A-Z]/.test(pwd) || /[^A-Za-z0-9]/.test(pwd)) score += 1;
+    return score;
+  };
+
+  const passwordStrength = calculatePasswordStrength(password);
+  const isPasswordValid = password.length >= 8 && /\d/.test(password);
+
+  const handleOtpPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text/plain").trim();
+    const pastedNumbers = pastedData.replace(/\D/g, "").slice(0, 6);
+    
+    if (pastedNumbers) {
+      const newOtp = [...otp];
+      for (let i = 0; i < pastedNumbers.length; i++) {
+        newOtp[i] = pastedNumbers[i];
+      }
+      setOtp(newOtp);
+      
+      // Focus on the next empty input or the last one
+      const nextIndex = Math.min(pastedNumbers.length, 5);
+      inputRefs.current[nextIndex]?.focus();
+
+      if (pastedNumbers.length === 6) {
+        executeVerification(pastedNumbers);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
@@ -145,12 +191,12 @@ export default function RegisterPage() {
             <div className="w-5 h-5 border-2 border-white rounded-full"></div>
           </div>
           <h1 className="text-2xl font-bold text-slate-900">
-            {isVerificationMode ? "Verifikasi Email" : "Create an account"}
+            {isVerificationMode ? "Verifikasi Email" : "Buat akun baru"}
           </h1>
           <p className="text-slate-500 mt-2">
             {isVerificationMode 
               ? `Kami telah mengirim 6 digit kode ke ${email}`
-              : "Start building your portfolio for free"
+              : "Mulai bangun portofolio Anda secara gratis"
             }
           </p>
         </div>
@@ -163,10 +209,10 @@ export default function RegisterPage() {
 
         <form onSubmit={handleRegister} className="space-y-5 relative">
           <div className="space-y-1.5">
-            <label className="text-sm font-bold text-slate-700">Email Address</label>
+            <label className="text-sm font-bold text-slate-700">Alamat Email</label>
             <input 
               type="email" 
-              placeholder="you@example.com"
+              placeholder="kamu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-emerald-500 focus:border-emerald-500 transition-colors disabled:bg-slate-100 disabled:text-slate-500"
@@ -176,17 +222,53 @@ export default function RegisterPage() {
           </div>
           
           <div className="space-y-1.5">
-            <label className="text-sm font-bold text-slate-700">Password</label>
-            <input 
-              type="password" 
-              placeholder="Create a password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-emerald-500 focus:border-emerald-500 transition-colors disabled:bg-slate-100 disabled:text-slate-500"
-              required
-              minLength={6}
-              disabled={loading || isVerificationMode}
-            />
+            <label className="text-sm font-bold text-slate-700">Kata Sandi</label>
+            <div className="relative">
+              <input 
+                type={showPassword ? "text" : "password"} 
+                placeholder="Buat kata sandi"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 pr-12 rounded-xl border border-slate-300 focus:ring-emerald-500 focus:border-emerald-500 transition-colors disabled:bg-slate-100 disabled:text-slate-500"
+                required
+                minLength={8}
+                disabled={loading || isVerificationMode}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+            
+            {/* Password Strength Indicator */}
+            {password.length > 0 && !isVerificationMode && (
+              <div className="mt-3 space-y-2">
+                <div className="flex gap-1.5 w-full h-1.5">
+                  {[1, 2, 3, 4].map((level) => (
+                    <div 
+                      key={level}
+                      className={`flex-1 rounded-full transition-all duration-300 ${
+                        passwordStrength >= level 
+                          ? passwordStrength <= 2 ? "bg-amber-400" : "bg-emerald-500" 
+                          : "bg-slate-200"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <div className="flex justify-between items-center text-xs">
+                  <span className={isPasswordValid ? "text-emerald-600 font-medium" : "text-slate-500"}>
+                    {passwordStrength === 0 ? "Lemah" : passwordStrength <= 2 ? "Sedang" : passwordStrength === 3 ? "Kuat" : "Sangat Kuat"}
+                  </span>
+                  <span className={isPasswordValid ? "text-emerald-600 font-medium" : "text-slate-500"}>
+                    Minimal 8 karakter termasuk angka
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
 
           {!isVerificationMode && (
@@ -204,12 +286,12 @@ export default function RegisterPage() {
           {!isVerificationMode && (
             <button 
               type="submit"
-              disabled={loading || !turnstileToken}
+              disabled={loading || !turnstileToken || !email || !isPasswordValid}
               className="w-full py-3 px-4 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-colors mt-2 disabled:opacity-70 flex justify-center items-center"
             >
               {loading ? (
                 <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-              ) : "Create Account"}
+              ) : "Buat Akun"}
             </button>
           )}
         </form>
@@ -220,7 +302,7 @@ export default function RegisterPage() {
           }`}
         >
           <div className="space-y-6">
-            <div className="flex justify-between gap-2">
+            <div className="flex justify-center gap-1.5 sm:gap-3">
               {otp.map((digit, idx) => (
                 <input
                   key={idx}
@@ -230,8 +312,9 @@ export default function RegisterPage() {
                   value={digit}
                   onChange={(e) => handleOtpChange(idx, e.target.value)}
                   onKeyDown={(e) => handleOtpKeyDown(idx, e)}
+                  onPaste={handleOtpPaste}
                   disabled={loading}
-                  className="w-12 h-14 text-center text-xl font-bold text-slate-900 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none bg-slate-50 focus:bg-white disabled:opacity-50"
+                  className="w-9 h-12 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-bold text-slate-900 rounded-lg sm:rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none bg-slate-50 focus:bg-white disabled:opacity-50"
                   required
                 />
               ))}
@@ -247,10 +330,16 @@ export default function RegisterPage() {
               <button 
                 type="button"
                 onClick={handleResendCode} 
-                className="text-sm font-medium text-emerald-600 hover:underline"
-                disabled={loading}
+                className={`text-sm font-medium transition-colors ${
+                  resendCountdown > 0 
+                    ? "text-slate-400 cursor-not-allowed" 
+                    : "text-emerald-600 hover:underline"
+                }`}
+                disabled={loading || resendCountdown > 0}
               >
-                Kirim ulang kode
+                {resendCountdown > 0 
+                  ? `Kirim ulang kode (${resendCountdown}s)` 
+                  : "Kirim ulang kode"}
               </button>
             </div>
           </div>
@@ -258,7 +347,7 @@ export default function RegisterPage() {
 
         {!isVerificationMode && (
           <div className="mt-8 text-center text-sm font-medium text-slate-600">
-            Already have an account? <Link href="/login" className="text-slate-900 font-bold hover:underline">Log in</Link>
+            Sudah punya akun? <Link href="/login" className="text-slate-900 font-bold hover:underline">Masuk</Link>
           </div>
         )}
       </div>

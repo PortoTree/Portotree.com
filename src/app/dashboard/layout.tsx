@@ -1,11 +1,29 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { LayoutDashboard, LogOut, Settings, User } from "lucide-react";
+import { adminAuth } from "@/lib/firebase/server";
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // ── Session Guard ──────────────────────────────────────────────────
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("session")?.value;
+
+  if (!sessionCookie) {
+    redirect("/login");
+  }
+
+  try {
+    await adminAuth.verifySessionCookie(sessionCookie, true);
+  } catch {
+    redirect("/login");
+  }
+  // ──────────────────────────────────────────────────────────────────
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row">
       {/* SIDEBAR */}
@@ -35,10 +53,18 @@ export default function DashboardLayout({
         </div>
 
         <div className="hidden md:block mt-auto p-4 border-t border-slate-200 bg-white">
-          <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-red-50 hover:text-red-600 font-medium transition-colors w-full">
-            <LogOut className="w-5 h-5" />
-            <span>Logout</span>
-          </button>
+          <form action={async () => {
+            "use server";
+            const { cookies: nextCookies } = await import("next/headers");
+            const cookieStore = await nextCookies();
+            cookieStore.delete("session");
+            redirect("/login");
+          }}>
+            <button type="submit" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-red-50 hover:text-red-600 font-medium transition-colors w-full">
+              <LogOut className="w-5 h-5" />
+              <span>Logout</span>
+            </button>
+          </form>
         </div>
       </aside>
 
