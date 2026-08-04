@@ -349,13 +349,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 export function useBuilderState() {
   useEffect(() => {
-    if (typeof window !== 'undefined' && !localStorage.getItem('cache_busted_gorib_v28')) {
+    if (typeof window !== 'undefined' && !localStorage.getItem('cache_busted_gorib_v34')) {
       sessionStorage.removeItem("storefront_sections");
       localStorage.removeItem("draft_template_sections");
       localStorage.removeItem("draft_template_sections_v10");
       localStorage.removeItem("draft_template_sections_v11");
       localStorage.removeItem("draft_template_sections_v12");
-      localStorage.setItem('cache_busted_gorib_v28', 'true');
+      localStorage.setItem('cache_busted_gorib_v34', 'true');
       window.location.href = window.location.pathname + '?reset=true';
     }
   }, []);
@@ -786,7 +786,7 @@ export function useBuilderState() {
         setSections(sanitizeSections(JSON.parse(localDraft)));
         console.log('[Builder] Init: Loaded draft template from localStorage');
       } else {
-        setSections(sanitizeSections(COMPLETE_PORTFOLIO_TEMPLATE));
+        setSections(sanitizeSections(GORIB_PORTFOLIO_TEMPLATE));
         console.log('[Builder] Init: Created Complete Portfolio Template');
       }
       hasInitialized.current = true;
@@ -798,7 +798,7 @@ export function useBuilderState() {
 
       if (isPracticallyEmpty) {
         // Mulai dengan template lengkap
-        setSections(sanitizeSections(COMPLETE_PORTFOLIO_TEMPLATE));
+        setSections(sanitizeSections(GORIB_PORTFOLIO_TEMPLATE));
         console.log('[Builder] Init: Created Complete Portfolio Template on Blank Canvas');
       } else {
         const parsed = sectionsArray.map((s: any) => {

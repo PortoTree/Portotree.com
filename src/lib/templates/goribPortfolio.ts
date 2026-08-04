@@ -17,9 +17,8 @@ export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
     isActive: true,
     config: {
       bgColor: "#ffffff",
-      contentWidth: "full",
-      maxWidth: "100%",
-      flexWrap: "nowrap",
+      contentWidth: "boxed",
+      maxWidth: "1200px",
       paddingTop: 16,
       paddingBottom: 16,
       paddingLeft: 24,
@@ -45,7 +44,6 @@ export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
           fontSize: 24,
           fontWeight: "800",
           textColor: "#10b981", // Emerald green
-          sizing: "fit",
         },
       },
       {
@@ -58,13 +56,8 @@ export const GORIB_PORTFOLIO_TEMPLATE: Section[] = [
           align: "center",
           justifyContent: "flex-end",
           gap: 24,
-          sizing: "custom",
-          flex: "1",
+          sizing: "fit",
           customClass: "flex-nowrap",
-          paddingTop: 16,
-          paddingBottom: 16,
-          paddingLeft: 24,
-          paddingRight: 0,
         },
         elements: [
           {
