@@ -123,13 +123,21 @@ export async function sendPasswordReset(email: string) {
   try {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
-    // Generate reset link that points directly to our custom page
-    const resetLink = await adminAuth.generatePasswordResetLink(email, {
+    // Generate reset link via Firebase Admin (just to get a valid oobCode)
+    const firebaseLink = await adminAuth.generatePasswordResetLink(email, {
       url: `${siteUrl}/reset-password`,
     });
 
+    // Extract oobCode from Firebase link and build our own direct link
+    const parsed = new URL(firebaseLink);
+    const oobCode = parsed.searchParams.get("oobCode");
+    if (!oobCode) throw new Error("Gagal menghasilkan kode reset.");
+
+    // Build direct link → bypass Firebase's intermediary page
+    const customResetLink = `${siteUrl}/reset-password?oobCode=${encodeURIComponent(oobCode)}`;
+
     // Send via Resend with our custom branded template
-    const result = await sendPasswordResetEmailViaResend(email, resetLink);
+    const result = await sendPasswordResetEmailViaResend(email, customResetLink);
     if (!result.success) {
       throw new Error("Gagal mengirim email reset kata sandi.");
     }
