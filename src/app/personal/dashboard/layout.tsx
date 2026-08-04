@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { LayoutDashboard, LogOut, Settings, User, Globe, FileText, CreditCard } from "lucide-react";
 import { adminAuth } from "@/lib/firebase/server";
+import SidebarNav from "./SidebarNav";
 
 export default async function DashboardLayout({
   children,
@@ -37,32 +38,7 @@ export default async function DashboardLayout({
           </Link>
         </div>
         
-        <div className="p-4 flex md:flex-col gap-1 overflow-x-auto md:overflow-visible">
-          <Link href="/personal/dashboard" className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-emerald-50 text-emerald-700 font-medium transition-colors shrink-0">
-            <LayoutDashboard className="w-5 h-5" />
-            <span className="hidden md:inline">Overview</span>
-          </Link>
-          <Link href="/personal/dashboard/portfolio" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium transition-colors shrink-0">
-            <Globe className="w-5 h-5" />
-            <span className="hidden md:inline">Portofolio</span>
-          </Link>
-          <Link href="/personal/dashboard/cv-builder" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium transition-colors shrink-0">
-            <FileText className="w-5 h-5" />
-            <span className="hidden md:inline">CV Builder</span>
-          </Link>
-          <Link href="/personal/dashboard/langganan" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium transition-colors shrink-0">
-            <CreditCard className="w-5 h-5" />
-            <span className="hidden md:inline">Langganan</span>
-          </Link>
-          <Link href="/personal/dashboard/account" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium transition-colors shrink-0">
-            <User className="w-5 h-5" />
-            <span className="hidden md:inline">Akun</span>
-          </Link>
-          <Link href="/personal/dashboard/settings" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium transition-colors shrink-0">
-            <Settings className="w-5 h-5" />
-            <span className="hidden md:inline">Pengaturan</span>
-          </Link>
-        </div>
+        <SidebarNav />
 
         <div className="hidden md:block mt-auto p-4 border-t border-slate-200 bg-white">
           <form action={async () => {
