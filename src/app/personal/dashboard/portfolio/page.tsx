@@ -53,7 +53,7 @@ export default function PortfolioPage() {
       </div>
 
       {/* 2-KOLOM: kiri besar, kanan lebih kecil */}
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col md:flex-row gap-6">
 
         {/* ══ KOLOM KIRI ══════════════════════════════════════ */}
         <div className="flex-1 min-w-0 space-y-4">
@@ -193,7 +193,7 @@ export default function PortfolioPage() {
         </div>
 
         {/* ══ KOLOM KANAN ═════════════════════════════════════ */}
-        <div className="w-full lg:w-80 flex-shrink-0 space-y-4">
+        <div className="w-full md:w-72 flex-shrink-0 space-y-4">
 
           {/* PERFORMANCE */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
