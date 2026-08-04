@@ -192,29 +192,6 @@ export default function PortfolioPage() {
         {/* ══ KOLOM KANAN ═════════════════════════════════════ */}
         <div className="w-full md:w-72 flex-shrink-0 space-y-4">
 
-          {/* PERFORMANCE */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-            <div className="flex items-center gap-2 mb-1">
-              <BarChart2 className="w-4 h-4 text-blue-500" />
-              <h3 className="font-bold text-slate-800 text-sm">Performance</h3>
-            </div>
-            <p className="text-xs text-slate-400 mb-4 leading-relaxed">
-              Setelah portfolio aktif maka jumlah pengunjung akan muncul disini
-            </p>
-
-            <div className="bg-slate-50 rounded-xl p-5 text-center border border-slate-100">
-              <div className="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-200">
-                <Crown className="w-7 h-7 text-white" />
-              </div>
-              <p className="font-bold text-slate-800 text-sm mb-1">Data Kunjungan</p>
-              <p className="text-xs text-slate-400 mb-4 leading-relaxed">
-                Aktivasi portfolio untuk melihat statistik pengunjung
-              </p>
-              <button className="w-full py-2.5 bg-blue-600 text-white font-bold text-sm rounded-xl hover:bg-blue-700 transition-colors">
-                Aktivasi Portfolio
-              </button>
-            </div>
-          </div>
 
           {/* PORTFOLIO INFO */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
