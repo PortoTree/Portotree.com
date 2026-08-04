@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { LayoutDashboard, LogOut, Settings, User } from "lucide-react";
+import { LayoutDashboard, LogOut, Settings, User, Globe, FileText } from "lucide-react";
 import { adminAuth } from "@/lib/firebase/server";
 
 export default async function DashboardLayout({
@@ -41,6 +41,14 @@ export default async function DashboardLayout({
           <Link href="/personal/dashboard" className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-emerald-50 text-emerald-700 font-medium transition-colors shrink-0">
             <LayoutDashboard className="w-5 h-5" />
             <span className="hidden md:inline">Overview</span>
+          </Link>
+          <Link href="/personal/dashboard/portfolio" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium transition-colors shrink-0">
+            <Globe className="w-5 h-5" />
+            <span className="hidden md:inline">Portofolio</span>
+          </Link>
+          <Link href="/personal/dashboard/cv-builder" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium transition-colors shrink-0">
+            <FileText className="w-5 h-5" />
+            <span className="hidden md:inline">CV Builder</span>
           </Link>
           <Link href="/personal/dashboard/account" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium transition-colors shrink-0">
             <User className="w-5 h-5" />
