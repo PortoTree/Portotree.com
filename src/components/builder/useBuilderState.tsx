@@ -786,7 +786,7 @@ export function useBuilderState() {
         setSections(sanitizeSections(JSON.parse(localDraft)));
         console.log('[Builder] Init: Loaded draft template from localStorage');
       } else {
-        setSections(sanitizeSections(GORIB_PORTFOLIO_TEMPLATE));
+        setSections(sanitizeSections(COMPLETE_PORTFOLIO_TEMPLATE));
         console.log('[Builder] Init: Created Complete Portfolio Template');
       }
       hasInitialized.current = true;
@@ -798,7 +798,7 @@ export function useBuilderState() {
 
       if (isPracticallyEmpty) {
         // Mulai dengan template lengkap
-        setSections(sanitizeSections(GORIB_PORTFOLIO_TEMPLATE));
+        setSections(sanitizeSections(COMPLETE_PORTFOLIO_TEMPLATE));
         console.log('[Builder] Init: Created Complete Portfolio Template on Blank Canvas');
       } else {
         const parsed = sectionsArray.map((s: any) => {
