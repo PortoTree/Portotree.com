@@ -24,6 +24,22 @@ export interface PortfolioData {
     current: boolean;
     description: string;
   }>;
+  education: Array<{
+    id: string;
+    school: string;
+    degree: string;
+    startDate: string;
+    endDate: string;
+    description: string;
+  }>;
+  organization: Array<{
+    id: string;
+    name: string;
+    role: string;
+    startDate: string;
+    endDate: string;
+    description: string;
+  }>;
   projects: Array<{
     id: string;
     title: string;
@@ -63,6 +79,8 @@ export const defaultPortfolioData: PortfolioData = {
       description: "Leading the frontend development team to build modern web applications using Next.js and Tailwind CSS."
     }
   ],
+  education: [],
+  organization: [],
   projects: [
     {
       id: "proj-1",

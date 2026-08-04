@@ -33,9 +33,20 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
         </div>
       </header>
 
-      <main className={`max-w-5xl mx-auto px-4 py-8 space-y-16 ${isMobilePreview ? '' : 'md:px-6 md:py-20 md:space-y-24'}`}>
-        {/* HERO SECTION */}
-        <section id="about" className={`flex ${isMobilePreview ? 'flex-col' : 'flex-col md:flex-row'} items-center gap-8 ${isMobilePreview ? '' : 'md:gap-12'} pt-4 ${isMobilePreview ? '' : 'md:pt-8'}`}>
+      {/* FULL WIDTH HERO SECTION */}
+      <section id="about" className="relative z-0 w-full pt-16 pb-12 md:pt-28 md:pb-20 overflow-hidden">
+        {/* Clearer Polka dots background with mask fade effect */}
+        <div 
+          className="absolute inset-0 -z-10"
+          style={{
+            backgroundImage: 'radial-gradient(#cbd5e1 2px, transparent 2px)',
+            backgroundSize: '32px 32px',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
+            maskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)'
+          }}
+        ></div>
+        
+        <div className={`max-w-5xl mx-auto px-4 ${isMobilePreview ? '' : 'md:px-6'} flex ${isMobilePreview ? 'flex-col' : 'flex-col md:flex-row'} items-center gap-8 ${isMobilePreview ? '' : 'md:gap-12'}`}>
           
           {/* IMAGE FIRST ON MOBILE */}
           {data.personal.photoUrl && (
@@ -113,8 +124,10 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
+      <main className={`max-w-5xl mx-auto px-4 py-8 space-y-16 ${isMobilePreview ? '' : 'md:px-6 md:py-20 md:space-y-24'}`}>
         {/* SKILLS */}
         {skillsArray.length > 0 && (
           <section className="space-y-6">

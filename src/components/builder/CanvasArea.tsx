@@ -136,14 +136,28 @@ function BuilderContent() {
         </div>
 
         {/* RIGHT CANVAS - PREVIEW */}
-        <div className="flex-1 bg-slate-200 overflow-y-auto relative flex flex-col h-full">
+        <div className="flex-1 bg-slate-200 overflow-y-hidden relative flex flex-col items-center justify-center py-2 px-4 md:py-4 md:px-8 h-full">
           <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
           
-          <div className={`mx-auto transition-all duration-300 ${
+          <div 
+            style={previewMode === 'mobile' ? { width: '375px' } : {}}
+            className={`mx-auto transition-all duration-300 w-full ${
             previewMode === 'mobile' 
-              ? 'w-[375px] h-[812px] max-h-[85vh] shadow-2xl bg-white my-8 rounded-[3rem] border-[14px] border-slate-900 overflow-y-auto relative flex-shrink-0' 
-              : 'w-full bg-white shadow-xl my-4 rounded-xl max-w-6xl min-h-full'
+              ? 'h-full max-h-[896px] shadow-2xl bg-white rounded-3xl border-8 border-slate-900 overflow-y-auto scrollbar-hide relative flex-shrink-0 ring-4 ring-slate-800' 
+              : 'bg-white shadow-xl rounded-xl max-w-6xl h-full overflow-y-auto custom-scrollbar'
           }`}>
+            {/* iPhone Hardware Elements */}
+            {previewMode === 'mobile' && (
+              <>
+                <div className="absolute top-0 inset-x-0 h-6 flex justify-center z-[100] pointer-events-none">
+                  <div className="w-32 h-full bg-slate-900 rounded-b-2xl"></div>
+                </div>
+                <div className="absolute bottom-1.5 inset-x-0 flex justify-center z-[100] pointer-events-none">
+                  <div className="w-32 h-1.5 bg-slate-800/20 backdrop-blur-sm rounded-full"></div>
+                </div>
+              </>
+            )}
+            
             <PortfolioViewer data={localData} isMobilePreview={previewMode === 'mobile'} />
           </div>
         </div>
