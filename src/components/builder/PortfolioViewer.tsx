@@ -11,11 +11,11 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
       {/* HEADER / NAV */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div className="w-full px-4 md:px-8 h-16 flex items-center justify-between">
+        <div className={`w-full px-4 ${isMobilePreview ? '' : 'md:px-8'} h-16 flex items-center justify-between`}>
           <div className="font-bold text-xl tracking-tight text-slate-800 truncate pr-4">
             {data.personal.name || "Portfolio"}
           </div>
-          <div className="flex items-center gap-4 md:gap-6 text-sm font-medium text-slate-600">
+          <div className={`flex items-center gap-4 ${isMobilePreview ? '' : 'md:gap-6'} text-sm font-medium text-slate-600`}>
             <nav className={`${isMobilePreview ? 'hidden' : 'hidden md:flex'} items-center gap-6`}>
               <a href="#about" className="hover:text-emerald-600 transition-colors">About</a>
               <a href="#experience" className="hover:text-emerald-600 transition-colors">Experience</a>
@@ -33,7 +33,7 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
         </div>
       </header>
 
-      <main className={`max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-20 space-y-16 ${isMobilePreview ? 'space-y-16' : 'md:space-y-24'}`}>
+      <main className={`max-w-5xl mx-auto px-4 py-8 space-y-16 ${isMobilePreview ? '' : 'md:px-6 md:py-20 md:space-y-24'}`}>
         {/* HERO SECTION */}
         <section id="about" className={`flex ${isMobilePreview ? 'flex-col' : 'flex-col md:flex-row'} items-center gap-8 ${isMobilePreview ? '' : 'md:gap-12'} pt-4 ${isMobilePreview ? '' : 'md:pt-8'}`}>
           
@@ -59,7 +59,7 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
               {data.personal.bio}
             </p>
             
-            <div className="flex flex-col items-center md:items-start gap-4 pt-4">
+            <div className={`flex flex-col items-center ${isMobilePreview ? '' : 'md:items-start'} gap-4 pt-4`}>
               {data.personal.location && (
                 <div className="flex items-center gap-2 text-slate-600 bg-white px-3 py-1.5 rounded-full shadow-sm border w-fit">
                   <MapPin size={18} className="text-emerald-500" />
@@ -67,47 +67,47 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
                 </div>
               )}
               
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 md:gap-4">
+              <div className={`flex flex-wrap items-center justify-center gap-3 ${isMobilePreview ? '' : 'md:justify-start md:gap-4'}`}>
                 {data.personal.email && (
                   <a href={`mailto:${data.personal.email}`} className="flex items-center gap-1.5 text-slate-500 hover:text-red-500 transition-colors">
                     <img src="/gmail.webp" alt="Gmail" className="w-5 h-5 object-contain" />
-                    <span className="hidden md:inline text-sm font-medium">Email</span>
+                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>Email</span>
                   </a>
                 )}
                 {data.personal.phone && (
                   <a href={`https://wa.me/${data.personal.phone.replace(/\D/g,'')}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-slate-500 hover:text-emerald-600 transition-colors">
                     <img src="/whatsapp.webp" alt="WhatsApp" className="w-5 h-5 object-contain" />
-                    <span className="hidden md:inline text-sm font-medium">WhatsApp</span>
+                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>WhatsApp</span>
                   </a>
                 )}
                 {data.social.github && (
                   <a href={data.social.github} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 transition-colors">
                     <img src="/github.webp" alt="GitHub" className="w-5 h-5 object-contain" />
-                    <span className="hidden md:inline text-sm font-medium">GitHub</span>
+                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>GitHub</span>
                   </a>
                 )}
                 {data.social.linkedin && (
                   <a href={data.social.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-slate-500 hover:text-emerald-600 transition-colors">
                     <img src="/linkedin.webp" alt="LinkedIn" className="w-5 h-5 object-contain" />
-                    <span className="hidden md:inline text-sm font-medium">LinkedIn</span>
+                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>LinkedIn</span>
                   </a>
                 )}
                 {data.social.twitter && (
                   <a href={data.social.twitter} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-slate-500 hover:text-sky-500 transition-colors">
                     <img src="/twiter.webp" alt="Twitter" className="w-5 h-5 object-contain" />
-                    <span className="hidden md:inline text-sm font-medium">Twitter</span>
+                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>Twitter</span>
                   </a>
                 )}
                 {data.social.instagram && (
                   <a href={data.social.instagram} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-slate-500 hover:text-pink-600 transition-colors">
                     <img src="/instagram.webp" alt="Instagram" className="w-5 h-5 object-contain" />
-                    <span className="hidden md:inline text-sm font-medium">Instagram</span>
+                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>Instagram</span>
                   </a>
                 )}
                 {data.social.facebook && (
                   <a href={data.social.facebook} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-slate-500 hover:text-blue-600 transition-colors">
                     <img src="/facebook.webp" alt="Facebook" className="w-5 h-5 object-contain" />
-                    <span className="hidden md:inline text-sm font-medium">Facebook</span>
+                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>Facebook</span>
                   </a>
                 )}
               </div>

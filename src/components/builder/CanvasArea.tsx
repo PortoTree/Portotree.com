@@ -139,7 +139,11 @@ function BuilderContent() {
         <div className="flex-1 bg-slate-200 overflow-y-auto relative flex flex-col h-full">
           <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
           
-          <div className={`mx-auto transition-all duration-300 min-h-full ${previewMode === 'mobile' ? 'w-full max-w-[414px] shadow-2xl bg-white my-8 rounded-[40px] border-8 border-slate-800 h-fit overflow-hidden' : 'w-full bg-white shadow-xl my-4 rounded-xl max-w-6xl'}`}>
+          <div className={`mx-auto transition-all duration-300 ${
+            previewMode === 'mobile' 
+              ? 'w-[375px] h-[812px] max-h-[85vh] shadow-2xl bg-white my-8 rounded-[3rem] border-[14px] border-slate-900 overflow-y-auto relative flex-shrink-0' 
+              : 'w-full bg-white shadow-xl my-4 rounded-xl max-w-6xl min-h-full'
+          }`}>
             <PortfolioViewer data={localData} isMobilePreview={previewMode === 'mobile'} />
           </div>
         </div>
