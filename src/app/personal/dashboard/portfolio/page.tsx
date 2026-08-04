@@ -71,26 +71,25 @@ export default function PortfolioPage() {
               </span>
 
               {/* Konten tengah */}
-              <div className="text-center">
-                <div className="inline-flex items-center gap-1.5 bg-slate-700/80 text-slate-300 text-xs px-3 py-1 rounded-full mb-3">
-                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+              <div className="text-center w-full px-4">
+                <div className="text-slate-300 text-xs mb-1">
                   Halo!
                 </div>
                 <h2 className="text-white text-2xl font-bold mb-5">
                   Saya <span className="text-emerald-400">johndoe</span>,
                 </h2>
 
-                {/* Foto placeholder */}
-                <div className="w-24 h-32 bg-slate-700 rounded-t-full mx-auto mb-5 flex items-center justify-center border border-slate-600">
-                  <span className="text-slate-500 text-[10px]">280 × 340</span>
+                {/* Foto placeholder (Arch shape, outline only) */}
+                <div className="w-24 h-32 rounded-t-full mx-auto mb-5 flex items-center justify-center border border-slate-400 bg-transparent">
+                  <span className="text-slate-400 text-[10px]">280 × 340</span>
                 </div>
 
                 {/* Tombol preview */}
-                <div className="flex gap-2 justify-center">
-                  <button className="px-5 py-1.5 bg-emerald-500 text-white text-xs font-bold rounded-full">
+                <div className="flex gap-3 justify-center">
+                  <button className="px-5 py-1.5 bg-emerald-400 text-slate-900 text-xs font-bold rounded-full">
                     Tentang Saya
                   </button>
-                  <button className="px-5 py-1.5 bg-slate-800 border border-slate-600 text-slate-200 text-xs font-bold rounded-full">
+                  <button className="px-5 py-1.5 bg-transparent border border-slate-400 text-slate-300 text-xs font-bold rounded-full">
                     Lihat Karya
                   </button>
                 </div>
