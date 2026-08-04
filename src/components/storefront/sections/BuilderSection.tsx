@@ -480,7 +480,7 @@ const NavigationElement = ({ config }: { config: any }) => {
             e.preventDefault();
             document.getElementById(`section-${link.id}`)?.scrollIntoView({ behavior: 'smooth' });
           }}
-          className="hover:opacity-70 transition-opacity cursor-pointer"
+          className="hover:opacity-70 transition-opacity cursor-pointer whitespace-nowrap"
         >
           {link.title}
         </a>
@@ -643,7 +643,7 @@ const ButtonElement = ({ config }: { config: any }) => {
         onClick={(e) => e.preventDefault()}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`${hoverClassRef.current} pointer-events-auto inline-flex items-center justify-center transition-all hover:opacity-90 active:scale-95`}
+        className={`${hoverClassRef.current} pointer-events-auto inline-flex items-center justify-center transition-all hover:opacity-90 active:scale-95 whitespace-nowrap`}
         style={{
           background: backgroundStyle,
           backgroundColor: backgroundColorStyle,
@@ -2894,7 +2894,7 @@ const ElementWrapper = ({
       maxWidth: '100%',
       flex: element.config?.sizing === 'full' ? '1 1 100%' : element.config?.sizing === 'fit' ? '0 0 auto' : element.config?.sizing === 'custom' ? element.config?.flex : undefined,
     }),
-    ...((sectionId === 'global-header' || sectionId === 'header') && (element.type === 'CART' || element.id === 'header-right-col') ? { marginLeft: 'auto' as const } : {}),
+    ...((sectionId === 'global-header' || sectionId === 'header') && element.type === 'CART' ? { marginLeft: 'auto' as const } : {}),
   };
 
   const isColumnType = element.type === 'COLUMN';

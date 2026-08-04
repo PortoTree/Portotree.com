@@ -26,6 +26,7 @@ export interface Section {
 }
 
 // Tambahkan subcomponents dan templates
+export const TEMPLATE_VERSION = 'v33'; // BUMP to force reset on first load
 export const SECTION_STRUCTURE_TEMPLATES = [
   {
     name: "1 Kolom Vertikal",
@@ -348,13 +349,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 export function useBuilderState() {
   useEffect(() => {
-    if (typeof window !== 'undefined' && !localStorage.getItem('cache_busted_gorib_v23')) {
+    if (typeof window !== 'undefined' && !localStorage.getItem('cache_busted_gorib_v28')) {
       sessionStorage.removeItem("storefront_sections");
       localStorage.removeItem("draft_template_sections");
       localStorage.removeItem("draft_template_sections_v10");
       localStorage.removeItem("draft_template_sections_v11");
       localStorage.removeItem("draft_template_sections_v12");
-      localStorage.setItem('cache_busted_gorib_v23', 'true');
+      localStorage.setItem('cache_busted_gorib_v28', 'true');
       window.location.href = window.location.pathname + '?reset=true';
     }
   }, []);

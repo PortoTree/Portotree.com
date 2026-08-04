@@ -57,11 +57,13 @@
   - Membungkus elemen `NAVIGATION` dan `BUTTON` ke dalam sebuah `COLUMN` (kolom baru).
   - Mengatur properti kolom tersebut menjadi `flex-row` dan `justifyContent: "flex-end"` agar Menu Navigasi dan tombol "Hire Me" mengelompok di sebelah kanan.
   - **BUGFIX 2:** Mengembalikan kolom Navigasi ke `sizing: "fit"` agar ukurannya pas dengan konten, DITAMBAH *customClass* `flex-nowrap` untuk memaksa elemen Navigasi dan Button agar tidak turun baris (anti-*wrap*).
-  - **BUGFIX 3:** Memperbaiki bug fatal di *engine* `BuilderSection.tsx` di mana sebelumnya pengecekan ID bagian header salah (memeriksa `global-header` padahal ID aslinya `header`). Kesalahan fatal ini membuat trik `marginLeft: 'auto'` tidak pernah tereksekusi. Sekarang trik ini dijamin aktif dan berhasil melempar kolom mentok ke kanan sejajar dengan tepi *container*!
+  - **BUGFIX 3:** Trik `marginLeft: auto` diganti dengan yang lebih *bulletproof*: Memberikan `flex: 1` pada elemen LOGO. Dengan ini, Logo akan menguasai seluruh ruang kosong di tengah Header, dan secara otomatis mendesak kolom Navigasi & Tombol ke ujung kanan tanpa perlawanan!
+  - **BUGFIX 4:** Sesuai permintaan spesifik, mengubah Header menjadi mode **Full Width** (`contentWidth: "full"`, `maxWidth: "100%"`) agar "Nama anda" menempel di pojok kiri layar, dan Navigasi menempel di pojok kanan layar.
+  - **BUGFIX 5:** Menghapus `flex-1` dari elemen `nav` dan menambahkan `whitespace-nowrap` agar teks menu ("About Me", "My Services", dll) tidak lagi turun baris/terlipat menjadi dua baris.
 - **File Terdampak:**
   - `C:\PortoTree\src\lib\templates\goribPortfolio.ts`
   - `C:\PortoTree\src\components\storefront\sections\BuilderSection.tsx`
-  - `C:\PortoTree\src\components\builder\useBuilderState.tsx` (Cache bust ke `v23`)
+  - `C:\PortoTree\src\components\builder\useBuilderState.tsx` (Cache bust ke `v26`)
 
 ## Kategori: Frontend (Live Canvas UX)
 - **Status:** Selesai
@@ -75,3 +77,21 @@
 - **File Terdampak:**
   - `C:\PortoTree\src\components\builder\CanvasArea.tsx`
   - `C:\PortoTree\src\components\builder\PreviewSection.tsx`
+
+## Kategori: Backend (Autentikasi & Email)
+- **Status:** Selesai
+- **Perubahan:**
+  - Menambahkan inisialisasi Firebase Client (`src/lib/firebase/client.ts`) dan Firebase Admin (`src/lib/firebase/server.ts`) untuk integrasi autentikasi.
+  - Menambahkan helper Resend (`src/lib/resend.ts`) untuk mengirim email verifikasi kustom.
+  - Membuat *Server Actions* (`src/app/actions/auth.ts`) untuk pembuatan sesi (Session Cookies) dan pengiriman email verifikasi.
+  - Mengupdate halaman Register (`src/app/register/page.tsx`) agar beroperasi sebagai Client Component, melakukan pendaftaran via Firebase Client, dan men-*trigger* email lewat Server Action.
+  - Membuat halaman *Verify Email* (`src/app/verify-email/page.tsx`) dengan fitur pengiriman ulang email.
+  - Menambahkan *middleware* proteksi sesi (`src/middleware.ts`) agar *user* yang tidak login diarahkan ulang dari halaman `/dashboard` ke `/login`.
+- **File Terdampak:**
+  - `C:\PortoTree\src\lib\firebase\client.ts`
+  - `C:\PortoTree\src\lib\firebase\server.ts`
+  - `C:\PortoTree\src\lib\resend.ts`
+  - `C:\PortoTree\src\app\actions\auth.ts`
+  - `C:\PortoTree\src\app\register\page.tsx`
+  - `C:\PortoTree\src\app\verify-email\page.tsx`
+  - `C:\PortoTree\src\middleware.ts`
