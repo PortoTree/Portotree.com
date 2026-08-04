@@ -3003,7 +3003,7 @@ className="w-4 h-4 object-contain"
                                             <div className="absolute inset-x-0 bottom-0 bg-black/85 border-t border-zinc-850 p-2 opacity-0 group-hover:opacity-100 flex items-center justify-between transition-all duration-200 z-20">
                                               <span className="text-[10px] text-zinc-400 font-medium">Logo dari profil toko</span>
                                               <a
-                                                href="/personal/dashboard/storefront/design"
+                                                href="/dashboard/storefront/design"
                                                 className="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-[10px] text-zinc-300 hover:text-white rounded-md font-bold transition-all flex items-center gap-1"
                                               >
                                                 <Settings2 className="w-3 h-3" />
@@ -3016,7 +3016,7 @@ className="w-4 h-4 object-contain"
                                       {/* Info permanen di bawah preview */}
                                       <div className="flex items-center justify-between py-1 px-2.5 rounded-[4px] bg-[#1a1a1f] border border-zinc-800">
                                         <span className="text-[10px] text-zinc-500">Logo diambil dari profil toko</span>
-                                        <a href="/personal/dashboard/storefront/design" className="text-[10px] text-blue-400 hover:text-blue-300 font-semibold">
+                                        <a href="/dashboard/storefront/design" className="text-[10px] text-blue-400 hover:text-blue-300 font-semibold">
                                           Ubah →
                                         </a>
                                       </div>
@@ -3092,7 +3092,7 @@ className="w-4 h-4 object-contain"
                                     <div className="rounded-[4px] bg-[#1a1a1f] border border-zinc-800 overflow-hidden">
                                       <div className="px-2.5 py-1.5 flex items-center justify-between border-b border-zinc-800/60">
                                         <span className="text-[10px] text-zinc-500 font-medium">Nama Toko</span>
-                                        <a href="/personal/dashboard/storefront/design" className="text-[10px] text-blue-400 hover:text-blue-300 font-semibold transition-colors">
+                                        <a href="/dashboard/storefront/design" className="text-[10px] text-blue-400 hover:text-blue-300 font-semibold transition-colors">
                                           Ubah →
                                         </a>
                                       </div>
