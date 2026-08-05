@@ -107,6 +107,42 @@ export const placeholderPortfolioData: PortfolioData = {
       platform: "GitHub",
       username: "johndoe",
       url: "https://github.com/johndoe"
+    },
+    {
+      id: "soc-3",
+      platform: "Twitter",
+      username: "johndoe",
+      url: "https://twitter.com/johndoe"
+    },
+    {
+      id: "soc-4",
+      platform: "Instagram",
+      username: "johndoe",
+      url: "https://instagram.com/johndoe"
+    },
+    {
+      id: "soc-5",
+      platform: "Facebook",
+      username: "johndoe",
+      url: "https://facebook.com/johndoe"
+    },
+    {
+      id: "soc-6",
+      platform: "WhatsApp",
+      username: "6281234567890",
+      url: "https://wa.me/6281234567890"
+    },
+    {
+      id: "soc-7",
+      platform: "YouTube",
+      username: "johndoe",
+      url: "https://youtube.com/@johndoe"
+    },
+    {
+      id: "soc-8",
+      platform: "TikTok",
+      username: "johndoe",
+      url: "https://tiktok.com/@johndoe"
     }
   ],
   experience: [

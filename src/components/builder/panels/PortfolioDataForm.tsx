@@ -4,6 +4,8 @@ import React, { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { PortfolioData } from "@/lib/portfolioData";
 import { Input } from "@/components/ui/input";
+import { auth } from "@/lib/firebase/client";
+import { onAuthStateChanged } from "firebase/auth";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Trash2, ChevronDown, User, GraduationCap, Briefcase, Share2, Wrench, Users, FolderGit2, UploadCloud, Crop, ImageIcon, Bold, Italic, List, Link as LinkIcon, AlignLeft, ChevronLeft, ChevronRight, Sparkles, MapPin, Award, Trophy, Building2 } from "lucide-react";
@@ -118,6 +120,15 @@ export function PortfolioDataForm({ data, onChange }: Props) {
       }
     });
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user?.email && !data.personal.email) {
+        handleChange('personal', 'email', user.email);
+      }
+    });
+    return () => unsubscribe();
+  }, [data.personal.email]);
 
   const handleArrayChange = (section: 'experience' | 'projects' | 'education' | 'organization', index: number, field: string, value: any) => {
     const newArray = [...data[section]];
@@ -412,7 +423,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="text-sm text-slate-700">Email</Label>
-              <Input value={data.personal.email} onChange={(e) => handleChange('personal', 'email', e.target.value)} type="email" placeholder="worldfarmfun@gmail.com" className={`h-11 ${!data.personal.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
+              <Input value={data.personal.email} onChange={(e) => handleChange('personal', 'email', e.target.value)} type="email" placeholder="nama@contoh.com" className={`h-11 ${!data.personal.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
             </div>
             <div className="space-y-2">
               <Label className="text-sm text-slate-700">Phone Number</Label>

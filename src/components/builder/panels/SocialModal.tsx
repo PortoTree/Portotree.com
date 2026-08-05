@@ -19,7 +19,7 @@ interface Props {
   initialData?: SocialFormData | null;
 }
 
-const platforms = ['LinkedIn', 'GitHub', 'Twitter', 'Instagram', 'Facebook'];
+const platforms = ['LinkedIn', 'GitHub', 'Twitter', 'Instagram', 'Facebook', 'WhatsApp', 'YouTube', 'TikTok'];
 
 const generateUrl = (platform: string, username: string) => {
   if (!username) return '';
@@ -29,6 +29,9 @@ const generateUrl = (platform: string, username: string) => {
     case 'Twitter': return `https://twitter.com/${username}`;
     case 'Instagram': return `https://instagram.com/${username}`;
     case 'Facebook': return `https://facebook.com/${username}`;
+    case 'WhatsApp': return `https://wa.me/${username}`;
+    case 'YouTube': return `https://youtube.com/@${username}`;
+    case 'TikTok': return `https://tiktok.com/@${username}`;
     default: return '';
   }
 };
@@ -141,6 +144,9 @@ export function SocialModal({ isOpen, onClose, onSave, initialData }: Props) {
                   formData.platform === 'GitHub' ? 'https://github.com/username' : 
                   formData.platform === 'Twitter' ? 'https://twitter.com/username' : 
                   formData.platform === 'Facebook' ? 'https://facebook.com/username' : 
+                  formData.platform === 'WhatsApp' ? 'https://wa.me/username' : 
+                  formData.platform === 'YouTube' ? 'https://youtube.com/@username' : 
+                  formData.platform === 'TikTok' ? 'https://tiktok.com/@username' : 
                   'https://linkedin.com/in/username'
                 }
                 value={formData.url}

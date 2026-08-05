@@ -17,7 +17,7 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
       photoUrl: rawData.personal?.photoUrl || placeholderPortfolioData.personal.photoUrl,
       hireMeLink: rawData.personal?.hireMeLink || placeholderPortfolioData.personal.hireMeLink,
     },
-    social: rawData.social,
+    social: rawData.social?.length > 0 ? rawData.social : placeholderPortfolioData.social,
     experience: rawData.experience?.length > 0 ? rawData.experience : placeholderPortfolioData.experience,
     education: rawData.education?.length > 0 ? rawData.education : placeholderPortfolioData.education,
     organization: rawData.organization?.length > 0 ? rawData.organization : placeholderPortfolioData.organization,
@@ -132,6 +132,9 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
                   else if (social.platform === "Twitter") { iconSrc = "/twiter.webp"; hoverColor = "hover:text-sky-500"; }
                   else if (social.platform === "Instagram") { iconSrc = "/instagram.webp"; hoverColor = "hover:text-pink-600"; }
                   else if (social.platform === "Facebook") { iconSrc = "/facebook.webp"; hoverColor = "hover:text-blue-600"; }
+                  else if (social.platform === "WhatsApp") { iconSrc = "/whatsapp.webp"; hoverColor = "hover:text-emerald-500"; }
+                  else if (social.platform === "YouTube") { iconSrc = "/youtube.webp"; hoverColor = "hover:text-red-600"; }
+                  else if (social.platform === "TikTok") { iconSrc = "/tiktok.webp"; hoverColor = "hover:text-slate-900"; }
 
                   return (
                     <a key={social.id} href={social.url} target="_blank" rel="noreferrer" className={`flex items-center gap-1.5 text-slate-500 transition-colors ${hoverColor}`}>
@@ -494,6 +497,9 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
                 else if (social.platform === "Twitter") iconSrc = "/twiter.webp";
                 else if (social.platform === "Instagram") iconSrc = "/instagram.webp";
                 else if (social.platform === "Facebook") iconSrc = "/facebook.webp";
+                else if (social.platform === "WhatsApp") iconSrc = "/whatsapp.webp";
+                else if (social.platform === "YouTube") iconSrc = "/youtube.webp";
+                else if (social.platform === "TikTok") iconSrc = "/tiktok.webp";
 
                 return (
                   <a key={social.id} href={social.url} target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity" title={social.platform}>
