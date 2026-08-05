@@ -220,8 +220,6 @@ function BuilderContent() {
 
         {/* RIGHT CANVAS - PREVIEW */}
         <div className="flex-1 bg-slate-200 overflow-y-hidden relative flex flex-col items-center justify-center py-2 px-4 md:py-4 md:px-8 h-full">
-          <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
-          
           <div 
             style={previewMode === 'mobile' ? { width: '375px' } : {}}
             className={`mx-auto transition-all duration-300 w-full ${

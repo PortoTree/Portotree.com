@@ -473,7 +473,7 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
       </main>
 
       {/* FOOTER */}
-      <footer className="bg-slate-900 text-slate-400 py-12 mt-20">
+      <footer className="bg-gradient-to-br from-emerald-800 to-emerald-950 text-emerald-50 py-12 mt-20">
         <div className="max-w-5xl mx-auto px-6 text-center space-y-4">
           <h3 className="text-2xl font-bold text-white mb-6">Let's Connect</h3>
           <div className="flex justify-center gap-6 mb-8">

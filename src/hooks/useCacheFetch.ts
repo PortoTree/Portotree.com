@@ -60,7 +60,11 @@ export function useCacheFetch<T>(url: string | null, cacheKey: string, ttl: numb
   }, [url, cacheKey]);
 
   useEffect(() => {
-    if (!url || typeof window === "undefined") return;
+    if (typeof window === "undefined") return;
+    if (!url) {
+      setLoading(false);
+      return;
+    }
     const cached = sessionStorage.getItem(cacheKey);
     
     if (cached) {
