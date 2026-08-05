@@ -86,12 +86,12 @@ export function EducationModal({ isOpen, onClose, onSave, initialData }: Props) 
 
   return createPortal(
     <div 
-      className="fixed inset-0 flex items-center justify-center p-4 sm:p-6"
+      className="fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-6"
       style={{ zIndex: 9999, backgroundColor: 'rgba(15, 23, 42, 0.6)' }}
     >
       <div 
-        className="bg-white rounded-xl shadow-2xl w-full max-w-2xl flex flex-col overflow-hidden" 
-        style={{ maxHeight: '85vh', marginTop: '2rem', marginBottom: '2rem' }}
+        className="bg-white rounded-t-2xl sm:rounded-xl shadow-2xl w-full max-w-2xl flex flex-col overflow-hidden max-md:animate-slide-up sm:my-8" 
+        style={{ maxHeight: '90vh' }}
       >
         
         {/* Header */}

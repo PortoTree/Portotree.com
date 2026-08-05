@@ -79,10 +79,10 @@ export function AddSectionModal({ isOpen, onClose, onAddSection, onRemoveSection
 
   return createPortal(
     <div 
-      className="fixed inset-0 flex items-center justify-center p-4 sm:p-6"
+      className="fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-6"
       style={{ zIndex: 9999, backgroundColor: 'rgba(15, 23, 42, 0.6)' }}
     >
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200 max-h-[85vh]">
+      <div className="bg-white rounded-t-2xl sm:rounded-xl shadow-2xl w-full max-w-3xl flex flex-col overflow-hidden max-md:animate-slide-up sm:animate-in sm:fade-in sm:zoom-in-95 duration-200 max-h-[90vh] sm:my-8">
         <div className="px-6 py-5 border-b border-slate-100 shrink-0">
           <h2 className="text-[16px] font-semibold text-slate-700">Pilih Bagian untuk Ditambahkan</h2>
         </div>
