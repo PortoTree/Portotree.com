@@ -148,12 +148,12 @@ export function EducationModal({ isOpen, onClose, onSave, initialData }: Props) 
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label className="text-slate-700">Tanggal Mulai <span className="text-red-500">*</span></Label>
               <div className="flex gap-2">
                 <select 
-                  className="flex-1 h-10 px-3 border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:border-emerald-600 text-sm"
+                  className="flex-1 h-9 px-3 border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:border-emerald-600 text-sm"
                   value={formData.startMonth}
                   onChange={(e) => handleChange('startMonth', e.target.value)}
                 >
@@ -162,7 +162,7 @@ export function EducationModal({ isOpen, onClose, onSave, initialData }: Props) 
                 </select>
                 <Input 
                   placeholder="Tahun"
-                  className="w-24 h-10 focus-visible:ring-emerald-600"
+                  className="flex-1 h-9 focus-visible:ring-emerald-600"
                   value={formData.startYear}
                   onChange={(e) => handleChange('startYear', e.target.value)}
                 />
@@ -174,7 +174,7 @@ export function EducationModal({ isOpen, onClose, onSave, initialData }: Props) 
               <div className="flex gap-2">
                 <select 
                   disabled={formData.current}
-                  className="flex-1 h-10 px-3 border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:border-emerald-600 text-sm disabled:bg-slate-100 disabled:text-slate-400"
+                  className="flex-1 h-9 px-3 border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:border-emerald-600 text-sm disabled:bg-slate-100 disabled:text-slate-400"
                   value={formData.endMonth}
                   onChange={(e) => handleChange('endMonth', e.target.value)}
                 >
@@ -184,7 +184,7 @@ export function EducationModal({ isOpen, onClose, onSave, initialData }: Props) 
                 <Input 
                   placeholder="Tahun"
                   disabled={formData.current}
-                  className="w-24 h-10 disabled:bg-slate-100 focus-visible:ring-emerald-600"
+                  className="flex-1 h-9 disabled:bg-slate-100 focus-visible:ring-emerald-600"
                   value={formData.endYear}
                   onChange={(e) => handleChange('endYear', e.target.value)}
                 />

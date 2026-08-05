@@ -35,6 +35,13 @@ function BuilderContent() {
   const [showUsernamePicker, setShowUsernamePicker] = useState(false);
   const [firestoreSaving, setFirestoreSaving] = useState(false);
 
+  // Set default preview mode to mobile on small screens
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setPreviewMode('mobile');
+    }
+  }, [setPreviewMode]);
+
   // Cek apakah user sudah punya username di Firestore (silent check, tanpa popup)
   useEffect(() => {
     async function checkExistingUsername() {
@@ -172,7 +179,7 @@ function BuilderContent() {
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          <div className="flex items-center p-1 rounded-lg bg-slate-100 border border-slate-200">
+          <div className="hidden md:flex items-center p-1 rounded-lg bg-slate-100 border border-slate-200">
             <button
               onClick={() => setPreviewMode('desktop')}
               className={`p-1.5 rounded-md transition-all ${previewMode === 'desktop' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
@@ -214,29 +221,28 @@ function BuilderContent() {
       {/* MAIN WORKSPACE */}
       <main className="flex-1 flex overflow-hidden">
         {/* LEFT SIDEBAR - FORM */}
-        <div className="w-1/3 min-w-[320px] max-w-[400px] flex-shrink-0 bg-white border-r border-slate-200 z-10 shadow-lg flex flex-col h-full overflow-hidden">
+        <div className={`w-full md:w-1/3 md:min-w-[320px] md:max-w-[400px] flex-shrink-0 bg-white border-r border-slate-200 z-10 shadow-lg flex-col h-full overflow-hidden ${showMobilePreview ? 'hidden md:flex' : 'flex'}`}>
           <PortfolioDataForm data={localData} onChange={handleDataChange} />
         </div>
 
         {/* RIGHT CANVAS - PREVIEW */}
-        <div className="flex-1 bg-slate-200 overflow-y-hidden relative flex flex-col items-center justify-center py-2 px-4 md:py-4 md:px-8 h-full">
+        <div className={`flex-1 bg-slate-200 overflow-y-hidden relative flex-col items-center justify-center p-0 md:py-4 md:px-8 h-full ${!showMobilePreview ? 'hidden md:flex' : 'flex'}`}>
           <div 
-            style={previewMode === 'mobile' ? { width: '375px' } : {}}
-            className={`mx-auto transition-all duration-300 w-full scroll-smooth ${
+            className={`mx-auto transition-all duration-300 w-full h-full scroll-smooth bg-white overflow-y-auto max-md:scrollbar-hide ${
             previewMode === 'mobile' 
-              ? 'h-full max-h-[896px] shadow-2xl bg-white rounded-3xl border-8 border-slate-900 overflow-y-auto scrollbar-hide relative flex-shrink-0 ring-4 ring-slate-800' 
-              : 'bg-white shadow-xl rounded-xl max-w-6xl h-full overflow-y-auto custom-scrollbar'
+              ? 'scrollbar-hide md:w-[375px] md:max-h-[896px] md:shadow-2xl md:rounded-3xl md:border-8 md:border-slate-900 relative md:flex-shrink-0 md:ring-4 md:ring-slate-800' 
+              : 'custom-scrollbar md:shadow-xl md:rounded-xl max-w-6xl'
           }`}>
-            {/* iPhone Hardware Elements */}
+            {/* iPhone Hardware Elements (Hidden on mobile) */}
             {previewMode === 'mobile' && (
-              <>
+              <div className="hidden md:block">
                 <div className="absolute top-0 inset-x-0 h-6 flex justify-center z-[100] pointer-events-none">
                   <div className="w-32 h-full bg-slate-900 rounded-b-2xl"></div>
                 </div>
                 <div className="absolute bottom-1.5 inset-x-0 flex justify-center z-[100] pointer-events-none">
                   <div className="w-32 h-1.5 bg-slate-800/20 backdrop-blur-sm rounded-full"></div>
                 </div>
-              </>
+              </div>
             )}
             
             <PortfolioViewer data={localData} isMobilePreview={previewMode === 'mobile'} />
@@ -246,7 +252,7 @@ function BuilderContent() {
         {/* FLOATING MOBILE PREVIEW BUTTON */}
         <button
           onClick={() => setShowMobilePreview(!showMobilePreview)}
-          className={`hidden fixed bottom-6 right-6 z-50 px-5 py-3 rounded-full shadow-2xl text-sm font-bold uppercase tracking-widest transition-all flex items-center gap-2 ${showMobilePreview ? 'bg-emerald-600 text-white' : 'bg-slate-50 text-slate-900 border border-slate-200'}`}
+          className={`md:hidden fixed bottom-6 right-6 z-50 px-5 py-3 rounded-full shadow-2xl text-sm font-bold uppercase tracking-widest transition-all flex items-center gap-2 ${!showMobilePreview ? 'bg-emerald-600 text-white' : 'bg-slate-50 text-slate-900 border border-slate-200'}`}
         >
           {showMobilePreview ? <Pencil className="w-5 h-5" /> : <Eye className="w-5 h-5" />} 
           <span>{showMobilePreview ? 'Edit Data' : 'Preview'}</span>

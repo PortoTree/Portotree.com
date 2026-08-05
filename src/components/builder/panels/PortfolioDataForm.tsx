@@ -357,7 +357,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
         <p className="text-sm text-slate-500">Isi data diri Anda di sini.</p>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      <div className="flex-1 overflow-y-auto p-4 pb-24 space-y-3 custom-scrollbar">
         
         {/* PERSONAL INFO */}
         <AccordionSection
@@ -380,8 +380,8 @@ export function PortfolioDataForm({ data, onChange }: Props) {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col gap-2 w-full">
-                <div className="flex flex-wrap gap-2">
+              <div className="flex flex-col gap-2 w-full items-center sm:items-start">
+                <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
                   <ImageUpload 
                     onUploadSuccess={(url) => handleChange('personal', 'photoUrl', url)}
                     customTrigger={
@@ -394,7 +394,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
                     <Trash2 size={14} /> Hapus
                   </Button>
                 </div>
-                <p className="text-[11px] text-slate-500 leading-tight">Format JPG atau PNG. Maksimum 5MB. Tarik & lepas atau klik untuk unggah.</p>
+                <p className="text-[11px] text-slate-500 leading-tight text-center sm:text-left">Format JPG atau PNG. Maksimum 5MB. Tarik & lepas atau klik untuk unggah.</p>
               </div>
             </div>
           </div>
@@ -409,7 +409,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             <Input value={data.personal.headline} onChange={(e) => handleChange('personal', 'headline', e.target.value)} placeholder="Senior Developer" className="h-11" />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="text-sm text-slate-700">Email</Label>
               <Input value={data.personal.email} onChange={(e) => handleChange('personal', 'email', e.target.value)} type="email" placeholder="worldfarmfun@gmail.com" className={`h-11 ${!data.personal.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
