@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import useSWR from "swr";
 import { getMyPortfolio } from "@/app/actions/portfolio";
 import { PortfolioViewer } from "@/components/builder/PortfolioViewer";
 import { defaultPortfolioData, PortfolioData } from "@/lib/portfolioData";
@@ -34,33 +35,35 @@ const progressItems = [
   { label: "Kontak & Lokasi", done: false },
 ];
 
+const fetcher = async () => {
+  const result = await getMyPortfolio();
+  if (result.success && result.data) {
+    return result;
+  }
+  throw new Error("Gagal mengambil portofolio");
+};
+
 export default function PortfolioPage() {
   const [showDetail, setShowDetail] = useState(false);
   const [copied, setCopied] = useState(false);
+  
+  // SWR Config: Hemat kuota Firestore Read!
+  const { data: swrData } = useSWR('my-portfolio-dashboard', fetcher, {
+    revalidateOnFocus: false, // Tidak nge-read ulang setiap pindah tab
+    revalidateOnReconnect: true,
+    dedupingInterval: 300000, // Caching 5 menit sebelum nge-read Firestore lagi
+  });
+
   const [portfolioData, setPortfolioData] = useState<PortfolioData>(defaultPortfolioData);
   const [myUsername, setMyUsername] = useState<string>("johndoe");
 
   useEffect(() => {
-    // Load dari Firestore
-    async function loadData() {
-      try {
-        const result = await getMyPortfolio();
-        if (result.success) {
-          if (result.username) {
-            setMyUsername(result.username);
-            console.log('[DEBUG] Dashboard: username dari Firestore:', result.username);
-          }
-          if (result.data) {
-            setPortfolioData(result.data);
-            console.log('[DEBUG] Dashboard: portfolio data loaded dari Firestore');
-            return; // Prioritaskan Firestore
-          }
-        }
-      } catch (err) {
-        console.error('[DEBUG] Dashboard: error loading from Firestore:', err);
-      }
-
-      // Fallback ke localStorage
+    if (swrData?.data) {
+      setPortfolioData(swrData.data as PortfolioData);
+      setMyUsername(swrData.username || "johndoe");
+      console.log('[DEBUG] Dashboard: portfolio data loaded dari SWR/Cache');
+    } else {
+      // Fallback ke localStorage (draft)
       const saved = localStorage.getItem('draft_template_sections');
       if (saved) {
         try {
@@ -69,8 +72,7 @@ export default function PortfolioPage() {
         } catch (e) {}
       }
     }
-    loadData();
-  }, []);
+  }, [swrData]);
 
   const portfolioLink = `portotree.com/p/${myUsername}`;
   const doneCount = progressItems.filter((i) => i.done).length;
