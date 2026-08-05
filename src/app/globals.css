@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+}
+
 @custom-variant dark (&:is(.dark *));
 @custom-variant data-open (&[data-open], &:is([data-open] *));
 @custom-variant data-closed (&[data-closed], &:is([data-closed] *));

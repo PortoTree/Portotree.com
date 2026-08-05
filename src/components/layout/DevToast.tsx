@@ -1,11 +1,18 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export function DevToast() {
   const [isVisible, setIsVisible] = useState(true);
+  const pathname = usePathname();
+
+  // Hide on public portfolio pages (/p/[username])
+  if (pathname?.startsWith('/p/')) {
+    return null;
+  }
 
   return (
     <AnimatePresence>

@@ -39,12 +39,11 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
           </div>
           <div className={`flex items-center gap-4 ${isMobilePreview ? '' : 'md:gap-6'} text-sm font-medium text-slate-600`}>
             <nav className={`${isMobilePreview ? 'hidden' : 'hidden md:flex'} items-center gap-6`}>
-              <a href="#about" className="hover:text-emerald-600 transition-colors">About</a>
               <a href="#services" className="hover:text-emerald-600 transition-colors">Services</a>
               <a href="#experience" className="hover:text-emerald-600 transition-colors">Experience</a>
               <a href="#organization" className="hover:text-emerald-600 transition-colors">Organization</a>
               <a href="#projects" className="hover:text-emerald-600 transition-colors">Projects</a>
-              <a href="#awards" className="hover:text-emerald-600 transition-colors">Awards</a>
+              <a href="#awards" className="hover:text-emerald-600 transition-colors">Certificate</a>
             </nav>
             {(data.personal.hireMeLink === 'whatsapp' ? data.personal.phone : data.personal.email) && (
               <a 

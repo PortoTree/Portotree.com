@@ -222,7 +222,7 @@ function BuilderContent() {
         <div className="flex-1 bg-slate-200 overflow-y-hidden relative flex flex-col items-center justify-center py-2 px-4 md:py-4 md:px-8 h-full">
           <div 
             style={previewMode === 'mobile' ? { width: '375px' } : {}}
-            className={`mx-auto transition-all duration-300 w-full ${
+            className={`mx-auto transition-all duration-300 w-full scroll-smooth ${
             previewMode === 'mobile' 
               ? 'h-full max-h-[896px] shadow-2xl bg-white rounded-3xl border-8 border-slate-900 overflow-y-auto scrollbar-hide relative flex-shrink-0 ring-4 ring-slate-800' 
               : 'bg-white shadow-xl rounded-xl max-w-6xl h-full overflow-y-auto custom-scrollbar'
