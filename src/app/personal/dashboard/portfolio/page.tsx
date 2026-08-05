@@ -114,12 +114,11 @@ export default function PortfolioPage() {
             </div>
 
             {/* Tombol aksi */}
-            <div className="p-5 space-y-3">
-              {/* Edit + Visit */}
-              <div className="grid grid-cols-2 gap-3">
+            <div className="p-5">
+              <div className="grid grid-cols-3 gap-2">
                 <a
                   href="/personal/portfolio-builder?mode=template"
-                  className="flex items-center justify-center gap-2 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors text-sm"
+                  className="flex flex-col items-center justify-center gap-1.5 py-2.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors text-xs"
                 >
                   <Edit3 className="w-4 h-4" />
                   Edit
@@ -128,27 +127,17 @@ export default function PortfolioPage() {
                   href={`https://${portfolioLink}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 py-3 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 transition-colors text-sm"
+                  className="flex flex-col items-center justify-center gap-1.5 py-2.5 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 transition-colors text-xs"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Visit
                 </a>
-              </div>
-
-              {/* Share + Edit Link */}
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { icon: Share2, label: "Share" },
-                  { icon: LinkIcon, label: "Edit Link" },
-                ].map(({ icon: Icon, label }) => (
-                  <button
-                    key={label}
-                    className="flex items-center justify-center gap-1.5 py-2.5 border border-slate-200 text-slate-600 text-xs font-medium rounded-xl hover:bg-slate-50 transition-colors"
-                  >
-                    <Icon className="w-3.5 h-3.5" />
-                    {label}
-                  </button>
-                ))}
+                <button
+                  className="flex flex-col items-center justify-center gap-1.5 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-white font-bold rounded-xl hover:from-amber-500 hover:to-yellow-600 transition-all shadow-sm shadow-amber-200 text-xs"
+                >
+                  <Share2 className="w-4 h-4" />
+                  Share
+                </button>
               </div>
             </div>
           </div>
