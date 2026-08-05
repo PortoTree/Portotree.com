@@ -3,6 +3,7 @@
 import React from "react";
 import { PortfolioData, placeholderPortfolioData } from "@/lib/portfolioData";
 import { Mail, Phone, MapPin, ExternalLink, Code2, Briefcase, LinkIcon, Wrench, Layout, GraduationCap, Users } from "lucide-react";
+import { motion } from "framer-motion";
 
 export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { data: PortfolioData; isMobilePreview?: boolean }) {
   const data = {
@@ -64,7 +65,7 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
       </header>
 
       {/* FULL WIDTH HERO SECTION */}
-      <section id="about" className="relative z-0 w-full pt-16 pb-12 md:pt-28 md:pb-20 overflow-hidden">
+      <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="about" className="relative z-0 w-full pt-16 pb-12 md:pt-28 md:pb-20 overflow-hidden">
         {/* Clearer Polka dots background with mask fade effect */}
         <div 
           className="absolute inset-0 -z-10"
@@ -143,12 +144,12 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       <main className={`max-w-5xl mx-auto px-4 py-8 space-y-16 ${isMobilePreview ? '' : 'md:px-6 md:py-20 md:space-y-24'}`}>
         {/* SERVICES */}
         {data.services && data.services.length > 0 && (
-          <section id="services" className="space-y-8">
+          <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="services" className="space-y-8">
             <div className="flex items-center gap-3 border-b pb-4">
               <div className="text-emerald-600">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
@@ -182,12 +183,12 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
                 </div>
               ))}
             </div>
-          </section>
+          </motion.section>
         )}
 
         {/* SKILLS */}
         {skillsArray.length > 0 && (
-          <section className="space-y-6">
+          <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} className="space-y-6">
             <div className="flex items-center gap-3 border-b pb-4">
               <Wrench className="text-emerald-600" size={28} />
               <h3 className="text-2xl font-bold text-slate-800">Skills</h3>
@@ -203,12 +204,12 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
                 </span>
               ))}
             </div>
-          </section>
+          </motion.section>
         )}
 
         {/* EXPERIENCE */}
         {data.experience.length > 0 && (
-          <section id="experience" className="space-y-8">
+          <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="experience" className="space-y-8">
             <div className="flex items-center gap-3 border-b pb-4">
               <Briefcase className="text-emerald-600" size={28} />
               <h3 className="text-2xl font-bold text-slate-800">Experience</h3>
@@ -243,12 +244,12 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
                 </div>
               ))}
             </div>
-          </section>
+          </motion.section>
         )}
 
         {/* ORGANIZATION */}
         {data.organization && data.organization.length > 0 && (
-          <section id="organization" className="space-y-8">
+          <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="organization" className="space-y-8">
             <div className="flex items-center gap-3 border-b pb-4">
               <Users className="text-emerald-600" size={28} />
               <h3 className="text-2xl font-bold text-slate-800">Organization</h3>
@@ -283,12 +284,12 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
                 </div>
               ))}
             </div>
-          </section>
+          </motion.section>
         )}
 
         {/* EDUCATION */}
         {data.education.length > 0 && (
-          <section id="education" className="space-y-8">
+          <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="education" className="space-y-8">
             <div className="flex items-center gap-3 border-b pb-4">
               <GraduationCap className="text-emerald-600" size={28} />
               <h3 className="text-2xl font-bold text-slate-800">Education</h3>
@@ -323,12 +324,12 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
                 </div>
               ))}
             </div>
-          </section>
+          </motion.section>
         )}
 
         {/* PROJECTS */}
         {data.projects.length > 0 && (
-          <section id="projects" className="space-y-8">
+          <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="projects" className="space-y-8">
             <div className="flex items-center gap-3 border-b pb-4">
               <Layout className="text-emerald-600" size={28} />
               <h3 className="text-2xl font-bold text-slate-800">Project preview</h3>
@@ -390,12 +391,12 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
               );
               })}
             </div>
-          </section>
+          </motion.section>
         )}
 
         {/* CERTIFICATIONS */}
         {data.certifications && data.certifications.length > 0 && (
-          <section id="certifications" className="space-y-8">
+          <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="certifications" className="space-y-8">
             <div className="flex items-center gap-3 border-b pb-4">
               <div className="text-emerald-600">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
@@ -426,12 +427,12 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
                 </div>
               ))}
             </div>
-          </section>
+          </motion.section>
         )}
 
         {/* AWARDS */}
         {data.awards && data.awards.length > 0 && (
-          <section id="certificate" className="space-y-8">
+          <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="certificate" className="space-y-8">
             <div className="flex items-center gap-3 border-b pb-4">
               <div className="text-emerald-600">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
@@ -467,12 +468,12 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
                 </div>
               ))}
             </div>
-          </section>
+          </motion.section>
         )}
       </main>
 
       {/* FOOTER */}
-      <footer className="bg-gradient-to-br from-emerald-800 to-emerald-950 text-emerald-50 py-12 mt-20">
+      <motion.footer initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} className="bg-gradient-to-br from-emerald-800 to-emerald-950 text-emerald-50 py-12 mt-20">
         <div className="max-w-5xl mx-auto px-6 text-center space-y-4">
           <h3 className="text-2xl font-bold text-white mb-6">Let's Connect</h3>
           <div className="flex justify-center gap-6 mb-8">
@@ -503,7 +504,7 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
           </div>
           <p>© {new Date().getFullYear()} {data.personal.name}. Built with PortoTree.</p>
         </div>
-      </footer>
+      </motion.footer>
     </div>
   );
 }
