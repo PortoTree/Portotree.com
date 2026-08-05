@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { getMyPortfolio } from "@/app/actions/portfolio";
 import { PortfolioViewer } from "@/components/builder/PortfolioViewer";
 import { defaultPortfolioData, PortfolioData } from "@/lib/portfolioData";
 import {
@@ -37,18 +38,41 @@ export default function PortfolioPage() {
   const [showDetail, setShowDetail] = useState(false);
   const [copied, setCopied] = useState(false);
   const [portfolioData, setPortfolioData] = useState<PortfolioData>(defaultPortfolioData);
+  const [myUsername, setMyUsername] = useState<string>("johndoe");
 
   useEffect(() => {
-    const saved = localStorage.getItem('draft_template_sections');
-    if (saved) {
+    // Load dari Firestore
+    async function loadData() {
       try {
-        setPortfolioData(JSON.parse(saved));
-      } catch (e) {}
+        const result = await getMyPortfolio();
+        if (result.success) {
+          if (result.username) {
+            setMyUsername(result.username);
+            console.log('[DEBUG] Dashboard: username dari Firestore:', result.username);
+          }
+          if (result.data) {
+            setPortfolioData(result.data);
+            console.log('[DEBUG] Dashboard: portfolio data loaded dari Firestore');
+            return; // Prioritaskan Firestore
+          }
+        }
+      } catch (err) {
+        console.error('[DEBUG] Dashboard: error loading from Firestore:', err);
+      }
+
+      // Fallback ke localStorage
+      const saved = localStorage.getItem('draft_template_sections');
+      if (saved) {
+        try {
+          setPortfolioData(JSON.parse(saved));
+          console.log('[DEBUG] Dashboard: portfolio data loaded dari localStorage');
+        } catch (e) {}
+      }
     }
+    loadData();
   }, []);
 
-  const username = portfolioData?.personal?.name?.toLowerCase().replace(/\s+/g, '') || "johndoe";
-  const portfolioLink = `portotree.com/p/${username}`;
+  const portfolioLink = `portotree.com/p/${myUsername}`;
   const doneCount = progressItems.filter((i) => i.done).length;
   const progressPercent = Math.round((doneCount / progressItems.length) * 100);
 
@@ -94,7 +118,7 @@ export default function PortfolioPage() {
               {/* Edit + Visit */}
               <div className="grid grid-cols-2 gap-3">
                 <a
-                  href="/personal/portfolio-builder"
+                  href="/personal/portfolio-builder?mode=template"
                   className="flex items-center justify-center gap-2 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors text-sm"
                 >
                   <Edit3 className="w-4 h-4" />

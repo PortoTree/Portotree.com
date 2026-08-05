@@ -1,7 +1,7 @@
 // @ts-nocheck
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useCallback } from "react";
 import { ArrowLeft, Monitor, Smartphone, Eye, Pencil, Globe, Save, Loader2 } from "lucide-react";
 import { useBuilderState } from "./useBuilderState";
 import { StorefrontProvider } from "@/components/storefront/StorefrontProvider";
@@ -9,6 +9,8 @@ import { PortfolioDataForm } from "./panels/PortfolioDataForm";
 import { PortfolioViewer } from "./PortfolioViewer";
 import { PortfolioData, defaultPortfolioData } from "@/lib/portfolioData";
 import { useRouter } from "next/navigation";
+import UsernamePicker from "./UsernamePicker";
+import { getMyPortfolio, savePortfolio } from "@/app/actions/portfolio";
 
 function BuilderContent() {
   const state = useBuilderState();
@@ -29,6 +31,81 @@ function BuilderContent() {
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [localData, setLocalData] = useState<PortfolioData>(defaultPortfolioData);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [myUsername, setMyUsername] = useState<string | null>(null);
+  const [showUsernamePicker, setShowUsernamePicker] = useState(false);
+  const [firestoreSaving, setFirestoreSaving] = useState(false);
+
+  // Cek apakah user sudah punya username di Firestore (silent check, tanpa popup)
+  useEffect(() => {
+    async function checkExistingUsername() {
+      try {
+        const result = await getMyPortfolio();
+        if (result.success && result.username) {
+          setMyUsername(result.username);
+          console.log('[DEBUG] User sudah punya username:', result.username);
+        } else {
+          console.log('[DEBUG] User belum punya username (popup akan muncul saat pertama kali simpan)');
+        }
+      } catch (err) {
+        console.error('[DEBUG] Error checking username:', err);
+      }
+    }
+    checkExistingUsername();
+  }, []);
+
+  // Handler saat username berhasil di-publish
+  const handleUsernameComplete = useCallback(async (username: string) => {
+    setMyUsername(username);
+    setShowUsernamePicker(false);
+    console.log('[DEBUG] Username dipilih & published:', username);
+
+    // Setelah publish, langsung simpan portfolio data ke Firestore
+    setFirestoreSaving(true);
+    try {
+      const result = await savePortfolio(localData);
+      if (result.success) {
+        console.log('[DEBUG] Portfolio berhasil disimpan ke Firestore setelah publish');
+      } else {
+        console.error('[DEBUG] Gagal simpan ke Firestore:', result.error);
+      }
+    } catch (err) {
+      console.error('[DEBUG] Error saving to Firestore:', err);
+    }
+    setFirestoreSaving(false);
+  }, [localData]);
+
+  // Handler save: jika belum punya username → tampilkan popup, jika sudah → langsung simpan
+  const handleFullSave = useCallback(async () => {
+    // 1. Simpan sections ke localStorage langsung (bypass API calls dari handleSave)
+    try {
+      localStorage.setItem('draft_template_sections', JSON.stringify(sections));
+      setHasChanges(false);
+      console.log('[DEBUG] Sections berhasil disimpan ke localStorage');
+    } catch (err) {
+      console.error('[DEBUG] Gagal simpan ke localStorage:', err);
+    }
+
+    // 2. Jika belum punya username → tampilkan popup publish
+    if (!myUsername) {
+      console.log('[DEBUG] Belum punya username, tampilkan popup publish');
+      setShowUsernamePicker(true);
+      return;
+    }
+
+    // 3. Sudah punya username → langsung simpan ke Firestore
+    setFirestoreSaving(true);
+    try {
+      const result = await savePortfolio(localData);
+      if (result.success) {
+        console.log('[DEBUG] Portfolio berhasil disimpan ke Firestore');
+      } else {
+        console.error('[DEBUG] Gagal simpan ke Firestore:', result.error);
+      }
+    } catch (err) {
+      console.error('[DEBUG] Error saving to Firestore:', err);
+    }
+    setFirestoreSaving(false);
+  }, [sections, setHasChanges, myUsername, localData]);
 
   // Parse portfolio data from sections
   useEffect(() => {
@@ -111,19 +188,25 @@ function BuilderContent() {
           </div>
 
           <button
-            onClick={() => window.open('/', '_blank')}
+            onClick={() => {
+              if (myUsername) {
+                window.open(`https://portotree.com/p/${myUsername}`, '_blank');
+              } else {
+                setShowUsernamePicker(true);
+              }
+            }}
             className="px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-widest bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-200 flex items-center gap-2"
           >
             <Globe className="w-4 h-4" /> <span className="hidden md:inline">Preview</span>
           </button>
           
           <button
-            onClick={handleSave}
-            disabled={!hasChanges || isSaving}
+            onClick={handleFullSave}
+            disabled={!hasChanges || isSaving || firestoreSaving}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${hasChanges ? "bg-emerald-600 text-white hover:bg-emerald-700" : "bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200"}`}
           >
-            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            <span className="hidden md:inline">{isSaving ? "Saving..." : "Simpan"}</span>
+            {(isSaving || firestoreSaving) ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            <span className="hidden md:inline">{(isSaving || firestoreSaving) ? "Saving..." : "Simpan"}</span>
           </button>
         </div>
       </header>
@@ -171,6 +254,16 @@ function BuilderContent() {
           <span>{showMobilePreview ? 'Edit Data' : 'Preview'}</span>
         </button>
       </main>
+
+      {/* Username Picker Popup */}
+      {showUsernamePicker && (
+        <UsernamePicker
+          isOpen={showUsernamePicker}
+          onComplete={handleUsernameComplete}
+          onCancel={() => setShowUsernamePicker(false)}
+          suggestedName={localData?.personal?.name}
+        />
+      )}
     </div>
   );
 }
