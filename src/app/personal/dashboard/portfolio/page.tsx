@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { PortfolioViewer } from "@/components/builder/PortfolioViewer";
+import { defaultPortfolioData, PortfolioData } from "@/lib/portfolioData";
 import {
   Edit3,
   ExternalLink,
@@ -16,6 +18,7 @@ import {
   ChevronUp,
   BarChart2,
 } from "lucide-react";
+import ProgressPortfolio from "@/components/dashboard/ProgressPortfolio";
 
 const progressItems = [
   { label: "Foto Profil", done: true },
@@ -33,8 +36,19 @@ const progressItems = [
 export default function PortfolioPage() {
   const [showDetail, setShowDetail] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [portfolioData, setPortfolioData] = useState<PortfolioData>(defaultPortfolioData);
 
-  const portfolioLink = "portotree.com/johndoe";
+  useEffect(() => {
+    const saved = localStorage.getItem('draft_template_sections');
+    if (saved) {
+      try {
+        setPortfolioData(JSON.parse(saved));
+      } catch (e) {}
+    }
+  }, []);
+
+  const username = portfolioData?.personal?.name?.toLowerCase().replace(/\s+/g, '') || "johndoe";
+  const portfolioLink = `portotree.com/p/${username}`;
   const doneCount = progressItems.filter((i) => i.done).length;
   const progressPercent = Math.round((doneCount / progressItems.length) * 100);
 
@@ -61,35 +75,17 @@ export default function PortfolioPage() {
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
 
             {/* Area gelap preview */}
-            <div className="bg-[#09090b] h-[340px] relative flex flex-col items-center justify-center overflow-hidden">
-              {/* Teks vertikal kiri */}
-              <span
-                className="absolute left-3 top-12 text-slate-700 text-[10px] font-bold tracking-[0.4em] uppercase select-none"
-                style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+            <div className="bg-slate-100 relative overflow-hidden border-b border-slate-200" style={{ height: '340px' }}>
+              <div 
+                className="absolute top-0 left-0 pointer-events-none"
+                style={{ 
+                  width: '200%', 
+                  height: '200%', 
+                  transformOrigin: 'top left',
+                  transform: 'scale(0.5)' 
+                }}
               >
-                PORTOTREE
-              </span>
-
-              {/* Konten tengah */}
-              <div className="text-center w-full px-4">
-                <div className="text-slate-400 text-xs mb-1.5 font-medium">
-                  Halo!
-                </div>
-                <h2 className="text-white text-[26px] font-extrabold mb-6 tracking-tight">
-                  Saya <span className="text-emerald-400">johndoe</span>,
-                </h2>
-
-                {/* Foto placeholder (Arch shape, outline only) */}
-                <div className="w-[110px] h-[135px] rounded-t-full mx-auto mb-6 flex items-center justify-center border border-slate-500 bg-transparent">
-                  <span className="text-slate-500 text-[10px]">280 × 340</span>
-                </div>
-
-                {/* Tombol preview */}
-                <div className="flex justify-center">
-                  <button className="px-6 py-1.5 bg-transparent border border-slate-500 text-white text-xs font-semibold rounded-full hover:bg-slate-800 transition-colors">
-                    Lihat Karya
-                  </button>
-                </div>
+                <PortfolioViewer data={portfolioData} />
               </div>
             </div>
 
@@ -98,7 +94,7 @@ export default function PortfolioPage() {
               {/* Edit + Visit */}
               <div className="grid grid-cols-2 gap-3">
                 <a
-                  href="/personal/dashboard/storefront"
+                  href="/personal/portfolio-builder"
                   className="flex items-center justify-center gap-2 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors text-sm"
                 >
                   <Edit3 className="w-4 h-4" />
@@ -134,56 +130,7 @@ export default function PortfolioPage() {
           </div>
 
           {/* PROGRESS PORTFOLIO */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-bold text-slate-800 flex items-center gap-2 text-sm">
-                <Globe className="w-4 h-4 text-blue-500" />
-                Progress Portfolio
-              </h3>
-              <span className="text-blue-600 font-black text-base">{progressPercent}%</span>
-            </div>
-
-            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden mb-3">
-              <div
-                className="h-full bg-blue-500 rounded-full transition-all duration-700"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
-
-            <button
-              onClick={() => setShowDetail(!showDetail)}
-              className="flex items-center gap-1 text-sm text-slate-500 hover:text-blue-600 transition-colors font-medium"
-            >
-              Lihat detail
-              {showDetail ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-            </button>
-
-            {showDetail && (
-              <ul className="mt-4 space-y-2.5 border-t border-slate-100 pt-4">
-                {progressItems.map((item) => (
-                  <li key={item.label} className="flex items-center gap-3 text-sm">
-                    <span
-                      className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold ${
-                        item.done
-                          ? "bg-emerald-100 text-emerald-600"
-                          : "bg-slate-100 text-slate-400"
-                      }`}
-                    >
-                      {item.done ? "✓" : "○"}
-                    </span>
-                    <span className={item.done ? "text-slate-700" : "text-slate-400"}>
-                      {item.label}
-                    </span>
-                    {!item.done && (
-                      <span className="ml-auto text-xs text-blue-500 font-semibold cursor-pointer hover:underline">
-                        Lengkapi
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <ProgressPortfolio />
         </div>
 
         {/* ══ KOLOM KANAN ═════════════════════════════════════ */}

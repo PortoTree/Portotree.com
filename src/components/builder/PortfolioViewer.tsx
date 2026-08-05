@@ -1,10 +1,32 @@
 "use client";
 
 import React from "react";
-import { PortfolioData } from "@/lib/portfolioData";
-import { Mail, Phone, MapPin, ExternalLink, Code2, Briefcase, LinkIcon, Wrench, Layout } from "lucide-react";
+import { PortfolioData, placeholderPortfolioData } from "@/lib/portfolioData";
+import { Mail, Phone, MapPin, ExternalLink, Code2, Briefcase, LinkIcon, Wrench, Layout, GraduationCap, Users } from "lucide-react";
 
-export function PortfolioViewer({ data, isMobilePreview = false }: { data: PortfolioData; isMobilePreview?: boolean }) {
+export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { data: PortfolioData; isMobilePreview?: boolean }) {
+  const data = {
+    personal: {
+      name: rawData.personal?.name || placeholderPortfolioData.personal.name,
+      headline: rawData.personal?.headline || placeholderPortfolioData.personal.headline,
+      bio: rawData.personal?.bio || placeholderPortfolioData.personal.bio,
+      email: rawData.personal?.email || placeholderPortfolioData.personal.email,
+      phone: rawData.personal?.phone || placeholderPortfolioData.personal.phone,
+      location: rawData.personal?.location || placeholderPortfolioData.personal.location,
+      photoUrl: rawData.personal?.photoUrl || placeholderPortfolioData.personal.photoUrl,
+      hireMeLink: rawData.personal?.hireMeLink || placeholderPortfolioData.personal.hireMeLink,
+    },
+    social: rawData.social,
+    experience: rawData.experience?.length > 0 ? rawData.experience : placeholderPortfolioData.experience,
+    education: rawData.education?.length > 0 ? rawData.education : placeholderPortfolioData.education,
+    organization: rawData.organization?.length > 0 ? rawData.organization : placeholderPortfolioData.organization,
+    projects: rawData.projects?.length > 0 ? rawData.projects : placeholderPortfolioData.projects,
+    certifications: rawData.certifications?.length > 0 ? rawData.certifications : placeholderPortfolioData.certifications,
+    awards: rawData.awards?.length > 0 ? rawData.awards : placeholderPortfolioData.awards,
+    services: rawData.services?.length > 0 ? rawData.services : placeholderPortfolioData.services,
+    skills: rawData.skills || placeholderPortfolioData.skills,
+  };
+
   const skillsArray = data.skills.split(",").map((s) => s.trim()).filter(Boolean);
 
   return (
@@ -18,12 +40,21 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
           <div className={`flex items-center gap-4 ${isMobilePreview ? '' : 'md:gap-6'} text-sm font-medium text-slate-600`}>
             <nav className={`${isMobilePreview ? 'hidden' : 'hidden md:flex'} items-center gap-6`}>
               <a href="#about" className="hover:text-emerald-600 transition-colors">About</a>
+              <a href="#services" className="hover:text-emerald-600 transition-colors">Services</a>
               <a href="#experience" className="hover:text-emerald-600 transition-colors">Experience</a>
+              <a href="#organization" className="hover:text-emerald-600 transition-colors">Organization</a>
               <a href="#projects" className="hover:text-emerald-600 transition-colors">Projects</a>
+              <a href="#awards" className="hover:text-emerald-600 transition-colors">Awards</a>
             </nav>
-            {data.personal.email && (
+            {(data.personal.hireMeLink === 'whatsapp' ? data.personal.phone : data.personal.email) && (
               <a 
-                href={`mailto:${data.personal.email}`}
+                href={
+                  data.personal.hireMeLink === 'whatsapp' 
+                    ? `https://wa.me/${data.personal.phone.replace(/\\D/g, '')}`
+                    : `mailto:${data.personal.email}`
+                }
+                target={data.personal.hireMeLink === 'whatsapp' ? "_blank" : undefined}
+                rel={data.personal.hireMeLink === 'whatsapp' ? "noopener noreferrer" : undefined}
                 className="bg-emerald-600 text-white px-4 py-2 rounded-full hover:bg-emerald-700 transition-colors flex-shrink-0"
               >
                 Hire Me
@@ -66,9 +97,10 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
             <h2 className={`${isMobilePreview ? 'text-2xl' : 'text-xl md:text-3xl'} font-medium text-slate-500`}>
               {data.personal.headline}
             </h2>
-            <p className={`${isMobilePreview ? 'text-lg mx-auto' : 'text-base md:text-lg mx-auto md:mx-0'} text-slate-600 leading-relaxed max-w-2xl`}>
-              {data.personal.bio}
-            </p>
+            <div 
+              className={`${isMobilePreview ? 'text-lg mx-auto' : 'text-base md:text-lg mx-auto md:mx-0'} text-slate-600 leading-relaxed max-w-2xl [&_b]:font-bold [&_i]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_a]:text-blue-600 [&_a]:underline`}
+              dangerouslySetInnerHTML={{ __html: data.personal.bio }}
+            />
             
             <div className={`flex flex-col items-center ${isMobilePreview ? '' : 'md:items-start'} gap-4 pt-4`}>
               {data.personal.location && (
@@ -91,36 +123,23 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
                     <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>WhatsApp</span>
                   </a>
                 )}
-                {data.social.github && (
-                  <a href={data.social.github} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 transition-colors">
-                    <img src="/github.webp" alt="GitHub" className="w-5 h-5 object-contain" />
-                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>GitHub</span>
-                  </a>
-                )}
-                {data.social.linkedin && (
-                  <a href={data.social.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-slate-500 hover:text-emerald-600 transition-colors">
-                    <img src="/linkedin.webp" alt="LinkedIn" className="w-5 h-5 object-contain" />
-                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>LinkedIn</span>
-                  </a>
-                )}
-                {data.social.twitter && (
-                  <a href={data.social.twitter} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-slate-500 hover:text-sky-500 transition-colors">
-                    <img src="/twiter.webp" alt="Twitter" className="w-5 h-5 object-contain" />
-                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>Twitter</span>
-                  </a>
-                )}
-                {data.social.instagram && (
-                  <a href={data.social.instagram} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-slate-500 hover:text-pink-600 transition-colors">
-                    <img src="/instagram.webp" alt="Instagram" className="w-5 h-5 object-contain" />
-                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>Instagram</span>
-                  </a>
-                )}
-                {data.social.facebook && (
-                  <a href={data.social.facebook} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-slate-500 hover:text-blue-600 transition-colors">
-                    <img src="/facebook.webp" alt="Facebook" className="w-5 h-5 object-contain" />
-                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>Facebook</span>
-                  </a>
-                )}
+                {data.social.map(social => {
+                  let iconSrc = "/github.webp";
+                  let hoverColor = "hover:text-emerald-600";
+                  
+                  if (social.platform === "GitHub") { iconSrc = "/github.webp"; hoverColor = "hover:text-slate-900"; }
+                  else if (social.platform === "LinkedIn") { iconSrc = "/linkedin.webp"; hoverColor = "hover:text-emerald-600"; }
+                  else if (social.platform === "Twitter") { iconSrc = "/twiter.webp"; hoverColor = "hover:text-sky-500"; }
+                  else if (social.platform === "Instagram") { iconSrc = "/instagram.webp"; hoverColor = "hover:text-pink-600"; }
+                  else if (social.platform === "Facebook") { iconSrc = "/facebook.webp"; hoverColor = "hover:text-blue-600"; }
+
+                  return (
+                    <a key={social.id} href={social.url} target="_blank" rel="noreferrer" className={`flex items-center gap-1.5 text-slate-500 transition-colors ${hoverColor}`}>
+                      <img src={iconSrc} alt={social.platform} className="w-5 h-5 object-contain" />
+                      <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>{social.platform}</span>
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -128,6 +147,45 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
       </section>
 
       <main className={`max-w-5xl mx-auto px-4 py-8 space-y-16 ${isMobilePreview ? '' : 'md:px-6 md:py-20 md:space-y-24'}`}>
+        {/* SERVICES */}
+        {data.services && data.services.length > 0 && (
+          <section id="services" className="space-y-8">
+            <div className="flex items-center gap-3 border-b pb-4">
+              <div className="text-emerald-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+              </div>
+              <h3 className="text-2xl font-bold text-slate-800">Services</h3>
+            </div>
+            <div className={`grid grid-cols-1 ${isMobilePreview ? '' : 'md:grid-cols-2 lg:grid-cols-3'} gap-6`}>
+              {data.services.map((service) => (
+                <div key={service.id} className="group bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all duration-300 flex flex-col h-full">
+                  <div className="flex-1 space-y-3">
+                    <h4 className="text-xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">{service.title}</h4>
+                    {service.description && (
+                      <div 
+                        className="text-slate-600 leading-relaxed text-sm prose prose-sm max-w-none prose-emerald [&>ul]:list-disc [&>ul]:pl-5 [&_a]:text-emerald-600 [&_a]:underline"
+                        dangerouslySetInnerHTML={{ __html: service.description }}
+                      />
+                    )}
+                  </div>
+                  {service.link && (
+                    <div className="pt-6 mt-auto">
+                      <a 
+                        href={service.link} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 px-4 py-2 rounded-lg transition-colors"
+                      >
+                        Contact Me <ExternalLink size={16} />
+                      </a>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* SKILLS */}
         {skillsArray.length > 0 && (
           <section className="space-y-6">
@@ -137,7 +195,11 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
             </div>
             <div className="flex flex-wrap gap-3">
               {skillsArray.map((skill, i) => (
-                <span key={i} className="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-sm font-medium shadow-sm">
+                <span 
+                  key={i} 
+                  className="group flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-50 to-white border border-emerald-100 hover:border-emerald-300 text-slate-700 hover:text-emerald-800 rounded-xl text-sm font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 cursor-default"
+                >
+                  <span className="block w-2 h-2 min-w-[8px] min-h-[8px] rounded-full bg-emerald-500 group-hover:bg-emerald-600 group-hover:scale-125 transition-transform duration-300 shadow-sm" style={{ backgroundColor: '#10b981' }}></span>
                   {skill}
                 </span>
               ))}
@@ -160,13 +222,104 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
                     <div className={`flex flex-col ${isMobilePreview ? '' : 'md:flex-row md:items-center'} justify-between gap-2`}>
                       <h4 className="text-xl font-bold text-slate-900">{exp.role}</h4>
                       <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full w-fit">
-                        {exp.startDate} - {exp.endDate}
+                        {exp.startMonth} {exp.startYear} - {exp.current ? 'Sekarang' : `${exp.endMonth} ${exp.endYear}`}
                       </span>
                     </div>
-                    <h5 className="text-lg font-medium text-slate-600">{exp.company}</h5>
-                    <p className="text-slate-600 leading-relaxed pt-2">
-                      {exp.description}
-                    </p>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-slate-600">
+                      <h5 className="text-lg font-medium">{exp.company}</h5>
+                      {exp.location && (
+                        <>
+                          <span className="hidden sm:inline text-slate-300">•</span>
+                          <span className="text-sm">{exp.location}</span>
+                        </>
+                      )}
+                    </div>
+                    {exp.description && (
+                      <div 
+                        className="text-slate-600 leading-relaxed pt-2 prose prose-sm max-w-none prose-emerald [&>ul]:list-disc [&>ul]:pl-5 [&_a]:text-emerald-600 [&_a]:underline"
+                        dangerouslySetInnerHTML={{ __html: exp.description }}
+                      />
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ORGANIZATION */}
+        {data.organization && data.organization.length > 0 && (
+          <section id="organization" className="space-y-8">
+            <div className="flex items-center gap-3 border-b pb-4">
+              <Users className="text-emerald-600" size={28} />
+              <h3 className="text-2xl font-bold text-slate-800">Organization</h3>
+            </div>
+            <div className="space-y-8 pl-2">
+              {data.organization.map((org, i) => (
+                <div key={org.id} className="relative border-l-2 border-emerald-200 pl-6 pb-2">
+                  <div className="absolute w-3 h-3 bg-emerald-500 rounded-full -left-[7px] top-2 shadow-[0_0_0_4px_white]"></div>
+                  <div className="space-y-2">
+                    <div className={`flex flex-col ${isMobilePreview ? '' : 'md:flex-row md:items-center'} justify-between gap-2`}>
+                      <h4 className="text-xl font-bold text-slate-900">{org.role}</h4>
+                      <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full w-fit">
+                        {org.startMonth} {org.startYear} - {org.current ? 'Saat ini' : `${org.endMonth} ${org.endYear}`}
+                      </span>
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-slate-600">
+                      <h5 className="text-lg font-medium">{org.name}</h5>
+                      {org.location && (
+                        <>
+                          <span className="hidden sm:inline text-slate-300">•</span>
+                          <span className="text-sm">{org.location}</span>
+                        </>
+                      )}
+                    </div>
+                    {org.description && (
+                      <div 
+                        className="text-slate-600 leading-relaxed pt-2 prose prose-sm max-w-none prose-emerald [&>ul]:list-disc [&>ul]:pl-5 [&_a]:text-emerald-600 [&_a]:underline"
+                        dangerouslySetInnerHTML={{ __html: org.description }}
+                      />
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* EDUCATION */}
+        {data.education.length > 0 && (
+          <section id="education" className="space-y-8">
+            <div className="flex items-center gap-3 border-b pb-4">
+              <GraduationCap className="text-emerald-600" size={28} />
+              <h3 className="text-2xl font-bold text-slate-800">Education</h3>
+            </div>
+            <div className="space-y-8 pl-2">
+              {data.education.map((edu) => (
+                <div key={edu.id} className="relative border-l-2 border-emerald-200 pl-6 pb-2">
+                  <div className="absolute w-3 h-3 bg-emerald-500 rounded-full -left-[7px] top-2 shadow-[0_0_0_4px_white]"></div>
+                  <div className="space-y-2">
+                    <div className={`flex flex-col ${isMobilePreview ? '' : 'md:flex-row md:items-center'} justify-between gap-2`}>
+                      <h4 className="text-xl font-bold text-slate-900">{edu.school}</h4>
+                      <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full w-fit">
+                        {edu.startMonth} {edu.startYear} - {edu.current ? 'Sekarang' : `${edu.endMonth} ${edu.endYear}`}
+                      </span>
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-slate-600">
+                      <h5 className="text-lg font-medium">{edu.degree} {edu.level ? `(${edu.level})` : ''}</h5>
+                      {edu.location && (
+                        <>
+                          <span className="hidden sm:inline text-slate-300">•</span>
+                          <span className="text-sm">{edu.location}</span>
+                        </>
+                      )}
+                    </div>
+                    {edu.description && (
+                      <div 
+                        className="text-slate-600 leading-relaxed pt-2 prose prose-sm max-w-none prose-emerald [&>ul]:list-disc [&>ul]:pl-5 [&_a]:text-emerald-600 [&_a]:underline"
+                        dangerouslySetInnerHTML={{ __html: edu.description }}
+                      />
+                    )}
                   </div>
                 </div>
               ))}
@@ -182,9 +335,27 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
               <h3 className="text-2xl font-bold text-slate-800">Project preview</h3>
             </div>
             <div className={`grid grid-cols-1 ${isMobilePreview ? '' : 'md:grid-cols-3'} gap-8`}>
-              {data.projects.map((proj) => (
+              {data.projects.map((proj) => {
+                let youtubeId = null;
+                if (proj.videoUrl) {
+                  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                  const match = proj.videoUrl.match(regExp);
+                  youtubeId = (match && match[2].length === 11) ? match[2] : null;
+                }
+                
+                return (
                 <div key={proj.id} className="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
-                  {proj.imageUrl && (
+                  {youtubeId ? (
+                    <div className="h-48 overflow-hidden bg-slate-100 relative">
+                      <iframe 
+                        className="w-full h-full absolute inset-0" 
+                        src={`https://www.youtube.com/embed/${youtubeId}`} 
+                        title="YouTube video player" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  ) : proj.imageUrl ? (
                     <div className="h-48 overflow-hidden bg-slate-100">
                       <img 
                         src={proj.imageUrl} 
@@ -192,7 +363,7 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
-                  )}
+                  ) : null}
                   <div className="p-6 space-y-4">
                     <div className="flex items-start justify-between gap-4">
                       <h4 className="text-xl font-bold text-slate-900">{proj.title}</h4>
@@ -202,9 +373,10 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
                         </a>
                       )}
                     </div>
-                    <p className="text-slate-600 line-clamp-3 leading-relaxed">
-                      {proj.description}
-                    </p>
+                    <div 
+                      className="text-slate-600 line-clamp-3 leading-relaxed prose prose-sm max-w-none prose-emerald [&>ul]:list-disc [&>ul]:pl-5 [&_a]:text-emerald-600 [&_a]:underline"
+                      dangerouslySetInnerHTML={{ __html: proj.description }}
+                    />
                     {proj.techStack && (
                       <div className="flex flex-wrap gap-2 pt-2">
                         {proj.techStack.split(",").map((tech, i) => (
@@ -213,6 +385,84 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
                           </span>
                         ))}
                       </div>
+                    )}
+                  </div>
+                </div>
+              );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* CERTIFICATIONS */}
+        {data.certifications && data.certifications.length > 0 && (
+          <section id="certifications" className="space-y-8">
+            <div className="flex items-center gap-3 border-b pb-4">
+              <div className="text-emerald-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+              </div>
+              <h3 className="text-2xl font-bold text-slate-800">Certifications</h3>
+            </div>
+            <div className={`grid grid-cols-1 ${isMobilePreview ? '' : 'md:grid-cols-2'} gap-8`}>
+              {data.certifications.map((cert) => (
+                <div key={cert.id} className="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+                  {cert.imageUrl && (
+                    <div className="h-48 overflow-hidden bg-slate-100">
+                      <img 
+                        src={cert.imageUrl} 
+                        alt={cert.title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6 space-y-4">
+                    <h4 className="text-xl font-bold text-slate-900">{cert.title}</h4>
+                    {cert.description && (
+                      <div 
+                        className="text-slate-600 line-clamp-3 leading-relaxed prose prose-sm max-w-none prose-emerald [&>ul]:list-disc [&>ul]:pl-5 [&_a]:text-emerald-600 [&_a]:underline"
+                        dangerouslySetInnerHTML={{ __html: cert.description }}
+                      />
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* AWARDS */}
+        {data.awards && data.awards.length > 0 && (
+          <section id="awards" className="space-y-8">
+            <div className="flex items-center gap-3 border-b pb-4">
+              <div className="text-emerald-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+              </div>
+              <h3 className="text-2xl font-bold text-slate-800">Awards</h3>
+            </div>
+            <div className={`grid grid-cols-1 ${isMobilePreview ? '' : 'md:grid-cols-2'} gap-8`}>
+              {data.awards.map((award) => (
+                <div key={award.id} className="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+                  {award.imageUrl && (
+                    <div className="h-48 overflow-hidden bg-slate-100">
+                      <img 
+                        src={award.imageUrl} 
+                        alt={award.title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6 space-y-4">
+                    <div className="space-y-1">
+                      <h4 className="text-xl font-bold text-slate-900">{award.title}</h4>
+                      <p className="text-sm font-medium text-emerald-600">
+                        {award.year} {award.issuer ? `• ${award.issuer}` : ''}
+                      </p>
+                    </div>
+                    {award.description && (
+                      <div 
+                        className="text-slate-600 leading-relaxed pt-1 prose prose-sm max-w-none prose-emerald [&>ul]:list-disc [&>ul]:pl-5 [&_a]:text-emerald-600 [&_a]:underline"
+                        dangerouslySetInnerHTML={{ __html: award.description }}
+                      />
                     )}
                   </div>
                 </div>
@@ -237,31 +487,20 @@ export function PortfolioViewer({ data, isMobilePreview = false }: { data: Portf
                   <img src="/whatsapp.webp" alt="WhatsApp" className="w-6 h-6 object-contain" />
                 </a>
               )}
-              {data.social.github && (
-                <a href={data.social.github} target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity" title="GitHub">
-                  <img src="/github.webp" alt="GitHub" className="w-6 h-6 object-contain" />
-                </a>
-              )}
-              {data.social.linkedin && (
-                <a href={data.social.linkedin} target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity" title="LinkedIn">
-                  <img src="/linkedin.webp" alt="LinkedIn" className="w-6 h-6 object-contain" />
-                </a>
-              )}
-              {data.social.twitter && (
-                <a href={data.social.twitter} target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity" title="Twitter">
-                  <img src="/twiter.webp" alt="Twitter" className="w-6 h-6 object-contain" />
-                </a>
-              )}
-              {data.social.instagram && (
-                <a href={data.social.instagram} target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity" title="Instagram">
-                  <img src="/instagram.webp" alt="Instagram" className="w-6 h-6 object-contain" />
-                </a>
-              )}
-              {data.social.facebook && (
-                <a href={data.social.facebook} target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity" title="Facebook">
-                  <img src="/facebook.webp" alt="Facebook" className="w-6 h-6 object-contain" />
-                </a>
-              )}
+              {data.social.map(social => {
+                let iconSrc = "/github.webp";
+                if (social.platform === "GitHub") iconSrc = "/github.webp";
+                else if (social.platform === "LinkedIn") iconSrc = "/linkedin.webp";
+                else if (social.platform === "Twitter") iconSrc = "/twiter.webp";
+                else if (social.platform === "Instagram") iconSrc = "/instagram.webp";
+                else if (social.platform === "Facebook") iconSrc = "/facebook.webp";
+
+                return (
+                  <a key={social.id} href={social.url} target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity" title={social.platform}>
+                    <img src={iconSrc} alt={social.platform} className="w-6 h-6 object-contain" />
+                  </a>
+                );
+              })}
           </div>
           <p>© {new Date().getFullYear()} {data.personal.name}. Built with PortoTree.</p>
         </div>

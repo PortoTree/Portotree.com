@@ -7,15 +7,32 @@ import { UploadCloud, Loader2 } from "lucide-react";
 interface ImageUploadProps {
   onUploadSuccess: (url: string) => void;
   className?: string;
+  customTrigger?: React.ReactNode;
 }
 
-export function ImageUpload({ onUploadSuccess, className = "" }: ImageUploadProps) {
+export function ImageUpload({ onUploadSuccess, className = "", customTrigger }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // Validate format (JPG, PNG)
+    const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+    if (!validTypes.includes(file.type)) {
+      alert("Format file tidak valid. Harap unggah format JPG atau PNG.");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    // Validate size (Max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      alert("Ukuran file terlalu besar. Maksimal 5MB.");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
 
     setIsUploading(true);
 
@@ -51,26 +68,32 @@ export function ImageUpload({ onUploadSuccess, className = "" }: ImageUploadProp
     <div className={`flex flex-col gap-2 ${className}`}>
       <input
         type="file"
-        accept="image/*"
+        accept="image/jpeg, image/png"
         ref={fileInputRef}
         onChange={handleUpload}
         className="hidden"
       />
-      <Button 
-        type="button" 
-        variant="outline" 
-        size="sm"
-        disabled={isUploading}
-        onClick={() => fileInputRef.current?.click()}
-        className="w-full flex items-center justify-center gap-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
-      >
-        {isUploading ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
-        ) : (
-          <UploadCloud className="w-4 h-4" />
-        )}
-        {isUploading ? "Mengunggah..." : "Upload Gambar"}
-      </Button>
+      {customTrigger ? (
+        <div onClick={() => !isUploading && fileInputRef.current?.click()} className={isUploading ? "opacity-50 cursor-wait pointer-events-none" : "cursor-pointer"}>
+          {customTrigger}
+        </div>
+      ) : (
+        <Button 
+          type="button" 
+          variant="outline" 
+          size="sm"
+          disabled={isUploading}
+          onClick={() => fileInputRef.current?.click()}
+          className="w-full flex items-center justify-center gap-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
+        >
+          {isUploading ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <UploadCloud className="w-4 h-4" />
+          )}
+          {isUploading ? "Mengunggah..." : "Upload Gambar"}
+        </Button>
+      )}
     </div>
   );
 }

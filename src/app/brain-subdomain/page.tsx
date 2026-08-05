@@ -37,7 +37,7 @@ export default function BrainDashboard() {
             </div>
             {/* The button opens the builder in template mode (e.g., using pageId='template-draft' or mode='template') */}
             <Link 
-              href="/portfolio-builder?mode=template"
+              href="/personal/portfolio-builder?mode=template"
               className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-lg font-medium shadow-sm transition-colors"
             >
               <PlusCircle className="w-5 h-5" />
@@ -55,7 +55,7 @@ export default function BrainDashboard() {
                 <h3 className="font-semibold text-lg">Han Nguyen Theme (Draft)</h3>
                 <p className="text-sm text-gray-500">Dibuat secara manual melalui builder.</p>
                 <div className="mt-2 flex gap-2">
-                  <Link href="/portfolio-builder?mode=template&id=1" className="text-sm text-purple-600 font-medium hover:underline">
+                  <Link href="/personal/portfolio-builder?mode=template&id=1" className="text-sm text-purple-600 font-medium hover:underline">
                     Edit Template
                   </Link>
                 </div>
