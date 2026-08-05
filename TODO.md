@@ -94,4 +94,14 @@
   - `C:\PortoTree\src\app\actions\auth.ts`
   - `C:\PortoTree\src\app\register\page.tsx`
   - `C:\PortoTree\src\app\verify-email\page.tsx`
-  - `C:\PortoTree\src\middleware.ts`
+- `C:\PortoTree\src\middleware.ts`
+
+## Kategori: Frontend (SEO & Meta Data)
+- **Status:** Selesai
+- **Perubahan:**
+  - Membuat `layout.tsx` khusus untuk subdomain `resume.portotree.com` di dalam `src/app/resume-subdomain/`.
+  - Membuat `layout.tsx` khusus untuk subdomain `portofolio.portotree.com` di dalam `src/app/portofolio-subdomain/`.
+  - Menetapkan `metadata` (title & description) yang spesifik dan unik untuk masing-masing subdomain agar tidak lagi menggunakan metadata global dari root layout.
+- **File Terdampak:**
+  - `C:\PortoTree\src\app\resume-subdomain\layout.tsx` [NEW]
+  - `C:\PortoTree\src\app\portofolio-subdomain\layout.tsx` [NEW]
