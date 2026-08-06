@@ -434,9 +434,14 @@ export function PortfolioDataForm({ data, onChange }: Props) {
               <Input value={data.personal.email} onChange={(e) => handleChange('personal', 'email', e.target.value)} type="email" placeholder="nama@contoh.com" className={`h-11 ${!data.personal.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
             </div>
             <div className="space-y-2">
-              <Label className="text-sm text-slate-700">Phone Number <span className="text-red-500">*</span></Label>
-              <Input value={data.personal.phone} onChange={(e) => handleChange('personal', 'phone', e.target.value)} placeholder="+1 234 567 8900" className={`h-11 ${!data.personal.phone ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
+              <Label className="text-sm text-slate-700">WhatsApp <span className="text-slate-400 font-normal text-xs">(Optional)</span></Label>
+              <Input value={data.personal.phone} onChange={(e) => handleChange('personal', 'phone', e.target.value)} placeholder="+1 234 567 8900" className="h-11" />
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-sm text-slate-700">Lokasi <span className="text-red-500">*</span></Label>
+            <Input value={data.personal.location} onChange={(e) => handleChange('personal', 'location', e.target.value)} placeholder="Jakarta, Indonesia" className={`h-11 ${!data.personal.location ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
           </div>
 
           <div className="space-y-2">
@@ -615,7 +620,6 @@ export function PortfolioDataForm({ data, onChange }: Props) {
           title="Skills"
           icon={Wrench}
           badgeCount={data.skills ? data.skills.split(',').filter(Boolean).length : 0}
-          hasError={!data.skills}
         >
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
@@ -637,8 +641,6 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             >
               <Plus size={16} className="mr-2" /> Atur Skill
             </Button>
-            
-            {!data.skills && <p className="text-xs text-red-500 text-center">Skill wajib diisi agar portofolio lebih menarik</p>}
           </div>
 
           <SkillModal
