@@ -50,3 +50,4 @@ export interface BuilderSidebarProps {
     state: ReturnType<typeof useBuilderState>;
     activeCanvas: 'homepage' | 'header' | 'footer';
 }
+
