@@ -78,7 +78,7 @@ export function EducationModal({ isOpen, onClose, onSave, initialData }: Props) 
 
   const handleSave = () => {
     // Basic validation
-    if (!formData.level || !formData.school || !formData.degree || !formData.startMonth || !formData.startYear) {
+    if (!formData.level || !formData.school || !formData.startYear) {
       toast.error("Mohon lengkapi field yang wajib diisi (*)");
       return;
     }
@@ -120,7 +120,7 @@ export function EducationModal({ isOpen, onClose, onSave, initialData }: Props) 
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-slate-700">Program Pendidikan <span className="text-red-500">*</span></Label>
+            <Label className="text-slate-700">Program Pendidikan</Label>
             <Input 
               placeholder="Teknik Informatika"
               value={formData.degree}

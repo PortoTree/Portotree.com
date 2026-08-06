@@ -74,7 +74,7 @@ export function ExperienceModal({ isOpen, onClose, onSave, initialData }: Props)
 
   const handleSave = () => {
     // Basic validation
-    if (!formData.role || !formData.company || !formData.location || !formData.startMonth || !formData.startYear) {
+    if (!formData.role || !formData.company || !formData.location || !formData.startYear) {
       toast.error("Mohon lengkapi field yang wajib diisi (*)");
       return;
     }

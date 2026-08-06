@@ -74,7 +74,7 @@ export function OrganizationModal({ isOpen, onClose, onSave, initialData }: Prop
 
   const handleSave = () => {
     // Basic validation
-    if (!formData.role || !formData.name || !formData.startMonth || !formData.startYear) {
+    if (!formData.role || !formData.name || !formData.startYear) {
       toast.error("Mohon lengkapi field yang wajib diisi (*)");
       return;
     }
