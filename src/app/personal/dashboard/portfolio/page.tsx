@@ -81,7 +81,7 @@ export default function PortfolioPage() {
             if (dataSection?.config) {
               const parsed = { ...dataSection.config };
               const existing = parsed.social?.map((s: any) => s.platform) || [];
-              const missing = defaultPortfolioData.social.filter(s => !existing.includes(s.platform));
+              const missing = (defaultPortfolioData.social || []).filter(s => !existing.includes(s.platform));
               if (missing.length > 0) {
                 parsed.social = [...(parsed.social || []), ...missing];
               }
