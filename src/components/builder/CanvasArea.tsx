@@ -53,12 +53,34 @@ function BuilderContent() {
         } else {
           console.log('[DEBUG] User belum punya username (popup akan muncul saat pertama kali simpan)');
         }
+        
+        // Recover data from Firestore if local draft is John Doe or empty
+        if (result.success && result.data) {
+          const localDraft = localStorage.getItem('draft_template_sections');
+          const isLocalDefault = !localDraft || localDraft.includes('"name":"John Doe"');
+          if (isLocalDefault) {
+            console.log('[DEBUG] Local draft is default or empty. Restoring from Firestore...');
+            
+            // Reconstruct sections with restored data
+            const restoredSections = [{
+              id: "portfolio-data-1",
+              type: "PORTFOLIO_DATA",
+              order: 999,
+              isActive: false, // hidden section
+              config: result.data as any,
+              elements: []
+            }];
+            setSections(restoredSections);
+            setLocalData(result.data as PortfolioData);
+            setDataLoaded(true);
+          }
+        }
       } catch (err) {
-        console.error('[DEBUG] Error checking username:', err);
+        console.error('[DEBUG] Error checking username or restoring data:', err);
       }
     }
     checkExistingUsername();
-  }, []);
+  }, [setSections]);
 
   // Handler saat username berhasil di-publish
   const handleUsernameComplete = useCallback(async (username: string) => {
@@ -245,7 +267,7 @@ function BuilderContent() {
               </div>
             )}
             
-            <PortfolioViewer data={localData} isMobilePreview={previewMode === 'mobile'} />
+            <PortfolioViewer data={localData} isMobilePreview={previewMode === 'mobile'} showPlaceholders={true} />
           </div>
         </div>
 

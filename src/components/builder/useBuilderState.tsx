@@ -11,7 +11,9 @@ import {
 } from "lucide-react";
 import { CREATIVE_PORTFOLIO_TEMPLATE } from "@/lib/templates/creativePortfolio";
 import { COMPLETE_PORTFOLIO_TEMPLATE } from "@/lib/templates/completePortfolio";
+import { useToast } from "@/hooks/use-toast";
 import { GORIB_PORTFOLIO_TEMPLATE } from "@/lib/templates/goribPortfolio";
+import { defaultPortfolioData } from "@/lib/portfolioData";
 
 // Import types & constants
 import { SectionElement, ELEMENT_TYPE_MAP } from "@/components/storefront/sections/BuilderSection";
@@ -363,7 +365,7 @@ export function useBuilderState() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pageId = searchParams?.get("pageId");
-  const isTemplateMode = searchParams?.get("mode") === "template";
+  const isTemplateMode = true; // Selalu true karena ini khusus Portfolio Builder
 
   const { data: initialSections, loading: loadingSections, refresh: refreshSections } = useCacheFetch<Section[]>(pageId || isTemplateMode ? null : "/api/storefront/sections", "storefront_sections", 0);
   const { data: customPage, loading: loadingPage, refresh: refreshPage } = useCacheFetch<any>(pageId ? `/api/storefront/pages/${pageId}` : null, `storefront_page_${pageId}`, 0);
@@ -783,7 +785,17 @@ export function useBuilderState() {
     } else if (isTemplateMode && !hasInitialized.current) {
       const localDraft = localStorage.getItem("draft_template_sections");
       if (localDraft) {
-        setSections(sanitizeSections(JSON.parse(localDraft)));
+        const parsedSections = JSON.parse(localDraft);
+        const dataSection = parsedSections.find((s: any) => s.type === 'PORTFOLIO_DATA');
+        if (dataSection?.config) {
+          const parsed = dataSection.config;
+          const existing = parsed.social?.map((s: any) => s.platform) || [];
+          const missing = defaultPortfolioData.social.filter((s: any) => !existing.includes(s.platform));
+          if (missing.length > 0) {
+            parsed.social = [...(parsed.social || []), ...missing];
+          }
+        }
+        setSections(sanitizeSections(parsedSections));
         console.log('[Builder] Init: Loaded draft template from localStorage');
       } else {
         setSections(sanitizeSections(GORIB_PORTFOLIO_TEMPLATE));

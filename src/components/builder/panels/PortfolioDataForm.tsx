@@ -96,7 +96,15 @@ export function PortfolioDataForm({ data, onChange }: Props) {
   const [editingProjId, setEditingProjId] = React.useState<string | null>(null);
 
   const [addSectionModalOpen, setAddSectionModalOpen] = React.useState(false);
-  const [addedSections, setAddedSections] = React.useState<string[]>(['education', 'experience', 'organization', 'projects', 'social', 'skills']);
+  const [addedSections, setAddedSections] = React.useState<string[]>(
+    data.activeSections || ['education', 'experience', 'organization', 'projects', 'social', 'skills']
+  );
+
+  React.useEffect(() => {
+    if (data.activeSections) {
+      setAddedSections(data.activeSections);
+    }
+  }, [data.activeSections]);
 
   const [certModalOpen, setCertModalOpen] = React.useState(false);
   const [editingCertId, setEditingCertId] = React.useState<string | null>(null);
@@ -377,10 +385,10 @@ export function PortfolioDataForm({ data, onChange }: Props) {
           id="personal"
           title="Informasi Pribadi"
           icon={User}
-          hasError={!data.personal.name || !data.personal.bio || !data.personal.photoUrl || !data.personal.email}
+          hasError={!data.personal.name || !data.personal.headline || !data.personal.bio || !data.personal.photoUrl || !data.personal.email || !data.personal.phone}
         >
           <div className="space-y-2">
-            <Label className="text-sm text-slate-700">Foto Profil</Label>
+            <Label className="text-sm text-slate-700">Foto Profil <span className="text-red-500">*</span></Label>
             <div className="border border-slate-200 rounded-xl p-3 flex flex-col sm:flex-row items-center gap-4">
               <div className="relative w-16 h-16 rounded-full border-2 border-dashed border-slate-300 flex items-center justify-center bg-slate-50 flex-shrink-0">
                 {data.personal.photoUrl ? (
@@ -411,28 +419,28 @@ export function PortfolioDataForm({ data, onChange }: Props) {
           </div>
 
           <div className="space-y-2">
-            <Label className="text-sm text-slate-700">Full Name</Label>
+            <Label className="text-sm text-slate-700">Nama lengkap <span className="text-red-500">*</span></Label>
             <Input value={data.personal.name} onChange={(e) => handleChange('personal', 'name', e.target.value)} className={`h-11 ${!data.personal.name ? 'border-red-500 focus-visible:ring-red-500' : ''}`} placeholder="worldfarm" />
           </div>
 
           <div className="space-y-2">
-            <Label className="text-sm text-slate-700">Professional Title</Label>
-            <Input value={data.personal.headline} onChange={(e) => handleChange('personal', 'headline', e.target.value)} placeholder="Senior Developer" className="h-11" />
+            <Label className="text-sm text-slate-700">Professional Title <span className="text-red-500">*</span></Label>
+            <Input value={data.personal.headline} onChange={(e) => handleChange('personal', 'headline', e.target.value)} placeholder="Senior Developer" className={`h-11 ${!data.personal.headline ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-sm text-slate-700">Email</Label>
+              <Label className="text-sm text-slate-700">Email <span className="text-red-500">*</span></Label>
               <Input value={data.personal.email} onChange={(e) => handleChange('personal', 'email', e.target.value)} type="email" placeholder="nama@contoh.com" className={`h-11 ${!data.personal.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
             </div>
             <div className="space-y-2">
-              <Label className="text-sm text-slate-700">Phone Number</Label>
-              <Input value={data.personal.phone} onChange={(e) => handleChange('personal', 'phone', e.target.value)} placeholder="+1 234 567 8900" className="h-11" />
+              <Label className="text-sm text-slate-700">Phone Number <span className="text-red-500">*</span></Label>
+              <Input value={data.personal.phone} onChange={(e) => handleChange('personal', 'phone', e.target.value)} placeholder="+1 234 567 8900" className={`h-11 ${!data.personal.phone ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label className="text-sm text-slate-700">Tujuan Tombol "Hire Me"</Label>
+            <Label className="text-sm text-slate-700">Tujuan Tombol "Hire Me" <span className="text-red-500">*</span></Label>
             <select
               className="w-full h-11 px-3 border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:border-emerald-600 text-sm bg-white"
               value={data.personal.hireMeLink || 'email'}
@@ -444,12 +452,14 @@ export function PortfolioDataForm({ data, onChange }: Props) {
           </div>
 
           <div className="space-y-2">
-            <Label className="text-sm text-slate-700">About Me</Label>
-              <RichTextEditor 
-                value={data.personal.bio} 
-                onChange={(val) => handleChange('personal', 'bio', val)} 
-                placeholder="Tell us about yourself and your professional journey..."
-              />
+            <Label className="text-sm text-slate-700">Ringkasan / Bio <span className="text-red-500">*</span></Label>
+              <div className={!data.personal.bio ? 'border border-red-500 rounded-md' : ''}>
+                <RichTextEditor 
+                  value={data.personal.bio} 
+                  onChange={(val) => handleChange('personal', 'bio', val)} 
+                  placeholder="Tell us about yourself and your professional journey..."
+                />
+              </div>
             </div>
         </AccordionSection>
 
@@ -933,17 +943,28 @@ export function PortfolioDataForm({ data, onChange }: Props) {
           onClose={() => setAddSectionModalOpen(false)}
           activeSections={addedSections}
           onAddSection={(sec) => {
-            setAddedSections(prev => [...prev, sec]);
+            const newAdded = [...addedSections, sec];
+            setAddedSections(newAdded);
             setOpenSection(sec);
+            if (!data[sec] && data[sec] !== "") {
+              if (sec === 'skills') {
+                onChange({ ...data, skills: "", activeSections: newAdded });
+              } else {
+                onChange({ ...data, [sec]: [], activeSections: newAdded });
+              }
+            } else {
+              onChange({ ...data, activeSections: newAdded });
+            }
           }}
           onRemoveSection={(sec) => {
-            setAddedSections(prev => prev.filter(s => s !== sec));
+            const newAdded = addedSections.filter(s => s !== sec);
+            setAddedSections(newAdded);
             if (sec === 'skills') {
-              onChange({ ...data, skills: '' });
+              onChange({ ...data, skills: undefined, activeSections: newAdded });
             } else if (sec === 'personal') {
               // Cannot remove personal section
             } else {
-              onChange({ ...data, [sec]: [] });
+              onChange({ ...data, [sec]: undefined, activeSections: newAdded });
             }
           }}
         />

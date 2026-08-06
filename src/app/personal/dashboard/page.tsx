@@ -11,13 +11,6 @@ export default function DashboardPage() {
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Selamat datang kembali!</h1>
           <p className="text-slate-500 mt-1">Berikut ringkasan portofolio Anda hari ini.</p>
         </div>
-        <Link 
-          href="/personal/dashboard/storefront" 
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 text-white font-bold uppercase tracking-widest text-sm rounded-xl hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20"
-        >
-          <Edit3 className="w-5 h-5" />
-          Edit Portofolio
-        </Link>
       </div>
 
       {/* METRICS */}
@@ -29,7 +22,7 @@ export default function DashboardPage() {
               <Eye className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-4xl font-black text-slate-900">1,248</div>
+          <div className="text-3xl font-bold tracking-tight text-slate-800">1,248</div>
           <div className="text-sm text-emerald-600 font-medium mt-2 flex items-center gap-1">
             <TrendingUp className="w-4 h-4" /> +12% dari minggu lalu
           </div>
@@ -42,7 +35,7 @@ export default function DashboardPage() {
               <MousePointerClick className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-4xl font-black text-slate-900">384</div>
+          <div className="text-3xl font-bold tracking-tight text-slate-800">384</div>
           <div className="text-sm text-emerald-600 font-medium mt-2 flex items-center gap-1">
             <TrendingUp className="w-4 h-4" /> +5% dari minggu lalu
           </div>
@@ -55,7 +48,7 @@ export default function DashboardPage() {
               <Globe className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-4xl font-black text-slate-900">892</div>
+          <div className="text-3xl font-bold tracking-tight text-slate-800">892</div>
           <div className="text-sm text-slate-500 font-medium mt-2">
             Dari 12 negara
           </div>

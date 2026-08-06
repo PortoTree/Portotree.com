@@ -5,30 +5,59 @@ import { PortfolioData, placeholderPortfolioData } from "@/lib/portfolioData";
 import { Mail, Phone, MapPin, ExternalLink, Code2, Briefcase, LinkIcon, Wrench, Layout, GraduationCap, Users } from "lucide-react";
 import { motion } from "framer-motion";
 
-export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { data: PortfolioData; isMobilePreview?: boolean }) {
+export function PortfolioViewer({ 
+  data: rawData, 
+  isMobilePreview = false,
+  showPlaceholders = false
+}: { 
+  data: PortfolioData; 
+  isMobilePreview?: boolean;
+  showPlaceholders?: boolean;
+}) {
+  const activeSections = rawData.activeSections || ['education', 'experience', 'organization', 'projects', 'social', 'skills'];
+
   const data = {
     personal: {
-      name: rawData.personal?.name || placeholderPortfolioData.personal.name,
-      headline: rawData.personal?.headline || placeholderPortfolioData.personal.headline,
-      bio: rawData.personal?.bio || placeholderPortfolioData.personal.bio,
-      email: rawData.personal?.email || placeholderPortfolioData.personal.email,
-      phone: rawData.personal?.phone || placeholderPortfolioData.personal.phone,
-      location: rawData.personal?.location || placeholderPortfolioData.personal.location,
-      photoUrl: rawData.personal?.photoUrl || placeholderPortfolioData.personal.photoUrl,
-      hireMeLink: rawData.personal?.hireMeLink || placeholderPortfolioData.personal.hireMeLink,
+      name: rawData.personal?.name || (showPlaceholders ? placeholderPortfolioData.personal.name : ""),
+      headline: rawData.personal?.headline || (showPlaceholders ? placeholderPortfolioData.personal.headline : ""),
+      bio: rawData.personal?.bio || (showPlaceholders ? placeholderPortfolioData.personal.bio : ""),
+      email: rawData.personal?.email || (showPlaceholders ? placeholderPortfolioData.personal.email : ""),
+      phone: rawData.personal?.phone || (showPlaceholders ? placeholderPortfolioData.personal.phone : ""),
+      location: rawData.personal?.location || (showPlaceholders ? placeholderPortfolioData.personal.location : ""),
+      photoUrl: rawData.personal?.photoUrl || (showPlaceholders ? placeholderPortfolioData.personal.photoUrl : ""),
+      hireMeLink: rawData.personal?.hireMeLink || (showPlaceholders ? placeholderPortfolioData.personal.hireMeLink : ""),
     },
-    social: rawData.social?.length > 0 ? rawData.social : placeholderPortfolioData.social,
-    experience: rawData.experience?.length > 0 ? rawData.experience : placeholderPortfolioData.experience,
-    education: rawData.education?.length > 0 ? rawData.education : placeholderPortfolioData.education,
-    organization: rawData.organization?.length > 0 ? rawData.organization : placeholderPortfolioData.organization,
-    projects: rawData.projects?.length > 0 ? rawData.projects : placeholderPortfolioData.projects,
-    certifications: rawData.certifications?.length > 0 ? rawData.certifications : placeholderPortfolioData.certifications,
-    awards: rawData.awards?.length > 0 ? rawData.awards : placeholderPortfolioData.awards,
-    services: rawData.services?.length > 0 ? rawData.services : placeholderPortfolioData.services,
-    skills: rawData.skills || placeholderPortfolioData.skills,
+    social: rawData.social?.length > 0 ? rawData.social : (showPlaceholders && activeSections.includes('social') ? placeholderPortfolioData.social : []),
+    experience: rawData.experience?.length > 0 ? rawData.experience : (showPlaceholders && activeSections.includes('experience') ? placeholderPortfolioData.experience : []),
+    education: rawData.education?.length > 0 ? rawData.education : (showPlaceholders && activeSections.includes('education') ? placeholderPortfolioData.education : []),
+    organization: rawData.organization?.length > 0 ? rawData.organization : (showPlaceholders && activeSections.includes('organization') ? placeholderPortfolioData.organization : []),
+    projects: rawData.projects?.length > 0 ? rawData.projects : (showPlaceholders && activeSections.includes('projects') ? placeholderPortfolioData.projects : []),
+    certifications: rawData.certifications?.length > 0 ? rawData.certifications : (showPlaceholders && activeSections.includes('certifications') ? placeholderPortfolioData.certifications : []),
+    awards: rawData.awards?.length > 0 ? rawData.awards : (showPlaceholders && activeSections.includes('awards') ? placeholderPortfolioData.awards : []),
+    services: rawData.services?.length > 0 ? rawData.services : (showPlaceholders && activeSections.includes('services') ? placeholderPortfolioData.services : []),
+    skills: rawData.skills || (showPlaceholders && activeSections.includes('skills') ? placeholderPortfolioData.skills : ""),
   };
 
   const skillsArray = data.skills.split(",").map((s) => s.trim()).filter(Boolean);
+
+  const BadgePlaceholder = () => (
+    <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ml-3 align-middle">
+      Placeholder
+    </span>
+  );
+
+  const isPlaceholder = {
+    personal: data.personal.name === placeholderPortfolioData.personal.name,
+    social: data.social === placeholderPortfolioData.social,
+    experience: data.experience === placeholderPortfolioData.experience,
+    education: data.education === placeholderPortfolioData.education,
+    organization: data.organization === placeholderPortfolioData.organization,
+    projects: data.projects === placeholderPortfolioData.projects,
+    certifications: data.certifications === placeholderPortfolioData.certifications,
+    awards: data.awards === placeholderPortfolioData.awards,
+    services: data.services === placeholderPortfolioData.services,
+    skills: data.skills === placeholderPortfolioData.skills,
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
@@ -137,7 +166,7 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
                   else if (social.platform === "TikTok") { iconSrc = "/tiktok.webp"; hoverColor = "hover:text-slate-900"; }
 
                   return (
-                    <a key={social.id} href={social.url} target="_blank" rel="noreferrer" className={`flex items-center gap-1.5 text-slate-500 transition-colors ${hoverColor}`}>
+                    <a key={social.id} href={social.url} target="_blank" rel="noreferrer" className={`flex items-center gap-1.5 text-slate-500 transition-colors ${hoverColor} ${isPlaceholder.social ? 'grayscale opacity-60' : ''}`}>
                       <img src={iconSrc} alt={social.platform} className="w-5 h-5 object-contain" />
                       <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>{social.platform}</span>
                     </a>
@@ -157,7 +186,10 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
               <div className="text-emerald-600">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
               </div>
-              <h3 className="text-2xl font-bold text-slate-800">Services</h3>
+              <h3 className="text-2xl font-bold text-slate-800">
+                Services
+                {isPlaceholder.services && <BadgePlaceholder />}
+              </h3>
             </div>
             <div className={`grid grid-cols-1 ${isMobilePreview ? '' : 'md:grid-cols-2 lg:grid-cols-3'} gap-6`}>
               {data.services.map((service) => (
@@ -194,7 +226,10 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
           <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} className="space-y-6">
             <div className="flex items-center gap-3 border-b pb-4">
               <Wrench className="text-emerald-600" size={28} />
-              <h3 className="text-2xl font-bold text-slate-800">Skills</h3>
+              <h3 className="text-2xl font-bold text-slate-800">
+                Skills
+                {isPlaceholder.skills && <BadgePlaceholder />}
+              </h3>
             </div>
             <div className="flex flex-wrap gap-3">
               {skillsArray.map((skill, i) => (
@@ -215,7 +250,10 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
           <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="experience" className="space-y-8">
             <div className="flex items-center gap-3 border-b pb-4">
               <Briefcase className="text-emerald-600" size={28} />
-              <h3 className="text-2xl font-bold text-slate-800">Experience</h3>
+              <h3 className="text-2xl font-bold text-slate-800">
+                Experience
+                {isPlaceholder.experience && <BadgePlaceholder />}
+              </h3>
             </div>
             <div className="space-y-8 pl-2">
               {data.experience.map((exp, i) => (
@@ -255,7 +293,10 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
           <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="organization" className="space-y-8">
             <div className="flex items-center gap-3 border-b pb-4">
               <Users className="text-emerald-600" size={28} />
-              <h3 className="text-2xl font-bold text-slate-800">Organization</h3>
+              <h3 className="text-2xl font-bold text-slate-800">
+                Organization
+                {isPlaceholder.organization && <BadgePlaceholder />}
+              </h3>
             </div>
             <div className="space-y-8 pl-2">
               {data.organization.map((org, i) => (
@@ -295,7 +336,10 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
           <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="education" className="space-y-8">
             <div className="flex items-center gap-3 border-b pb-4">
               <GraduationCap className="text-emerald-600" size={28} />
-              <h3 className="text-2xl font-bold text-slate-800">Education</h3>
+              <h3 className="text-2xl font-bold text-slate-800">
+                Education
+                {isPlaceholder.education && <BadgePlaceholder />}
+              </h3>
             </div>
             <div className="space-y-8 pl-2">
               {data.education.map((edu) => (
@@ -335,7 +379,10 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
           <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="projects" className="space-y-8">
             <div className="flex items-center gap-3 border-b pb-4">
               <Layout className="text-emerald-600" size={28} />
-              <h3 className="text-2xl font-bold text-slate-800">Project preview</h3>
+              <h3 className="text-2xl font-bold text-slate-800">
+                Project preview
+                {isPlaceholder.projects && <BadgePlaceholder />}
+              </h3>
             </div>
             <div className={`grid grid-cols-1 ${isMobilePreview ? '' : 'md:grid-cols-3'} gap-8`}>
               {data.projects.map((proj) => {
@@ -404,7 +451,10 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
               <div className="text-emerald-600">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
               </div>
-              <h3 className="text-2xl font-bold text-slate-800">Certifications</h3>
+              <h3 className="text-2xl font-bold text-slate-800">
+                Certifications
+                {isPlaceholder.certifications && <BadgePlaceholder />}
+              </h3>
             </div>
             <div className={`grid grid-cols-1 ${isMobilePreview ? '' : 'md:grid-cols-2'} gap-8`}>
               {data.certifications.map((cert) => (
@@ -440,7 +490,10 @@ export function PortfolioViewer({ data: rawData, isMobilePreview = false }: { da
               <div className="text-emerald-600">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
               </div>
-              <h3 className="text-2xl font-bold text-slate-800">Awards</h3>
+              <h3 className="text-2xl font-bold text-slate-800">
+                Awards
+                {isPlaceholder.awards && <BadgePlaceholder />}
+              </h3>
             </div>
             <div className={`grid grid-cols-1 ${isMobilePreview ? '' : 'md:grid-cols-2'} gap-8`}>
               {data.awards.map((award) => (

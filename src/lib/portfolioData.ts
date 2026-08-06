@@ -9,13 +9,13 @@ export interface PortfolioData {
     photoUrl: string;
     hireMeLink?: 'email' | 'whatsapp';
   };
-  social: Array<{
+  social?: Array<{
     id: string;
     platform: string;
     username: string;
     url: string;
   }>;
-  experience: Array<{
+  experience?: Array<{
     id: string;
     role: string;
     company: string;
@@ -27,7 +27,7 @@ export interface PortfolioData {
     current: boolean;
     description: string;
   }>;
-  education: Array<{
+  education?: Array<{
     id: string;
     level: string;
     degree: string;
@@ -40,7 +40,7 @@ export interface PortfolioData {
     current: boolean;
     description: string;
   }>;
-  organization: Array<{
+  organization?: Array<{
     id: string;
     name: string;
     role: string;
@@ -52,7 +52,7 @@ export interface PortfolioData {
     current: boolean;
     description: string;
   }>;
-  projects: Array<{
+  projects?: Array<{
     id: string;
     title: string;
     description: string;
@@ -61,13 +61,13 @@ export interface PortfolioData {
     techStack: string; // comma separated
     link: string;
   }>;
-  certifications: Array<{
+  certifications?: Array<{
     id: string;
     title: string;
     description: string;
     imageUrl: string;
   }>;
-  awards: Array<{
+  awards?: Array<{
     id: string;
     title: string;
     issuer: string;
@@ -75,13 +75,14 @@ export interface PortfolioData {
     description: string;
     imageUrl: string;
   }>;
-  services: Array<{
+  services?: Array<{
     id: string;
     title: string;
     link: string;
     description: string;
   }>;
-  skills: string; // comma separated
+  skills?: string; // comma separated
+  activeSections?: string[];
 }
 
 export const placeholderPortfolioData: PortfolioData = {
@@ -99,50 +100,50 @@ export const placeholderPortfolioData: PortfolioData = {
     {
       id: "soc-1",
       platform: "LinkedIn",
-      username: "johndoe",
-      url: "https://linkedin.com/in/johndoe"
+      username: "",
+      url: "https://linkedin.com/in/"
     },
     {
       id: "soc-2",
       platform: "GitHub",
-      username: "johndoe",
-      url: "https://github.com/johndoe"
+      username: "",
+      url: "https://github.com/"
     },
     {
       id: "soc-3",
       platform: "Twitter",
-      username: "johndoe",
-      url: "https://twitter.com/johndoe"
+      username: "",
+      url: "https://twitter.com/"
     },
     {
       id: "soc-4",
       platform: "Instagram",
-      username: "johndoe",
-      url: "https://instagram.com/johndoe"
+      username: "",
+      url: "https://instagram.com/"
     },
     {
       id: "soc-5",
       platform: "Facebook",
-      username: "johndoe",
-      url: "https://facebook.com/johndoe"
+      username: "",
+      url: "https://facebook.com/"
     },
     {
       id: "soc-6",
       platform: "WhatsApp",
-      username: "6281234567890",
-      url: "https://wa.me/6281234567890"
+      username: "",
+      url: "https://wa.me/"
     },
     {
       id: "soc-7",
       platform: "YouTube",
-      username: "johndoe",
-      url: "https://youtube.com/@johndoe"
+      username: "",
+      url: "https://youtube.com/@"
     },
     {
       id: "soc-8",
       platform: "TikTok",
-      username: "johndoe",
-      url: "https://tiktok.com/@johndoe"
+      username: "",
+      url: "https://tiktok.com/@"
     }
   ],
   experience: [
@@ -260,7 +261,7 @@ export const defaultPortfolioData: PortfolioData = {
     email: "",
     phone: "",
     location: "",
-    photoUrl: "https://res.cloudinary.com/dn1sg27e1/image/upload/v1785830943/placeholder-person-4x4_mjkcnf.png",
+    photoUrl: "",
     hireMeLink: "email"
   },
   social: [],
@@ -268,8 +269,6 @@ export const defaultPortfolioData: PortfolioData = {
   education: [],
   organization: [],
   projects: [],
-  certifications: [],
-  awards: [],
-  services: [],
   skills: "",
+  activeSections: ['education', 'experience', 'organization', 'projects', 'social', 'skills']
 };

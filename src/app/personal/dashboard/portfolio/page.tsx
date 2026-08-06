@@ -24,7 +24,7 @@ import ProgressPortfolio from "@/components/dashboard/ProgressPortfolio";
 
 const progressItems = [
   { label: "Foto Profil", done: true },
-  { label: "Nama & Headline", done: true },
+  { label: "Nama lengkap", done: true },
   { label: "Ringkasan / Bio", done: false },
   { label: "Pengalaman Kerja", done: false },
   { label: "Pendidikan", done: true },
@@ -37,10 +37,10 @@ const progressItems = [
 
 const fetcher = async () => {
   const result = await getMyPortfolio();
-  if (result.success && result.data) {
+  if (result.success) {
     return result;
   }
-  throw new Error("Gagal mengambil portofolio");
+  throw new Error(result.error || "Gagal mengambil portofolio");
 };
 
 export default function PortfolioPage() {
@@ -56,20 +56,53 @@ export default function PortfolioPage() {
 
   const [portfolioData, setPortfolioData] = useState<PortfolioData>(defaultPortfolioData);
   const [myUsername, setMyUsername] = useState<string>("johndoe");
+  const [createdAt, setCreatedAt] = useState<string>("-");
+  const [updatedAt, setUpdatedAt] = useState<string>("-");
 
   useEffect(() => {
-    if (swrData?.data) {
-      setPortfolioData(swrData.data as PortfolioData);
-      setMyUsername(swrData.username || "johndoe");
-      console.log('[DEBUG] Dashboard: portfolio data loaded dari SWR/Cache');
-    } else {
-      // Fallback ke localStorage (draft)
-      const saved = localStorage.getItem('draft_template_sections');
-      if (saved) {
-        try {
-          setPortfolioData(JSON.parse(saved));
-          console.log('[DEBUG] Dashboard: portfolio data loaded dari localStorage');
-        } catch (e) {}
+    if (swrData) {
+      if (swrData.data) {
+        const merged = { ...(swrData.data as PortfolioData) };
+        const existing = merged.social?.map((s: any) => s.platform) || [];
+        const missing = defaultPortfolioData.social.filter(s => !existing.includes(s.platform));
+        if (missing.length > 0) {
+          merged.social = [...(merged.social || []), ...missing];
+        }
+        console.log('[DEBUG] Merged Socials:', merged.social);
+        setPortfolioData(merged);
+        console.log('[DEBUG] Dashboard: portfolio data loaded dari SWR/Cache');
+      } else {
+        // Fallback ke localStorage jika belum ada data di server
+        const saved = localStorage.getItem('draft_template_sections');
+        if (saved) {
+          try {
+            const sections = JSON.parse(saved);
+            const dataSection = sections.find((s: any) => s.type === 'PORTFOLIO_DATA');
+            if (dataSection?.config) {
+              const parsed = { ...dataSection.config };
+              const existing = parsed.social?.map((s: any) => s.platform) || [];
+              const missing = defaultPortfolioData.social.filter(s => !existing.includes(s.platform));
+              if (missing.length > 0) {
+                parsed.social = [...(parsed.social || []), ...missing];
+              }
+              setPortfolioData(parsed);
+              console.log('[DEBUG] Dashboard: portfolio data loaded dari localStorage');
+            }
+          } catch (e) {}
+        }
+      }
+      
+      if (swrData.username) {
+        setMyUsername(swrData.username);
+      }
+      
+      if (swrData.createdAt) {
+        const d = new Date(swrData.createdAt);
+        setCreatedAt(`${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`);
+      }
+      if (swrData.updatedAt) {
+        const d = new Date(swrData.updatedAt);
+        setUpdatedAt(`${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`);
       }
     }
   }, [swrData]);
@@ -164,13 +197,13 @@ export default function PortfolioPage() {
                 <span className="flex items-center gap-2 text-slate-400">
                   <Clock className="w-3.5 h-3.5" /> Modified
                 </span>
-                <span className="font-medium text-slate-700">8/5/2026</span>
+                <span className="font-medium text-slate-700">{updatedAt}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2 text-slate-400">
                   <Calendar className="w-3.5 h-3.5" /> Created
                 </span>
-                <span className="font-medium text-slate-700">8/4/2026</span>
+                <span className="font-medium text-slate-700">{createdAt}</span>
               </div>
               <div className="flex items-start justify-between gap-2 pt-1">
                 <span className="flex items-center gap-2 text-slate-400 flex-shrink-0">

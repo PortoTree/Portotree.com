@@ -33,7 +33,7 @@ export default function ProgressPortfolio() {
 
   const checklist = [
     { id: 'photo', label: 'Foto Profil', isCompleted: !!(data.personal?.photoUrl && data.personal.photoUrl !== '/default-avatar.png' && data.personal.photoUrl !== 'https://res.cloudinary.com/dn1sg27e1/image/upload/v1785830943/placeholder-person-4x4_mjkcnf.png' && data.personal.photoUrl.trim() !== '') },
-    { id: 'name_headline', label: 'Nama & Headline', isCompleted: !!(data.personal?.name?.trim() && data.personal?.headline?.trim()) },
+    { id: 'name_headline', label: 'Nama lengkap', isCompleted: !!(data.personal?.name?.trim()) },
     { id: 'bio', label: 'Ringkasan / Bio', isCompleted: !!(data.personal?.bio?.trim()) },
     { id: 'experience', label: 'Pengalaman Kerja', isCompleted: Array.isArray(data.experience) && data.experience.length > 0 },
     { id: 'education', label: 'Pendidikan', isCompleted: Array.isArray(data.education) && data.education.length > 0 },
@@ -101,7 +101,7 @@ export default function ProgressPortfolio() {
               
               {!item.isCompleted && (
                 <Link 
-                  href={`/personal/portfolio-builder?section=${item.id}`}
+                  href={`/personal/portfolio-builder?mode=template&section=${item.id}`}
                   className="text-sm text-blue-600 font-medium opacity-100 transition-opacity"
                 >
                   Lengkapi

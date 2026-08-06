@@ -134,7 +134,7 @@ export async function savePortfolio(portfolioData: any): Promise<{ success: bool
 // ============================================================
 // Ambil portfolio user yang sedang login
 // ============================================================
-export async function getMyPortfolio(): Promise<{ success: boolean; data?: any; username?: string; error?: string }> {
+export async function getMyPortfolio(): Promise<{ success: boolean; data?: any; username?: string; createdAt?: string; updatedAt?: string; error?: string }> {
   try {
     const uid = await getAuthenticatedUid();
     if (!uid) return { success: false, error: "Belum login" };
@@ -149,6 +149,8 @@ export async function getMyPortfolio(): Promise<{ success: boolean; data?: any; 
       success: true,
       data: docData?.data || null,
       username: docData?.username || undefined,
+      createdAt: docData?.createdAt?.toDate?.().toISOString() || undefined,
+      updatedAt: docData?.updatedAt?.toDate?.().toISOString() || undefined,
     };
   } catch (error: any) {
     console.error("[DEBUG] getMyPortfolio error:", error);
