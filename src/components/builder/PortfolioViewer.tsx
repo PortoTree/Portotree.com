@@ -88,12 +88,12 @@ export function PortfolioViewer({
     >
       {/* HEADER / NAV */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div className={`w-full px-4 ${isMobilePreview ? '' : 'md:px-8'} h-16 flex items-center justify-between`}>
+        <div className={`w-full px-4 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'px-8' : 'md:px-8'} h-16 flex items-center justify-between`}>
           <div className="font-bold text-xl tracking-tight text-slate-800 truncate pr-4">
             {data.personal.name || "Portfolio"}
           </div>
-          <div className={`flex items-center gap-4 ${isMobilePreview ? '' : 'md:gap-6'} text-sm font-medium text-slate-600`}>
-            <nav className={`${isMobilePreview ? 'hidden' : 'hidden md:flex'} items-center gap-6`}>
+          <div className={`flex items-center gap-4 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'gap-6' : 'md:gap-6'} text-sm font-medium text-slate-600`}>
+            <nav className={`${isMobilePreview === true ? 'hidden' : isMobilePreview === false ? 'flex' : 'hidden md:flex'} items-center gap-6`}>
               {data.services && data.services.length > 0 && <a href="#services" className="hover:text-emerald-600 transition-colors">Services</a>}
               {data.experience && data.experience.length > 0 && <a href="#experience" className="hover:text-emerald-600 transition-colors">Experience</a>}
               {data.education && data.education.length > 0 && <a href="#education" className="hover:text-emerald-600 transition-colors">Education</a>}
@@ -133,11 +133,11 @@ export function PortfolioViewer({
           }}
         ></div>
         
-        <div className={`max-w-5xl mx-auto px-4 ${isMobilePreview ? '' : 'md:px-6'} flex ${isMobilePreview ? 'flex-col' : 'flex-col md:flex-row'} items-center gap-8 ${isMobilePreview ? '' : 'md:gap-12'}`}>
+        <div className={`max-w-5xl mx-auto px-4 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'px-6' : 'md:px-6'} flex ${isMobilePreview === true ? 'flex-col' : isMobilePreview === false ? 'flex-row' : 'flex-col md:flex-row'} items-center gap-8 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'gap-12' : 'md:gap-12'}`}>
           
           {/* IMAGE FIRST ON MOBILE */}
           {data.personal.photoUrl && (
-            <div className={`${isMobilePreview ? 'w-48 h-48' : 'w-40 h-40 md:w-72 md:h-72 md:order-last'} flex-shrink-0`}>
+            <div className={`${isMobilePreview === true ? 'w-48 h-48' : isMobilePreview === false ? 'w-72 h-72 order-last' : 'w-40 h-40 md:w-72 md:h-72 md:order-last'} flex-shrink-0`}>
               <img 
                 src={data.personal.photoUrl} 
                 alt={data.personal.name} 
@@ -146,19 +146,19 @@ export function PortfolioViewer({
             </div>
           )}
 
-          <div className={`flex-1 space-y-4 ${isMobilePreview ? 'text-center' : 'md:space-y-6 text-center md:text-left'}`}>
-            <h1 className={`${isMobilePreview ? 'text-4xl' : 'text-4xl md:text-6xl'} font-extrabold tracking-tight text-slate-900 leading-tight`}>
+          <div className={`flex-1 space-y-4 ${isMobilePreview === true ? 'text-center' : isMobilePreview === false ? 'space-y-6 text-left' : 'md:space-y-6 text-center md:text-left'}`}>
+            <h1 className={`${isMobilePreview === true ? 'text-4xl' : isMobilePreview === false ? 'text-6xl' : 'text-4xl md:text-6xl'} font-extrabold tracking-tight text-slate-900 leading-tight`}>
               Hi, I'm <span className="text-emerald-600">{data.personal.name}</span>
             </h1>
-            <h2 className={`${isMobilePreview ? 'text-2xl' : 'text-xl md:text-3xl'} font-medium text-slate-500`}>
+            <h2 className={`${isMobilePreview === true ? 'text-2xl' : isMobilePreview === false ? 'text-3xl' : 'text-xl md:text-3xl'} font-medium text-slate-500`}>
               {data.personal.headline}
             </h2>
             <div 
-              className={`${isMobilePreview ? 'text-lg mx-auto' : 'text-base md:text-lg mx-auto md:mx-0'} text-slate-600 leading-relaxed max-w-2xl [&_b]:font-bold [&_i]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_a]:text-blue-600 [&_a]:underline`}
+              className={`${isMobilePreview === true ? 'text-lg mx-auto' : isMobilePreview === false ? 'text-lg mx-0' : 'text-base md:text-lg mx-auto md:mx-0'} text-slate-600 leading-relaxed max-w-2xl [&_b]:font-bold [&_i]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_a]:text-blue-600 [&_a]:underline`}
               dangerouslySetInnerHTML={{ __html: data.personal.bio }}
             />
             
-            <div className={`flex flex-col items-center ${isMobilePreview ? '' : 'md:items-start'} gap-4 pt-4`}>
+            <div className={`flex flex-col items-center ${isMobilePreview === true ? '' : isMobilePreview === false ? 'items-start' : 'md:items-start'} gap-4 pt-4`}>
               {data.personal.location && (
                 <div className="flex items-center gap-2 text-slate-600 bg-white px-3 py-1.5 rounded-full shadow-sm border w-fit">
                   <MapPin size={18} className="text-emerald-500" />
@@ -166,17 +166,17 @@ export function PortfolioViewer({
                 </div>
               )}
               
-              <div className={`flex flex-wrap items-center justify-center gap-3 ${isMobilePreview ? '' : 'md:justify-start md:gap-4'}`}>
+              <div className={`flex flex-wrap items-center justify-center gap-3 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'justify-start gap-4' : 'md:justify-start md:gap-4'}`}>
                 {data.personal.email && (
                   <a href={`mailto:${data.personal.email}`} className="flex items-center gap-1.5 text-slate-500 hover:text-red-500 transition-colors">
                     <img src="/gmail.webp" alt="Gmail" className="w-5 h-5 object-contain" />
-                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>Email</span>
+                    <span className={`hidden ${isMobilePreview === true ? '' : isMobilePreview === false ? 'inline' : 'md:inline'} text-sm font-medium`}>Email</span>
                   </a>
                 )}
                 {data.personal.phone && (
                   <a href={`https://wa.me/${data.personal.phone.replace(/\D/g,'')}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-slate-500 hover:text-emerald-600 transition-colors">
                     <img src="/whatsapp.webp" alt="WhatsApp" className="w-5 h-5 object-contain" />
-                    <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>WhatsApp</span>
+                    <span className={`hidden ${isMobilePreview === true ? '' : isMobilePreview === false ? 'inline' : 'md:inline'} text-sm font-medium`}>WhatsApp</span>
                   </a>
                 )}
                 {data.social.map(social => {
@@ -195,7 +195,7 @@ export function PortfolioViewer({
                   return (
                     <a key={social.id} href={social.url} target="_blank" rel="noreferrer" className={`flex items-center gap-1.5 text-slate-500 transition-colors ${hoverColor} ${isPlaceholder.social ? 'grayscale opacity-60' : ''}`}>
                       <img src={iconSrc} alt={social.platform} className="w-5 h-5 object-contain" />
-                      <span className={`hidden ${isMobilePreview ? '' : 'md:inline'} text-sm font-medium`}>{social.platform}</span>
+                      <span className={`hidden ${isMobilePreview === true ? '' : isMobilePreview === false ? 'inline' : 'md:inline'} text-sm font-medium`}>{social.platform}</span>
                     </a>
                   );
                 })}
@@ -205,7 +205,7 @@ export function PortfolioViewer({
         </div>
       </motion.section>
 
-      <main className={`max-w-5xl mx-auto px-4 py-8 space-y-16 ${isMobilePreview ? '' : 'md:px-6 md:py-20 md:space-y-24'}`}>
+      <main className={`max-w-5xl mx-auto px-4 py-8 space-y-16 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'px-6 py-20 space-y-24' : 'md:px-6 md:py-20 md:space-y-24'}`}>
         {/* SERVICES */}
         {data.services && data.services.length > 0 && (
           <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="services" className="space-y-8">
@@ -218,7 +218,7 @@ export function PortfolioViewer({
                 {isPlaceholder.services && <BadgePlaceholder />}
               </h3>
             </div>
-            <div className={`grid grid-cols-1 ${isMobilePreview ? '' : 'md:grid-cols-2 lg:grid-cols-3'} gap-6`}>
+            <div className={`grid grid-cols-1 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-3'} gap-6`}>
               {data.services.map((service) => (
                 <div key={service.id} className="group bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all duration-300 flex flex-col h-full">
                   <div className="flex-1 space-y-3">
@@ -287,7 +287,7 @@ export function PortfolioViewer({
                 <div key={exp.id} className="relative border-l-2 border-emerald-200 pl-6 pb-2">
                   <div className="absolute w-3 h-3 bg-emerald-500 rounded-full -left-[7px] top-2 shadow-[0_0_0_4px_white]"></div>
                   <div className="space-y-2">
-                    <div className={`flex flex-col ${isMobilePreview ? '' : 'md:flex-row md:items-center'} justify-between gap-2`}>
+                    <div className={`flex flex-col ${isMobilePreview === true ? '' : isMobilePreview === false ? 'flex-row items-center' : 'md:flex-row md:items-center'} justify-between gap-2`}>
                       <h4 className="text-xl font-bold text-slate-900">{exp.role}</h4>
                       <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full w-fit">
                         {exp.startMonth} {exp.startYear} - {exp.current ? 'Sekarang' : `${exp.endMonth} ${exp.endYear}`}
@@ -330,7 +330,7 @@ export function PortfolioViewer({
                 <div key={org.id} className="relative border-l-2 border-emerald-200 pl-6 pb-2">
                   <div className="absolute w-3 h-3 bg-emerald-500 rounded-full -left-[7px] top-2 shadow-[0_0_0_4px_white]"></div>
                   <div className="space-y-2">
-                    <div className={`flex flex-col ${isMobilePreview ? '' : 'md:flex-row md:items-center'} justify-between gap-2`}>
+                    <div className={`flex flex-col ${isMobilePreview === true ? '' : isMobilePreview === false ? 'flex-row items-center' : 'md:flex-row md:items-center'} justify-between gap-2`}>
                       <h4 className="text-xl font-bold text-slate-900">{org.role}</h4>
                       <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full w-fit">
                         {org.startMonth} {org.startYear} - {org.current ? 'Saat ini' : `${org.endMonth} ${org.endYear}`}
@@ -373,7 +373,7 @@ export function PortfolioViewer({
                 <div key={edu.id} className="relative border-l-2 border-emerald-200 pl-6 pb-2">
                   <div className="absolute w-3 h-3 bg-emerald-500 rounded-full -left-[7px] top-2 shadow-[0_0_0_4px_white]"></div>
                   <div className="space-y-2">
-                    <div className={`flex flex-col ${isMobilePreview ? '' : 'md:flex-row md:items-center'} justify-between gap-2`}>
+                    <div className={`flex flex-col ${isMobilePreview === true ? '' : isMobilePreview === false ? 'flex-row items-center' : 'md:flex-row md:items-center'} justify-between gap-2`}>
                       <h4 className="text-xl font-bold text-slate-900">{edu.school}</h4>
                       <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full w-fit">
                         {edu.startMonth} {edu.startYear} - {edu.current ? 'Sekarang' : `${edu.endMonth} ${edu.endYear}`}
@@ -411,7 +411,7 @@ export function PortfolioViewer({
                 {isPlaceholder.projects && <BadgePlaceholder />}
               </h3>
             </div>
-            <div className={`grid grid-cols-1 ${isMobilePreview ? '' : 'md:grid-cols-3'} gap-8`}>
+            <div className={`grid grid-cols-1 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'grid-cols-3' : 'md:grid-cols-3'} gap-8`}>
               {data.projects.map((proj) => {
                 let youtubeId = null;
                 if (proj.videoUrl) {
@@ -483,7 +483,7 @@ export function PortfolioViewer({
                 {isPlaceholder.certifications && <BadgePlaceholder />}
               </h3>
             </div>
-            <div className={`grid grid-cols-1 ${isMobilePreview ? '' : 'md:grid-cols-2'} gap-8`}>
+            <div className={`grid grid-cols-1 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'grid-cols-2' : 'md:grid-cols-2'} gap-8`}>
               {data.certifications.map((cert) => (
                 <div key={cert.id} className="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
                   {cert.imageUrl && (
@@ -522,7 +522,7 @@ export function PortfolioViewer({
                 {isPlaceholder.awards && <BadgePlaceholder />}
               </h3>
             </div>
-            <div className={`grid grid-cols-1 ${isMobilePreview ? '' : 'md:grid-cols-2'} gap-8`}>
+            <div className={`grid grid-cols-1 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'grid-cols-2' : 'md:grid-cols-2'} gap-8`}>
               {data.awards.map((award) => (
                 <div key={award.id} className="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
                   {award.imageUrl && (

@@ -148,7 +148,7 @@ export default function Home() {
                   <div className="w-16 h-4 md:w-20 md:h-5 bg-slate-200 rounded-full"></div>
                </div>
                <div className="absolute inset-0 overflow-hidden bg-slate-50">
-                 <div style={{ zoom: 0.6 }} className="w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar">
+                 <div className="w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar max-md:[zoom:0.45] md:[zoom:0.6]">
                    <PortfolioViewer data={placeholderPortfolioData} isMobilePreview={true} showPlaceholders={true} />
                  </div>
                </div>
@@ -162,7 +162,7 @@ export default function Home() {
                   <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-green-400"></div>
                </div>
                <div className="flex-1 w-full overflow-hidden bg-slate-50 relative">
-                 <div style={{ zoom: 0.5 }} className="absolute inset-0 w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar">
+                 <div className="absolute inset-0 w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar max-md:[zoom:0.25] md:[zoom:0.5]">
                    <PortfolioViewer data={placeholderPortfolioData} isMobilePreview={false} showPlaceholders={true} />
                  </div>
                </div>
