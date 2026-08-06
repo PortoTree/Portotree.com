@@ -47,6 +47,7 @@ export const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
       };
 
       return (
+        <>
         <div className="border border-zinc-800 rounded-xl overflow-hidden bg-[#1e1e1e] flex flex-col">
           {/* Toolbar */}
           <div className="p-2 border-b border-zinc-800 bg-[#16161a] space-y-1 select-none">
@@ -359,6 +360,6 @@ export const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
             </div>
           </div>
         )}
-      </div>
-    );
-  };
+        </>
+      );
+    };
