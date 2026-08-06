@@ -100,16 +100,16 @@ export default function CompanyLandingPage() {
                     animation: blob-shape 4s infinite ease-in-out alternate;
                   }
                 `}</style>
-                <Link href="/register" className="relative group flex items-center justify-center">
+                <div className="relative group flex items-center justify-center">
                   <div className="absolute inset-0 animate-ping">
                     <div className="w-full h-full bg-blue-500 opacity-75 animate-blob-shape"></div>
                   </div>
-                  <Button className="relative z-10 w-32 h-32 p-0 text-lg font-bold animate-blob-shape flex flex-col items-center justify-center hover:scale-110 transition-all duration-300 shadow-[0_0_30px_rgba(37,99,235,0.5)] hover:shadow-[0_0_50px_rgba(37,99,235,0.7)] bg-blue-600 hover:bg-blue-500 text-white border-0">
+                  <Link href="https://portotree.com/register" className="relative z-10 w-32 h-32 p-0 text-lg font-bold animate-blob-shape flex flex-col items-center justify-center hover:scale-110 transition-all duration-300 shadow-[0_0_30px_rgba(37,99,235,0.5)] hover:shadow-[0_0_50px_rgba(37,99,235,0.7)] bg-blue-600 hover:bg-blue-500 text-white border-0 outline-none select-none">
                     <span className="leading-tight">Mulai</span>
                     <span className="leading-tight">Sekarang</span>
                     <ArrowRight className="mt-1 h-6 w-6 group-hover:translate-x-1.5 group-hover:scale-110 transition-all duration-300" />
-                  </Button>
-                </Link>
+                  </Link>
+                </div>
               </div>
             </motion.div>
             
