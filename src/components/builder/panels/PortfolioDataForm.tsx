@@ -139,13 +139,13 @@ export function PortfolioDataForm({ data, onChange }: Props) {
   }, [data.personal.email]);
 
   const handleArrayChange = (section: 'experience' | 'projects' | 'education' | 'organization', index: number, field: string, value: any) => {
-    const newArray = [...data[section]];
+    const newArray = [...(data[section] || [])];
     newArray[index] = { ...newArray[index], [field]: value };
     onChange({ ...data, [section]: newArray });
   };
 
   const addArrayItem = (section: 'experience' | 'projects' | 'education' | 'organization') => {
-    const newArray = [...data[section]];
+    const newArray = [...(data[section] || [])];
     if (section === 'experience') {
       newArray.push({ id: `exp-${Date.now()}`, role: "New Role", company: "Company Name", location: "", startMonth: "Januari", startYear: "2023", endMonth: "", endYear: "", current: true, description: "" });
     } else if (section === 'projects') {
@@ -159,7 +159,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
   };
 
   const removeArrayItem = (section: 'experience' | 'projects' | 'education' | 'organization', index: number) => {
-    const newArray = [...data[section]];
+    const newArray = [...(data[section] || [])];
     newArray.splice(index, 1);
     onChange({ ...data, [section]: newArray as any });
   };
@@ -173,7 +173,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
       // Edit existing
       onChange({
         ...data,
-        education: data.education.map(e => e.id === editingEduId ? { ...eduData, id: editingEduId } : e)
+        education: (data.education || []).map(e => e.id === editingEduId ? { ...eduData, id: editingEduId } : e)
       });
     } else {
       // Add new
@@ -199,7 +199,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
     if (editingExpId) {
       onChange({
         ...data,
-        experience: data.experience.map(e => e.id === editingExpId ? { ...expData, id: editingExpId } : e)
+        experience: (data.experience || []).map(e => e.id === editingExpId ? { ...expData, id: editingExpId } : e)
       });
     } else {
       onChange({
@@ -224,7 +224,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
     if (editingSocId) {
       onChange({
         ...data,
-        social: data.social.map(s => s.id === editingSocId ? { ...socData, id: editingSocId } : s)
+        social: (data.social || []).map(s => s.id === editingSocId ? { ...socData, id: editingSocId } : s)
       });
     } else {
       onChange({
@@ -242,7 +242,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
   };
 
   const handleDeleteSocial = (index: number) => {
-    const newArray = [...data.social];
+    const newArray = [...(data.social || [])];
     newArray.splice(index, 1);
     onChange({ ...data, social: newArray });
   };
@@ -251,7 +251,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
     if (editingOrgId) {
       onChange({
         ...data,
-        organization: data.organization.map(o => o.id === editingOrgId ? { ...orgData, id: editingOrgId } : o)
+        organization: (data.organization || []).map(o => o.id === editingOrgId ? { ...orgData, id: editingOrgId } : o)
       });
     } else {
       onChange({
@@ -278,7 +278,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
     if (editingProjId) {
       onChange({
         ...data,
-        projects: data.projects.map(p => p.id === editingProjId ? { ...projData, id: editingProjId } : p)
+        projects: (data.projects || []).map(p => p.id === editingProjId ? { ...projData, id: editingProjId } : p)
       });
     } else {
       onChange({
@@ -471,7 +471,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
           id="education"
           title="Riwayat Pendidikan"
           icon={GraduationCap}
-          badgeCount={data.education?.length || 0}
+          badgeCount={data.education?.length ?? 0}
         >
           {(data.education || []).map((edu, index) => (
             <div key={edu.id} className="p-4 border border-slate-200 rounded-xl bg-white mb-3 shadow-sm hover:border-emerald-300 transition-colors flex flex-col gap-2 relative group cursor-pointer" onClick={() => handleEditEducation(edu.id)}>
@@ -503,7 +503,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             isOpen={eduModalOpen}
             onClose={() => setEduModalOpen(false)}
             onSave={handleSaveEducation}
-            initialData={editingEduId ? data.education.find(e => e.id === editingEduId) : null}
+            initialData={editingEduId ? data.education?.find(e => e.id === editingEduId) : null}
           />
         </AccordionSection>
         )}
@@ -516,9 +516,9 @@ export function PortfolioDataForm({ data, onChange }: Props) {
           id="experience"
           title="Riwayat Pekerjaan"
           icon={Briefcase}
-          badgeCount={data.experience?.length || 0}
+          badgeCount={data.experience?.length ?? 0}
         >
-          {data.experience.map((exp, index) => (
+          {(data.experience || []).map((exp, index) => (
             <div key={exp.id} className="group flex items-center justify-between p-3 border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
               <div className="flex-1 min-w-0 pr-4">
                 <h4 className="font-semibold text-slate-800 text-sm truncate">{exp.role}</h4>
@@ -552,7 +552,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             isOpen={expModalOpen}
             onClose={() => setExpModalOpen(false)}
             onSave={handleSaveExperience}
-            initialData={editingExpId ? data.experience.find(e => e.id === editingExpId) : null}
+            initialData={editingExpId ? data.experience?.find(e => e.id === editingExpId) : null}
           />
         </AccordionSection>
         )}
@@ -565,9 +565,9 @@ export function PortfolioDataForm({ data, onChange }: Props) {
           id="social"
           title="Media Sosial"
           icon={Share2}
-          badgeCount={data.social?.length || 0}
+          badgeCount={data.social?.length ?? 0}
         >
-          {data.social?.map((soc, index) => (
+          {(data.social || []).map((soc, index) => (
             <div key={soc.id} className="group flex items-center justify-between p-3 border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
               <div className="flex-1 min-w-0 pr-4">
                 <h4 className="font-semibold text-slate-800 text-sm truncate">{soc.platform}</h4>
@@ -601,7 +601,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             isOpen={socModalOpen}
             onClose={() => setSocModalOpen(false)}
             onSave={handleSaveSocial}
-            initialData={editingSocId ? data.social.find(s => s.id === editingSocId) : null}
+            initialData={editingSocId ? data.social?.find(s => s.id === editingSocId) : null}
           />
         </AccordionSection>
         )}
@@ -644,7 +644,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
           <SkillModal
             isOpen={skillModalOpen}
             onClose={() => setSkillModalOpen(false)}
-            initialSkillsStr={data.skills}
+            initialSkillsStr={data.skills || ""}
             onSave={(newSkills) => handleChange('skills', '', newSkills)}
           />
         </AccordionSection>
@@ -658,7 +658,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
           id="organization"
           title="Riwayat Organisasi"
           icon={Users}
-          badgeCount={data.organization?.length || 0}
+          badgeCount={data.organization?.length ?? 0}
         >
           {(data.organization || []).map((org, index) => (
             <div key={org.id} className="p-4 border border-slate-200 rounded-xl bg-white mb-3 shadow-sm hover:border-emerald-300 transition-colors flex flex-col gap-2 relative group cursor-pointer" onClick={() => handleEditOrganization(org.id)}>
@@ -702,7 +702,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             isOpen={orgModalOpen}
             onClose={() => setOrgModalOpen(false)}
             onSave={handleSaveOrganization}
-            initialData={editingOrgId ? data.organization.find(o => o.id === editingOrgId) : null}
+            initialData={editingOrgId ? data.organization?.find(o => o.id === editingOrgId) : null}
           />
         </AccordionSection>
         )}
@@ -715,7 +715,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
           id="projects"
           title="Projects / Portofolio"
           icon={FolderGit2}
-          badgeCount={data.projects?.length || 0}
+          badgeCount={data.projects?.length ?? 0}
         >
           {(data.projects || []).map((proj, index) => (
             <div key={proj.id} className="p-4 border border-slate-200 rounded-xl bg-white mb-3 shadow-sm hover:border-emerald-300 transition-colors flex flex-col gap-2 relative group cursor-pointer" onClick={() => handleEditProject(proj.id)}>
@@ -762,22 +762,22 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             isOpen={projModalOpen}
             onClose={() => setProjModalOpen(false)}
             onSave={handleSaveProject}
-            initialData={editingProjId ? data.projects.find(p => p.id === editingProjId) : null}
+            initialData={editingProjId ? data.projects?.find(p => p.id === editingProjId) : null}
           />
         </AccordionSection>
         )}
 
         {/* CERTIFICATIONS */}
-        {(data.certifications?.length > 0 || addedSections.includes('certifications')) && (
+        {((data.certifications?.length ?? 0) > 0 || addedSections.includes('certifications')) && (
           <AccordionSection
             openSection={openSection}
             toggleSection={toggleSection}
             id="certifications"
             title="Sertifikasi"
             icon={Award}
-            badgeCount={data.certifications?.length || 0}
+            badgeCount={data.certifications?.length ?? 0}
           >
-            {data.certifications?.map((cert, index) => (
+            {(data.certifications || []).map((cert, index) => (
               <div key={cert.id} className="group flex items-center justify-between p-3 border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
                 <div className="flex-1 min-w-0 pr-4">
                   <h4 className="font-semibold text-slate-800 text-sm truncate">{cert.title}</h4>
@@ -821,16 +821,16 @@ export function PortfolioDataForm({ data, onChange }: Props) {
         )}
 
         {/* AWARDS */}
-        {(data.awards?.length > 0 || addedSections.includes('awards')) && (
+        {((data.awards?.length ?? 0) > 0 || addedSections.includes('awards')) && (
           <AccordionSection
             openSection={openSection}
             toggleSection={toggleSection}
             id="awards"
             title="Penghargaan"
             icon={Trophy}
-            badgeCount={data.awards?.length || 0}
+            badgeCount={data.awards?.length ?? 0}
           >
-            {data.awards?.map((award, index) => (
+            {(data.awards || []).map((award, index) => (
               <div key={award.id} className="group flex items-center justify-between p-3 border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
                 <div className="flex-1 min-w-0 pr-4">
                   <h4 className="font-semibold text-slate-800 text-sm truncate">{award.title}</h4>
@@ -875,7 +875,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
         )}
 
         {/* SERVICES */}
-        {(data.services?.length > 0 || addedSections.includes('services')) && (
+        {((data.services?.length ?? 0) > 0 || addedSections.includes('services')) && (
           <AccordionSection
             openSection={openSection}
             toggleSection={toggleSection}
@@ -946,7 +946,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             const newAdded = [...addedSections, sec];
             setAddedSections(newAdded);
             setOpenSection(sec);
-            if (!data[sec] && data[sec] !== "") {
+            if (!(data as any)[sec] && (data as any)[sec] !== "") {
               if (sec === 'skills') {
                 onChange({ ...data, skills: "", activeSections: newAdded });
               } else {

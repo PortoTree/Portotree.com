@@ -27,18 +27,18 @@ export function PortfolioViewer({
       photoUrl: rawData.personal?.photoUrl || (showPlaceholders ? placeholderPortfolioData.personal.photoUrl : ""),
       hireMeLink: rawData.personal?.hireMeLink || (showPlaceholders ? placeholderPortfolioData.personal.hireMeLink : ""),
     },
-    social: (rawData.social?.length ?? 0) > 0 ? rawData.social : (showPlaceholders && activeSections.includes('social') ? placeholderPortfolioData.social : []),
-    experience: (rawData.experience?.length ?? 0) > 0 ? rawData.experience : (showPlaceholders && activeSections.includes('experience') ? placeholderPortfolioData.experience : []),
-    education: (rawData.education?.length ?? 0) > 0 ? rawData.education : (showPlaceholders && activeSections.includes('education') ? placeholderPortfolioData.education : []),
-    organization: (rawData.organization?.length ?? 0) > 0 ? rawData.organization : (showPlaceholders && activeSections.includes('organization') ? placeholderPortfolioData.organization : []),
-    projects: (rawData.projects?.length ?? 0) > 0 ? rawData.projects : (showPlaceholders && activeSections.includes('projects') ? placeholderPortfolioData.projects : []),
-    certifications: (rawData.certifications?.length ?? 0) > 0 ? rawData.certifications : (showPlaceholders && activeSections.includes('certifications') ? placeholderPortfolioData.certifications : []),
-    awards: (rawData.awards?.length ?? 0) > 0 ? rawData.awards : (showPlaceholders && activeSections.includes('awards') ? placeholderPortfolioData.awards : []),
-    services: (rawData.services?.length ?? 0) > 0 ? rawData.services : (showPlaceholders && activeSections.includes('services') ? placeholderPortfolioData.services : []),
+    social: ((rawData.social?.length ?? 0) > 0 ? rawData.social : (showPlaceholders && activeSections.includes('social') ? placeholderPortfolioData.social : [])) || [],
+    experience: ((rawData.experience?.length ?? 0) > 0 ? rawData.experience : (showPlaceholders && activeSections.includes('experience') ? placeholderPortfolioData.experience : [])) || [],
+    education: ((rawData.education?.length ?? 0) > 0 ? rawData.education : (showPlaceholders && activeSections.includes('education') ? placeholderPortfolioData.education : [])) || [],
+    organization: ((rawData.organization?.length ?? 0) > 0 ? rawData.organization : (showPlaceholders && activeSections.includes('organization') ? placeholderPortfolioData.organization : [])) || [],
+    projects: ((rawData.projects?.length ?? 0) > 0 ? rawData.projects : (showPlaceholders && activeSections.includes('projects') ? placeholderPortfolioData.projects : [])) || [],
+    certifications: ((rawData.certifications?.length ?? 0) > 0 ? rawData.certifications : (showPlaceholders && activeSections.includes('certifications') ? placeholderPortfolioData.certifications : [])) || [],
+    awards: ((rawData.awards?.length ?? 0) > 0 ? rawData.awards : (showPlaceholders && activeSections.includes('awards') ? placeholderPortfolioData.awards : [])) || [],
+    services: ((rawData.services?.length ?? 0) > 0 ? rawData.services : (showPlaceholders && activeSections.includes('services') ? placeholderPortfolioData.services : [])) || [],
     skills: rawData.skills || (showPlaceholders && activeSections.includes('skills') ? placeholderPortfolioData.skills : ""),
   };
 
-  const skillsArray = data.skills.split(",").map((s) => s.trim()).filter(Boolean);
+  const skillsArray = (data.skills || "").split(",").map((s) => s.trim()).filter(Boolean);
 
   const BadgePlaceholder = () => (
     <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ml-3 align-middle">
