@@ -2,7 +2,7 @@
 "use client";
 
 import { Suspense, useState, useEffect, useCallback } from "react";
-import { ArrowLeft, Monitor, Smartphone, Eye, Pencil, Globe, Save, Loader2 } from "lucide-react";
+import { ArrowLeft, Monitor, Smartphone, Eye, Pencil, Globe, Save, Loader2, Info } from "lucide-react";
 import { useBuilderState } from "./useBuilderState";
 import { StorefrontProvider } from "@/components/storefront/StorefrontProvider";
 import { PortfolioDataForm } from "./panels/PortfolioDataForm";
@@ -196,8 +196,23 @@ function BuilderContent() {
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <div className="h-6 w-px bg-slate-200"></div>
-          <span className="font-bold text-slate-800 hidden md:block">Portfolio Builder</span>
+          <div className="h-6 w-px bg-slate-200 hidden md:block"></div>
+          <span className="font-bold text-slate-800 hidden md:block shrink-0">Portfolio Builder</span>
+
+          {/* HELP BUTTON */}
+          <div className="hidden lg:block h-6 w-px bg-slate-200 mx-1"></div>
+          <a 
+            href="https://chat.whatsapp.com/EinEUnLQthc3M0wrlyRuhR"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors border border-red-100 hover:border-red-200 group shrink-0"
+            title="Join grub whatsapp kami untuk memberikan pesan kritik dan saran"
+          >
+            <Info className="w-4 h-4 group-hover:text-red-700 transition-colors shrink-0" />
+            <span className="text-[10px] md:text-xs font-bold group-hover:text-red-700 transition-colors whitespace-nowrap">
+              Mengalami masalah?
+            </span>
+          </a>
         </div>
 
         <div className="flex items-center gap-3 shrink-0">

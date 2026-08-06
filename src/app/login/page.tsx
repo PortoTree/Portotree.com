@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
 import { auth } from "@/lib/firebase/client";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -55,9 +56,13 @@ export default function LoginPage() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 bg-emerald-600 rounded-xl mx-auto mb-4 flex items-center justify-center shadow-lg shadow-emerald-600/20">
-            <div className="w-5 h-5 border-2 border-white rounded-full"></div>
-          </div>
+          <Image 
+            src="/logo-landscape.png" 
+            alt="PortoTree Logo" 
+            width={160} 
+            height={40} 
+            className="mx-auto mb-6"
+          />
           <h1 className="text-2xl font-bold text-slate-900">Selamat datang kembali</h1>
           <p className="text-slate-500 mt-2">Masuk ke akun PortoTree Anda</p>
         </div>

@@ -14,10 +14,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { getSubdomainUrl, getMainUrl } from '@/lib/url';
+import { auth } from '@/lib/firebase/client';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import useSWR from 'swr';
+import { getMyPortfolio } from '@/app/actions/portfolio';
+import { removeSession } from '@/app/actions/auth';
+
+const fetcher = async () => {
+  const result = await getMyPortfolio();
+  if (result.success) return result;
+  return null;
+};
 
 export function Navbar() {
-  // Mock status login untuk simulasi UI
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [showFabTooltip, setShowFabTooltip] = useState(false);
   const [hasDismissedTooltip, setHasDismissedTooltip] = useState(false);
   const [isFabOpen, setIsFabOpen] = useState(false);
@@ -32,7 +43,34 @@ export function Navbar() {
     if (typeof window !== 'undefined') {
       setIsPortofolioDomain(window.location.hostname.includes('portofolio'));
     }
+    
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user);
+    });
+    return () => unsubscribe();
   }, []);
+
+  const { data: swrData } = useSWR(isLoggedIn ? 'my-portfolio-navbar' : null, fetcher, {
+    dedupingInterval: 5 * 60 * 1000
+  });
+
+  useEffect(() => {
+    if (swrData?.data?.personal?.photoUrl) {
+      setPhotoUrl(swrData.data.personal.photoUrl);
+    }
+  }, [swrData]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      await removeSession();
+      setIsLoggedIn(false);
+      setPhotoUrl(null);
+      router.push('/');
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -166,7 +204,10 @@ export function Navbar() {
                                 <Building2 className="w-4 h-4" />
                               </div>
                               <div>
-                                <div className="font-bold text-sm text-slate-800">Untuk Perusahaan</div>
+                                <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                                  Untuk Perusahaan
+                                  <span className="text-[9px] font-bold uppercase tracking-widest bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full">Soon</span>
+                                </div>
                                 <div className="text-xs text-slate-500 mt-0.5">Company profile B2B</div>
                               </div>
                             </a>
@@ -178,7 +219,10 @@ export function Navbar() {
                           <FileText className="w-5 h-5" />
                         </div>
                         <div>
-                          <div className="font-bold text-sm text-slate-800">Buat CV</div>
+                          <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                            Buat CV
+                            <span className="text-[9px] font-bold uppercase tracking-widest bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full">Soon</span>
+                          </div>
                           <div className="text-xs text-slate-500 mt-0.5">Bikin CV standar ATS</div>
                         </div>
                       </a>
@@ -201,13 +245,21 @@ export function Navbar() {
               {/* Icon Profil User */}
               <DropdownMenu modal={false}>
                 <DropdownMenuTrigger className={`rounded-full overflow-hidden border-2 transition-all focus:outline-none ${isLoggedIn ? 'border-transparent hover:border-green-500 focus:ring-2 focus:ring-green-500' : 'border-transparent hover:border-gray-300'}`}>
-                  <Image 
-                    src="/user.png" 
-                    alt={isLoggedIn ? "Profile" : "User"} 
-                    width={32} 
-                    height={32} 
-                    className={`w-8 h-8 object-cover ${!isLoggedIn ? 'opacity-80 hover:opacity-100 transition-opacity' : ''}`} 
-                  />
+                  {photoUrl ? (
+                    <img 
+                      src={photoUrl} 
+                      alt="Profile" 
+                      className={`w-8 h-8 object-cover ${!isLoggedIn ? 'opacity-80 hover:opacity-100 transition-opacity' : ''}`} 
+                    />
+                  ) : (
+                    <Image 
+                      src="/user.png" 
+                      alt={isLoggedIn ? "Profile" : "User"} 
+                      width={32} 
+                      height={32} 
+                      className={`w-8 h-8 object-cover ${!isLoggedIn ? 'opacity-80 hover:opacity-100 transition-opacity' : ''}`} 
+                    />
+                  )}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48 mt-2 rounded-xl">
                   {isLoggedIn ? (
@@ -220,7 +272,7 @@ export function Navbar() {
                       </DropdownMenuItem>
                       <DropdownMenuItem 
                         className="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-700 w-full mt-1" 
-                        onClick={() => setIsLoggedIn(false)}
+                        onClick={handleLogout}
                       >
                         Logout
                       </DropdownMenuItem>
@@ -229,7 +281,7 @@ export function Navbar() {
                     <>
                       <DropdownMenuItem 
                         className="cursor-pointer font-medium w-full"
-                        onClick={() => setIsLoggedIn(true)}
+                        onClick={() => router.push('/login')}
                       >
                         Login
                       </DropdownMenuItem>
@@ -352,7 +404,10 @@ export function Navbar() {
                               <FileText className="w-5 h-5" />
                             </div>
                             <div>
-                              <div className="font-bold text-sm text-slate-800">Buat CV</div>
+                              <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                                Buat CV
+                                <span className="text-[9px] font-bold uppercase tracking-widest bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full">Soon</span>
+                              </div>
                               <div className="text-xs text-slate-500 mt-0.5">Bikin CV standar ATS</div>
                             </div>
                           </button>
@@ -380,7 +435,10 @@ export function Navbar() {
                               <Building2 className="w-4 h-4" />
                             </div>
                             <div>
-                              <div className="font-bold text-sm text-slate-800">Untuk Perusahaan</div>
+                              <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                                Untuk Perusahaan
+                                <span className="text-[9px] font-bold uppercase tracking-widest bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full">Soon</span>
+                              </div>
                               <div className="text-xs text-slate-500 mt-0.5">Company profile B2B</div>
                             </div>
                           </a>

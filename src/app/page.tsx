@@ -139,7 +139,10 @@ export default function Home() {
                   <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-8">
                     <Building2 className="w-8 h-8" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Untuk Bisnis & Perusahaan</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
+                    Untuk Bisnis & Perusahaan
+                    <span className="text-[10px] font-bold bg-amber-100 text-amber-700 px-2 py-1 rounded-full uppercase tracking-widest leading-none">Soon</span>
+                  </h3>
                   <p className="text-gray-600 mb-8 leading-relaxed">
                     Bangun company profile elegan yang menampilkan layanan, portofolio proyek perusahaan, dan tim Anda untuk meyakinkan calon investor.
                   </p>

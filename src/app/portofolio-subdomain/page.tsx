@@ -90,7 +90,10 @@ export default function PortofolioHub() {
                   <Building2 className="w-8 h-8" />
                 </div>
                 
-                <h3 className="text-2xl font-bold text-slate-800 mb-3">Untuk Perusahaan</h3>
+                <h3 className="text-2xl font-bold text-slate-800 mb-3 flex items-center gap-3">
+                  Untuk Perusahaan
+                  <span className="text-[10px] font-bold bg-amber-100 text-amber-700 px-2 py-1 rounded-full uppercase tracking-widest leading-none">Soon</span>
+                </h3>
                 <p className="text-slate-600 mb-6 flex-1">
                   Cocok untuk agensi, B2B, dan <strong>startup</strong> yang ingin membangun <strong>Company Profile</strong> profesional untuk meyakinkan klien & investor.
                 </p>

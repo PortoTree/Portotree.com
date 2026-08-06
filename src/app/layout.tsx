@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { DevToast } from "@/components/layout/DevToast";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,9 @@ export default function RootLayout({
         
         {/* Temporary Development Toast */}
         <DevToast />
+        
+        {/* Sonner Toaster */}
+        <Toaster position="top-center" style={{ zIndex: 99999 }} />
       </body>
     </html>
   );

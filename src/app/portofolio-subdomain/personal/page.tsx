@@ -3,10 +3,12 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, LayoutTemplate, Link as LinkIcon, QrCode, FileText, Globe, Share2, Eye, Briefcase, ChevronLeft, ChevronRight, Rocket, CheckCircle2 } from "lucide-react";
+import { ArrowRight, LayoutTemplate, Link as LinkIcon, QrCode, FileText, Globe, Share2, Eye, Briefcase, ChevronLeft, ChevronRight, Rocket, CheckCircle2, Layout } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
+import { PortfolioViewer } from "@/components/builder/PortfolioViewer";
+import { placeholderPortfolioData } from "@/lib/portfolioData";
 import {
   Dialog,
   DialogContent,
@@ -140,22 +142,30 @@ export default function Home() {
             <div className="w-0 sm:w-2 md:w-[calc((100vw-72rem)/2)] shrink-0 max-w-[max(1.5rem,calc((100vw-80rem)/2))]"></div>
 
             {/* Mobile Mockup */}
-            <div className="w-[200px] md:w-[260px] shrink-0 rounded-[2rem] md:rounded-[2.5rem] border-[6px] md:border-[8px] border-muted bg-muted/30 shadow-2xl overflow-hidden aspect-[9/19] flex items-center justify-center relative backdrop-blur-sm snap-center ml-6 md:ml-0">
+            <div className="w-[200px] md:w-[260px] shrink-0 rounded-[2rem] md:rounded-[2.5rem] border-[6px] md:border-[8px] border-slate-200 bg-white shadow-2xl overflow-hidden aspect-[9/19] flex flex-col relative snap-center ml-6 md:ml-0">
                {/* Dynamic Island */}
-               <div className="absolute top-0 w-full flex justify-center pt-1.5 md:pt-2 z-10">
-                  <div className="w-16 h-4 md:w-20 md:h-5 bg-muted rounded-full"></div>
+               <div className="absolute top-0 w-full flex justify-center pt-1.5 md:pt-2 z-20">
+                  <div className="w-16 h-4 md:w-20 md:h-5 bg-slate-200 rounded-full"></div>
                </div>
-               <p className="text-muted-foreground text-xs md:text-sm font-medium text-center px-4">Pratinjau Mobile</p>
+               <div className="absolute inset-0 overflow-hidden bg-slate-50">
+                 <div style={{ zoom: 0.6 }} className="w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar">
+                   <PortfolioViewer data={placeholderPortfolioData} isMobilePreview={true} showPlaceholders={true} />
+                 </div>
+               </div>
             </div>
 
             {/* Desktop Mockup */}
-            <div className="w-[92vw] max-w-[500px] shrink-0 md:w-full md:max-w-3xl rounded-xl border border-muted-foreground/20 bg-muted/30 shadow-2xl overflow-hidden aspect-[16/9] flex items-center justify-center relative backdrop-blur-sm snap-center">
-               <div className="absolute top-0 w-full h-8 md:h-10 border-b border-muted-foreground/10 bg-background/50 flex items-center px-3 md:px-4 space-x-1.5 md:space-x-2">
+            <div className="w-[92vw] max-w-[500px] shrink-0 md:w-full md:max-w-3xl rounded-xl border border-slate-200 bg-white shadow-2xl overflow-hidden aspect-[16/9] flex flex-col relative snap-center">
+               <div className="w-full h-8 md:h-10 border-b border-slate-100 bg-slate-50 flex items-center px-3 md:px-4 space-x-1.5 md:space-x-2 shrink-0 z-20">
                   <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-red-400"></div>
                   <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-amber-400"></div>
                   <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-green-400"></div>
                </div>
-               <p className="text-muted-foreground text-sm md:text-base font-medium mt-8 md:mt-10">Pratinjau Desktop</p>
+               <div className="flex-1 w-full overflow-hidden bg-slate-50 relative">
+                 <div style={{ zoom: 0.5 }} className="absolute inset-0 w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar">
+                   <PortfolioViewer data={placeholderPortfolioData} isMobilePreview={false} showPlaceholders={true} />
+                 </div>
+               </div>
             </div>
 
             {/* Spacer for right padding */}

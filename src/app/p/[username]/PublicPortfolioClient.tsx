@@ -36,7 +36,7 @@ export function PublicPortfolioClient({ data, username }: PublicPortfolioClientP
 
   return (
     <div className="min-h-screen bg-white">
-      <PortfolioViewer data={data} />
+      <PortfolioViewer data={data} username={username} />
     </div>
   );
 }

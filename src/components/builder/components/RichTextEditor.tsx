@@ -6,6 +6,7 @@ import { RichTextEditorProps } from "../types";
 export const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
       const editorRef = useRef<HTMLDivElement>(null);
       const isUpdatingRef = useRef(false);
+      const [showHelpPopup, setShowHelpPopup] = useState(false);
 
       // Sinkronisasi value dari luar hanya jika kontennya benar-benar berbeda
       useEffect(() => {
@@ -305,7 +306,7 @@ export const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
             <div className="flex flex-wrap items-center gap-1">
               <button
                 type="button"
-                onClick={() => alert("Petunjuk: Gunakan toolbar di atas untuk memformat teks paragraf Anda secara visual.")}
+                onClick={() => setShowHelpPopup(true)}
                 className="p-1 rounded text-zinc-400 hover:text-zinc-100 hover:bg-zinc-850 cursor-pointer"
                 title="Bantuan (Help)"
               >
@@ -336,6 +337,28 @@ export const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
             </div>
           </div>
         </div>
-      );
-    };
 
+        {showHelpPopup && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div className="bg-zinc-900 rounded-xl p-6 shadow-2xl border border-zinc-800 w-full max-w-sm">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-emerald-900/50 text-emerald-400 rounded-full flex items-center justify-center">
+                  <HelpCircle className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-bold text-zinc-100">Bantuan Format</h3>
+              </div>
+              <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
+                Petunjuk: Gunakan toolbar di atas untuk memformat teks paragraf Anda secara visual. Anda dapat menebalkan teks, membuat daftar, atau menyisipkan tautan dengan mudah.
+              </p>
+              <button 
+                onClick={() => setShowHelpPopup(false)}
+                className="w-full bg-emerald-600 text-white rounded-lg py-2.5 font-medium hover:bg-emerald-700 transition-colors"
+              >
+                Mengerti
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RichTextEditor } from '@/components/ui/RichTextEditor';
+import { toast } from 'sonner';
 
 interface OrganizationFormData {
   id?: string;
@@ -74,7 +75,7 @@ export function OrganizationModal({ isOpen, onClose, onSave, initialData }: Prop
   const handleSave = () => {
     // Basic validation
     if (!formData.role || !formData.name || !formData.startMonth || !formData.startYear) {
-      alert("Mohon lengkapi field yang wajib diisi (*)");
+      toast.error("Mohon lengkapi field yang wajib diisi (*)");
       return;
     }
     onSave(formData);

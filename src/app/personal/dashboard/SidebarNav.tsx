@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { LayoutDashboard, Settings, User, Globe, FileText, CreditCard, Briefcase, Mail } from "lucide-react";
+import { LayoutDashboard, Settings, User, Globe, FileText, CreditCard, Briefcase, Mail, Info } from "lucide-react";
 
 const navItems = [
   { href: "/personal/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
@@ -58,7 +58,8 @@ export default function SidebarNav() {
       )}
 
       {/* SIDEBAR NAVIGATION ITEMS (DESKTOP) */}
-      <div className="hidden md:flex flex-col gap-1 p-4">
+      <div className="hidden md:flex flex-col h-full overflow-y-auto">
+        <div className="flex flex-col gap-1 p-4 flex-1">
         {navItems.map(({ href, label, icon: Icon, exact, badge }) => {
           const isActive = exact ? pathname === href : pathname.startsWith(href);
           return (
@@ -87,6 +88,25 @@ export default function SidebarNav() {
             </Link>
           );
         })}
+        </div>
+        
+        {/* DESKTOP FOOTER */}
+        <div className="p-5 mt-auto border-t border-slate-200 bg-slate-50/80">
+          <a 
+            href="https://chat.whatsapp.com/EinEUnLQthc3M0wrlyRuhR"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block group bg-white border border-slate-200 p-3 rounded-xl shadow-sm hover:bg-red-50 hover:border-red-200 hover:shadow-md transition-all"
+          >
+            <div className="flex items-center gap-1.5 text-sm font-bold text-red-600 group-hover:text-red-700 transition-colors">
+              <Info className="w-4 h-4" />
+              <span>Mengalami masalah?</span>
+            </div>
+            <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
+              Join grub whatsapp kami untuk memberikan pesan kritik dan saran
+            </p>
+          </a>
+        </div>
       </div>
 
       {/* MOBILE TRIGGER BUTTON */}
@@ -100,16 +120,23 @@ export default function SidebarNav() {
       </div>
 
       {/* MOBILE NAVIGATION DRAWER (LAYER) */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-50 flex">
-          {/* Backdrop */}
-          <div 
-            className="fixed inset-0 bg-black/20 transition-opacity" 
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-          
-          {/* Drawer Panel */}
-          <div className="relative w-64 bg-white h-full shadow-xl flex flex-col animate-in slide-in-from-left fade-in duration-300">
+      <div 
+        className={`md:hidden fixed inset-0 z-50 flex transition-opacity duration-300 ${
+          isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        {/* Backdrop */}
+        <div 
+          className="absolute inset-0 bg-black/20" 
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+        
+        {/* Drawer Panel */}
+        <div 
+          className={`relative w-64 bg-white h-full shadow-xl flex flex-col transition-transform duration-300 ease-out ${
+            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
             <div className="p-4 border-b border-slate-100 flex items-center justify-between">
               <span className="font-bold text-slate-800">Menu Navigasi</span>
               <button 
@@ -120,7 +147,7 @@ export default function SidebarNav() {
               </button>
             </div>
             
-            <div className="flex flex-col gap-1 p-4 overflow-y-auto">
+            <div className="flex flex-col gap-1 p-4 overflow-y-auto flex-1">
               {navItems.map(({ href, label, icon: Icon, exact, badge }) => {
                 const isActive = exact ? pathname === href : pathname.startsWith(href);
                 return (
@@ -151,9 +178,26 @@ export default function SidebarNav() {
                 );
               })}
             </div>
+
+            {/* MOBILE FOOTER */}
+            <div className="p-5 mt-auto border-t border-slate-200 bg-slate-50/80">
+              <a 
+                href="https://chat.whatsapp.com/EinEUnLQthc3M0wrlyRuhR"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block group bg-white border border-slate-200 p-3 rounded-xl shadow-sm hover:bg-red-50 hover:border-red-200 hover:shadow-md transition-all"
+              >
+                <div className="flex items-center gap-1.5 text-sm font-bold text-red-600 group-hover:text-red-700 transition-colors">
+                  <Info className="w-4 h-4" />
+                  <span>Mengalami masalah?</span>
+                </div>
+                <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                  Join grub whatsapp kami untuk memberikan pesan kritik dan saran
+                </p>
+              </a>
+            </div>
           </div>
         </div>
-      )}
     </>
   );
 }

@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { ChevronDown, LogOut, User } from "lucide-react";
 import useSWR from "swr";
 import { getMyPortfolio } from "@/app/actions/portfolio";
+import { auth } from "@/lib/firebase/client";
+import { signOut } from "firebase/auth";
 
 const fetcher = async () => {
   const result = await getMyPortfolio();
@@ -41,6 +43,15 @@ export default function UserProfileDropdown({
 
   const photoUrl = swrData?.data?.personal?.photoUrl;
 
+  const handleClientLogout = async () => {
+    try {
+      await signOut(auth);
+      await logoutAction();
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
   if (variant === "header") {
     return (
       <div className="relative" ref={dropdownRef}>
@@ -61,12 +72,10 @@ export default function UserProfileDropdown({
               <span className="text-slate-800 font-medium truncate leading-tight text-sm">{name || "User"}</span>
               <span className="text-slate-500 text-xs truncate leading-tight mt-0.5">{email}</span>
             </div>
-            <form action={logoutAction}>
-              <button type="submit" className="flex items-center gap-3 px-4 py-2.5 w-full text-slate-600 hover:bg-red-50 hover:text-red-600 font-medium transition-colors text-sm text-left">
-                <LogOut className="w-4 h-4" />
-                <span>Keluar</span>
-              </button>
-            </form>
+            <button onClick={handleClientLogout} className="flex items-center gap-3 px-4 py-2.5 w-full text-slate-600 hover:bg-red-50 hover:text-red-600 font-medium transition-colors text-sm text-left">
+              <LogOut className="w-4 h-4" />
+              <span>Keluar</span>
+            </button>
           </div>
         )}
       </div>
@@ -97,12 +106,13 @@ export default function UserProfileDropdown({
 
       {isOpen && (
         <div className="absolute left-3 right-3 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-50 overflow-hidden py-1">
-          <form action={logoutAction}>
-            <button type="submit" className="flex items-center gap-3 px-4 py-2.5 w-full text-slate-600 hover:bg-red-50 hover:text-red-600 font-medium transition-colors text-sm text-left">
-              <LogOut className="w-4 h-4" />
-              <span>Keluar</span>
-            </button>
-          </form>
+          <button
+            onClick={handleClientLogout}
+            className="w-full text-left px-4 py-2.5 text-sm text-red-600 font-medium hover:bg-red-50 flex items-center gap-2"
+          >
+            <LogOut className="w-4 h-4" />
+            Keluar Akun
+          </button>
         </div>
       )}
     </div>

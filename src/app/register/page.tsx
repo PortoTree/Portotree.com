@@ -4,7 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff } from "lucide-react";
+import Image from "next/image";
+import { Eye, EyeOff, Mail, CheckCircle2 } from "lucide-react";
 import { auth } from "@/lib/firebase/client";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { sendVerification, verifyOTP, createSession, validateTurnstile } from "@/app/actions/auth";
@@ -24,7 +25,8 @@ export default function RegisterPage() {
   const [isVerificationMode, setIsVerificationMode] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const [resendCountdown, setResendCountdown] = useState(60);
+  const [resendCountdown, setResendCountdown] = useState(0);
+  const [showResendPopup, setShowResendPopup] = useState(false);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -43,7 +45,7 @@ export default function RegisterPage() {
         throw new Error(result.error || "Gagal mengirim ulang kode");
       }
       setResendCountdown(60);
-      alert("Kode verifikasi telah dikirim ulang ke email Anda.");
+      setShowResendPopup(true);
     } catch (err: any) {
       console.error("Resend error:", err);
       setError(err.message || "Gagal mengirim ulang kode");
@@ -75,6 +77,7 @@ export default function RegisterPage() {
       
       // 3. Switch to verification mode (OTP UI)
       setIsVerificationMode(true);
+      setResendCountdown(60);
     } catch (err: any) {
       console.error("Register error:", err);
       // Firebase specific error handling
@@ -187,9 +190,13 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 bg-emerald-600 rounded-xl mx-auto mb-4 flex items-center justify-center shadow-lg shadow-emerald-600/20">
-            <div className="w-5 h-5 border-2 border-white rounded-full"></div>
-          </div>
+          <Image 
+            src="/logo-landscape.png" 
+            alt="PortoTree Logo" 
+            width={160} 
+            height={40} 
+            className="mx-auto mb-6"
+          />
           <h1 className="text-2xl font-bold text-slate-900">
             {isVerificationMode ? "Verifikasi Email" : "Buat akun baru"}
           </h1>
@@ -351,6 +358,24 @@ export default function RegisterPage() {
           </div>
         )}
       </div>
+
+      {showResendPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl p-6 shadow-xl w-full max-w-sm text-center transform transition-all">
+            <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Mail className="w-6 h-6" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-800 mb-2">Kode Terkirim</h3>
+            <p className="text-sm text-slate-500 mb-6">Kode verifikasi telah dikirim ulang ke email Anda.</p>
+            <button 
+              onClick={() => setShowResendPopup(false)}
+              className="w-full bg-emerald-600 text-white rounded-lg py-2.5 font-medium hover:bg-emerald-700 transition-colors"
+            >
+              Mengerti
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

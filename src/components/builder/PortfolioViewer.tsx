@@ -8,11 +8,13 @@ import { motion } from "framer-motion";
 export function PortfolioViewer({ 
   data: rawData, 
   isMobilePreview = false,
-  showPlaceholders = false
+  showPlaceholders = false,
+  username
 }: { 
   data: PortfolioData; 
   isMobilePreview?: boolean;
   showPlaceholders?: boolean;
+  username?: string;
 }) {
   const activeSections = rawData.activeSections || ['education', 'experience', 'organization', 'projects', 'social', 'skills'];
 
@@ -59,8 +61,31 @@ export function PortfolioViewer({
     skills: data.skills === placeholderPortfolioData.skills,
   };
 
+  const handleGlobalClick = (e: React.MouseEvent) => {
+    // Only track if username is provided (meaning it's the live public page)
+    if (!username) return;
+
+    // Find closest anchor tag
+    const target = (e.target as HTMLElement).closest('a');
+    
+    // Check if it's an external link or a meaningful action link (not an in-page anchor like #experience)
+    if (target && target.href && !target.getAttribute('href')?.startsWith('#')) {
+      fetch("/api/track", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, type: "click" }),
+      }).catch(err => console.error("[Analytics] Failed to track click:", err));
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
+    <div 
+      className={`min-h-screen text-slate-900 selection:bg-emerald-100 selection:text-emerald-900 ${
+        isMobilePreview ? "bg-slate-50" : "bg-white"
+      }`}
+      style={{ fontFamily: "'Inter', sans-serif" }}
+      onClick={handleGlobalClick}
+    >
       {/* HEADER / NAV */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
         <div className={`w-full px-4 ${isMobilePreview ? '' : 'md:px-8'} h-16 flex items-center justify-between`}>

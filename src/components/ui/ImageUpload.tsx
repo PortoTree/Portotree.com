@@ -3,6 +3,7 @@
 import React, { useState, useRef } from "react";
 import { Button } from "./button";
 import { UploadCloud, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface ImageUploadProps {
   onUploadSuccess: (url: string) => void;
@@ -21,7 +22,7 @@ export function ImageUpload({ onUploadSuccess, className = "", customTrigger }: 
     // Validate format (JPG, PNG)
     const validTypes = ["image/jpeg", "image/jpg", "image/png"];
     if (!validTypes.includes(file.type)) {
-      alert("Format file tidak valid. Harap unggah format JPG atau PNG.");
+      toast.error("Format file tidak valid. Harap unggah format JPG atau PNG.");
       if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
@@ -29,7 +30,7 @@ export function ImageUpload({ onUploadSuccess, className = "", customTrigger }: 
     // Validate size (Max 5MB)
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (file.size > maxSize) {
-      alert("Ukuran file terlalu besar. Maksimal 5MB.");
+      toast.error("Ukuran file terlalu besar. Maksimal 5MB.");
       if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
@@ -53,11 +54,11 @@ export function ImageUpload({ onUploadSuccess, className = "", customTrigger }: 
       if (data.secure_url) {
         onUploadSuccess(data.secure_url);
       } else {
-        alert("Gagal mengunggah. Pastikan preset dan cloud name sudah benar.");
+        toast.error("Gagal mengunggah. Pastikan preset dan cloud name sudah benar.");
       }
     } catch (error) {
       console.error("Upload error:", error);
-      alert("Terjadi kesalahan saat mengunggah gambar.");
+      toast.error("Terjadi kesalahan saat mengunggah gambar.");
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";

@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RichTextEditor } from '@/components/ui/RichTextEditor';
 import { ImageUpload } from '@/components/ui/ImageUpload';
+import { toast } from 'sonner';
 
 interface ProjectFormData {
   id?: string;
@@ -66,7 +67,7 @@ export function ProjectModal({ isOpen, onClose, onSave, initialData }: Props) {
 
   const handleSave = () => {
     if (!formData.title || !formData.description) {
-      alert("Mohon lengkapi field yang wajib diisi (*)");
+      toast.error("Mohon lengkapi field yang wajib diisi (*)");
       return;
     }
     

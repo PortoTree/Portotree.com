@@ -370,13 +370,17 @@ export function PortfolioDataForm({ data, onChange }: Props) {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-white border-r">
-      <div className="p-4 border-b flex-shrink-0 bg-white">
+    <div className="flex flex-col h-full w-full bg-white md:border-r">
+      <div className="hidden md:block p-4 border-b flex-shrink-0 bg-white">
         <h2 className="text-lg font-bold text-slate-800">Data Portofolio</h2>
         <p className="text-sm text-slate-500">Isi data diri Anda di sini.</p>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 pb-24 space-y-3 custom-scrollbar">
+        <div className="md:hidden pb-2">
+          <h2 className="text-lg font-bold text-slate-800">Data Portofolio</h2>
+          <p className="text-sm text-slate-500">Isi data diri Anda di sini.</p>
+        </div>
         
         {/* PERSONAL INFO */}
         <AccordionSection

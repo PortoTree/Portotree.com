@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RichTextEditor } from '@/components/ui/RichTextEditor';
+import { toast } from 'sonner';
 
 interface EducationFormData {
   id?: string;
@@ -78,7 +79,7 @@ export function EducationModal({ isOpen, onClose, onSave, initialData }: Props) 
   const handleSave = () => {
     // Basic validation
     if (!formData.level || !formData.school || !formData.degree || !formData.startMonth || !formData.startYear) {
-      alert("Mohon lengkapi field yang wajib diisi (*)");
+      toast.error("Mohon lengkapi field yang wajib diisi (*)");
       return;
     }
     onSave(formData);
