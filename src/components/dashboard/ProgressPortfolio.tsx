@@ -4,29 +4,38 @@ import { useState, useEffect } from "react";
 import { CheckCircle2, Circle, Globe, ChevronDown, ChevronUp } from "lucide-react";
 import { PortfolioData, defaultPortfolioData } from "@/lib/portfolioData";
 import Link from "next/link";
+import { getMyPortfolio } from "@/app/actions/portfolio";
 
 export default function ProgressPortfolio() {
   const [data, setData] = useState<PortfolioData | null>(null);
   const [isExpanded, setIsExpanded] = useState(true);
 
   useEffect(() => {
-    try {
-      const localDraft = localStorage.getItem("draft_template_sections");
-      if (localDraft) {
-        const sections = JSON.parse(localDraft);
-        const dataSection = sections.find((s: any) => s.type === "PORTFOLIO_DATA");
-        if (dataSection && dataSection.config && Object.keys(dataSection.config).length > 0) {
-          setData(dataSection.config as PortfolioData);
+    async function fetchProgress() {
+      try {
+        const res = await getMyPortfolio();
+        if (res.success && res.data) {
+          setData(res.data as PortfolioData);
         } else {
-          setData(defaultPortfolioData);
+          const localDraft = localStorage.getItem("draft_template_sections");
+          if (localDraft) {
+            const sections = JSON.parse(localDraft);
+            const dataSection = sections.find((s: any) => s.type === "PORTFOLIO_DATA");
+            if (dataSection && dataSection.config && Object.keys(dataSection.config).length > 0) {
+              setData(dataSection.config as PortfolioData);
+            } else {
+              setData(defaultPortfolioData);
+            }
+          } else {
+            setData(defaultPortfolioData);
+          }
         }
-      } else {
+      } catch (e) {
+        console.error(e);
         setData(defaultPortfolioData);
       }
-    } catch (e) {
-      console.error(e);
-      setData(defaultPortfolioData);
     }
+    fetchProgress();
   }, []);
 
   if (!data) return null; // or loading skeleton
