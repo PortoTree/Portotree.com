@@ -64,7 +64,7 @@ export default function PortfolioPage() {
       if (swrData.data) {
         const merged = { ...(swrData.data as PortfolioData) };
         const existing = merged.social?.map((s: any) => s.platform) || [];
-        const missing = defaultPortfolioData.social.filter(s => !existing.includes(s.platform));
+        const missing = (defaultPortfolioData.social || []).filter(s => !existing.includes(s.platform));
         if (missing.length > 0) {
           merged.social = [...(merged.social || []), ...missing];
         }
