@@ -25,7 +25,7 @@ export function DevToast() {
         >
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></div>
-            Sedang tahap development
+            Akses fitur awal
           </div>
           <button 
             onClick={() => setIsVisible(false)}

@@ -1,8 +1,26 @@
-import Link from "next/link";
-import { Eye, MousePointerClick, TrendingUp, Globe, Edit3 } from "lucide-react";
+"use client";
+
+import useSWR from "swr";
+import { Eye, MousePointerClick, TrendingUp, Globe } from "lucide-react";
 import TrafficChart from "@/components/dashboard/TrafficChart";
+import { getDashboardAnalytics } from "@/app/actions/analytics";
+
+const fetcher = async () => {
+  const res = await getDashboardAnalytics();
+  if (res.success && res.data) return res.data;
+  throw new Error(res.error || "Failed to fetch analytics");
+};
 
 export default function DashboardPage() {
+  const { data, isLoading } = useSWR("dashboard-analytics", fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 300000, // 5 minutes cache
+  });
+
+  const views = data?.totalViews || 0;
+  const clicks = data?.totalClicks || 0;
+  const visitors = data?.uniqueVisitors || 0;
+  const chartData = data?.chartData || [];
   return (
     <div className="p-6 md:p-10 max-w-5xl mx-auto space-y-10">
       {/* HEADER */}
@@ -22,7 +40,9 @@ export default function DashboardPage() {
               <Eye className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-3xl font-bold tracking-tight text-slate-800">1,248</div>
+          <div className="text-3xl font-bold tracking-tight text-slate-800">
+            {isLoading ? "..." : views.toLocaleString('id-ID')}
+          </div>
           <div className="text-sm text-emerald-600 font-medium mt-2 flex items-center gap-1">
             <TrendingUp className="w-4 h-4" /> +12% dari minggu lalu
           </div>
@@ -35,7 +55,9 @@ export default function DashboardPage() {
               <MousePointerClick className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-3xl font-bold tracking-tight text-slate-800">384</div>
+          <div className="text-3xl font-bold tracking-tight text-slate-800">
+            {isLoading ? "..." : clicks.toLocaleString('id-ID')}
+          </div>
           <div className="text-sm text-emerald-600 font-medium mt-2 flex items-center gap-1">
             <TrendingUp className="w-4 h-4" /> +5% dari minggu lalu
           </div>
@@ -48,15 +70,17 @@ export default function DashboardPage() {
               <Globe className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-3xl font-bold tracking-tight text-slate-800">892</div>
+          <div className="text-3xl font-bold tracking-tight text-slate-800">
+            {isLoading ? "..." : visitors.toLocaleString('id-ID')}
+          </div>
           <div className="text-sm text-slate-500 font-medium mt-2">
-            Dari 12 negara
+            Keseluruhan
           </div>
         </div>
       </div>
 
       {/* TRAFFIC CHART */}
-      <TrafficChart />
+      <TrafficChart data={chartData} isLoading={isLoading} />
     </div>
   );
 }

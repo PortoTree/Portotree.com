@@ -55,16 +55,16 @@ export default function ProgressPortfolio() {
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Globe className="w-5 h-5 text-blue-600" />
+            <Globe className="w-5 h-5 text-emerald-600" />
             <h2 className="font-bold text-slate-800 text-lg">Progress Portfolio</h2>
           </div>
-          <div className="font-black text-blue-600 text-xl">{progressPercentage}%</div>
+          <div className="font-black text-emerald-600 text-xl">{progressPercentage}%</div>
         </div>
 
         {/* Progress Bar */}
         <div className="w-full bg-slate-100 rounded-full h-2.5 mb-2">
           <div 
-            className="bg-blue-600 h-2.5 rounded-full transition-all duration-500 ease-in-out" 
+            className="bg-emerald-600 h-2.5 rounded-full transition-all duration-500 ease-in-out" 
             style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>
@@ -102,7 +102,7 @@ export default function ProgressPortfolio() {
               {!item.isCompleted && (
                 <Link 
                   href={`/personal/portfolio-builder?mode=template&section=${item.id}`}
-                  className="text-sm text-blue-600 font-medium opacity-100 transition-opacity"
+                  className="text-sm text-emerald-600 font-medium opacity-100 transition-opacity"
                 >
                   Lengkapi
                 </Link>

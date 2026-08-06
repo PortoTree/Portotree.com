@@ -14,11 +14,13 @@ const fetcher = async () => {
 export default function UserProfileDropdown({ 
   email, 
   name, 
-  logoutAction 
+  logoutAction,
+  variant = "sidebar"
 }: { 
   email?: string;
   name?: string;
   logoutAction: () => Promise<void>;
+  variant?: "sidebar" | "header";
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -38,6 +40,38 @@ export default function UserProfileDropdown({
   });
 
   const photoUrl = swrData?.data?.personal?.photoUrl;
+
+  if (variant === "header") {
+    return (
+      <div className="relative" ref={dropdownRef}>
+        <button 
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-teal-400 text-white shadow-inner overflow-hidden focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all hover:opacity-90"
+        >
+          {photoUrl ? (
+            <img src={photoUrl} alt="Profile" className="w-full h-full object-cover" />
+          ) : (
+            <User className="w-5 h-5" />
+          )}
+        </button>
+
+        {isOpen && (
+          <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg z-50 overflow-hidden py-1">
+            <div className="px-4 py-2 border-b border-slate-100 flex flex-col">
+              <span className="text-slate-800 font-medium truncate leading-tight text-sm">{name || "User"}</span>
+              <span className="text-slate-500 text-xs truncate leading-tight mt-0.5">{email}</span>
+            </div>
+            <form action={logoutAction}>
+              <button type="submit" className="flex items-center gap-3 px-4 py-2.5 w-full text-slate-600 hover:bg-red-50 hover:text-red-600 font-medium transition-colors text-sm text-left">
+                <LogOut className="w-4 h-4" />
+                <span>Keluar</span>
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="relative p-3 border-b border-slate-100" ref={dropdownRef}>

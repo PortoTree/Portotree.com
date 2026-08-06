@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import useSWR from "swr";
-import { getMyPortfolio } from "@/app/actions/portfolio";
+import { getMyPortfolio, updateUsername } from "@/app/actions/portfolio";
 import { PortfolioViewer } from "@/components/builder/PortfolioViewer";
 import { defaultPortfolioData, PortfolioData } from "@/lib/portfolioData";
 import {
@@ -46,6 +46,10 @@ const fetcher = async () => {
 export default function PortfolioPage() {
   const [showDetail, setShowDetail] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+  const [linkInput, setLinkInput] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
   
   // SWR Config: Hemat kuota Firestore Read!
   const { data: swrData } = useSWR('my-portfolio-dashboard', fetcher, {
@@ -115,6 +119,28 @@ export default function PortfolioPage() {
     navigator.clipboard.writeText(`https://${portfolioLink}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSaveLink = async () => {
+    if (!linkInput || linkInput === myUsername) {
+      setIsLinkModalOpen(false);
+      return;
+    }
+    setIsSaving(true);
+    setSaveError("");
+    try {
+      const result = await updateUsername(linkInput);
+      if (result.success) {
+        setMyUsername(linkInput); // update local state immediately
+        setIsLinkModalOpen(false);
+      } else {
+        setSaveError(result.error || "Gagal mengubah link");
+      }
+    } catch (e: any) {
+      setSaveError(e.message || "Terjadi kesalahan");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -188,7 +214,7 @@ export default function PortfolioPage() {
           {/* PORTFOLIO INFO */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
             <div className="flex items-center gap-2 mb-4">
-              <Settings className="w-4 h-4 text-blue-500" />
+              <Settings className="w-4 h-4 text-emerald-500" />
               <h3 className="font-bold text-slate-800 text-sm">Portfolio Info</h3>
             </div>
 
@@ -210,12 +236,12 @@ export default function PortfolioPage() {
                   <Globe className="w-3.5 h-3.5" /> Link
                 </span>
                 <div className="flex items-center gap-1.5 min-w-0">
-                  <span className="text-blue-500 text-xs font-medium truncate">
+                  <span className="text-emerald-500 text-xs font-medium truncate">
                     {portfolioLink}
                   </span>
                   <button
                     onClick={handleCopy}
-                    className="flex-shrink-0 text-slate-300 hover:text-blue-500 transition-colors"
+                    className="flex-shrink-0 text-slate-300 hover:text-emerald-500 transition-colors"
                   >
                     <Copy className="w-3.5 h-3.5" />
                   </button>
@@ -225,18 +251,73 @@ export default function PortfolioPage() {
             </div>
 
             <div className="mt-4 pt-4 border-t border-slate-100">
-              <p className="text-xs text-slate-500 leading-relaxed">
-                HRD lebih menyukai{" "}
-                <span className="font-bold text-slate-700">link yang rapi</span>. Ubah link
-                acak kamu menjadi nama profesional agar profil Anda terlihat lebih meyakinkan!
-              </p>
-              <button className="mt-3 w-full py-2 border border-blue-200 text-blue-600 font-semibold text-xs rounded-lg hover:bg-blue-50 transition-colors">
+              <button 
+                onClick={() => {
+                  setLinkInput(myUsername);
+                  setIsLinkModalOpen(true);
+                }}
+                className="w-full py-2 border border-emerald-200 text-emerald-600 font-semibold text-xs rounded-lg hover:bg-emerald-50 transition-colors"
+              >
                 Ubah Link Sekarang
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* MODAL UBAH LINK */}
+      {isLinkModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/20 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+            <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="font-bold text-slate-800 text-lg">Ubah Link Portofolio</h3>
+              <button 
+                onClick={() => setIsLinkModalOpen(false)}
+                className="text-slate-400 hover:bg-slate-100 hover:text-slate-600 p-2 rounded-full transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Username / Link Kustom</label>
+                <div className="flex rounded-lg shadow-sm border border-slate-200 focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500 overflow-hidden">
+                  <span className="inline-flex items-center px-3 rounded-l-lg bg-slate-50 text-slate-500 text-sm border-r border-slate-200">
+                    portotree.com/p/
+                  </span>
+                  <input
+                    type="text"
+                    value={linkInput}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/[^a-zA-Z0-9-]/g, '');
+                      setLinkInput(val);
+                    }}
+                    className="flex-1 min-w-0 block w-full px-3 py-2 sm:text-sm focus:outline-none text-slate-700"
+                    placeholder="nama-kamu"
+                  />
+                </div>
+                <p className="mt-2 text-xs text-slate-500">Hanya huruf, angka, dan tanda hubung (-) yang diperbolehkan.</p>
+                {saveError && <p className="mt-2 text-xs text-red-500 font-medium">{saveError}</p>}
+              </div>
+            </div>
+            <div className="p-5 border-t border-slate-100 flex justify-end gap-3 bg-slate-50">
+              <button 
+                onClick={() => setIsLinkModalOpen(false)}
+                className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+              >
+                Batal
+              </button>
+              <button 
+                onClick={handleSaveLink}
+                disabled={isSaving}
+                className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 border border-transparent rounded-lg hover:bg-emerald-700 shadow-sm transition-colors disabled:opacity-70 flex items-center gap-2"
+              >
+                {isSaving ? "Menyimpan..." : "Simpan"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

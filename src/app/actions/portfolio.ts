@@ -7,7 +7,7 @@ import { FieldValue } from "firebase-admin/firestore";
 // ============================================================
 // Helper: Ambil UID user dari session cookie
 // ============================================================
-async function getAuthenticatedUid(): Promise<string | null> {
+export async function getAuthenticatedUid(): Promise<string | null> {
   try {
     const cookieStore = await cookies();
     const sessionCookie = cookieStore.get("session");
@@ -98,6 +98,66 @@ export async function claimUsername(username: string): Promise<{ success: boolea
     return { success: true };
   } catch (error: any) {
     console.error("[DEBUG] claimUsername error:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+// ============================================================
+// Ubah username untuk user yang sedang login
+// ============================================================
+export async function updateUsername(newUsername: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const uid = await getAuthenticatedUid();
+    if (!uid) return { success: false, error: "Belum login" };
+
+    const check = await checkUsername(newUsername);
+    if (!check.available) {
+      return { success: false, error: check.error };
+    }
+
+    const portfolioRef = adminDb.collection("portfolios").doc(uid);
+    const existingPortfolio = await portfolioRef.get();
+    
+    if (!existingPortfolio.exists) {
+       return { success: false, error: "Portfolio tidak ditemukan" };
+    }
+
+    const oldUsername = existingPortfolio.data()?.username;
+    
+    // Jika username tidak berubah
+    if (oldUsername === newUsername) {
+      return { success: true };
+    }
+
+    const batch = adminDb.batch();
+
+    // 1. Delete old username mapping
+    if (oldUsername) {
+      batch.delete(adminDb.collection("usernames").doc(oldUsername));
+    }
+
+    // 2. Claim new username mapping
+    batch.set(adminDb.collection("usernames").doc(newUsername), {
+      uid,
+      claimedAt: FieldValue.serverTimestamp(),
+    });
+
+    // 3. Update portfolio document
+    batch.set(
+      portfolioRef,
+      {
+        username: newUsername,
+        updatedAt: FieldValue.serverTimestamp(),
+      },
+      { merge: true }
+    );
+
+    await batch.commit();
+    console.log(`[DEBUG] Username updated from "${oldUsername}" to "${newUsername}" by uid: ${uid}`);
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("[DEBUG] updateUsername error:", error);
     return { success: false, error: error.message };
   }
 }
