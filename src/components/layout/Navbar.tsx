@@ -37,7 +37,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Halaman utama blog</div>
       </div>
     </a>
-    <a href={getMainUrl('/tags/karier')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog/tags/karier')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Briefcase className="w-5 h-5" />
       </div>
@@ -46,7 +46,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Tips sukses di dunia kerja</div>
       </div>
     </a>
-    <a href={getMainUrl('/tags/tips-trik')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog/tags/tips-trik')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Lightbulb className="w-5 h-5" />
       </div>
@@ -55,7 +55,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Berbagai panduan praktis</div>
       </div>
     </a>
-    <a href={getMainUrl('/tags/edukasi')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog/tags/edukasi')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <BookOpen className="w-5 h-5" />
       </div>
@@ -64,7 +64,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Tambah wawasan & ilmu baru</div>
       </div>
     </a>
-    <a href={getMainUrl('/tags/info-berita')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog/tags/info-berita')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Newspaper className="w-5 h-5" />
       </div>
@@ -73,7 +73,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Update dunia profesional</div>
       </div>
     </a>
-    <a href={getMainUrl('/tags/dokumen')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog/tags/dokumen')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <FileText className="w-5 h-5" />
       </div>
@@ -82,7 +82,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Panduan bikin berkas penting</div>
       </div>
     </a>
-    <a href={getMainUrl('/tags/portofolio')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog/tags/portofolio')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Layout className="w-5 h-5" />
       </div>
@@ -203,22 +203,22 @@ export function Navbar() {
             <a href={getMainUrl('/blog')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
               <Home className="w-4 h-4" /> Beranda
             </a>
-            <a href={getMainUrl('/tags/karier')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+            <a href={getMainUrl('/blog/tags/karier')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
               <Briefcase className="w-4 h-4" /> Karier
             </a>
-            <a href={getMainUrl('/tags/tips-trik')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+            <a href={getMainUrl('/blog/tags/tips-trik')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
               <Lightbulb className="w-4 h-4" /> Tips & Trik
             </a>
-            <a href={getMainUrl('/tags/edukasi')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+            <a href={getMainUrl('/blog/tags/edukasi')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
               <BookOpen className="w-4 h-4" /> Edukasi
             </a>
-            <a href={getMainUrl('/tags/info-berita')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+            <a href={getMainUrl('/blog/tags/info-berita')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
               <Newspaper className="w-4 h-4" /> Info & Berita
             </a>
-            <a href={getMainUrl('/tags/dokumen')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+            <a href={getMainUrl('/blog/tags/dokumen')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
               <FileText className="w-4 h-4" /> Dokumen (CV/Surat)
             </a>
-            <a href={getMainUrl('/tags/portofolio')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 hover:text-green-600 flex items-center gap-3 text-sm">
+            <a href={getMainUrl('/blog/tags/portofolio')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 hover:text-green-600 flex items-center gap-3 text-sm">
               <Layout className="w-4 h-4" /> Portofolio
             </a>
           </motion.div>
@@ -307,12 +307,12 @@ export function Navbar() {
             ) : isBlogPage ? (
               <nav className="hidden lg:flex items-center gap-4 text-sm font-medium">
                 <Link href={getMainUrl('/blog')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Home className="w-4 h-4"/> Beranda</Link>
-                <Link href={getMainUrl('/tags/karier')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Briefcase className="w-4 h-4"/> Karier</Link>
-                <Link href={getMainUrl('/tags/tips-trik')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Lightbulb className="w-4 h-4"/> Tips & Trik</Link>
-                <Link href={getMainUrl('/tags/edukasi')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><BookOpen className="w-4 h-4"/> Edukasi</Link>
-                <Link href={getMainUrl('/tags/info-berita')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Newspaper className="w-4 h-4"/> Info & Berita</Link>
-                <Link href={getMainUrl('/tags/dokumen')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><FileText className="w-4 h-4"/> Dokumen</Link>
-                <Link href={getMainUrl('/tags/portofolio')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Layout className="w-4 h-4"/> Portofolio</Link>
+                <Link href={getMainUrl('/blog/tags/karier')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Briefcase className="w-4 h-4"/> Karier</Link>
+                <Link href={getMainUrl('/blog/tags/tips-trik')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Lightbulb className="w-4 h-4"/> Tips & Trik</Link>
+                <Link href={getMainUrl('/blog/tags/edukasi')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><BookOpen className="w-4 h-4"/> Edukasi</Link>
+                <Link href={getMainUrl('/blog/tags/info-berita')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Newspaper className="w-4 h-4"/> Info & Berita</Link>
+                <Link href={getMainUrl('/blog/tags/dokumen')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><FileText className="w-4 h-4"/> Dokumen</Link>
+                <Link href={getMainUrl('/blog/tags/portofolio')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Layout className="w-4 h-4"/> Portofolio</Link>
               </nav>
             ) : (
               <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
@@ -554,22 +554,22 @@ export function Navbar() {
                     <Link href={getMainUrl('/blog')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
                       <Home className="w-5 h-5" /> Beranda
                     </Link>
-                    <Link href={getMainUrl('/tags/karier')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                    <Link href={getMainUrl('/blog/tags/karier')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
                       <Briefcase className="w-5 h-5" /> Karier
                     </Link>
-                    <Link href={getMainUrl('/tags/tips-trik')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                    <Link href={getMainUrl('/blog/tags/tips-trik')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
                       <Lightbulb className="w-5 h-5" /> Tips & Trik
                     </Link>
-                    <Link href={getMainUrl('/tags/edukasi')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                    <Link href={getMainUrl('/blog/tags/edukasi')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
                       <BookOpen className="w-5 h-5" /> Edukasi
                     </Link>
-                    <Link href={getMainUrl('/tags/info-berita')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                    <Link href={getMainUrl('/blog/tags/info-berita')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
                       <Newspaper className="w-5 h-5" /> Info & Berita
                     </Link>
-                    <Link href={getMainUrl('/tags/dokumen')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                    <Link href={getMainUrl('/blog/tags/dokumen')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
                       <FileText className="w-5 h-5" /> Dokumen (CV/Surat)
                     </Link>
-                    <Link href={getMainUrl('/tags/portofolio')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 hover:text-green-600 flex items-center gap-3">
+                    <Link href={getMainUrl('/blog/tags/portofolio')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 hover:text-green-600 flex items-center gap-3">
                       <Layout className="w-5 h-5" /> Portofolio
                     </Link>
                   </>
