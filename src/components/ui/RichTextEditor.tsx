@@ -21,12 +21,15 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
   const [hasSelection, setHasSelection] = useState(false);
   const [hasFormatting, setHasFormatting] = useState(false);
 
-  // Sync initial value only once
+  // Sync value when changed externally (e.g. opening different items or resetting form)
   useEffect(() => {
     if (editorRef.current && editorRef.current.innerHTML !== value) {
-      editorRef.current.innerHTML = value || '';
+      // Only overwrite if the editor is not currently focused to prevent cursor jumping while typing
+      if (document.activeElement !== editorRef.current) {
+        editorRef.current.innerHTML = value || '';
+      }
     }
-  }, []);
+  }, [value]);
 
   useEffect(() => {
     const handleSelectionChange = () => {
