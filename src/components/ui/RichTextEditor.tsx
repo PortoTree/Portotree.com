@@ -64,6 +64,13 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
     }
   };
 
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    // Strip HTML formatting on paste to prevent weird backgrounds/styles
+    const text = e.clipboardData.getData('text/plain');
+    document.execCommand('insertText', false, text);
+  };
+
   const checkFormatting = (html: string) => {
     // Check if there are any formatting tags (b, i, a, or inline styles for alignment)
     const formatted = /<(b|i|a|u|strike|font|span|div style)[^>]*>/i.test(html) || /style="/i.test(html);
@@ -210,6 +217,7 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
         contentEditable
         onInput={handleInput}
         onBlur={handleInput}
+        onPaste={handlePaste}
         className="rich-text-editor p-3 min-h-[120px] outline-none text-slate-700 [&_b]:font-bold [&_i]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_a]:text-emerald-600 [&_a]:underline"
         data-placeholder={placeholder}
       />

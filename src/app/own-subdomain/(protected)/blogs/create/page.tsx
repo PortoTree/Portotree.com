@@ -1,65 +1,46 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { getBlogById, updateBlog, deleteBlog } from "@/app/actions/blog";
+import { createBlog } from "@/app/actions/blog";
 import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { ImageUpload } from "@/components/ui/ImageUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Save, ArrowLeft, Loader2, Image as ImageIcon, Trash2, ExternalLink } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Save, ArrowLeft, Loader2, Image as ImageIcon, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import Image from "next/image";
-import { use } from "react";
 
-export default function EditBlogPage({ params }: { params: Promise<{ id: string }> }) {
+export default function CreateBlogPage() {
   const router = useRouter();
-  const { id } = use(params);
-  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
     excerpt: "",
+    category: "Karier",
     content: "",
     coverImage: "",
     status: "draft" as "draft" | "published",
   });
 
-  useEffect(() => {
-    const fetchBlog = async () => {
-      try {
-        const result = await getBlogById(id);
-        if (result.success && result.data) {
-          setFormData({
-            title: result.data.title || "",
-            slug: result.data.slug || "",
-            excerpt: result.data.excerpt || "",
-            content: result.data.content || "",
-            coverImage: result.data.coverImage || "",
-            status: result.data.status || "draft",
-          });
-        } else {
-          toast.error("Blog tidak ditemukan");
-          router.push("/blogs");
-        }
-      } catch (error) {
-        toast.error("Gagal mengambil data blog");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    fetchBlog();
-  }, [id, router]);
-
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value;
-    setFormData(prev => ({ ...prev, title }));
+    // Auto generate slug from title if slug is empty or user hasn't typed in slug manually
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "");
+      
+    setFormData(prev => ({
+      ...prev,
+      title,
+      slug: prev.slug === "" || prev.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "") === prev.slug ? slug : prev.slug
+    }));
   };
 
   const handleSave = async (status: "draft" | "published") => {
@@ -81,14 +62,14 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
         status,
       };
       
-      const result = await updateBlog(id, dataToSave);
+      const result = await createBlog(dataToSave);
       
       if (result.success) {
-        toast.success(`Artikel berhasil diperbarui dan di-set sebagai ${status}`);
-        setFormData(prev => ({ ...prev, status }));
+        toast.success(`Artikel berhasil ${status === 'published' ? 'dipublikasikan' : 'disimpan sebagai draft'}`);
+        router.push("/blogs");
         router.refresh();
       } else {
-        toast.error(result.error || "Gagal memperbarui artikel");
+        toast.error(result.error || "Gagal menyimpan artikel");
       }
     } catch (error) {
       toast.error("Terjadi kesalahan. Silakan coba lagi.");
@@ -97,66 +78,21 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
     }
   };
 
-  const handleDelete = async () => {
-    if (!confirm("Apakah Anda yakin ingin menghapus artikel ini? Tindakan ini tidak bisa dibatalkan.")) {
-      return;
-    }
-    
-    setIsDeleting(true);
-    try {
-      const result = await deleteBlog(id);
-      if (result.success) {
-        toast.success("Artikel berhasil dihapus");
-        router.push("/blogs");
-        router.refresh();
-      } else {
-        toast.error("Gagal menghapus artikel");
-      }
-    } catch (error) {
-      toast.error("Terjadi kesalahan saat menghapus");
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 text-cyan-500 animate-spin" />
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-20">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div className="flex items-center gap-4">
-          <Link href="/blogs" className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
-            <ArrowLeft className="w-5 h-5 text-slate-600" />
-          </Link>
-          <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Edit Artikel</h1>
-            <p className="text-sm text-slate-500 mt-1">Status: <strong className="uppercase">{formData.status}</strong></p>
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          {formData.status === 'published' && (
-            <a 
-              href={`https://portotree.com/blog/${formData.slug}`} 
-              target="_blank" 
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-600 hover:text-cyan-600 rounded-lg text-sm font-medium transition-colors"
-            >
-              Lihat Publikasi
-              <ExternalLink className="w-4 h-4" />
-            </a>
-          )}
+      <div className="flex items-center gap-4 mb-6">
+        <Link href="/blogs" className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+          <ArrowLeft className="w-5 h-5 text-slate-600" />
+        </Link>
+        <div>
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Tulis Artikel Baru</h1>
+          <p className="text-sm text-slate-500 mt-1">Bagikan pemikiran dan cerita Anda ke dunia.</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
+          {/* Main Content Area */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div className="space-y-2">
               <Label htmlFor="title" className="text-slate-700 font-bold">Judul Artikel</Label>
@@ -165,8 +101,28 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
                 placeholder="Contoh: 10 Tips Membangun Portofolio..." 
                 value={formData.title}
                 onChange={handleTitleChange}
-                className="text-lg py-6 font-medium focus-visible:ring-cyan-500"
+                className="text-lg py-6 font-medium focus-visible:ring-emerald-500"
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="category" className="text-slate-700 font-bold">Kategori</Label>
+              <Select 
+                value={formData.category} 
+                onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Pilih Kategori" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Karier">Karier</SelectItem>
+                  <SelectItem value="Tips & Trik">Tips & Trik</SelectItem>
+                  <SelectItem value="Edukasi">Edukasi</SelectItem>
+                  <SelectItem value="Info & Berita">Info & Berita</SelectItem>
+                  <SelectItem value="Dokumen (CV/Surat)">Dokumen (CV/Surat)</SelectItem>
+                  <SelectItem value="Portofolio">Portofolio</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             
             <div className="space-y-2">
@@ -182,41 +138,28 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
         </div>
 
         <div className="space-y-6">
-          {/* Actions Sidebar */}
+          {/* Sidebar Area */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div className="space-y-4">
-              <h3 className="font-bold text-slate-900 border-b border-slate-100 pb-2">Perbarui</h3>
+              <h3 className="font-bold text-slate-900 border-b border-slate-100 pb-2">Pengaturan Publikasi</h3>
               
               <Button 
                 onClick={() => handleSave("published")} 
-                disabled={isSubmitting || isDeleting}
-                className="w-full bg-cyan-600 hover:bg-cyan-700 text-white shadow-md shadow-cyan-500/20"
+                disabled={isSubmitting}
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-500/20"
               >
-                {isSubmitting && formData.status === 'published' ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-                {formData.status === 'published' ? 'Perbarui Publikasi' : 'Publikasikan Sekarang'}
+                {isSubmitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                Publikasikan Sekarang
               </Button>
               
               <Button 
                 onClick={() => handleSave("draft")} 
-                disabled={isSubmitting || isDeleting}
+                disabled={isSubmitting}
                 variant="outline"
-                className={`w-full text-slate-600 hover:text-slate-900 ${formData.status === 'draft' ? 'bg-slate-50' : ''}`}
+                className="w-full text-slate-600 hover:text-slate-900"
               >
-                {isSubmitting && formData.status === 'draft' ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-                Simpan ke Draft
+                Simpan sebagai Draft
               </Button>
-
-              <div className="pt-4 border-t border-slate-100">
-                <Button 
-                  onClick={handleDelete} 
-                  disabled={isSubmitting || isDeleting}
-                  variant="ghost"
-                  className="w-full text-red-600 hover:text-red-700 hover:bg-red-50"
-                >
-                  {isDeleting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Trash2 className="w-4 h-4 mr-2" />}
-                  Hapus Artikel
-                </Button>
-              </div>
             </div>
           </div>
 

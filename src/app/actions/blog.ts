@@ -8,6 +8,7 @@ export type BlogPost = {
   title: string;
   slug: string;
   excerpt: string;
+  category?: string; // New Category Field
   content: string; // HTML content from Rich Text Editor
   coverImage: string | null;
   status: 'draft' | 'published';
@@ -61,6 +62,62 @@ export async function getAdminBlogs(): Promise<{ success: boolean; data?: BlogPo
     return { success: false, error: "Gagal mengambil daftar blog." };
   }
 }
+
+// READ ALL PUBLISHED (For Public Site)
+export async function getPublishedBlogs(): Promise<{ success: boolean; data?: BlogPost[]; error?: string }> {
+  try {
+    const snapshot = await adminDb
+      .collection("blogs")
+      .where("status", "==", "published")
+      .orderBy("createdAt", "desc")
+      .get();
+    
+    const blogs: BlogPost[] = snapshot.docs.map(doc => ({
+      ...doc.data(),
+      id: doc.id,
+      createdAt: doc.data().createdAt?.toDate()?.toISOString() || null,
+      updatedAt: doc.data().updatedAt?.toDate()?.toISOString() || null,
+    })) as BlogPost[];
+
+    return { success: true, data: blogs };
+  } catch (error: any) {
+    console.error("[getPublishedBlogs] Error:", error);
+    return { success: false, error: "Gagal mengambil daftar blog." };
+  }
+}
+
+// READ SINGLE BY SLUG (For Public Site)
+export async function getBlogBySlug(slug: string): Promise<{ success: boolean; data?: BlogPost; error?: string }> {
+  try {
+    const snapshot = await adminDb
+      .collection("blogs")
+      .where("slug", "==", slug)
+      .where("status", "==", "published")
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) {
+      return { success: false, error: "Artikel tidak ditemukan atau belum dipublikasikan." };
+    }
+
+    const doc = snapshot.docs[0];
+    const data = doc.data() as BlogPost;
+    
+    return { 
+      success: true, 
+      data: {
+        ...data,
+        id: doc.id,
+        createdAt: data.createdAt?.toDate?.()?.toISOString() || null,
+        updatedAt: data.updatedAt?.toDate?.()?.toISOString() || null,
+      } 
+    };
+  } catch (error: any) {
+    console.error("[getBlogBySlug] Error:", error);
+    return { success: false, error: "Gagal mengambil artikel." };
+  }
+}
+
 
 // READ SINGLE
 export async function getBlogById(id: string): Promise<{ success: boolean; data?: BlogPost; error?: string }> {

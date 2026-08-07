@@ -1,0 +1,113 @@
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { getBlogBySlug, getPublishedBlogs } from "@/app/actions/blog";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { Calendar, ArrowLeft } from "lucide-react";
+import { Metadata } from "next";
+
+export const revalidate = 60;
+
+// Dynamic Metadata
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const result = await getBlogBySlug(resolvedParams.slug);
+  
+  if (!result.success || !result.data) {
+    return { title: "Artikel Tidak Ditemukan | PortoTree" };
+  }
+  
+  return {
+    title: `${result.data.title} | PortoTree Blog`,
+    description: result.data.excerpt || "Baca artikel selengkapnya di PortoTree.",
+    openGraph: {
+      images: result.data.coverImage ? [result.data.coverImage] : [],
+    },
+  };
+}
+
+export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
+  const result = await getBlogBySlug(resolvedParams.slug);
+  
+  if (!result.success || !result.data) {
+    notFound();
+  }
+
+  const blog = result.data;
+  const date = blog.createdAt ? new Date(blog.createdAt).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  }) : "";
+
+  return (
+    <div className="min-h-screen bg-white font-sans selection:bg-emerald-200 selection:text-emerald-900 flex flex-col">
+      <Navbar />
+      
+      <main className="flex-1 pt-24 pb-24">
+        {/* Cover Image Header */}
+        <div className="w-full max-w-5xl mx-auto px-6 mb-8 pt-8">
+          <Link href="/blog" className="inline-flex items-center text-slate-500 hover:text-emerald-600 font-medium transition-colors mb-8">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Kembali ke Blog
+          </Link>
+          
+          <div className="flex flex-wrap items-center gap-4 mb-4">
+            <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-semibold">
+              {blog.category || "Karier"}
+            </span>
+            <div className="flex items-center gap-2 text-slate-500 font-medium">
+              <Calendar className="w-5 h-5 text-emerald-600" />
+              <time>{date}</time>
+            </div>
+          </div>
+          
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-8">
+            {blog.title}
+          </h1>
+        </div>
+
+        {blog.coverImage && (
+          <div className="w-full max-w-6xl mx-auto px-6 mb-16">
+            <div className="relative aspect-[2/1] md:aspect-[21/9] w-full rounded-3xl overflow-hidden shadow-xl border border-slate-100">
+              <Image 
+                src={blog.coverImage} 
+                alt={blog.title} 
+                fill 
+                className="object-cover" 
+                priority
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Content */}
+        <div className="max-w-3xl mx-auto px-6">
+          <article 
+            className="prose prose-slate md:prose-lg lg:prose-xl mx-auto
+              prose-headings:font-extrabold prose-headings:tracking-tight prose-headings:text-slate-900
+              prose-a:text-emerald-600 hover:prose-a:text-emerald-700
+              prose-img:rounded-2xl prose-img:shadow-lg
+              prose-blockquote:border-l-emerald-500 prose-blockquote:bg-emerald-50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-xl prose-blockquote:not-italic
+              prose-li:marker:text-emerald-500"
+            dangerouslySetInnerHTML={{ __html: blog.content }}
+          />
+          
+          <div className="mt-16 pt-8 border-t border-slate-100 flex justify-between items-center">
+            <p className="text-slate-500 font-medium">Terima kasih telah membaca.</p>
+            <Link 
+              href="/blog"
+              className="inline-flex items-center justify-center font-bold bg-slate-900 text-white hover:bg-slate-800 transition-colors h-12 px-8 rounded-full shadow-md"
+            >
+              Baca Artikel Lainnya
+            </Link>
+          </div>
+        </div>
+      </main>
+      
+      <Footer />
+    </div>
+  );
+}

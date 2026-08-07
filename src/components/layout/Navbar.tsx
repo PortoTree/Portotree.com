@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, Briefcase, Layout, FileText, X, Users, Building2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronDown, Briefcase, Layout, FileText, X, Users, Building2, ChevronLeft, ChevronRight, Menu, Lightbulb, BookOpen, Newspaper, Home, Layers, Phone, Package, Info, ShieldCheck, FileSignature } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +26,74 @@ const fetcher = async () => {
   return null;
 };
 
+const BlogDropdownContent = () => (
+  <div className="bg-white rounded-xl p-2 shadow-xl border border-slate-100 grid grid-cols-2 gap-1">
+    <a href="https://www.portotree.com/blog" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
+        <Home className="w-5 h-5" />
+      </div>
+      <div>
+        <div className="font-bold text-sm text-slate-800">Beranda</div>
+        <div className="text-xs text-slate-500 mt-0.5">Halaman utama blog</div>
+      </div>
+    </a>
+    <a href="https://www.portotree.com/tags/karier" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
+        <Briefcase className="w-5 h-5" />
+      </div>
+      <div>
+        <div className="font-bold text-sm text-slate-800">Karier</div>
+        <div className="text-xs text-slate-500 mt-0.5">Tips sukses di dunia kerja</div>
+      </div>
+    </a>
+    <a href="https://www.portotree.com/tags/tips-trik" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
+        <Lightbulb className="w-5 h-5" />
+      </div>
+      <div>
+        <div className="font-bold text-sm text-slate-800">Tips & Trik</div>
+        <div className="text-xs text-slate-500 mt-0.5">Berbagai panduan praktis</div>
+      </div>
+    </a>
+    <a href="https://www.portotree.com/tags/edukasi" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
+        <BookOpen className="w-5 h-5" />
+      </div>
+      <div>
+        <div className="font-bold text-sm text-slate-800">Edukasi</div>
+        <div className="text-xs text-slate-500 mt-0.5">Tambah wawasan & ilmu baru</div>
+      </div>
+    </a>
+    <a href="https://www.portotree.com/tags/info-berita" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
+        <Newspaper className="w-5 h-5" />
+      </div>
+      <div>
+        <div className="font-bold text-sm text-slate-800">Info & Berita</div>
+        <div className="text-xs text-slate-500 mt-0.5">Update dunia profesional</div>
+      </div>
+    </a>
+    <a href="https://www.portotree.com/tags/dokumen" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
+        <FileText className="w-5 h-5" />
+      </div>
+      <div>
+        <div className="font-bold text-sm text-slate-800">Dokumen (CV/Surat)</div>
+        <div className="text-xs text-slate-500 mt-0.5">Panduan bikin berkas penting</div>
+      </div>
+    </a>
+    <a href="https://www.portotree.com/tags/portofolio" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
+        <Layout className="w-5 h-5" />
+      </div>
+      <div>
+        <div className="font-bold text-sm text-slate-800">Portofolio</div>
+        <div className="text-xs text-slate-500 mt-0.5">Inspirasi karya dan desain</div>
+      </div>
+    </a>
+  </div>
+);
+
 export function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
@@ -34,6 +102,9 @@ export function Navbar() {
   const [isFabOpen, setIsFabOpen] = useState(false);
   const [showFab, setShowFab] = useState(false);
   const [showMobilePortoSub, setShowMobilePortoSub] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileProdukOpen, setIsMobileProdukOpen] = useState(false);
+  const [isMobileBlogOpen, setIsMobileBlogOpen] = useState(false);
   const [isPortofolioDomain, setIsPortofolioDomain] = useState(false);
   const router = useRouter();
   const pathname = usePathname() || '';
@@ -104,6 +175,44 @@ export function Navbar() {
     };
   }, [showFab, hasDismissedTooltip]);
 
+  const renderMobileBlogAccordion = () => (
+    <div className="flex flex-col border-b border-slate-100">
+      <button onClick={() => setIsMobileBlogOpen(!isMobileBlogOpen)} className="py-4 hover:text-green-600 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <BookOpen className="w-5 h-5" /> Blog
+        </div>
+        <ChevronDown className={`w-4 h-4 transition-transform ${isMobileBlogOpen ? 'rotate-180' : ''}`} />
+      </button>
+      <AnimatePresence>
+        {isMobileBlogOpen && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden flex flex-col pl-8 bg-slate-50/50 rounded-lg mb-2">
+            <a href="https://www.portotree.com/blog" onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+              <Home className="w-4 h-4" /> Beranda
+            </a>
+            <a href="https://www.portotree.com/tags/karier" onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+              <Briefcase className="w-4 h-4" /> Karier
+            </a>
+            <a href="https://www.portotree.com/tags/tips-trik" onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+              <Lightbulb className="w-4 h-4" /> Tips & Trik
+            </a>
+            <a href="https://www.portotree.com/tags/edukasi" onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+              <BookOpen className="w-4 h-4" /> Edukasi
+            </a>
+            <a href="https://www.portotree.com/tags/info-berita" onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+              <Newspaper className="w-4 h-4" /> Info & Berita
+            </a>
+            <a href="https://www.portotree.com/tags/dokumen" onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+              <FileText className="w-4 h-4" /> Dokumen (CV/Surat)
+            </a>
+            <a href="https://www.portotree.com/tags/portofolio" onClick={() => setIsMobileMenuOpen(false)} className="py-3 hover:text-green-600 flex items-center gap-3 text-sm">
+              <Layout className="w-4 h-4" /> Portofolio
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+
   return (
     <>
       <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
@@ -140,27 +249,53 @@ export function Navbar() {
 
             {pathname.includes('/company') ? (
               <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-                <a href={getMainUrl('/job-feed')} className="transition-colors hover:text-blue-600 text-slate-600 font-semibold py-2 flex items-center gap-1">
-                  Talent Feed <span className="text-[9px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full uppercase tracking-widest">Soon</span>
+                <a href={getMainUrl('/job-feed')} className="transition-colors hover:text-blue-600 text-slate-600 font-semibold py-2 flex items-center gap-1.5">
+                  <Briefcase className="w-4 h-4" />
+                  Talent Feed <span className="text-[9px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full uppercase tracking-widest ml-1">Soon</span>
                 </a>
-                <a href="#layanan" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2">Layanan</a>
-                <a href="#klien" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2">Klien</a>
-                <a href="#kontak" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2">Kontak</a>
+                <a href="#layanan" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                  <Layers className="w-4 h-4" />
+                  Layanan
+                </a>
+                <a href="#klien" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                  <Users className="w-4 h-4" />
+                  Klien
+                </a>
+                <a href="#kontak" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                  <Phone className="w-4 h-4" />
+                  Kontak
+                </a>
               </nav>
             ) : pathname.includes('/personal') ? (
               <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-                <a href={getMainUrl('/job-feed')} className="transition-colors hover:text-blue-600 text-slate-600 font-semibold py-2 flex items-center gap-1">
-                  Job Feed <span className="text-[9px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full uppercase tracking-widest">Soon</span>
+                <a href={getMainUrl('/job-feed')} className="transition-colors hover:text-blue-600 text-slate-600 font-semibold py-2 flex items-center gap-1.5">
+                  <Briefcase className="w-4 h-4" />
+                  Job Feed <span className="text-[9px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full uppercase tracking-widest ml-1">Soon</span>
                 </a>
-                <a href={getSubdomainUrl('resume')} className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 font-semibold">Buat CV</a>
-                <Link href="https://www.portotree.com/blog" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2">Blog</Link>
-                <Link href="https://www.portotree.com/about" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2">Tentang kami</Link>
+                <a href={getSubdomainUrl('resume')} className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 font-semibold flex items-center gap-1.5">
+                  <FileText className="w-4 h-4" />
+                  Buat CV
+                </a>
+                <div className="relative group">
+                  <Link href="https://www.portotree.com/blog" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5 focus:outline-none py-2">
+                    <BookOpen className="w-4 h-4" />
+                    Blog <ChevronDown className="w-4 h-4 ml-0.5 transition-transform duration-200 group-hover:-rotate-180" />
+                  </Link>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[520px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
+                    <BlogDropdownContent />
+                  </div>
+                </div>
+                <Link href="https://www.portotree.com/about" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                  <Info className="w-4 h-4" />
+                  Tentang kami
+                </Link>
               </nav>
             ) : (
               <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
                 <div className="relative group">
-                  <button className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1 focus:outline-none py-2">
-                    Produk <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:-rotate-180" />
+                  <button className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5 focus:outline-none py-2">
+                    <Package className="w-4 h-4" />
+                    Produk <ChevronDown className="w-4 h-4 ml-0.5 transition-transform duration-200 group-hover:-rotate-180" />
                   </button>
                   <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-72 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
                     <div className="bg-white rounded-xl p-2 shadow-xl border border-slate-100 flex flex-col">
@@ -232,8 +367,27 @@ export function Navbar() {
                     </div>
                   </div>
                 </div>
-                <Link href="https://www.portotree.com/blog" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2">Blog</Link>
-                <Link href="https://www.portotree.com/about" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2">Tentang kami</Link>
+                <div className="relative group">
+                  <Link href="https://www.portotree.com/blog" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5 focus:outline-none py-2">
+                    <BookOpen className="w-4 h-4" />
+                    Blog <ChevronDown className="w-4 h-4 ml-0.5 transition-transform duration-200 group-hover:-rotate-180" />
+                  </Link>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[520px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
+                    <BlogDropdownContent />
+                  </div>
+                </div>
+                <Link href="https://www.portotree.com/about" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                  <Info className="w-4 h-4" />
+                  Tentang kami
+                </Link>
+                <Link href="https://www.portotree.com/privacy-policy" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4" />
+                  Kebijakan Privasi
+                </Link>
+                <Link href="https://www.portotree.com/terms-and-conditions" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                  <FileSignature className="w-4 h-4" />
+                  Ketentuan Layanan
+                </Link>
               </nav>
             )}
             
@@ -302,6 +456,117 @@ export function Navbar() {
           </div>
         </header>
       </div>
+
+      {/* Floating Mobile Menu Toggle (Right Edge) */}
+      <button 
+        onClick={() => setIsMobileMenuOpen(true)}
+        className="md:hidden fixed right-0 top-1/2 -translate-y-1/2 z-[100] bg-white/60 backdrop-blur-sm border border-r-0 border-slate-200 shadow-sm py-3 pl-2 pr-1 rounded-l-full hover:bg-white/90 transition-all duration-300 opacity-60 hover:opacity-100 group"
+      >
+        <ChevronLeft className="w-4 h-4 text-slate-500 group-hover:text-emerald-600" />
+      </button>
+
+      {/* Mobile Slide-in Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 z-[120] md:hidden"
+            />
+            
+            {/* Drawer */}
+            <motion.div 
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 h-full w-4/5 max-w-sm bg-white z-[130] p-6 shadow-2xl flex flex-col md:hidden"
+            >
+              <div className="flex items-center justify-between mb-8">
+                <div className="font-bold text-xl text-slate-900">Menu</div>
+                <button 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 text-slate-500 rounded-full hover:bg-slate-100 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <nav className="flex flex-col font-medium text-slate-700 flex-1 overflow-y-auto pb-6">
+                {pathname.includes('/company') ? (
+                  <>
+                    <a href={getMainUrl('/job-feed')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <Briefcase className="w-5 h-5" /> Talent Feed <span className="text-[9px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full uppercase tracking-widest">Soon</span>
+                    </a>
+                    <a href="#layanan" onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <Layers className="w-5 h-5" /> Layanan
+                    </a>
+                    <a href="#klien" onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <Users className="w-5 h-5" /> Klien
+                    </a>
+                    <a href="#kontak" onClick={() => setIsMobileMenuOpen(false)} className="py-4 hover:text-green-600 flex items-center gap-3">
+                      <Phone className="w-5 h-5" /> Kontak
+                    </a>
+                  </>
+                ) : pathname.includes('/personal') ? (
+                  <>
+                    <a href={getMainUrl('/job-feed')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <Briefcase className="w-5 h-5" /> Job Feed <span className="text-[9px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full uppercase tracking-widest">Soon</span>
+                    </a>
+                    <a href={getSubdomainUrl('resume')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <FileText className="w-5 h-5" /> Buat CV
+                    </a>
+                    {renderMobileBlogAccordion()}
+                    <Link href="https://www.portotree.com/about" onClick={() => setIsMobileMenuOpen(false)} className="py-4 hover:text-green-600 flex items-center gap-3">
+                      <Info className="w-5 h-5" /> Tentang
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex flex-col border-b border-slate-100">
+                      <button onClick={() => setIsMobileProdukOpen(!isMobileProdukOpen)} className="py-4 hover:text-green-600 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Package className="w-5 h-5" /> Produk
+                        </div>
+                        <ChevronDown className={`w-4 h-4 transition-transform ${isMobileProdukOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      <AnimatePresence>
+                        {isMobileProdukOpen && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden flex flex-col pl-8 bg-slate-50/50 rounded-lg mb-2">
+                            <a href={getMainUrl('/job-feed')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+                              <Briefcase className="w-4 h-4" /> Job Feed <span className="text-[9px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full uppercase tracking-widest">Soon</span>
+                            </a>
+                            <a href={getSubdomainUrl('portofolio')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+                              <Layout className="w-4 h-4" /> Buat Portofolio
+                            </a>
+                            <a href={getSubdomainUrl('resume')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 hover:text-green-600 flex items-center gap-3 text-sm">
+                              <FileText className="w-4 h-4" /> Buat CV
+                            </a>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                    {renderMobileBlogAccordion()}
+                    <Link href="https://www.portotree.com/about" onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <Info className="w-5 h-5" /> Tentang
+                    </Link>
+                    <Link href="https://www.portotree.com/privacy-policy" onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <ShieldCheck className="w-5 h-5" /> Kebijakan Privasi
+                    </Link>
+                    <Link href="https://www.portotree.com/terms-and-conditions" onClick={() => setIsMobileMenuOpen(false)} className="py-4 hover:text-green-600 flex items-center gap-3">
+                      <FileSignature className="w-5 h-5" /> Ketentuan Layanan
+                    </Link>
+                  </>
+                )}
+              </nav>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Floating Navigation FAB for Mobile */}
       <AnimatePresence>

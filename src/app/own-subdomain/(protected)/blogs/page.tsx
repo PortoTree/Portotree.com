@@ -2,9 +2,6 @@ import { getAdminBlogs } from "@/app/actions/blog";
 import Link from "next/link";
 import { Plus, Search, FileText } from "lucide-react";
 
-export const metadata = {
-  title: "Manajemen Blog | Owner Dashboard",
-};
 
 export default async function AdminBlogsPage() {
   const blogsResult = await getAdminBlogs();
