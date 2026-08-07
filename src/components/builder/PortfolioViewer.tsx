@@ -144,7 +144,7 @@ export function PortfolioViewer({
           }}
         ></div>
         
-        <div className={`max-w-5xl mx-auto px-4 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'px-6' : 'md:px-6'} flex ${isMobilePreview === true ? 'flex-col' : isMobilePreview === false ? 'flex-row' : 'flex-col md:flex-row'} items-center gap-8 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'gap-12' : 'md:gap-12'}`}>
+        <div className={`max-w-5xl mx-auto px-4 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'px-6' : 'md:px-6'} flex ${isMobilePreview === true ? 'flex-col' : isMobilePreview === false ? 'flex-row' : 'flex-col md:flex-row'} ${isMobilePreview === true ? 'items-center' : isMobilePreview === false ? 'items-start' : 'items-center md:items-start'} gap-8 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'gap-12' : 'md:gap-12'}`}>
           
           {/* IMAGE FIRST ON MOBILE */}
           {data.personal.photoUrl && (
