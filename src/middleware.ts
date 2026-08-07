@@ -15,14 +15,15 @@ export function middleware(req: NextRequest) {
     return NextResponse.rewrite(new URL(`/portofolio-subdomain${url.pathname}`, req.url));
   }
   
-  // Logic for brain/admin subdomain
-  if (domain === 'brain.portotree.com' || domain === 'brain.localhost') {
-    return NextResponse.rewrite(new URL(`/brain-subdomain${url.pathname}`, req.url));
-  }
-  
+
   // Logic for resume subdomain
   if (domain === 'resume.portotree.com' || domain === 'resume.localhost') {
     return NextResponse.rewrite(new URL(`/resume-subdomain${url.pathname}`, req.url));
+  }
+
+  // Logic for owner dashboard subdomain
+  if (domain === 'own.portotree.com' || domain === 'own.localhost') {
+    return NextResponse.rewrite(new URL(`/own-subdomain${url.pathname}`, req.url));
   }
 
   // Check for dashboard auth

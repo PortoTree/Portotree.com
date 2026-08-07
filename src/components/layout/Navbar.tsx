@@ -133,6 +133,9 @@ export function Navbar() {
               {pathname === '/portofolio-subdomain' && !isPortofolioDomain && (
                 <span className="text-lg font-bold bg-gradient-to-r from-emerald-600 to-green-500 bg-clip-text text-transparent -ml-1">Portofolio</span>
               )}
+              {pathname.includes('/blog') && (
+                <span className="text-lg font-bold bg-gradient-to-r from-cyan-600 to-blue-500 bg-clip-text text-transparent -ml-1">Blog</span>
+              )}
             </div>
 
             {pathname.includes('/company') ? (
