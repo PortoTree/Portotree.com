@@ -18,6 +18,17 @@ export function PortfolioViewer({
 }) {
   const activeSections = rawData.activeSections || ['education', 'experience', 'organization', 'projects', 'social', 'skills'];
 
+  const sortHistory = (arr: any[]) => {
+    return [...arr].sort((a, b) => {
+      const aEnd = a.current ? 9999 : parseInt(a.endYear || a.startYear || '0', 10);
+      const bEnd = b.current ? 9999 : parseInt(b.endYear || b.startYear || '0', 10);
+      if (aEnd !== bEnd) return bEnd - aEnd;
+      const aStart = parseInt(a.startYear || '0', 10);
+      const bStart = parseInt(b.startYear || '0', 10);
+      return bStart - aStart;
+    });
+  };
+
   const data = {
     personal: {
       name: rawData.personal?.name || (showPlaceholders ? placeholderPortfolioData.personal.name : ""),
@@ -30,9 +41,9 @@ export function PortfolioViewer({
       hireMeLink: rawData.personal?.hireMeLink || (showPlaceholders ? placeholderPortfolioData.personal.hireMeLink : ""),
     },
     social: ((rawData.social?.length ?? 0) > 0 ? rawData.social : (showPlaceholders && activeSections.includes('social') ? placeholderPortfolioData.social : [])) || [],
-    experience: ((rawData.experience?.length ?? 0) > 0 ? rawData.experience : (showPlaceholders && activeSections.includes('experience') ? placeholderPortfolioData.experience : [])) || [],
-    education: ((rawData.education?.length ?? 0) > 0 ? rawData.education : (showPlaceholders && activeSections.includes('education') ? placeholderPortfolioData.education : [])) || [],
-    organization: ((rawData.organization?.length ?? 0) > 0 ? rawData.organization : (showPlaceholders && activeSections.includes('organization') ? placeholderPortfolioData.organization : [])) || [],
+    experience: sortHistory(((rawData.experience?.length ?? 0) > 0 ? rawData.experience : (showPlaceholders && activeSections.includes('experience') ? placeholderPortfolioData.experience : [])) || []),
+    education: sortHistory(((rawData.education?.length ?? 0) > 0 ? rawData.education : (showPlaceholders && activeSections.includes('education') ? placeholderPortfolioData.education : [])) || []),
+    organization: sortHistory(((rawData.organization?.length ?? 0) > 0 ? rawData.organization : (showPlaceholders && activeSections.includes('organization') ? placeholderPortfolioData.organization : [])) || []),
     projects: ((rawData.projects?.length ?? 0) > 0 ? rawData.projects : (showPlaceholders && activeSections.includes('projects') ? placeholderPortfolioData.projects : [])) || [],
     certifications: ((rawData.certifications?.length ?? 0) > 0 ? rawData.certifications : (showPlaceholders && activeSections.includes('certifications') ? placeholderPortfolioData.certifications : [])) || [],
     awards: ((rawData.awards?.length ?? 0) > 0 ? rawData.awards : (showPlaceholders && activeSections.includes('awards') ? placeholderPortfolioData.awards : [])) || [],
