@@ -23,6 +23,13 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "PortoTree - Web Portofolio Online",
   description: "Buat web portofolio online profesional tanpa coding dengan PortoTree.",
+  openGraph: {
+    images: ['/logo-portotree.png'],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ['/logo-portotree.png'],
+  },
 };
 
 export default function RootLayout({
