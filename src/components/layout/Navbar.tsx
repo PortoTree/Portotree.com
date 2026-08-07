@@ -28,7 +28,7 @@ const fetcher = async () => {
 
 const BlogDropdownContent = () => (
   <div className="bg-white rounded-xl p-2 shadow-xl border border-slate-100 grid grid-cols-2 gap-1">
-    <a href="https://www.portotree.com/blog" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Home className="w-5 h-5" />
       </div>
@@ -37,7 +37,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Halaman utama blog</div>
       </div>
     </a>
-    <a href="https://www.portotree.com/tags/karier" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/tags/karier')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Briefcase className="w-5 h-5" />
       </div>
@@ -46,7 +46,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Tips sukses di dunia kerja</div>
       </div>
     </a>
-    <a href="https://www.portotree.com/tags/tips-trik" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/tags/tips-trik')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Lightbulb className="w-5 h-5" />
       </div>
@@ -55,7 +55,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Berbagai panduan praktis</div>
       </div>
     </a>
-    <a href="https://www.portotree.com/tags/edukasi" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/tags/edukasi')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <BookOpen className="w-5 h-5" />
       </div>
@@ -64,7 +64,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Tambah wawasan & ilmu baru</div>
       </div>
     </a>
-    <a href="https://www.portotree.com/tags/info-berita" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/tags/info-berita')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Newspaper className="w-5 h-5" />
       </div>
@@ -73,7 +73,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Update dunia profesional</div>
       </div>
     </a>
-    <a href="https://www.portotree.com/tags/dokumen" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/tags/dokumen')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <FileText className="w-5 h-5" />
       </div>
@@ -82,7 +82,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Panduan bikin berkas penting</div>
       </div>
     </a>
-    <a href="https://www.portotree.com/tags/portofolio" target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/tags/portofolio')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Layout className="w-5 h-5" />
       </div>
@@ -109,6 +109,7 @@ export function Navbar() {
   const router = useRouter();
   const pathname = usePathname() || '';
   const isSubdomain = pathname.startsWith('/portofolio-subdomain') || pathname.startsWith('/resume-subdomain');
+  const isBlogPage = pathname.startsWith('/blog') || pathname.startsWith('/tags');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -199,25 +200,25 @@ export function Navbar() {
       <AnimatePresence>
         {isMobileBlogOpen && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden flex flex-col pl-8 bg-slate-50/50 rounded-lg mb-2">
-            <a href="https://www.portotree.com/blog" onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+            <a href={getMainUrl('/blog')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
               <Home className="w-4 h-4" /> Beranda
             </a>
-            <a href="https://www.portotree.com/tags/karier" onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+            <a href={getMainUrl('/tags/karier')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
               <Briefcase className="w-4 h-4" /> Karier
             </a>
-            <a href="https://www.portotree.com/tags/tips-trik" onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+            <a href={getMainUrl('/tags/tips-trik')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
               <Lightbulb className="w-4 h-4" /> Tips & Trik
             </a>
-            <a href="https://www.portotree.com/tags/edukasi" onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+            <a href={getMainUrl('/tags/edukasi')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
               <BookOpen className="w-4 h-4" /> Edukasi
             </a>
-            <a href="https://www.portotree.com/tags/info-berita" onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+            <a href={getMainUrl('/tags/info-berita')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
               <Newspaper className="w-4 h-4" /> Info & Berita
             </a>
-            <a href="https://www.portotree.com/tags/dokumen" onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
+            <a href={getMainUrl('/tags/dokumen')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
               <FileText className="w-4 h-4" /> Dokumen (CV/Surat)
             </a>
-            <a href="https://www.portotree.com/tags/portofolio" onClick={() => setIsMobileMenuOpen(false)} className="py-3 hover:text-green-600 flex items-center gap-3 text-sm">
+            <a href={getMainUrl('/tags/portofolio')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 hover:text-green-600 flex items-center gap-3 text-sm">
               <Layout className="w-4 h-4" /> Portofolio
             </a>
           </motion.div>
@@ -290,7 +291,7 @@ export function Navbar() {
                   Buat CV
                 </a>
                 <div className="relative group">
-                  <Link href="https://www.portotree.com/blog" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5 focus:outline-none py-2">
+                  <Link href={getMainUrl('/blog')} target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5 focus:outline-none py-2">
                     <BookOpen className="w-4 h-4" />
                     Blog <ChevronDown className="w-4 h-4 ml-0.5 transition-transform duration-200 group-hover:-rotate-180" />
                   </Link>
@@ -298,10 +299,20 @@ export function Navbar() {
                     <BlogDropdownContent />
                   </div>
                 </div>
-                <Link href="https://www.portotree.com/about" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                <Link href={getMainUrl('/about')} target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
                   <Info className="w-4 h-4" />
                   Tentang kami
                 </Link>
+              </nav>
+            ) : isBlogPage ? (
+              <nav className="hidden lg:flex items-center gap-4 text-sm font-medium">
+                <Link href={getMainUrl('/blog')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Home className="w-4 h-4"/> Beranda</Link>
+                <Link href={getMainUrl('/tags/karier')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Briefcase className="w-4 h-4"/> Karier</Link>
+                <Link href={getMainUrl('/tags/tips-trik')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Lightbulb className="w-4 h-4"/> Tips & Trik</Link>
+                <Link href={getMainUrl('/tags/edukasi')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><BookOpen className="w-4 h-4"/> Edukasi</Link>
+                <Link href={getMainUrl('/tags/info-berita')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Newspaper className="w-4 h-4"/> Info & Berita</Link>
+                <Link href={getMainUrl('/tags/dokumen')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><FileText className="w-4 h-4"/> Dokumen</Link>
+                <Link href={getMainUrl('/tags/portofolio')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Layout className="w-4 h-4"/> Portofolio</Link>
               </nav>
             ) : (
               <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
@@ -381,7 +392,7 @@ export function Navbar() {
                   </div>
                 </div>
                 <div className="relative group">
-                  <Link href="https://www.portotree.com/blog" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5 focus:outline-none py-2">
+                  <Link href={getMainUrl('/blog')} target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5 focus:outline-none py-2">
                     <BookOpen className="w-4 h-4" />
                     Blog <ChevronDown className="w-4 h-4 ml-0.5 transition-transform duration-200 group-hover:-rotate-180" />
                   </Link>
@@ -389,15 +400,15 @@ export function Navbar() {
                     <BlogDropdownContent />
                   </div>
                 </div>
-                <Link href="https://www.portotree.com/about" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                <Link href={getMainUrl('/about')} target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
                   <Info className="w-4 h-4" />
                   Tentang kami
                 </Link>
-                <Link href="https://www.portotree.com/privacy-policy" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                <Link href={getMainUrl('/privacy-policy')} target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4" />
                   Kebijakan Privasi
                 </Link>
-                <Link href="https://www.portotree.com/terms-and-conditions" target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                <Link href={getMainUrl('/terms-and-conditions')} target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
                   <FileSignature className="w-4 h-4" />
                   Ketentuan Layanan
                 </Link>
@@ -499,7 +510,7 @@ export function Navbar() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed top-0 right-0 h-full w-4/5 max-w-sm bg-white z-[130] p-6 shadow-2xl flex flex-col md:hidden"
             >
-              <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center justify-between mb-4">
                 <div className="font-bold text-xl text-slate-900">Menu</div>
                 <button 
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -534,8 +545,32 @@ export function Navbar() {
                       <FileText className="w-5 h-5" /> Buat CV
                     </a>
                     {renderMobileBlogAccordion()}
-                    <Link href="https://www.portotree.com/about" onClick={() => setIsMobileMenuOpen(false)} className="py-4 hover:text-green-600 flex items-center gap-3">
+                    <Link href={getMainUrl('/about')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 hover:text-green-600 flex items-center gap-3">
                       <Info className="w-5 h-5" /> Tentang
+                    </Link>
+                  </>
+                ) : isBlogPage ? (
+                  <>
+                    <Link href={getMainUrl('/blog')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <Home className="w-5 h-5" /> Beranda
+                    </Link>
+                    <Link href={getMainUrl('/tags/karier')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <Briefcase className="w-5 h-5" /> Karier
+                    </Link>
+                    <Link href={getMainUrl('/tags/tips-trik')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <Lightbulb className="w-5 h-5" /> Tips & Trik
+                    </Link>
+                    <Link href={getMainUrl('/tags/edukasi')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <BookOpen className="w-5 h-5" /> Edukasi
+                    </Link>
+                    <Link href={getMainUrl('/tags/info-berita')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <Newspaper className="w-5 h-5" /> Info & Berita
+                    </Link>
+                    <Link href={getMainUrl('/tags/dokumen')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <FileText className="w-5 h-5" /> Dokumen (CV/Surat)
+                    </Link>
+                    <Link href={getMainUrl('/tags/portofolio')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 hover:text-green-600 flex items-center gap-3">
+                      <Layout className="w-5 h-5" /> Portofolio
                     </Link>
                   </>
                 ) : (
@@ -564,13 +599,13 @@ export function Navbar() {
                       </AnimatePresence>
                     </div>
                     {renderMobileBlogAccordion()}
-                    <Link href="https://www.portotree.com/about" onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                    <Link href={getMainUrl('/about')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
                       <Info className="w-5 h-5" /> Tentang
                     </Link>
-                    <Link href="https://www.portotree.com/privacy-policy" onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                    <Link href={getMainUrl('/privacy-policy')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
                       <ShieldCheck className="w-5 h-5" /> Kebijakan Privasi
                     </Link>
-                    <Link href="https://www.portotree.com/terms-and-conditions" onClick={() => setIsMobileMenuOpen(false)} className="py-4 hover:text-green-600 flex items-center gap-3">
+                    <Link href={getMainUrl('/terms-and-conditions')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 hover:text-green-600 flex items-center gap-3">
                       <FileSignature className="w-5 h-5" /> Ketentuan Layanan
                     </Link>
                   </>
