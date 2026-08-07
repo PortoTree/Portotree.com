@@ -74,7 +74,7 @@ export function OrganizationModal({ isOpen, onClose, onSave, initialData }: Prop
 
   const handleSave = () => {
     // Basic validation
-    if (!formData.role || !formData.name || !formData.startYear) {
+    if (!formData.role || !formData.name) {
       toast.error("Mohon lengkapi field yang wajib diisi (*)");
       return;
     }
@@ -137,7 +137,7 @@ export function OrganizationModal({ isOpen, onClose, onSave, initialData }: Prop
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label className="text-slate-700">Mulai <span className="text-red-500">*</span></Label>
+              <Label className="text-slate-700">Mulai</Label>
               <div className="flex gap-2">
                 <select 
                   className="flex-1 h-9 px-3 border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:border-emerald-600 text-sm"
@@ -157,7 +157,7 @@ export function OrganizationModal({ isOpen, onClose, onSave, initialData }: Prop
             </div>
 
             <div className="space-y-1.5">
-              <Label className="text-slate-700">Selesai {formData.current ? '' : <span className="text-red-500">*</span>}</Label>
+              <Label className="text-slate-700">Selesai</Label>
               <div className="flex gap-2">
                 <select 
                   disabled={formData.current}
