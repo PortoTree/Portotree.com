@@ -175,6 +175,19 @@ export function Navbar() {
     };
   }, [showFab, hasDismissedTooltip]);
 
+  // Lock body scroll when mobile menus are open
+  useEffect(() => {
+    if (isMobileMenuOpen || isFabOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen, isFabOpen]);
+
   const renderMobileBlogAccordion = () => (
     <div className="flex flex-col border-b border-slate-100">
       <button onClick={() => setIsMobileBlogOpen(!isMobileBlogOpen)} className="py-4 hover:text-green-600 flex items-center justify-between">
