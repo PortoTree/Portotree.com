@@ -197,7 +197,7 @@ function BuilderContent() {
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div className="h-6 w-px bg-slate-200 hidden md:block"></div>
-          <span className="font-bold text-slate-800 hidden md:block shrink-0">Portfolio Builder</span>
+          <span className="font-bold text-slate-800 hidden md:block shrink-0">Portofolio Builder</span>
 
           {/* HELP BUTTON */}
           <div className="hidden lg:block h-6 w-px bg-slate-200 mx-1"></div>

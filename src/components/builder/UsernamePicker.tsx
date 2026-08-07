@@ -86,9 +86,9 @@ export default function UsernamePicker({ isOpen, onComplete, onCancel, suggested
           <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
             <Rocket className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-bold mb-1">Publish Portfoliomu! 🚀</h2>
+          <h2 className="text-2xl font-bold mb-1">Publish Portofoliomu! 🚀</h2>
           <p className="text-emerald-100 text-sm">
-            Pilih link unik untuk portfolio publikmu
+            Pilih link unik untuk portofolio publikmu
           </p>
         </div>
 
@@ -149,7 +149,7 @@ export default function UsernamePicker({ isOpen, onComplete, onCancel, suggested
           {/* Info */}
           <div className="bg-emerald-50 rounded-xl p-3 border border-emerald-100">
             <p className="text-xs text-emerald-700">
-              💡 Link ini akan menjadi alamat publik portfoliomu. Kamu bisa mengubahnya nanti di halaman Dashboard Portfolio.
+              💡 Link ini akan menjadi alamat publik portofoliomu. Kamu bisa mengubahnya nanti di halaman Dashboard Portofolio.
             </p>
           </div>
 
@@ -170,7 +170,7 @@ export default function UsernamePicker({ isOpen, onComplete, onCancel, suggested
                 </>
               ) : (
                 <>
-                  <Rocket className="w-4 h-4" /> Publish Portfolio
+                  <Rocket className="w-4 h-4" /> Publish Portofolio
                 </>
               )}
             </button>

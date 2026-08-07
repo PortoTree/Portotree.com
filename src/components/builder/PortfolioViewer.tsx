@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 
 export function PortfolioViewer({ 
   data: rawData, 
-  isMobilePreview = false,
+  isMobilePreview,
   showPlaceholders = false,
   username
 }: { 
@@ -90,7 +90,7 @@ export function PortfolioViewer({
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
         <div className={`w-full px-4 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'px-8' : 'md:px-8'} h-16 flex items-center justify-between`}>
           <div className="font-bold text-xl tracking-tight text-slate-800 truncate pr-4">
-            {data.personal.name || "Portfolio"}
+            {data.personal.name || "Portofolio"}
           </div>
           <div className={`flex items-center gap-4 ${isMobilePreview === true ? '' : isMobilePreview === false ? 'gap-6' : 'md:gap-6'} text-sm font-medium text-slate-600`}>
             <nav className={`${isMobilePreview === true ? 'hidden' : isMobilePreview === false ? 'flex' : 'hidden md:flex'} items-center gap-6`}>

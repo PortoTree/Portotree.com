@@ -14,16 +14,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!result.success || !result.data) {
     return {
-      title: "Portfolio Tidak Ditemukan | PortoTree",
+      title: "Portofolio Tidak Ditemukan | PortoTree",
     };
   }
 
   const data = result.data;
   return {
     title: `${data.personal?.name || username} | PortoTree`,
-    description: data.personal?.bio || `Portfolio ${data.personal?.name || username} di PortoTree`,
+    description: data.personal?.bio || `Portofolio ${data.personal?.name || username} di PortoTree`,
     openGraph: {
-      title: `${data.personal?.name || username} — Portfolio`,
+      title: `${data.personal?.name || username} — Portofolio`,
       description: data.personal?.headline || data.personal?.bio || "",
       images: data.personal?.photoUrl ? [{ url: data.personal.photoUrl }] : [],
     },
