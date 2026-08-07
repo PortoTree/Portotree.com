@@ -176,7 +176,7 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
               <Label htmlFor="category" className="text-slate-700 font-bold">Kategori</Label>
               <Select 
                 value={formData.category} 
-                onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
+                onValueChange={(value) => setFormData(prev => ({ ...prev, category: value || "Karier" }))}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Pilih Kategori" />
