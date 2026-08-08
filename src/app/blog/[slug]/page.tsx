@@ -64,7 +64,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             </div>
           </div>
           
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-slate-900 tracking-tight leading-snug text-balance mb-6">
             {blog.title}
           </h1>
         </div>
@@ -95,13 +95,13 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             dangerouslySetInnerHTML={{ __html: blog.content }}
           />
           
-          <div className="mt-16 pt-8 border-t border-slate-100 flex justify-between items-center">
-            <p className="text-slate-500 font-medium">Terima kasih telah membaca.</p>
+          <div className="mt-16 pt-8 border-t border-slate-100 flex flex-col items-center gap-4">
+            <p className="text-slate-500 font-medium text-center">Terima kasih telah membaca.</p>
             <Link 
               href="/blog"
               className="inline-flex items-center justify-center font-bold bg-slate-900 text-white hover:bg-slate-800 transition-colors h-12 px-8 rounded-full shadow-md"
             >
-              Baca Artikel Lainnya
+              Baca Lainnya
             </Link>
           </div>
         </div>

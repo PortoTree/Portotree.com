@@ -70,6 +70,7 @@ export async function getPublishedBlogs(): Promise<{ success: boolean; data?: Bl
       .collection("blogs")
       .where("status", "==", "published")
       .orderBy("createdAt", "desc")
+      .limit(10)
       .get();
     
     const blogs: BlogPost[] = snapshot.docs.map(doc => ({
