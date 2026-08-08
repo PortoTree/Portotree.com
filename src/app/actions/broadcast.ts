@@ -43,6 +43,10 @@ export async function broadcastLatestBlog() {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://portotree.com";
     const articleUrl = `${siteUrl}/blog/${latestBlog.slug}`;
 
+    // Buat excerpt / cuplikan dari konten (hapus tag HTML dan ambil ~300 karakter)
+    const rawText = latestBlog.content ? latestBlog.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() : '';
+    const previewExcerpt = rawText.length > 300 ? rawText.substring(0, 300) + '...' : rawText;
+
     const subject = `Artikel Baru: ${latestBlog.title}`;
     const htmlContent = `
       <!DOCTYPE html>
@@ -74,7 +78,7 @@ export async function broadcastLatestBlog() {
             </h1>
 
             <div style="color: #52525b; font-size: 16px; line-height: 1.6; margin-bottom: 32px;">
-              ${latestBlog.content}
+              <p style="margin: 0;">${previewExcerpt}</p>
             </div>
 
             <div style="text-align: center;">
