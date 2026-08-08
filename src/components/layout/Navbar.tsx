@@ -28,7 +28,7 @@ const fetcher = async () => {
 
 const BlogDropdownContent = () => (
   <div className="bg-white rounded-xl p-2 shadow-xl border border-slate-100 grid grid-cols-2 gap-1">
-    <a href={getMainUrl('/blog')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Home className="w-5 h-5" />
       </div>
@@ -37,7 +37,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Halaman utama blog</div>
       </div>
     </a>
-    <a href={getMainUrl('/blog/tags/karier')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog/tags/karier')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Briefcase className="w-5 h-5" />
       </div>
@@ -46,7 +46,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Tips sukses di dunia kerja</div>
       </div>
     </a>
-    <a href={getMainUrl('/blog/tags/tips-trik')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog/tags/tips-trik')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Lightbulb className="w-5 h-5" />
       </div>
@@ -55,7 +55,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Berbagai panduan praktis</div>
       </div>
     </a>
-    <a href={getMainUrl('/blog/tags/edukasi')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog/tags/edukasi')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <BookOpen className="w-5 h-5" />
       </div>
@@ -64,7 +64,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Tambah wawasan & ilmu baru</div>
       </div>
     </a>
-    <a href={getMainUrl('/blog/tags/info-berita')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog/tags/info-berita')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Newspaper className="w-5 h-5" />
       </div>
@@ -73,7 +73,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Update dunia profesional</div>
       </div>
     </a>
-    <a href={getMainUrl('/blog/tags/dokumen')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog/tags/dokumen')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <FileText className="w-5 h-5" />
       </div>
@@ -82,7 +82,7 @@ const BlogDropdownContent = () => (
         <div className="text-xs text-slate-500 mt-0.5">Panduan bikin berkas penting</div>
       </div>
     </a>
-    <a href={getMainUrl('/blog/tags/portofolio')} target="_blank" className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+    <a href={getMainUrl('/blog/tags/portofolio')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
       <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
         <Layout className="w-5 h-5" />
       </div>
@@ -291,7 +291,7 @@ export function Navbar() {
                   Buat CV
                 </a>
                 <div className="relative group">
-                  <Link href={getMainUrl('/blog')} target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5 focus:outline-none py-2">
+                  <Link href={getMainUrl('/blog')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5 focus:outline-none py-2">
                     <BookOpen className="w-4 h-4" />
                     Blog <ChevronDown className="w-4 h-4 ml-0.5 transition-transform duration-200 group-hover:-rotate-180" />
                   </Link>
@@ -299,20 +299,10 @@ export function Navbar() {
                     <BlogDropdownContent />
                   </div>
                 </div>
-                <Link href={getMainUrl('/about')} target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                <Link href={getMainUrl('/about')} className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
                   <Info className="w-4 h-4" />
                   Tentang kami
                 </Link>
-              </nav>
-            ) : isBlogPage ? (
-              <nav className="hidden lg:flex items-center gap-4 text-sm font-medium">
-                <Link href={getMainUrl('/blog')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Home className="w-4 h-4"/> Beranda</Link>
-                <Link href={getMainUrl('/blog/tags/karier')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Briefcase className="w-4 h-4"/> Karier</Link>
-                <Link href={getMainUrl('/blog/tags/tips-trik')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Lightbulb className="w-4 h-4"/> Tips & Trik</Link>
-                <Link href={getMainUrl('/blog/tags/edukasi')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><BookOpen className="w-4 h-4"/> Edukasi</Link>
-                <Link href={getMainUrl('/blog/tags/info-berita')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Newspaper className="w-4 h-4"/> Info & Berita</Link>
-                <Link href={getMainUrl('/blog/tags/dokumen')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><FileText className="w-4 h-4"/> Dokumen</Link>
-                <Link href={getMainUrl('/blog/tags/portofolio')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5"><Layout className="w-4 h-4"/> Portofolio</Link>
               </nav>
             ) : (
               <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
@@ -392,7 +382,7 @@ export function Navbar() {
                   </div>
                 </div>
                 <div className="relative group">
-                  <Link href={getMainUrl('/blog')} target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5 focus:outline-none py-2">
+                  <Link href={getMainUrl('/blog')} className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1.5 focus:outline-none py-2">
                     <BookOpen className="w-4 h-4" />
                     Blog <ChevronDown className="w-4 h-4 ml-0.5 transition-transform duration-200 group-hover:-rotate-180" />
                   </Link>
@@ -400,15 +390,15 @@ export function Navbar() {
                     <BlogDropdownContent />
                   </div>
                 </div>
-                <Link href={getMainUrl('/about')} target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                <Link href={getMainUrl('/about')} className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
                   <Info className="w-4 h-4" />
                   Tentang kami
                 </Link>
-                <Link href={getMainUrl('/privacy-policy')} target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                <Link href={getMainUrl('/privacy-policy')} className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4" />
                   Kebijakan Privasi
                 </Link>
-                <Link href={getMainUrl('/terms-and-conditions')} target="_blank" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                <Link href={getMainUrl('/terms-and-conditions')} className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
                   <FileSignature className="w-4 h-4" />
                   Ketentuan Layanan
                 </Link>
@@ -547,30 +537,6 @@ export function Navbar() {
                     {renderMobileBlogAccordion()}
                     <Link href={getMainUrl('/about')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 hover:text-green-600 flex items-center gap-3">
                       <Info className="w-5 h-5" /> Tentang
-                    </Link>
-                  </>
-                ) : isBlogPage ? (
-                  <>
-                    <Link href={getMainUrl('/blog')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
-                      <Home className="w-5 h-5" /> Beranda
-                    </Link>
-                    <Link href={getMainUrl('/blog/tags/karier')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
-                      <Briefcase className="w-5 h-5" /> Karier
-                    </Link>
-                    <Link href={getMainUrl('/blog/tags/tips-trik')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
-                      <Lightbulb className="w-5 h-5" /> Tips & Trik
-                    </Link>
-                    <Link href={getMainUrl('/blog/tags/edukasi')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
-                      <BookOpen className="w-5 h-5" /> Edukasi
-                    </Link>
-                    <Link href={getMainUrl('/blog/tags/info-berita')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
-                      <Newspaper className="w-5 h-5" /> Info & Berita
-                    </Link>
-                    <Link href={getMainUrl('/blog/tags/dokumen')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
-                      <FileText className="w-5 h-5" /> Dokumen (CV/Surat)
-                    </Link>
-                    <Link href={getMainUrl('/blog/tags/portofolio')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 hover:text-green-600 flex items-center gap-3">
-                      <Layout className="w-5 h-5" /> Portofolio
                     </Link>
                   </>
                 ) : (

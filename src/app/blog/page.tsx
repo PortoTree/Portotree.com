@@ -63,7 +63,7 @@ export default async function BlogPage({
             <div className="grid lg:grid-cols-4 gap-8 lg:gap-12">
               
               {/* LEFT COLUMN: Hero + Articles */}
-              <div className="lg:col-span-3">
+              <div className="lg:col-span-3 min-w-0">
                 
                 {/* HERO TEXT */}
                 <div className="mb-16 text-center lg:text-left">
@@ -103,12 +103,12 @@ export default async function BlogPage({
                   <p className="text-sm lg:text-base text-[#6c6c6c]">Baca artikel terbaru untuk sukses berkarir</p>
                   
                   {/* Category Tabs */}
-                  <div className="flex flex-wrap items-center gap-2 mt-6">
+                  <div className="flex flex-nowrap lg:flex-wrap items-center gap-2 mt-6 overflow-x-auto pb-2 scrollbar-hide w-full">
                     {CATEGORIES.map((cat) => (
                       <Link 
                         key={cat.slug} 
                         href={cat.slug === 'semua' ? '/blog' : `/blog/tags/${cat.slug}`}
-                        className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                        className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
                           cat.slug === 'semua' 
                             ? "bg-emerald-600 text-white shadow-md" 
                             : "bg-white border border-[#e9ecef] text-[#6c6c6c] hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200"
