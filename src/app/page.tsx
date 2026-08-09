@@ -217,17 +217,30 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-              <div className="w-full md:w-1/2 relative">
-                {/* Mockup Frame */}
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-700 bg-slate-800 p-2">
+              <div className="w-full md:w-1/2 relative flex justify-center">
+                {/* Desktop Mockup Frame */}
+                <div className="hidden md:block w-full relative rounded-2xl overflow-hidden shadow-2xl border border-slate-700 bg-slate-800 p-2">
                   <div className="flex gap-1.5 px-2 pb-2 pt-1 border-b border-slate-700 mb-2">
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
                     <div className="w-3 h-3 rounded-full bg-amber-500"></div>
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
                   </div>
                   <div className="relative w-full aspect-[16/10] bg-slate-50 overflow-hidden rounded-lg">
-                    <div className="absolute inset-0 w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar max-md:[zoom:0.35] md:[zoom:0.5] pointer-events-none">
+                    <div className="absolute inset-0 w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar md:[zoom:0.5] pointer-events-none">
                       <PortfolioViewer data={placeholderPortfolioData} isMobilePreview={false} showPlaceholders={true} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile Mockup Frame */}
+                <div className="block md:hidden relative w-[240px] rounded-[2.5rem] border-[8px] border-slate-700 bg-slate-800 shadow-2xl overflow-hidden aspect-[9/19] flex flex-col">
+                  {/* Dynamic Island */}
+                  <div className="absolute top-0 w-full flex justify-center pt-2 z-20">
+                    <div className="w-20 h-5 bg-slate-700 rounded-full"></div>
+                  </div>
+                  <div className="absolute inset-0 overflow-hidden bg-slate-50">
+                    <div className="w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar [zoom:0.45] pointer-events-none">
+                      <PortfolioViewer data={placeholderPortfolioData} isMobilePreview={true} showPlaceholders={true} />
                     </div>
                   </div>
                 </div>
