@@ -7,6 +7,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { getSubdomainUrl } from "@/lib/url";
 import { Button } from "@/components/ui/button";
+import { PortfolioViewer } from "@/components/builder/PortfolioViewer";
+import { placeholderPortfolioData } from "@/lib/portfolioData";
 import { 
   ArrowRight, 
   Users, 
@@ -208,9 +210,9 @@ export default function Home() {
                   <li className="flex items-center gap-3"><CheckCircle2 className="text-green-400 w-6 h-6" /> SEO Friendly</li>
                 </ul>
                 <div className="pt-6">
-                  <Link href="/portofolio">
+                  <Link href="/register">
                     <Button className="bg-green-500 hover:bg-green-600 text-white rounded-full px-8 h-12 font-bold">
-                      Lihat Demo Portofolio
+                      Coba sekarang
                     </Button>
                   </Link>
                 </div>
@@ -223,7 +225,11 @@ export default function Home() {
                     <div className="w-3 h-3 rounded-full bg-amber-500"></div>
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
                   </div>
-                  <img src="/mockup1.webp" alt="Portfolio Preview" className="w-full h-auto rounded-lg object-cover" onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1507238692062-710e5d12228e?q=80&w=800&auto=format&fit=crop"; }} />
+                  <div className="relative w-full aspect-[16/10] bg-slate-50 overflow-hidden rounded-lg">
+                    <div className="absolute inset-0 w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar max-md:[zoom:0.35] md:[zoom:0.5] pointer-events-none">
+                      <PortfolioViewer data={placeholderPortfolioData} isMobilePreview={false} showPlaceholders={true} />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
