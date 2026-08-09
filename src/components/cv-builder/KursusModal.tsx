@@ -205,7 +205,7 @@ export function KursusModal({ isOpen, onClose, onSave, initialData }: Props) {
             <div className="space-y-2">
               <Label className="text-sm font-medium text-slate-700">Deskripsi</Label>
               <RichTextEditor 
-                content={formData.description}
+                value={formData.description}
                 onChange={(html) => setFormData({...formData, description: html})}
                 placeholder="Topik yang dipelajari, skill yang didapat, atau pencapaian selama kursus..."
               />
