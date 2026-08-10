@@ -82,7 +82,7 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-[340px] bg-white border border-gray-200 rounded-2xl p-8 shadow-xl overflow-hidden"
+              className="relative w-full max-w-[420px] bg-white border border-gray-200 rounded-2xl p-8 shadow-xl overflow-hidden"
             >
               {/* Background Glow */}
               <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 blur-[80px] opacity-10 -z-10 ${modal.variant === 'danger' ? 'bg-red-500' : 'bg-blue-500'}`} />

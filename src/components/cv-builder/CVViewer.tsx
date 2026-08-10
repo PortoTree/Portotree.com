@@ -120,7 +120,7 @@ export function CVViewer({ data }: CVViewerProps) {
                 {/* Translate the content up to show the correct slice */}
                 <div 
                   className="cv-instance absolute left-0 w-full"
-                  style={{ top: `calc(-100% * ${i})` }}
+                  style={{ top: `calc(-297mm * ${i})` }}
                 >
                   {renderTemplate()}
                 </div>

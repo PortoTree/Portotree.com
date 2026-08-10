@@ -8,15 +8,30 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Eye, EyeOff, Download, ArrowLeft, Edit, Palette, Info } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useUI } from "@/components/ui/UIProvider";
 
 export default function CVBuilderPage() {
   const { data, isLoading, updateConfig, updatePortfolio, toggleVisibility } = useCvBuilderState();
   const [sidebarMode, setSidebarMode] = useState<'edit' | 'design'>('edit');
   const [showMobilePreview, setShowMobilePreview] = useState(false);
+  const { showConfirm } = useUI();
 
   // Basic print function
   const handlePrint = () => {
-    window.print();
+    if (window.innerWidth >= 768) {
+      showConfirm({
+        title: "Perhatian Sebelum Cetak",
+        message: "Jika layar cetak (Preview PDF) terlihat kosong atau terpotong, pastikan Anda mengubah pengaturan 'Margins' menjadi 'None' (Tidak Ada) pada menu pengaturan Print.",
+        variant: "info",
+        confirmText: "Mengerti & Cetak",
+        cancelText: "Batal",
+        onConfirm: () => {
+          setTimeout(() => window.print(), 100);
+        }
+      });
+    } else {
+      window.print();
+    }
   };
 
   if (isLoading || !data) {
