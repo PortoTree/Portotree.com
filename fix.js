@@ -1,23 +1,11 @@
 const fs = require('fs');
+let code = fs.readFileSync('src/components/cv-builder/templates/ATSModern.tsx', 'utf8');
 
-function restoreATSModern() {
-  let file = 'src/components/cv-builder/templates/ATSModern.tsx';
-  let code = fs.readFileSync(file, 'utf8');
+// Replace fragments that contain hr and h3 with div className="cv-section"
+code = code.replace(/<>\s*<hr className="border-t border-gray-300" \/>\s*<div>\s*<h3/g, '<div className="cv-section">\n              <hr className="border-t border-gray-300" />\n              <div>\n                <h3');
 
-  // Add HR after header
-  code = code.replace(/<\/h2>\s*<\/div>/g, '</h2>\n        <hr className="border-t border-gray-300" />\n      </div>');
-  
-  // Add HR between sections
-  code = code.replace(/(<\/>\s*)}?\s*<div/g, '\\n          <hr className="border-t border-gray-300" />\n          <div');
-  code = code.replace(/(<\/div>\s*)<div\s*>\s*<h3/g, '\<hr className="border-t border-gray-300" />\n          <div>\n            <h3');
+// Replace the closing fragment
+code = code.replace(/<\/div>\s*<\/div>\s*<\/div>\s*<\/>/g, '</div>\n                </div>\n              </div>\n            </div>');
+code = code.replace(/<\/ul>\s*<\/div>\s*<\/>/g, '</ul>\n              </div>\n            </div>');
 
-  // Restore border-l for timelines
-  code = code.replace(/className="pl-4 space-y-5 py-1"/g, 'className="border-l-[1px] border-gray-300 pl-4 space-y-5 py-1"');
-  code = code.replace(/className="pl-4 space-y-4 py-1"/g, 'className="border-l-[1px] border-gray-300 pl-4 space-y-4 py-1"');
-  code = code.replace(/className="pl-5 space-y-6 py-1"/g, 'className="border-l-[1px] border-gray-300 pl-5 space-y-6 py-1"');
-  code = code.replace(/className="pl-5 space-y-4 py-1"/g, 'className="border-l-[1px] border-gray-300 pl-5 space-y-4 py-1"');
-
-  fs.writeFileSync(file, code);
-}
-
-restoreATSModern();
+fs.writeFileSync('src/components/cv-builder/templates/ATSModern.tsx', code);
