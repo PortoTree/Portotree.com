@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { DevToast } from "@/components/layout/DevToast";
 import { Toaster } from "@/components/ui/sonner";
+import { UIProvider } from "@/components/ui/UIProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,13 +44,15 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col custom-scrollbar overflow-x-hidden">
-        {children}
-        
-        {/* Temporary Development Toast */}
-        <DevToast />
-        
-        {/* Sonner Toaster */}
-        <Toaster position="top-center" style={{ zIndex: 99999 }} />
+        <UIProvider>
+          {children}
+          
+          {/* Temporary Development Toast */}
+          <DevToast />
+          
+          {/* Sonner Toaster */}
+          <Toaster position="top-center" style={{ zIndex: 99999 }} />
+        </UIProvider>
       </body>
     </html>
   );

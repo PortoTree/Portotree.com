@@ -14,10 +14,12 @@ import { Save, ArrowLeft, Loader2, Image as ImageIcon, Trash2, ExternalLink } fr
 import Link from "next/link";
 import { toast } from "sonner";
 import Image from "next/image";
+import { useUI } from "@/components/ui/UIProvider";
 import { use } from "react";
 
 export default function EditBlogPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
+  const { showConfirm } = useUI();
   const { id } = use(params);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -101,25 +103,28 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
   };
 
   const handleDelete = async () => {
-    if (!confirm("Apakah Anda yakin ingin menghapus artikel ini? Tindakan ini tidak bisa dibatalkan.")) {
-      return;
-    }
-    
-    setIsDeleting(true);
-    try {
-      const result = await deleteBlog(id);
-      if (result.success) {
-        toast.success("Artikel berhasil dihapus");
-        router.push("/blogs");
-        router.refresh();
-      } else {
-        toast.error("Gagal menghapus artikel");
+    showConfirm({
+      title: "Hapus Artikel",
+      message: "Apakah Anda yakin ingin menghapus artikel ini? Tindakan ini tidak bisa dibatalkan.",
+      variant: "danger",
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          const result = await deleteBlog(id);
+          if (result.success) {
+            toast.success("Artikel berhasil dihapus");
+            router.push("/blogs");
+            router.refresh();
+          } else {
+            toast.error("Gagal menghapus artikel");
+          }
+        } catch (error) {
+          toast.error("Terjadi kesalahan saat menghapus");
+        } finally {
+          setIsDeleting(false);
+        }
       }
-    } catch (error) {
-      toast.error("Terjadi kesalahan saat menghapus");
-    } finally {
-      setIsDeleting(false);
-    }
+    });
   };
 
   if (isLoading) {

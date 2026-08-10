@@ -76,19 +76,19 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={closeModal}
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/40"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-[340px] bg-[#0a0f1d] border border-white/10 rounded-2xl p-8 shadow-2xl overflow-hidden"
+              className="relative w-full max-w-[340px] bg-white border border-gray-200 rounded-2xl p-8 shadow-xl overflow-hidden"
             >
               {/* Background Glow */}
-              <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 blur-[80px] opacity-20 -z-10 ${modal.variant === 'danger' ? 'bg-red-500' : 'bg-blue-500'}`} />
+              <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 blur-[80px] opacity-10 -z-10 ${modal.variant === 'danger' ? 'bg-red-500' : 'bg-blue-500'}`} />
               
               <div className="text-center space-y-4">
-                <div className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4 ${modal.variant === 'danger' ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 'bg-blue-500/10 text-blue-500 border border-blue-500/20'}`}>
+                <div className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4 ${modal.variant === 'danger' ? 'bg-red-50 text-red-500 border border-red-100' : 'bg-blue-50 text-blue-500 border border-blue-100'}`}>
                   {modal.variant === 'danger' ? (
                     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -100,8 +100,8 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
                   )}
                 </div>
                 
-                <h3 className="text-sm font-black text-white uppercase tracking-widest">{modal.title}</h3>
-                <p className="text-[10px] text-gray-400 font-medium leading-relaxed">
+                <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest">{modal.title}</h3>
+                <p className="text-[11px] text-gray-500 font-medium leading-relaxed">
                   {modal.message}
                 </p>
                 
@@ -112,7 +112,7 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
                         if (modal.onCancel) modal.onCancel();
                         closeModal();
                       }}
-                      className="py-3 px-4 rounded-2xl bg-white/5 border border-white/10 text-[9px] font-black text-gray-400 uppercase tracking-widest hover:bg-white/10 transition-all active:scale-95"
+                      className="py-3 px-4 rounded-2xl bg-white border border-gray-200 text-[10px] font-bold text-gray-600 uppercase tracking-widest hover:bg-gray-50 transition-all active:scale-95 shadow-sm"
                     >
                       {modal.cancelText || 'Batal'}
                     </button>
@@ -122,7 +122,7 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
                       modal.onConfirm();
                       if (modal.cancelText !== 'hidden') closeModal();
                     }}
-                    className={`py-3 px-4 rounded-2xl text-[9px] font-black text-white uppercase tracking-widest transition-all active:scale-95 shadow-xl ${
+                    className={`py-3 px-4 rounded-2xl text-[10px] font-bold text-white uppercase tracking-widest transition-all active:scale-95 shadow-md ${
                       modal.cancelText === 'hidden' ? 'w-full' : ''
                     } ${
                       modal.variant === 'danger' 

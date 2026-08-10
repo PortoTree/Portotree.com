@@ -1,6 +1,6 @@
 "use client";
-
 import React, { useEffect } from "react";
+import { useUI } from "@/components/ui/UIProvider";
 import { useSearchParams } from "next/navigation";
 import { CVPortfolioData } from "@/lib/cvData";
 import { Input } from "@/components/ui/input";
@@ -70,6 +70,7 @@ const AccordionSection = ({
 };
 
 export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
+  const { showConfirm } = useUI();
   const searchParams = useSearchParams();
   const [openSection, setOpenSection] = React.useState<string>('');
 
@@ -359,11 +360,16 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
   };
 
   const handleDeleteCertification = (index: number) => {
-    if (window.confirm("Yakin ingin menghapus sertifikasi ini?")) {
-      const updatedCerts = [...(data.certifications || [])];
-      updatedCerts.splice(index, 1);
-      onChange({ ...data, certifications: updatedCerts });
-    }
+    showConfirm({
+      title: "Hapus Sertifikasi",
+      message: "Yakin ingin menghapus sertifikasi ini?",
+      variant: "danger",
+      onConfirm: () => {
+        const updatedCerts = [...(data.certifications || [])];
+        updatedCerts.splice(index, 1);
+        onChange({ ...data, certifications: updatedCerts });
+      }
+    });
   };
 
   const handleSaveAward = (awardData: any) => {
@@ -382,11 +388,16 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
   };
 
   const handleDeleteKursus = (index: number) => {
-    if (confirm('Apakah Anda yakin ingin menghapus kursus ini?')) {
-      const updatedCourses = [...(data.courses || [])];
-      updatedCourses.splice(index, 1);
-      onChange({ ...data, courses: updatedCourses });
-    }
+    showConfirm({
+      title: "Hapus Kursus",
+      message: "Apakah Anda yakin ingin menghapus kursus ini?",
+      variant: "danger",
+      onConfirm: () => {
+        const updatedKursus = [...(data.kursus || [])];
+        updatedKursus.splice(index, 1);
+        onChange({ ...data, kursus: updatedKursus });
+      }
+    });
   };
 
   const handleSaveKursus = (kursusData: KursusFormData) => {
@@ -405,11 +416,16 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
   };
 
   const handleDeleteBahasa = (index: number) => {
-    if (confirm('Apakah Anda yakin ingin menghapus bahasa ini?')) {
-      const updatedLanguages = [...(data.languages || [])];
-      updatedLanguages.splice(index, 1);
-      onChange({ ...data, languages: updatedLanguages });
-    }
+    showConfirm({
+      title: "Hapus Bahasa",
+      message: "Apakah Anda yakin ingin menghapus bahasa ini?",
+      variant: "danger",
+      onConfirm: () => {
+        const updatedBahasa = [...(data.bahasa || [])];
+        updatedBahasa.splice(index, 1);
+        onChange({ ...data, bahasa: updatedBahasa });
+      }
+    });
   };
 
   const handleSaveBahasa = (bahasaData: BahasaFormData) => {
@@ -428,11 +444,16 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
   };
 
   const handleDeleteEkskul = (index: number) => {
-    if (confirm('Apakah Anda yakin ingin menghapus ekskul ini?')) {
-      const updatedEkskuls = [...(data.extracurriculars || [])];
-      updatedEkskuls.splice(index, 1);
-      onChange({ ...data, extracurriculars: updatedEkskuls });
-    }
+    showConfirm({
+      title: "Hapus Ekskul",
+      message: "Apakah Anda yakin ingin menghapus ekskul ini?",
+      variant: "danger",
+      onConfirm: () => {
+        const updatedEkskul = [...(data.ekstrakurikuler || [])];
+        updatedEkskul.splice(index, 1);
+        onChange({ ...data, ekstrakurikuler: updatedEkskul });
+      }
+    });
   };
 
   const handleSaveEkskul = (ekskulData: EkskulFormData) => {
@@ -451,11 +472,16 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
   };
 
   const handleDeleteHobi = (index: number) => {
-    if (confirm('Apakah Anda yakin ingin menghapus hobi ini?')) {
-      const updatedHobbies = [...(data.hobbies || [])];
-      updatedHobbies.splice(index, 1);
-      onChange({ ...data, hobbies: updatedHobbies });
-    }
+    showConfirm({
+      title: "Hapus Hobi",
+      message: "Apakah Anda yakin ingin menghapus hobi ini?",
+      variant: "danger",
+      onConfirm: () => {
+        const updatedHobi = [...(data.hobi || [])];
+        updatedHobi.splice(index, 1);
+        onChange({ ...data, hobi: updatedHobi });
+      }
+    });
   };
 
   const handleSaveHobi = (hobiData: HobiFormData) => {
@@ -474,11 +500,16 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
   };
 
   const handleDeleteAward = (index: number) => {
-    if (window.confirm("Yakin ingin menghapus penghargaan ini?")) {
-      const updatedAwards = [...(data.awards || [])];
-      updatedAwards.splice(index, 1);
-      onChange({ ...data, awards: updatedAwards });
-    }
+    showConfirm({
+      title: "Hapus Penghargaan",
+      message: "Yakin ingin menghapus penghargaan ini?",
+      variant: "danger",
+      onConfirm: () => {
+        const updatedAwards = [...(data.awards || [])];
+        updatedAwards.splice(index, 1);
+        onChange({ ...data, awards: updatedAwards });
+      }
+    });
   };
 
   const handleSaveService = (serviceData: any) => {
@@ -497,11 +528,16 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
   };
 
   const handleDeleteService = (index: number) => {
-    if (window.confirm("Yakin ingin menghapus layanan ini?")) {
-      const updatedServices = [...(data.services || [])];
-      updatedServices.splice(index, 1);
-      onChange({ ...data, services: updatedServices });
-    }
+    showConfirm({
+      title: "Hapus Layanan",
+      message: "Yakin ingin menghapus layanan ini?",
+      variant: "danger",
+      onConfirm: () => {
+        const updatedServices = [...(data.services || [])];
+        updatedServices.splice(index, 1);
+        onChange({ ...data, services: updatedServices });
+      }
+    });
   };
 
   return (

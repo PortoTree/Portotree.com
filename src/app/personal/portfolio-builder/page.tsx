@@ -3,8 +3,6 @@ import { UIProvider } from "@/components/ui/UIProvider";
 
 export default function PortfolioBuilderPage() {
   return (
-    <UIProvider>
-      <VisualPageBuilder />
-    </UIProvider>
+    <VisualPageBuilder />
   );
 }

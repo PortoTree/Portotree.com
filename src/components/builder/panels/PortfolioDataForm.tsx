@@ -1,6 +1,6 @@
 "use client";
-
 import React, { useEffect } from "react";
+import { useUI } from "@/components/ui/UIProvider";
 import { useSearchParams } from "next/navigation";
 import { PortfolioData } from "@/lib/portfolioData";
 import { Input } from "@/components/ui/input";
@@ -64,6 +64,7 @@ const AccordionSection = ({
 };
 
 export function PortfolioDataForm({ data, onChange }: Props) {
+  const { showConfirm } = useUI();
   const searchParams = useSearchParams();
   const [openSection, setOpenSection] = React.useState<string>('');
 
@@ -324,11 +325,16 @@ export function PortfolioDataForm({ data, onChange }: Props) {
   };
 
   const handleDeleteCertification = (index: number) => {
-    if (window.confirm("Yakin ingin menghapus sertifikasi ini?")) {
-      const updatedCerts = [...(data.certifications || [])];
-      updatedCerts.splice(index, 1);
-      onChange({ ...data, certifications: updatedCerts });
-    }
+    showConfirm({
+      title: "Hapus Sertifikasi",
+      message: "Yakin ingin menghapus sertifikasi ini?",
+      variant: "danger",
+      onConfirm: () => {
+        const updatedCerts = [...(data.certifications || [])];
+        updatedCerts.splice(index, 1);
+        onChange({ ...data, certifications: updatedCerts });
+      }
+    });
   };
 
   const handleSaveAward = (awardData: any) => {
@@ -347,11 +353,16 @@ export function PortfolioDataForm({ data, onChange }: Props) {
   };
 
   const handleDeleteAward = (index: number) => {
-    if (window.confirm("Yakin ingin menghapus penghargaan ini?")) {
-      const updatedAwards = [...(data.awards || [])];
-      updatedAwards.splice(index, 1);
-      onChange({ ...data, awards: updatedAwards });
-    }
+    showConfirm({
+      title: "Hapus Penghargaan",
+      message: "Yakin ingin menghapus penghargaan ini?",
+      variant: "danger",
+      onConfirm: () => {
+        const updatedAwards = [...(data.awards || [])];
+        updatedAwards.splice(index, 1);
+        onChange({ ...data, awards: updatedAwards });
+      }
+    });
   };
 
   const handleSaveService = (serviceData: any) => {
@@ -370,11 +381,16 @@ export function PortfolioDataForm({ data, onChange }: Props) {
   };
 
   const handleDeleteService = (index: number) => {
-    if (window.confirm("Yakin ingin menghapus layanan ini?")) {
-      const updatedServices = [...(data.services || [])];
-      updatedServices.splice(index, 1);
-      onChange({ ...data, services: updatedServices });
-    }
+    showConfirm({
+      title: "Hapus Layanan",
+      message: "Yakin ingin menghapus layanan ini?",
+      variant: "danger",
+      onConfirm: () => {
+        const updatedServices = [...(data.services || [])];
+        updatedServices.splice(index, 1);
+        onChange({ ...data, services: updatedServices });
+      }
+    });
   };
 
   return (
