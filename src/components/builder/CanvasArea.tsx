@@ -265,10 +265,10 @@ function BuilderContent() {
         {/* RIGHT CANVAS - PREVIEW */}
         <div className={`flex-1 bg-slate-200 overflow-y-hidden relative flex-col items-center justify-center p-0 md:py-4 md:px-8 h-full ${!showMobilePreview ? 'hidden md:flex' : 'flex'}`}>
           <div 
-            className={`mx-auto transition-all duration-300 w-full h-full scroll-smooth bg-white overflow-y-auto max-md:scrollbar-hide ${
+            className={`mx-auto transition-all duration-300 w-full h-full bg-white relative ${
             previewMode === 'mobile' 
-              ? 'scrollbar-hide md:w-[375px] md:max-h-[896px] md:shadow-2xl md:rounded-3xl md:border-8 md:border-slate-900 relative md:flex-shrink-0 md:ring-4 md:ring-slate-800' 
-              : 'custom-scrollbar md:shadow-xl md:rounded-xl max-w-6xl'
+              ? 'md:w-[375px] md:max-h-[896px] md:shadow-2xl md:rounded-3xl md:border-8 md:border-slate-900 md:flex-shrink-0 md:ring-4 md:ring-slate-800 overflow-hidden' 
+              : 'md:shadow-xl md:rounded-xl max-w-6xl overflow-hidden'
           }`}>
             {/* iPhone Hardware Elements (Hidden on mobile) */}
             {previewMode === 'mobile' && (
@@ -282,7 +282,10 @@ function BuilderContent() {
               </div>
             )}
             
-            <PortfolioViewer data={localData} isMobilePreview={previewMode === 'mobile'} showPlaceholders={true} />
+            {/* SCROLLABLE CONTENT */}
+            <div className={`w-full h-full scroll-smooth overflow-y-auto max-md:scrollbar-hide ${previewMode === 'mobile' ? 'scrollbar-hide' : 'custom-scrollbar'}`}>
+              <PortfolioViewer data={localData} isMobilePreview={previewMode === 'mobile'} showPlaceholders={true} />
+            </div>
           </div>
         </div>
 

@@ -21,7 +21,15 @@ export async function getCVData() {
     ]);
 
     // Serialize to plain objects to avoid Next.js serialization errors with Firebase Timestamps
-    const safePortfolioData = JSON.parse(JSON.stringify(portfolioDoc.exists ? portfolioDoc.data() : defaultPortfolioData));
+    const rawPortfolio = portfolioDoc.exists ? portfolioDoc.data() : null;
+    let portfolioDataOnly = rawPortfolio?.data || defaultPortfolioData;
+    
+    // Auto-recover nested data structure caused by previous CV Builder bug
+    while (portfolioDataOnly && portfolioDataOnly.data && !portfolioDataOnly.personal && !portfolioDataOnly.activeSections) {
+      portfolioDataOnly = portfolioDataOnly.data;
+    }
+
+    const safePortfolioData = JSON.parse(JSON.stringify(portfolioDataOnly));
     const safeConfigData = JSON.parse(JSON.stringify(cvConfigDoc.exists ? cvConfigDoc.data() : defaultCVConfig));
 
     return {

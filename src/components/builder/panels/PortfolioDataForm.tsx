@@ -96,13 +96,21 @@ export function PortfolioDataForm({ data, onChange }: Props) {
   const [editingProjId, setEditingProjId] = React.useState<string | null>(null);
 
   const [addSectionModalOpen, setAddSectionModalOpen] = React.useState(false);
-  const [addedSections, setAddedSections] = React.useState<string[]>(
-    data.activeSections || ['education', 'experience', 'organization', 'projects', 'social', 'skills']
-  );
+  const [addedSections, setAddedSections] = React.useState<string[]>(() => {
+    let initial = data.activeSections || ['education', 'experience', 'organization', 'projects', 'social', 'skills', 'certifications', 'awards', 'services'];
+    if (data.activeSections && data.activeSections.length === 6 && !data.activeSections.includes('services')) {
+      initial = [...data.activeSections, 'certifications', 'awards', 'services'];
+    }
+    return initial;
+  });
 
   React.useEffect(() => {
     if (data.activeSections) {
-      setAddedSections(data.activeSections);
+      let updated = data.activeSections;
+      if (updated.length === 6 && !updated.includes('services')) {
+        updated = [...updated, 'certifications', 'awards', 'services'];
+      }
+      setAddedSections(updated);
     }
   }, [data.activeSections]);
 

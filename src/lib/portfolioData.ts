@@ -270,5 +270,5 @@ export const defaultPortfolioData: PortfolioData = {
   organization: [],
   projects: [],
   skills: "",
-  activeSections: ['education', 'experience', 'organization', 'projects', 'social', 'skills']
+  activeSections: ['education', 'experience', 'organization', 'projects', 'social', 'skills', 'certifications', 'awards', 'services']
 };

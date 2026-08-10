@@ -170,7 +170,7 @@ export default function PortfolioPage() {
                   transform: 'scale(0.5)' 
                 }}
               >
-                <PortfolioViewer data={portfolioData} />
+                <PortfolioViewer data={portfolioData} showPlaceholders={true} />
               </div>
             </div>
 

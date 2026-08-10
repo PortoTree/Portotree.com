@@ -16,7 +16,12 @@ export function PortfolioViewer({
   showPlaceholders?: boolean;
   username?: string;
 }) {
-  const activeSections = rawData.activeSections || ['education', 'experience', 'organization', 'projects', 'social', 'skills'];
+  let activeSections = rawData.activeSections || ['education', 'experience', 'organization', 'projects', 'social', 'skills', 'certifications', 'awards', 'services'];
+  
+  // Auto-upgrade legacy activeSections (which only had 6 items) for existing users
+  if (rawData.activeSections && rawData.activeSections.length === 6 && !rawData.activeSections.includes('services')) {
+    activeSections = [...rawData.activeSections, 'certifications', 'awards', 'services'];
+  }
 
   const sortHistory = (arr: any[]) => {
     return [...arr].sort((a, b) => {
@@ -61,15 +66,15 @@ export function PortfolioViewer({
 
   const isPlaceholder = {
     personal: data.personal.name === placeholderPortfolioData.personal.name,
-    social: data.social === placeholderPortfolioData.social,
-    experience: data.experience === placeholderPortfolioData.experience,
-    education: data.education === placeholderPortfolioData.education,
-    organization: data.organization === placeholderPortfolioData.organization,
-    projects: data.projects === placeholderPortfolioData.projects,
-    certifications: data.certifications === placeholderPortfolioData.certifications,
-    awards: data.awards === placeholderPortfolioData.awards,
-    services: data.services === placeholderPortfolioData.services,
-    skills: data.skills === placeholderPortfolioData.skills,
+    social: (!rawData.social || rawData.social.length === 0) && showPlaceholders,
+    experience: (!rawData.experience || rawData.experience.length === 0) && showPlaceholders,
+    education: (!rawData.education || rawData.education.length === 0) && showPlaceholders,
+    organization: (!rawData.organization || rawData.organization.length === 0) && showPlaceholders,
+    projects: (!rawData.projects || rawData.projects.length === 0) && showPlaceholders,
+    certifications: (!rawData.certifications || rawData.certifications.length === 0) && showPlaceholders,
+    awards: (!rawData.awards || rawData.awards.length === 0) && showPlaceholders,
+    services: (!rawData.services || rawData.services.length === 0) && showPlaceholders,
+    skills: (!rawData.skills || rawData.skills.trim() === "") && showPlaceholders,
   };
 
   const handleGlobalClick = (e: React.MouseEvent) => {
@@ -132,7 +137,7 @@ export function PortfolioViewer({
       </header>
 
       {/* FULL WIDTH HERO SECTION */}
-      <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="about" className="relative z-0 w-full pt-16 pb-12 md:pt-28 md:pb-20 overflow-hidden">
+      <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} id="about" className={`relative z-0 w-full overflow-hidden ${isMobilePreview === true ? 'pt-8 pb-12' : isMobilePreview === false ? 'pt-28 pb-20' : 'pt-8 pb-12 md:pt-28 md:pb-20'}`}>
         {/* Clearer Polka dots background with mask fade effect */}
         <div 
           className="absolute inset-0 -z-10"
@@ -570,15 +575,15 @@ export function PortfolioViewer({
       <motion.footer initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} className="bg-gradient-to-br from-emerald-800 to-emerald-950 text-emerald-50 py-12 mt-20">
         <div className="max-w-5xl mx-auto px-6 text-center space-y-4">
           <h3 className="text-2xl font-bold text-white mb-6">Let's Connect</h3>
-          <div className="flex justify-center gap-6 mb-8">
+          <div className="flex flex-wrap justify-center gap-6 mb-8">
               {data.personal.email && (
                 <a href={`mailto:${data.personal.email}`} className="hover:opacity-80 transition-opacity" title="Email">
-                  <img src="/gmail.webp" alt="Gmail" className="w-6 h-6 object-contain" />
+                  <img src="/gmail.webp" alt="Gmail" className={`w-6 h-6 object-contain ${isPlaceholder.personal ? 'grayscale opacity-50' : ''}`} />
                 </a>
               )}
               {data.personal.phone && (
                 <a href={`https://wa.me/${data.personal.phone.replace(/\D/g,'')}`} target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity" title="WhatsApp">
-                  <img src="/whatsapp.webp" alt="WhatsApp" className="w-6 h-6 object-contain" />
+                  <img src="/whatsapp.webp" alt="WhatsApp" className={`w-6 h-6 object-contain ${isPlaceholder.personal ? 'grayscale opacity-50' : ''}`} />
                 </a>
               )}
               {data.social.map(social => {
@@ -594,7 +599,7 @@ export function PortfolioViewer({
 
                 return (
                   <a key={social.id} href={social.url} target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity" title={social.platform}>
-                    <img src={iconSrc} alt={social.platform} className="w-6 h-6 object-contain" />
+                    <img src={iconSrc} alt={social.platform} className={`w-6 h-6 object-contain ${isPlaceholder.social ? 'grayscale opacity-50' : ''}`} />
                   </a>
                 );
               })}
