@@ -2,6 +2,17 @@ import React from 'react';
 import { CVDataPayload } from '@/lib/cvData';
 
 export function ATSClassic({ data }: { data: CVDataPayload }) {
+  const getProficiencyPercentage = (level?: string) => {
+    if (!level) return 0;
+    const l = level.toLowerCase();
+    if (l.includes('mula') || l.includes('begin')) return 20;
+    if (l.includes('menengah') || l.includes('inter')) return 40;
+    if (l.includes('lanjut') || l.includes('advan')) return 60;
+    if (l.includes('fasih') || l.includes('fluent')) return 80;
+    if (l.includes('asli') || l.includes('native')) return 100;
+    return 50;
+  };
+
   const { portfolio, config } = data;
   const { personal, experience, education, skills, projects, certifications, awards, organization, internship, courses, languages, extracurriculars, hobbies } = portfolio;
   
@@ -106,8 +117,17 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
           <SectionHeader title="LANGUAGES" />
           <ul className="grid grid-cols-3 gap-x-4 gap-y-1 list-disc pl-5">
             {visibleLanguages.map(lang => (
-              <li key={lang.id} className="pl-1 leading-snug break-words">
-                <span className="font-medium">{lang.name}</span> — <span className="text-gray-700 italic">{lang.proficiency}</span>
+              <li key={lang.id} className="pl-1 mb-2 leading-snug break-words">
+                <div className="flex justify-between items-end mb-1">
+                  <span className="font-medium">{lang.name}</span>
+                  <span className="text-gray-500 text-xs italic">{lang.proficiency}</span>
+                </div>
+                <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
+                  <div 
+                    className="bg-slate-700 h-full rounded-full print:bg-black"
+                    style={{ width: `${getProficiencyPercentage(lang.proficiency)}%` }}
+                  />
+                </div>
               </li>
             ))}
           </ul>

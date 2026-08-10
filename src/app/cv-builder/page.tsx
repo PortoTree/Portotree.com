@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 export default function CVBuilderPage() {
   const { data, isLoading, updateConfig, updatePortfolio, toggleVisibility } = useCvBuilderState();
   const [sidebarMode, setSidebarMode] = useState<'edit' | 'design'>('edit');
+  const [showMobilePreview, setShowMobilePreview] = useState(false);
 
   // Basic print function
   const handlePrint = () => {
@@ -31,24 +32,40 @@ export default function CVBuilderPage() {
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-slate-100 print:bg-white print:h-auto print:overflow-visible">
       {/* Top Navbar - hidden when printing */}
-      <div className="print:hidden h-16 bg-white border-b flex items-center justify-between px-6 shrink-0 sticky top-0 z-50">
-        <div className="flex items-center gap-4">
+      <div className="print:hidden h-16 bg-white border-b flex items-center justify-between px-4 md:px-6 shrink-0 sticky top-0 z-50">
+        <div className="flex items-center gap-2 md:gap-4">
           <Link href="/dashboard" className="text-gray-500 hover:text-black transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <h1 className="font-bold text-lg">CV Builder</h1>
+          <h1 className="font-bold text-base md:text-lg">CV Builder</h1>
         </div>
-        <div className="flex items-center gap-4">
-          <Button onClick={handlePrint} className="bg-green-600 hover:bg-green-700 text-white rounded-full">
-            <Download className="w-4 h-4 mr-2" />
-            Download PDF
+        <div className="flex items-center gap-2 md:gap-4">
+          {/* Mobile Navigation Toggles */}
+          <div className="flex md:hidden items-center bg-slate-100 p-1 rounded-xl">
+            <button 
+              onClick={() => setSidebarMode('edit')} 
+              className={`p-2 rounded-lg transition-all ${sidebarMode === 'edit' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500'}`}
+            >
+              <Edit className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={() => setSidebarMode('design')} 
+              className={`p-2 rounded-lg transition-all ${sidebarMode === 'design' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500'}`}
+            >
+              <Palette className="w-5 h-5" />
+            </button>
+          </div>
+
+          <Button onClick={handlePrint} className="bg-green-600 hover:bg-green-700 text-white rounded-full px-3 md:px-4">
+            <Download className="w-4 h-4 md:mr-2" />
+            <span className="hidden md:inline">Download PDF</span>
           </Button>
         </div>
       </div>
 
-      <div className="flex flex-1 h-[calc(100vh-64px)] overflow-hidden print:h-auto print:overflow-visible">
+      <div className="flex flex-1 h-[calc(100vh-64px)] overflow-hidden print:h-auto print:overflow-visible relative">
         {/* Far Left - Icon Sidebar - hidden when printing */}
-        <aside className="print:hidden w-16 shrink-0 bg-white border-r flex flex-col items-center py-4 space-y-4 z-20">
+        <aside className="print:hidden w-16 shrink-0 bg-white border-r flex-col items-center py-4 space-y-4 z-20 hidden md:flex">
           <button 
             onClick={() => setSidebarMode('edit')} 
             className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all ${sidebarMode === 'edit' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-500 hover:bg-gray-100'}`}
@@ -66,7 +83,7 @@ export default function CVBuilderPage() {
         </aside>
 
         {/* Middle Sidebar - Active Panel - hidden when printing */}
-        <div className="w-[550px] shrink-0 border-r bg-white overflow-y-auto custom-scrollbar print:hidden h-full relative z-10">
+        <div className={`w-full md:w-[550px] shrink-0 border-r bg-white overflow-y-auto custom-scrollbar print:hidden h-full relative z-10 ${showMobilePreview ? 'hidden md:block' : 'block'}`}>
           
           {sidebarMode === 'design' && (
             <div className="flex flex-col">
@@ -125,10 +142,19 @@ export default function CVBuilderPage() {
         </div>
 
         {/* Right Area - Live Preview */}
-        <main className="flex-1 overflow-y-auto custom-scrollbar relative bg-gray-200 print:bg-white print:overflow-visible print:h-auto h-full">
+        <main className={`flex-1 overflow-y-auto custom-scrollbar relative bg-gray-200 print:bg-white print:overflow-visible print:h-auto h-full ${!showMobilePreview ? 'hidden md:block' : 'block'}`}>
           {/* Zoom controls could go here */}
           <CVViewer data={data} />
         </main>
+        
+        {/* FLOATING MOBILE PREVIEW BUTTON */}
+        <button
+          onClick={() => setShowMobilePreview(!showMobilePreview)}
+          className={`md:hidden fixed bottom-6 right-6 z-50 px-5 py-3 rounded-full shadow-2xl text-sm font-bold uppercase tracking-widest transition-all flex items-center gap-2 ${!showMobilePreview ? 'bg-emerald-600 text-white' : 'bg-slate-50 text-slate-900 border border-slate-200'}`}
+        >
+          {showMobilePreview ? <Edit className="w-5 h-5" /> : <Eye className="w-5 h-5" />} 
+          <span>{showMobilePreview ? 'Edit Data' : 'Preview'}</span>
+        </button>
       </div>
       
       {/* Print Specific CSS overrides */}

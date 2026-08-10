@@ -3,6 +3,17 @@ import { CVDataPayload } from '@/lib/cvData';
 import { Phone, Mail, MapPin, Globe } from 'lucide-react';
 
 export function ATSModern({ data }: { data: CVDataPayload }) {
+  const getProficiencyPercentage = (level?: string) => {
+    if (!level) return 0;
+    const l = level.toLowerCase();
+    if (l.includes('mula') || l.includes('begin')) return 20;
+    if (l.includes('menengah') || l.includes('inter')) return 40;
+    if (l.includes('lanjut') || l.includes('advan')) return 60;
+    if (l.includes('fasih') || l.includes('fluent')) return 80;
+    if (l.includes('asli') || l.includes('native')) return 100;
+    return 50;
+  };
+
   const { portfolio, config } = data;
   const { personal, experience, education, skills, internship, projects, organization, certifications, awards, courses, languages, extracurriculars, hobbies } = portfolio;
   
@@ -115,9 +126,17 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                 <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-4">Languages</h3>
                 <ul className="flex flex-col gap-1.5 text-[9.5pt] text-gray-700">
                   {visibleLanguages.map(lang => (
-                    <li key={lang.id} className="flex justify-between items-center break-inside-avoid">
-                      <span>{lang.name}</span>
-                      <span className="text-gray-500 italic">{lang.proficiency}</span>
+                    <li key={lang.id} className="flex flex-col break-inside-avoid mb-2">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="font-medium text-gray-800">{lang.name}</span>
+                        <span className="text-gray-500 text-xs italic">{lang.proficiency}</span>
+                      </div>
+                      <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
+                        <div 
+                          className="bg-emerald-600 h-full rounded-full print:bg-slate-700"
+                          style={{ width: `${getProficiencyPercentage(lang.proficiency)}%` }}
+                        />
+                      </div>
                     </li>
                   ))}
                 </ul>
