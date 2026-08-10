@@ -16,6 +16,7 @@ export interface CVPersonalData {
   gender?: string;
   nationality?: string;
   address?: string;
+  portfolioUrl?: string;
 }
 
 export interface CVPortfolioData extends Omit<PortfolioData, 'awards' | 'personal'> {

@@ -29,6 +29,10 @@ export async function getCVData() {
       portfolioDataOnly = portfolioDataOnly.data;
     }
 
+    if (rawPortfolio?.username && portfolioDataOnly.personal && !portfolioDataOnly.personal.portfolioUrl) {
+      portfolioDataOnly.personal.portfolioUrl = `portotree.com/p/${rawPortfolio.username}`;
+    }
+
     const safePortfolioData = JSON.parse(JSON.stringify(portfolioDataOnly));
     const safeConfigData = JSON.parse(JSON.stringify(cvConfigDoc.exists ? cvConfigDoc.data() : defaultCVConfig));
 

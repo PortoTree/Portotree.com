@@ -3,7 +3,7 @@ import { CVDataPayload } from '@/lib/cvData';
 
 export function ATSClassic({ data }: { data: CVDataPayload }) {
   const { portfolio, config } = data;
-  const { personal, experience, education, skills, projects, certifications, awards, organization } = portfolio;
+  const { personal, experience, education, skills, projects, certifications, awards, organization, internship, courses, languages, extracurriculars, hobbies } = portfolio;
   
   const name = personal?.firstName || personal?.lastName 
     ? `${personal?.firstName || ''} ${personal?.lastName || ''}`.trim().toUpperCase()
@@ -14,6 +14,7 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
   const location = personal?.address || personal?.location || "San Francisco, USA";
   const phone = personal?.phone || "+1 987 654 3210";
   const email = personal?.email || "jessica.anderson@email.com";
+  const portfolioUrl = personal?.portfolioUrl || "";
   
   const bio = personal?.bio ? personal?.bio.replace(/<[^>]+>/g, '') : "Creative and detail-oriented Graphic Designer with over 5 years of experience in developing engaging and innovative digital and print designs. Proficient in Adobe Creative Suite, UI/UX design, branding, and visual storytelling. Adept at collaborating with clients and marketing teams to deliver compelling visuals that drive engagement. Passionate about design trends and committed to delivering high-quality creative solutions.";
 
@@ -23,6 +24,11 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
   const visibleCerts = certifications?.filter(item => !config.hiddenItems.includes(item.id)) || [];
   const visibleAwards = awards?.filter(item => !config.hiddenItems.includes(item.id)) || [];
   const visibleOrg = organization?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  const visibleInternship = internship?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  const visibleCourses = courses?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  const visibleLanguages = languages?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  const visibleExtracurriculars = extracurriculars?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  const visibleHobbies = hobbies?.filter(item => !config.hiddenItems.includes(item.id)) || [];
   
   const SectionHeader = ({ title, thickTop = false }: { title: string, thickTop?: boolean }) => (
     <div className="mb-3">
@@ -48,10 +54,16 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
         <div className="flex items-center gap-2 text-black font-medium mb-1">
           <span>{location}</span>
           <span>•</span>
-          <span>{phone}</span>
+          <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="text-inherit no-underline">{phone}</a>
         </div>
         <div className="text-black font-medium">
-          {email}
+          <a href={`mailto:${email}`} className="text-inherit no-underline">{email}</a>
+          {portfolioUrl && (
+            <>
+              <span> • </span>
+              <a href={`https://${portfolioUrl.replace(/^https?:\/\//, '')}`} target="_blank" rel="noopener noreferrer" className="text-inherit no-underline">{portfolioUrl}</a>
+            </>
+          )}
         </div>
       </div>
 
@@ -89,13 +101,26 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
         )}
       </div>
 
+      {visibleLanguages.length > 0 && (
+        <div className="mb-6">
+          <SectionHeader title="LANGUAGES" />
+          <ul className="grid grid-cols-3 gap-x-4 gap-y-1 list-disc pl-5">
+            {visibleLanguages.map(lang => (
+              <li key={lang.id} className="pl-1 leading-snug break-words">
+                <span className="font-medium">{lang.name}</span> — <span className="text-gray-700 italic">{lang.proficiency}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* EDUCATION */}
       <div className="mb-6">
         <SectionHeader title="EDUCATION" />
         <div className="space-y-4">
           {visibleEducation.length > 0 ? (
             visibleEducation.map(edu => (
-              <div key={edu.id}>
+              <div key={edu.id} className="break-inside-avoid mb-4">
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className="font-bold">{edu.degree} {edu.level ? `in ${edu.level}` : ''}</div>
                   <div className="font-medium text-[9pt]">{edu.endYear || edu.startYear}</div>
@@ -115,13 +140,30 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
         </div>
       </div>
 
+      {visibleCourses.length > 0 && (
+        <div className="mb-6">
+          <SectionHeader title="COURSES" />
+          <div className="space-y-4">
+            {visibleCourses.map(course => (
+              <div key={course.id}>
+                <div className="flex justify-between items-baseline mb-0.5">
+                  <div className="font-bold">{course.title}</div>
+                  <div className="font-medium text-[9pt]">{course.startYear} – {course.current ? 'Present' : course.endYear}</div>
+                </div>
+                <div className="text-black italic">{course.issuer}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* PROFESSIONAL EXPERIENCE */}
       <div className="mb-6">
         <SectionHeader title="PROFESSIONAL EXPERIENCE" />
         <div className="space-y-5">
           {visibleExperience.length > 0 ? (
             visibleExperience.map(exp => (
-              <div key={exp.id}>
+              <div key={exp.id} className="break-inside-avoid mb-4">
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className="font-bold">{exp.role}</div>
                   <div className="font-medium text-[9pt]">{exp.startYear} – {exp.current ? 'Present' : exp.endYear}</div>
@@ -171,13 +213,76 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
         </div>
       </div>
 
+      {visibleInternship.length > 0 && (
+        <div className="mb-6">
+          <SectionHeader title="INTERNSHIP EXPERIENCE" />
+          <div className="space-y-5">
+            {visibleInternship.map(intern => (
+              <div key={intern.id} className="break-inside-avoid mb-4">
+                <div className="flex justify-between items-baseline mb-0.5">
+                  <div className="font-bold">{intern.role}</div>
+                  <div className="font-medium text-[9pt]">{intern.startYear} – {intern.current ? 'Present' : intern.endYear}</div>
+                </div>
+                <div className="text-black mb-1.5 italic">{intern.company} {intern.location ? `(${intern.location})` : ''}</div>
+                {intern.description && (
+                  <ul className="list-disc pl-5 space-y-1">
+                    {intern.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line, i) => (
+                      <li key={i} className="pl-1">{line.replace(/^-\s*/, '')}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+
+      {visibleProjects.length > 0 && (
+        <div className="mb-6">
+          <SectionHeader title="PROJECTS" />
+          <div className="space-y-5">
+            {visibleProjects.map(proj => (
+              <div key={proj.id} className="break-inside-avoid mb-4">
+                <div className="flex justify-between items-baseline mb-0.5">
+                  <div className="font-bold">{proj.title}</div>
+                </div>
+                <div className="text-blue-600 mb-1.5 italic"><a href={proj.link} target="_blank" rel="noopener noreferrer" className="hover:underline">{proj.link}</a></div>
+                {proj.description && (
+                  <ul className="list-disc pl-5 space-y-1">
+                    {proj.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line, i) => (
+                      <li key={i} className="pl-1">{line.replace(/^-\s*/, '')}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {visibleCerts.length > 0 && (
+        <div className="mb-6">
+          <SectionHeader title="CERTIFICATIONS" />
+          <div className="space-y-4">
+            {visibleCerts.map(cert => (
+              <div key={cert.id} className="break-inside-avoid mb-4">
+                <div className="flex justify-between items-baseline mb-0.5">
+                  <div className="font-bold">{cert.title}</div>
+                </div>
+                {cert.description && <p className="text-justify">{cert.description}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {visibleAwards.length > 0 && (
         <div className="mb-6">
           <SectionHeader title="PRESTASI" />
           <div className="space-y-3">
             {visibleAwards.map(award => (
-              <div key={award.id}>
+              <div key={award.id} className="break-inside-avoid mb-4">
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className="font-bold">{award.title}</div>
                   <div className="font-medium text-[9pt]">{award.year}</div>
@@ -195,7 +300,7 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
           <SectionHeader title="ORGANIZATIONS" />
           <div className="space-y-4">
             {visibleOrg.map(org => (
-              <div key={org.id}>
+              <div key={org.id} className="break-inside-avoid mb-4">
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className="font-bold">{org.role}</div>
                   <div className="font-medium text-[9pt]">{org.startYear} – {org.current ? 'Present' : org.endYear}</div>
@@ -205,6 +310,36 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {visibleExtracurriculars.length > 0 && (
+        <div className="mb-6">
+          <SectionHeader title="EXTRACURRICULARS" />
+          <div className="space-y-4">
+            {visibleExtracurriculars.map(extra => (
+              <div key={extra.id} className="break-inside-avoid mb-4">
+                <div className="flex justify-between items-baseline mb-0.5">
+                  <div className="font-bold">{extra.title}</div>
+                  <div className="font-medium text-[9pt]">{extra.year}</div>
+                </div>
+                <div className="text-black italic">{extra.issuer}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {visibleHobbies.length > 0 && (
+        <div className="mb-6">
+          <SectionHeader title="HOBBIES" />
+          <ul className="grid grid-cols-3 gap-x-4 gap-y-1 list-disc pl-5">
+            {visibleHobbies.map(hobby => (
+              <li key={hobby.id} className="pl-1 leading-snug break-words">
+                {hobby.name}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 

@@ -1,5 +1,24 @@
 # TODO Tracker
 
+## Kategori: Frontend (CV Builder)
+- **Status:** Selesai
+- **Perubahan:**
+  - Menampilkan input Professional Title (headline) pada menu form Informasi Pribadi di dalam CV Builder yang sebelumnya disembunyikan.
+  - Menghapus 4 kolom input (Tempat Lahir, Tanggal Lahir, Jenis Kelamin, Kewarganegaraan) dari form Informasi Pribadi pada CV Builder beserta dengan validasi error-nya.
+  - Menggabungkan kolom Nama Depan dan Nama Belakang menjadi 1 kolom saja bernama Fullname di form Informasi Pribadi pada CV Builder.
+  - Menyatukan input Fullname dan Professional Title ke dalam 1 baris (2 kolom sejajar) di form Informasi Pribadi pada CV Builder.
+  - Mengganti input Lokasi Singkat (Kota, Negara) menjadi Link URL Portofolio pada form Informasi Pribadi CV Builder.
+  - Membungkus informasi kontak (Telepon, Email, dan Link Portofolio) menggunakan tag *anchor* HTML (<a>) pada template ATSModern dan ATSClassic agar tautan aktif dan lebih mudah dibaca oleh mesin ATS maupun ditekan saat disimpan sebagai PDF.
+  - Menambahkan validasi wajib isi (required) beserta tanda asterisk merah (*) pada input Tanggal Mulai dan Tanggal Selesai di seluruh *modal* riwayat (Pendidikan, Pengalaman, Organisasi, Magang, dan Kursus).
+  - Meralat validasi tanggal pada *modal* riwayat: sekarang yang diwajibkan hanya input Tahun, sedangkan *dropdown* Bulan dikembalikan menjadi opsional (tidak memblokir jika tidak diisi).
+  - Menambahkan seluruh seksi riwayat CV (Magang, Proyek, Sertifikasi, Prestasi, Organisasi, Kursus, Bahasa, Ekstrakulikuler, dan Hobi) ke dalam template cetak ATSModern (dibagi ke 2 kolom) dan ATSClassic (disusun berurutan ke bawah) agar tidak ada data yang terlewat saat *export* ke PDF.
+  - Mengubah input Link URL Portofolio menjadi opsional dan menghapus dari pengecekan error wajib isi.
+  - Memperbarui sistem render Canvas CV (ATSModern dan ATSClassic) agar menyembunyikan icon/link portofolio jika datanya kosong.
+  - Melakukan sinkronisasi otomatis (*auto-fill*) Link URL Portofolio dengan URL Portofolio user jika user sebelumnya telah meng-klaim username Portofolio.
+  - Memasukkan Professional Title sebagai field wajib pada validasi input di CV Builder.
+- **File Terdampak:**
+  - C:\PortoTree\src\components\cv-builder\CVDataForm.tsx
+
 ## Kategori: Frontend (Builder & Template)
 - **Status:** Selesai
 - **Perubahan:** 

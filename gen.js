@@ -1,4 +1,5 @@
-import React from 'react';
+const fs = require('fs');
+let code = \import React from 'react';
 import { CVDataPayload } from '@/lib/cvData';
 import { Phone, Mail, MapPin, Globe } from 'lucide-react';
 
@@ -7,7 +8,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
   const { personal, experience, education, skills, internship, projects, organization, certifications, awards, courses, languages, extracurriculars, hobbies } = portfolio;
   
   const name = personal?.firstName || personal?.lastName 
-    ? `${personal?.firstName || ''} ${personal?.lastName || ''}`.trim().toUpperCase()
+    ? \\\\ \\\\.trim().toUpperCase()
     : personal?.name 
       ? personal?.name.toUpperCase()
       : "YOUR NAME";
@@ -63,11 +64,11 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
             <div className="flex flex-col gap-3 text-[9.5pt] text-gray-700">
               <div className="flex items-center gap-3">
                 <div className="bg-gray-800 text-white p-1 rounded-full"><Phone size={12} /></div>
-                <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="text-inherit no-underline">{phone}</a>
+                <a href={\\\	el:\\\\} className="text-inherit no-underline">{phone}</a>
               </div>
               <div className="flex items-center gap-3">
                 <div className="bg-gray-800 text-white p-1 rounded-full"><Mail size={12} /></div>
-                <a href={`mailto:${email}`} className="break-all text-inherit no-underline">{email}</a>
+                <a href={\\\mailto:\\\\} className="break-all text-inherit no-underline">{email}</a>
               </div>
               <div className="flex items-center gap-3">
                 <div className="bg-gray-800 text-white p-1 rounded-full"><MapPin size={12} /></div>
@@ -76,7 +77,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
               {portfolioUrl && (
                 <div className="flex items-center gap-3">
                   <div className="bg-gray-800 text-white p-1 rounded-full"><Globe size={12} /></div>
-                  <a href={`https://${portfolioUrl.replace(/^https?:\/\//, '')}`} target="_blank" rel="noopener noreferrer" className="break-all text-inherit no-underline">{portfolioUrl.replace(/^https?:\/\//, '')}</a>
+                  <a href={\\\https://\\\\} target="_blank" rel="noopener noreferrer" className="break-all text-inherit no-underline">{portfolioUrl.replace(/^https?:\\\\/\\\\//, '')}</a>
                 </div>
               )}
             </div>
@@ -91,17 +92,17 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
               {skills ? (
                 skills.split(',').map((skill, i) => (
                   <li key={i} className="flex items-center gap-2">
-                    <span className="text-gray-400 text-xs">â€¢</span> {skill.trim()}
+                    <span className="text-gray-400 text-xs">•</span> {skill.trim()}
                   </li>
                 ))
               ) : (
                 <>
-                  <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">â€¢</span> Communication</li>
-                  <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">â€¢</span> Problem Solving</li>
-                  <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">â€¢</span> Time Management</li>
-                  <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">â€¢</span> Teamwork</li>
-                  <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">â€¢</span> Adaptability</li>
-                  <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">â€¢</span> Attention to Detail</li>
+                  <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">•</span> Communication</li>
+                  <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">•</span> Problem Solving</li>
+                  <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">•</span> Time Management</li>
+                  <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">•</span> Teamwork</li>
+                  <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">•</span> Adaptability</li>
+                  <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">•</span> Attention to Detail</li>
                 </>
               )}
             </ul>
@@ -132,7 +133,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                 <ul className="flex flex-col gap-1.5 text-[9.5pt] text-gray-700">
                   {visibleHobbies.map(hobby => (
                     <li key={hobby.id} className="flex items-center gap-2 break-inside-avoid">
-                      <span className="text-gray-400 text-xs">â€¢</span> {hobby.name}
+                      <span className="text-gray-400 text-xs">•</span> {hobby.name}
                     </li>
                   ))}
                 </ul>
@@ -148,7 +149,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
               <div className="border-l-[1px] border-gray-300 pl-4 space-y-5 py-1">
                 {visibleEducation.length > 0 ? (
                   visibleEducation.map(edu => (
-                    <div key={edu.id} className="relative break-inside-avoid mb-4">
+                    <div key={edu.id} className="relative break-inside-avoid">
                       <div className="absolute -left-[20.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                       <h4 className="font-bold uppercase text-[9.5pt] tracking-wider mb-0.5">{edu.school}</h4>
                       <div className="text-[9.5pt] text-gray-700 mb-0.5">{edu.degree}</div>
@@ -157,13 +158,13 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                   ))
                 ) : (
                   <>
-                    <div className="relative break-inside-avoid mb-4">
+                    <div className="relative break-inside-avoid">
                       <div className="absolute -left-[20.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                       <h4 className="font-bold uppercase text-[9.5pt] tracking-wider mb-0.5">BORCELLE SCHOOL</h4>
                       <div className="text-[9.5pt] text-gray-700 mb-0.5">Really Great High School</div>
                       <div className="text-[9pt] text-gray-500">2010 - 2014</div>
                     </div>
-                    <div className="relative break-inside-avoid mb-4">
+                    <div className="relative break-inside-avoid">
                       <div className="absolute -left-[20.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                       <h4 className="font-bold uppercase text-[9.5pt] tracking-wider mb-0.5">LICERIA OF TECHNOLOGY</h4>
                       <div className="text-[9.5pt] text-gray-700 mb-0.5">Really Great University</div>
@@ -183,7 +184,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-4 space-y-4 py-1">
                     {visibleCourses.map(course => (
-                      <div key={course.id} className="relative break-inside-avoid mb-4">
+                      <div key={course.id} className="relative break-inside-avoid">
                         <div className="absolute -left-[20.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[9.5pt] tracking-wider mb-0.5">{course.title}</h4>
                         <div className="text-[9.5pt] text-gray-700 mb-0.5">{course.issuer}</div>
@@ -204,7 +205,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-4 space-y-4 py-1">
                     {visibleExtracurriculars.map(extra => (
-                      <div key={extra.id} className="relative break-inside-avoid mb-4">
+                      <div key={extra.id} className="relative break-inside-avoid">
                         <div className="absolute -left-[20.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[9.5pt] tracking-wider mb-0.5">{extra.title}</h4>
                         <div className="text-[9.5pt] text-gray-700 mb-0.5">{extra.issuer}</div>
@@ -237,7 +238,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
               <div className="border-l-[1px] border-gray-300 pl-5 space-y-6 py-1">
                 {visibleExperience.length > 0 ? (
                   visibleExperience.map(exp => (
-                    <div key={exp.id} className="relative break-inside-avoid mb-4">
+                    <div key={exp.id} className="relative break-inside-avoid">
                       <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                       <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">{exp.role}</h4>
                       <div className="text-[9.5pt] text-gray-700 mb-2 font-medium">
@@ -245,7 +246,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                       </div>
                       {exp.description && (
                         <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-700 leading-relaxed">
-                          {exp.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line, i) => (
+                          {exp.description.replace(/<[^>]+>/g, '').split('\\n').filter(Boolean).map((line, i) => (
                             <li key={i}>{line.replace(/^-/, '').trim()}</li>
                           ))}
                         </ul>
@@ -254,7 +255,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                   ))
                 ) : (
                   <>
-                    <div className="relative break-inside-avoid mb-4">
+                    <div className="relative break-inside-avoid">
                       <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                       <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">MANAGED</h4>
                       <div className="text-[9.5pt] text-gray-700 mb-2 font-medium">
@@ -267,7 +268,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                       </ul>
                     </div>
                     
-                    <div className="relative break-inside-avoid mb-4">
+                    <div className="relative break-inside-avoid">
                       <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                       <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">CREATED</h4>
                       <div className="text-[9.5pt] text-gray-700 mb-2 font-medium">
@@ -280,7 +281,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                       </ul>
                     </div>
                     
-                    <div className="relative break-inside-avoid mb-4">
+                    <div className="relative break-inside-avoid">
                       <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                       <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">IMPROVED</h4>
                       <div className="text-[9.5pt] text-gray-700 mb-2 font-medium">
@@ -306,7 +307,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-5 space-y-6 py-1">
                     {visibleInternship.map(intern => (
-                      <div key={intern.id} className="relative break-inside-avoid mb-4">
+                      <div key={intern.id} className="relative break-inside-avoid">
                         <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">{intern.role}</h4>
                         <div className="text-[9.5pt] text-gray-700 mb-2 font-medium">
@@ -314,7 +315,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                         </div>
                         {intern.description && (
                           <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-700 leading-relaxed">
-                            {intern.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line, i) => (
+                            {intern.description.replace(/<[^>]+>/g, '').split('\\n').filter(Boolean).map((line, i) => (
                               <li key={i}>{line.replace(/^-/, '').trim()}</li>
                             ))}
                           </ul>
@@ -335,7 +336,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-5 space-y-6 py-1">
                     {visibleProjects.map(proj => (
-                      <div key={proj.id} className="relative break-inside-avoid mb-4">
+                      <div key={proj.id} className="relative break-inside-avoid">
                         <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">{proj.title}</h4>
                         <div className="text-[9.5pt] text-gray-700 mb-2 font-medium">
@@ -343,7 +344,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                         </div>
                         {proj.description && (
                           <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-700 leading-relaxed">
-                            {proj.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line, i) => (
+                            {proj.description.replace(/<[^>]+>/g, '').split('\\n').filter(Boolean).map((line, i) => (
                               <li key={i}>{line.replace(/^-/, '').trim()}</li>
                             ))}
                           </ul>
@@ -364,7 +365,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-5 space-y-6 py-1">
                     {visibleOrganization.map(org => (
-                      <div key={org.id} className="relative break-inside-avoid mb-4">
+                      <div key={org.id} className="relative break-inside-avoid">
                         <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">{org.role}</h4>
                         <div className="text-[9.5pt] text-gray-700 mb-2 font-medium">
@@ -372,7 +373,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                         </div>
                         {org.description && (
                           <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-700 leading-relaxed">
-                            {org.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line, i) => (
+                            {org.description.replace(/<[^>]+>/g, '').split('\\n').filter(Boolean).map((line, i) => (
                               <li key={i}>{line.replace(/^-/, '').trim()}</li>
                             ))}
                           </ul>
@@ -393,7 +394,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-5 space-y-4 py-1">
                     {visibleAwards.map(award => (
-                      <div key={award.id} className="relative break-inside-avoid mb-4">
+                      <div key={award.id} className="relative break-inside-avoid">
                         <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">{award.title}</h4>
                         <div className="text-[9.5pt] text-gray-700 mb-0.5">{award.issuer}</div>
@@ -415,7 +416,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-5 space-y-4 py-1">
                     {visibleCertifications.map(cert => (
-                      <div key={cert.id} className="relative break-inside-avoid mb-4">
+                      <div key={cert.id} className="relative break-inside-avoid">
                         <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">{cert.title}</h4>
                         {cert.description && <p className="text-[9.5pt] text-gray-700 mt-1">{cert.description}</p>}
@@ -431,4 +432,6 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
       </div>
     </div>
   );
-}
+}\
+
+fs.writeFileSync('src/components/cv-builder/templates/ATSModern.tsx', code);

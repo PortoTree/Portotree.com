@@ -78,7 +78,7 @@ export function EducationModal({ isOpen, onClose, onSave, initialData }: Props) 
 
   const handleSave = () => {
     // Basic validation
-    if (!formData.level || !formData.school) {
+    if (!formData.level || !formData.school || !formData.location || !formData.startYear || (!formData.current && !formData.endYear)) {
       toast.error("Mohon lengkapi field yang wajib diisi (*)");
       return;
     }
@@ -151,7 +151,7 @@ export function EducationModal({ isOpen, onClose, onSave, initialData }: Props) 
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label className="text-slate-700">Tanggal Mulai</Label>
+              <Label className="text-slate-700">Tanggal Mulai <span className="text-red-500">*</span></Label>
               <div className="flex gap-2">
                 <select 
                   className="flex-1 h-9 px-3 border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:border-emerald-600 text-sm"
@@ -171,7 +171,7 @@ export function EducationModal({ isOpen, onClose, onSave, initialData }: Props) 
             </div>
 
             <div className="space-y-1.5">
-              <Label className="text-slate-700">Tanggal Selesai</Label>
+              <Label className="text-slate-700">Tanggal Selesai {!formData.current && <span className="text-red-500">*</span>}</Label>
               <div className="flex gap-2">
                 <select 
                   disabled={formData.current}

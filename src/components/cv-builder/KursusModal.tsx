@@ -72,8 +72,8 @@ export function KursusModal({ isOpen, onClose, onSave, initialData }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title || !formData.issuer) {
-      toast.error('Nama Kursus dan Penyelenggara wajib diisi');
+    if (!formData.title || !formData.issuer || !formData.startYear || (!formData.current && !formData.endYear)) {
+      toast.error('Mohon lengkapi field yang wajib diisi (*)');
       return;
     }
     onSave(formData);
@@ -129,7 +129,7 @@ export function KursusModal({ isOpen, onClose, onSave, initialData }: Props) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Tanggal Mulai</Label>
+                <Label className="text-sm font-medium text-slate-700">Tanggal Mulai <span className="text-red-500">*</span></Label>
                 <div className="flex gap-2">
                   <select 
                     className="flex-1 h-11 px-3 border border-slate-200 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent text-slate-700"
@@ -150,7 +150,7 @@ export function KursusModal({ isOpen, onClose, onSave, initialData }: Props) {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Tanggal Selesai</Label>
+                <Label className="text-sm font-medium text-slate-700">Tanggal Selesai {!formData.current && <span className="text-red-500">*</span>}</Label>
                 <div className="flex gap-2">
                   <select 
                     className="flex-1 h-11 px-3 border border-slate-200 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent text-slate-700 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed"

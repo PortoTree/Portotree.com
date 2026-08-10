@@ -524,7 +524,7 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
           id="personal"
           title="Informasi Pribadi"
           icon={User}
-          hasError={!data.personal?.name || (!isCVMode && !data.personal?.headline) || !data.personal?.bio || (!isCVMode && !data.personal?.photoUrl) || !data.personal?.email || !data.personal?.phone || !data.personal?.placeOfBirth || !data.personal?.gender || !data.personal?.nationality || !data.personal?.address || !data.personal?.location}
+          hasError={!data.personal?.name || !data.personal?.headline || !data.personal?.bio || (!isCVMode && !data.personal?.photoUrl) || !data.personal?.email || !data.personal?.phone || !data.personal?.address}
         >
           {!isCVMode && (
             <div className="space-y-2">
@@ -561,71 +561,35 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-sm text-slate-700">Nama Depan <span className="text-red-500">*</span></Label>
-              <Input value={data.personal?.firstName || ''} onChange={(e) => {
-                const val = e.target.value;
-                onChange({
-                  ...data,
-                  personal: {
-                    ...(data.personal || {}),
-                    firstName: val,
-                    name: `${val} ${data.personal?.lastName || ''}`.trim()
-                  }
-                });
-              }} className={`h-11 ${!data.personal?.firstName && !data.personal?.name ? 'border-red-500 focus-visible:ring-red-500' : ''}`} placeholder="John" />
+              <Label className="text-sm text-slate-700">Fullname <span className="text-red-500">*</span></Label>
+              <Input 
+                value={data.personal?.name || [data.personal?.firstName, data.personal?.lastName].filter(Boolean).join(' ') || ''} 
+                onChange={(e) => {
+                  const val = e.target.value;
+                  const parts = val.trim().split(' ');
+                  const fName = parts[0] || '';
+                  const lName = parts.slice(1).join(' ');
+                  
+                  onChange({
+                    ...data,
+                    personal: {
+                      ...(data.personal || {}),
+                      name: val,
+                      firstName: fName,
+                      lastName: lName
+                    }
+                  });
+                }} 
+                className={`h-11 ${!data.personal?.name && !data.personal?.firstName ? 'border-red-500 focus-visible:ring-red-500' : ''}`} 
+                placeholder="John Doe" 
+              />
             </div>
-            <div className="space-y-2">
-              <Label className="text-sm text-slate-700">Nama Belakang</Label>
-              <Input value={data.personal?.lastName || ''} onChange={(e) => {
-                const val = e.target.value;
-                onChange({
-                  ...data,
-                  personal: {
-                    ...(data.personal || {}),
-                    lastName: val,
-                    name: `${data.personal?.firstName || ''} ${val}`.trim()
-                  }
-                });
-              }} className="h-11" placeholder="Doe" />
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label className="text-sm text-slate-700">Tempat Lahir <span className="text-red-500">*</span></Label>
-              <Input value={data.personal?.placeOfBirth || ''} onChange={(e) => handleChange('personal', 'placeOfBirth', e.target.value)} className={`h-11 ${!data.personal?.placeOfBirth ? 'border-red-500 focus-visible:ring-red-500' : ''}`} placeholder="Jakarta" />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-sm text-slate-700">Tanggal Lahir</Label>
-              <Input type="date" value={data.personal?.dateOfBirth || ''} onChange={(e) => handleChange('personal', 'dateOfBirth', e.target.value)} className="h-11" />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label className="text-sm text-slate-700">Jenis Kelamin <span className="text-red-500">*</span></Label>
-              <select
-                className={`w-full h-11 px-3 border rounded-md focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:border-emerald-600 text-sm bg-white ${!data.personal?.gender ? 'border-red-500' : 'border-slate-300'}`}
-                value={data.personal?.gender || ''}
-                onChange={(e) => handleChange('personal', 'gender', e.target.value)}
-              >
-                <option value="">Pilih Jenis Kelamin</option>
-                <option value="Laki-laki">Laki-laki</option>
-                <option value="Perempuan">Perempuan</option>
-              </select>
-            </div>
-            <div className="space-y-2">
-              <Label className="text-sm text-slate-700">Kewarganegaraan <span className="text-red-500">*</span></Label>
-              <Input value={data.personal?.nationality || ''} onChange={(e) => handleChange('personal', 'nationality', e.target.value)} className={`h-11 ${!data.personal?.nationality ? 'border-red-500 focus-visible:ring-red-500' : ''}`} placeholder="Indonesia" />
-            </div>
-          </div>
-
-          {!isCVMode && (
             <div className="space-y-2">
               <Label className="text-sm text-slate-700">Professional Title <span className="text-red-500">*</span></Label>
               <Input value={data.personal?.headline} onChange={(e) => handleChange('personal', 'headline', e.target.value)} placeholder="Senior Developer" className={`h-11 ${!data.personal?.headline ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
             </div>
-          )}
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -644,8 +608,8 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
           </div>
 
           <div className="space-y-2">
-            <Label className="text-sm text-slate-700">Lokasi Singkat (Kota, Negara) <span className="text-red-500">*</span></Label>
-            <Input value={data.personal?.location} onChange={(e) => handleChange('personal', 'location', e.target.value)} placeholder="Jakarta, Indonesia" className={`h-11 ${!data.personal?.location ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
+            <Label className="text-sm text-slate-700">Link URL Portofolio <span className="text-slate-400 font-normal text-xs">(Opsional)</span></Label>
+            <Input value={data.personal?.portfolioUrl || ''} onChange={(e) => handleChange('personal', 'portfolioUrl', e.target.value)} placeholder="portotree.com/p/username" className="h-11" />
           </div>
 
           {!isCVMode && (
