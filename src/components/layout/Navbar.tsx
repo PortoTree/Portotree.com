@@ -263,10 +263,7 @@ export function Navbar() {
 
             {pathname.includes('/company') ? (
               <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-                <a href={getMainUrl('/job-feed')} className="transition-colors hover:text-blue-600 text-slate-600 font-semibold py-2 flex items-center gap-1.5">
-                  <Briefcase className="w-4 h-4" />
-                  Talent Feed <span className="text-[9px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full uppercase tracking-widest ml-1">Soon</span>
-                </a>
+
                 <a href="#layanan" className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
                   <Layers className="w-4 h-4" />
                   Layanan
@@ -282,10 +279,7 @@ export function Navbar() {
               </nav>
             ) : pathname.includes('/personal') ? (
               <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-                <a href={getMainUrl('/job-feed')} className="transition-colors hover:text-blue-600 text-slate-600 font-semibold py-2 flex items-center gap-1.5">
-                  <Briefcase className="w-4 h-4" />
-                  Job Feed <span className="text-[9px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full uppercase tracking-widest ml-1">Soon</span>
-                </a>
+
                 <a href={getSubdomainUrl('resume')} className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 font-semibold flex items-center gap-1.5">
                   <FileText className="w-4 h-4" />
                   Buat CV
@@ -313,18 +307,7 @@ export function Navbar() {
                   </button>
                   <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-72 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
                     <div className="bg-white rounded-xl p-2 shadow-xl border border-slate-100 flex flex-col">
-                      <a href={getMainUrl('/job-feed')} className="flex items-start gap-4 p-3 rounded-lg hover:bg-blue-50 transition-colors group/item">
-                        <div className="bg-blue-100/50 p-2.5 rounded-lg text-blue-600 shrink-0 transition-transform group-hover/item:scale-110">
-                          <Briefcase className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
-                            Job Feed
-                            <span className="text-[9px] font-bold uppercase tracking-widest bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full">Soon</span>
-                          </div>
-                          <div className="text-xs text-slate-500 mt-0.5">Cari lowongan kerja terbaru</div>
-                        </div>
-                      </a>
+
                       <div className="relative group/sub">
                         <a href={getSubdomainUrl('portofolio')} className="flex items-center justify-between p-3 rounded-lg hover:bg-emerald-50 transition-colors mt-1 cursor-pointer group/item">
                           <div className="flex items-start gap-4">
@@ -373,7 +356,6 @@ export function Navbar() {
                         <div>
                           <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
                             Buat CV
-                            <span className="text-[9px] font-bold uppercase tracking-widest bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full">Soon</span>
                           </div>
                           <div className="text-xs text-slate-500 mt-0.5">Bikin CV standar ATS</div>
                         </div>
@@ -407,11 +389,11 @@ export function Navbar() {
             
             <div className="flex items-center gap-4">
               {/* Tombol Utama (Disembunyikan di Mobile) */}
-              <Link href={isLoggedIn ? "/personal/dashboard" : "/register"} className="hidden md:block">
-                <Button className="rounded-full bg-green-600 hover:bg-green-700 text-white shadow-sm font-semibold px-6">
+              <a href={isLoggedIn ? "/personal/dashboard" : getMainUrl("/register")} className="hidden md:block">
+                <Button className="rounded-full px-6 bg-slate-900 hover:bg-slate-800 text-white font-medium border-0">
                   {isLoggedIn ? "Dashboard" : "Daftar Sekarang"}
                 </Button>
-              </Link>
+              </a>
 
               {/* Icon Profil User */}
               <DropdownMenu modal={false}>
@@ -452,16 +434,16 @@ export function Navbar() {
                     <>
                       <DropdownMenuItem 
                         className="cursor-pointer font-medium w-full"
-                        onClick={() => router.push('/login')}
+                        onClick={() => window.location.href = getMainUrl('/login')}
                       >
                         Login
                       </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        onClick={() => router.push('/register')} 
-                        className="cursor-pointer w-full mt-1"
+                      <Button 
+                        onClick={() => window.location.href = getMainUrl('/register')} 
+                        className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-xl h-12"
                       >
                         Daftar
-                      </DropdownMenuItem>
+                      </Button>
                     </>
                   )}
                 </DropdownMenuContent>
@@ -513,9 +495,7 @@ export function Navbar() {
               <nav className="flex flex-col font-medium text-slate-700 flex-1 overflow-y-auto pb-6">
                 {pathname.includes('/company') ? (
                   <>
-                    <a href={getMainUrl('/job-feed')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
-                      <Briefcase className="w-5 h-5" /> Talent Feed <span className="text-[9px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full uppercase tracking-widest">Soon</span>
-                    </a>
+
                     <a href="#layanan" onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
                       <Layers className="w-5 h-5" /> Layanan
                     </a>
@@ -528,9 +508,7 @@ export function Navbar() {
                   </>
                 ) : pathname.includes('/personal') ? (
                   <>
-                    <a href={getMainUrl('/job-feed')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
-                      <Briefcase className="w-5 h-5" /> Job Feed <span className="text-[9px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full uppercase tracking-widest">Soon</span>
-                    </a>
+
                     <a href={getSubdomainUrl('resume')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
                       <FileText className="w-5 h-5" /> Buat CV
                     </a>
@@ -551,9 +529,7 @@ export function Navbar() {
                       <AnimatePresence>
                         {isMobileProdukOpen && (
                           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden flex flex-col pl-8 bg-slate-50/50 rounded-lg mb-2">
-                            <a href={getMainUrl('/job-feed')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
-                              <Briefcase className="w-4 h-4" /> Job Feed <span className="text-[9px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full uppercase tracking-widest">Soon</span>
-                            </a>
+
                             <a href={getSubdomainUrl('portofolio')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
                               <Layout className="w-4 h-4" /> Buat Portofolio
                             </a>
@@ -655,18 +631,7 @@ export function Navbar() {
                     >
                       <div className="relative grid">
                         <div className={`col-start-1 row-start-1 flex flex-col transition-opacity duration-300 ${showMobilePortoSub ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-                          <button onClick={() => { window.location.href = getMainUrl('/job-feed'); setIsFabOpen(false); setShowMobilePortoSub(false); }} className="w-full text-left flex items-start gap-4 p-3 rounded-lg hover:bg-blue-50 transition-colors group/item">
-                            <div className="bg-blue-100/50 p-2.5 rounded-lg text-blue-600 shrink-0 transition-transform group-hover/item:scale-110">
-                              <Briefcase className="w-5 h-5" />
-                            </div>
-                            <div>
-                              <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
-                                Job Feed
-                                <span className="text-[9px] font-bold uppercase tracking-widest bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full">Soon</span>
-                              </div>
-                              <div className="text-xs text-slate-500 mt-0.5">Cari lowongan kerja terbaru</div>
-                            </div>
-                          </button>
+
                           
                           <button onClick={() => setShowMobilePortoSub(true)} className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-emerald-50 transition-colors mt-1 group/item">
                             <div className="flex items-start gap-4 text-left">
@@ -688,7 +653,6 @@ export function Navbar() {
                             <div>
                               <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
                                 Buat CV
-                                <span className="text-[9px] font-bold uppercase tracking-widest bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full">Soon</span>
                               </div>
                               <div className="text-xs text-slate-500 mt-0.5">Bikin CV standar ATS</div>
                             </div>

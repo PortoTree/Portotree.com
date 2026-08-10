@@ -53,7 +53,7 @@ export default function ResumeSubdomain() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center mb-10">
-                <Button className="h-14 px-8 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-base font-bold shadow-lg shadow-amber-600/20 transition-all hover:-translate-y-1 w-full sm:w-auto">
+                <Button onClick={() => window.location.href = 'https://portotree.com/register'} className="h-14 px-8 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-base font-bold shadow-lg shadow-amber-600/20 transition-all hover:-translate-y-1 w-full sm:w-auto">
                   Buat CV Sekarang
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
@@ -85,11 +85,9 @@ export default function ResumeSubdomain() {
             {/* Visual Hero */}
             <div className="w-full lg:flex-1 lg:order-2 flex justify-center lg:justify-end items-center relative">
               <div className="relative w-full max-w-[400px] aspect-[3/4] bg-white rounded-2xl shadow-2xl border border-slate-200 transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                {/* Placeholder Image */}
-                <div className="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center p-8 text-slate-400 rounded-2xl overflow-hidden">
-                  <FileText className="w-24 h-24 text-slate-300 mb-4" />
-                  <p className="font-semibold text-center text-slate-500">Mockup CV ATS Friendly</p>
-                  <p className="text-sm text-center mt-2">(Gambar Sementara)</p>
+                {/* CV Image */}
+                <div className="absolute inset-0 bg-white rounded-2xl overflow-hidden">
+                  <img src="/resume-modern.jpg" alt="Modern CV Template" className="w-full h-full object-cover object-top" />
                 </div>
                 
                 {/* Floating Elements */}
@@ -194,17 +192,19 @@ export default function ResumeSubdomain() {
                   }}
                 >
                   <div className="group rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-2xl h-full flex flex-col transition-all hover:border-amber-300">
-                    <div className="relative aspect-[3/4] bg-slate-100 p-4 flex-1">
-                      <div className="absolute inset-0 bg-slate-200 flex items-center justify-center text-slate-400">
-                        <span>{template.desc}</span>
-                      </div>
-                      <span className={`absolute top-3 left-3 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider ${template.badgeClass}`}>
+                    <div className="relative aspect-[3/4] bg-slate-100 flex-1 overflow-hidden">
+                      <img 
+                        src="/cooming-soon-vertical.png" 
+                        alt={template.title} 
+                        className="absolute inset-0 w-full h-full object-cover" 
+                      />
+                      <span className={`absolute top-3 left-3 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider shadow-sm z-10 ${template.badgeClass}`}>
                         {template.type}
                       </span>
                     </div>
                     <div className="p-4 mt-auto bg-white border-t border-slate-100">
                       <h4 className="font-bold text-slate-900 mb-3">{template.title}</h4>
-                      <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white" disabled={!isCenter}>Gunakan Template</Button>
+                      <Button onClick={() => window.location.href = 'https://portotree.com/register'} className="w-full bg-slate-900 hover:bg-slate-800 text-white disabled:opacity-50" disabled>Gunakan Template</Button>
                     </div>
                   </div>
                 </motion.div>
@@ -364,7 +364,7 @@ export default function ResumeSubdomain() {
                      </div>
                      
                      <div className="w-full h-8 bg-amber-600 rounded text-white text-[11px] font-bold flex items-center justify-center gap-1.5 shadow-sm mt-3 hover:bg-amber-700 transition-colors cursor-default">
-                        <Zap className="w-3 h-3 fill-current" /> Optimasi AI
+                        <Zap className="w-3 h-3 fill-current" /> Optimasi
                      </div>
                   </div>
                 </div>
@@ -634,7 +634,7 @@ export default function ResumeSubdomain() {
                 Bergabunglah dengan ribuan profesional lain yang telah meningkatkan peluang panggilan interview mereka menggunakan CV dari PortoTree.
               </p>
               
-              <Button size="lg" className="bg-white hover:bg-slate-50 text-amber-600 font-bold px-8 h-14 rounded-2xl text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex items-center gap-3">
+              <Button onClick={() => window.location.href = 'https://portotree.com/register'} size="lg" className="bg-white hover:bg-slate-50 text-amber-600 font-bold px-8 h-14 rounded-2xl text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex items-center gap-3">
                 Mulai Buat CV Gratis <FileText className="w-5 h-5" />
               </Button>
             </div>
