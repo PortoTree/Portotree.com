@@ -37,28 +37,19 @@ export function CVViewer({ data }: CVViewerProps) {
       </div>
 
       {/* 
-        PRINT CONTAINER
-        Hidden on screen, but visible when printing.
-        Allows the browser's native window.print() to paginate seamlessly.
+        UI & PRINT PAGES
+        Slices the continuous CV into multiple visual A4 canvases for the screen.
+        We also use these exact sliced pages for printing to solve browser flexbox truncation bugs.
       */}
       <div 
-        className="hidden print:block cv-instance bg-white"
-        style={{ width: '210mm' }}
-        id="cv-print-area"
+        className="flex flex-col items-center gap-8 w-full print:block print:gap-0"
+        id="cv-print-container"
       >
-        {renderTemplate()}
-      </div>
-
-      {/* 
-        UI PREVIEW PAGES
-        Slices the continuous CV into multiple visual A4 canvases for the screen.
-        Hidden when printing.
-      */}
-      <div className="print:hidden flex flex-col items-center gap-8 w-full">
         {Array.from({ length: pages }).map((_, i) => (
           <div 
             key={i} 
-            className="w-[210mm] h-[297mm] bg-white shadow-[0_0_15px_rgba(0,0,0,0.1)] overflow-hidden relative"
+            className="cv-page w-[210mm] h-[297mm] bg-white shadow-[0_0_15px_rgba(0,0,0,0.1)] overflow-hidden relative print:shadow-none print:m-0"
+            style={{ pageBreakInside: 'avoid', pageBreakAfter: 'always' }}
           >
             {/* Translate the content up to show the correct slice */}
             <div 

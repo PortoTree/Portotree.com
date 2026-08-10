@@ -136,6 +136,12 @@ export function usePagination(dependencies: any[]) {
 
   useEffect(() => {
     runPagination();
+    
+    // Ensure we re-calculate after fonts are loaded
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(runPagination);
+    }
+
     window.addEventListener('resize', runPagination);
     return () => window.removeEventListener('resize', runPagination);
   }, dependencies);

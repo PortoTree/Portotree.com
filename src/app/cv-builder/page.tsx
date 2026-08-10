@@ -46,7 +46,7 @@ export default function CVBuilderPage() {
         </div>
       </div>
 
-      <div className="flex flex-1 h-[calc(100vh-64px)] overflow-hidden">
+      <div className="flex flex-1 h-[calc(100vh-64px)] overflow-hidden print:h-auto print:overflow-visible">
         {/* Far Left - Icon Sidebar - hidden when printing */}
         <aside className="print:hidden w-16 shrink-0 bg-white border-r flex flex-col items-center py-4 space-y-4 z-20">
           <button 
@@ -125,7 +125,7 @@ export default function CVBuilderPage() {
         </div>
 
         {/* Right Area - Live Preview */}
-        <main className="flex-1 overflow-y-auto custom-scrollbar relative bg-gray-200 print:bg-white print:overflow-visible h-full">
+        <main className="flex-1 overflow-y-auto custom-scrollbar relative bg-gray-200 print:bg-white print:overflow-visible print:h-auto h-full">
           {/* Zoom controls could go here */}
           <CVViewer data={data} />
         </main>
@@ -137,15 +137,17 @@ export default function CVBuilderPage() {
           body * {
             visibility: hidden;
           }
-          #cv-print-area, #cv-print-area * {
+          #cv-print-container, #cv-print-container * {
             visibility: visible;
           }
-          #cv-print-area {
+          #cv-print-container {
             position: absolute;
             left: 0;
             top: 0;
             margin: 0 !important;
             padding: 0 !important;
+          }
+          .cv-page {
             box-shadow: none !important;
           }
           @page {
