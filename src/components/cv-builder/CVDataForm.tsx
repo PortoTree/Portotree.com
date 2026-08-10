@@ -393,9 +393,9 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
       message: "Apakah Anda yakin ingin menghapus kursus ini?",
       variant: "danger",
       onConfirm: () => {
-        const updatedKursus = [...(data.kursus || [])];
-        updatedKursus.splice(index, 1);
-        onChange({ ...data, kursus: updatedKursus });
+        const updatedCourses = [...(data.courses || [])];
+        updatedCourses.splice(index, 1);
+        onChange({ ...data, courses: updatedCourses });
       }
     });
   };
@@ -421,9 +421,9 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
       message: "Apakah Anda yakin ingin menghapus bahasa ini?",
       variant: "danger",
       onConfirm: () => {
-        const updatedBahasa = [...(data.bahasa || [])];
-        updatedBahasa.splice(index, 1);
-        onChange({ ...data, bahasa: updatedBahasa });
+        const updatedLanguages = [...(data.languages || [])];
+        updatedLanguages.splice(index, 1);
+        onChange({ ...data, languages: updatedLanguages });
       }
     });
   };
@@ -449,9 +449,9 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
       message: "Apakah Anda yakin ingin menghapus ekskul ini?",
       variant: "danger",
       onConfirm: () => {
-        const updatedEkskul = [...(data.ekstrakurikuler || [])];
-        updatedEkskul.splice(index, 1);
-        onChange({ ...data, ekstrakurikuler: updatedEkskul });
+        const updatedEkskuls = [...(data.extracurriculars || [])];
+        updatedEkskuls.splice(index, 1);
+        onChange({ ...data, extracurriculars: updatedEkskuls });
       }
     });
   };
@@ -477,9 +477,9 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
       message: "Apakah Anda yakin ingin menghapus hobi ini?",
       variant: "danger",
       onConfirm: () => {
-        const updatedHobi = [...(data.hobi || [])];
-        updatedHobi.splice(index, 1);
-        onChange({ ...data, hobi: updatedHobi });
+        const updatedHobbies = [...(data.hobbies || [])];
+        updatedHobbies.splice(index, 1);
+        onChange({ ...data, hobbies: updatedHobbies });
       }
     });
   };
