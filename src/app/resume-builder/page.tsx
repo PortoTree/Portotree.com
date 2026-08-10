@@ -164,7 +164,7 @@ export default function CVBuilderPage() {
         {/* FLOATING MOBILE PREVIEW BUTTON */}
         <button
           onClick={() => setShowMobilePreview(!showMobilePreview)}
-          className={`md:hidden fixed bottom-6 right-6 z-50 px-5 py-3 rounded-full shadow-2xl text-sm font-bold uppercase tracking-widest transition-all flex items-center gap-2 ${!showMobilePreview ? 'bg-emerald-600 text-white' : 'bg-slate-50 text-slate-900 border border-slate-200'}`}
+          className={`md:hidden fixed bottom-6 right-6 z-50 px-5 py-3 rounded-full shadow-2xl text-sm font-bold uppercase tracking-widest transition-all flex items-center gap-2 print:hidden ${!showMobilePreview ? 'bg-emerald-600 text-white' : 'bg-slate-50 text-slate-900 border border-slate-200'}`}
         >
           {showMobilePreview ? <Edit className="w-5 h-5" /> : <Eye className="w-5 h-5" />} 
           <span>{showMobilePreview ? 'Edit Data' : 'Preview'}</span>
@@ -174,25 +174,27 @@ export default function CVBuilderPage() {
       {/* Print Specific CSS overrides */}
       <style dangerouslySetInnerHTML={{__html: `
         @media print {
-          body * {
-            visibility: hidden;
-          }
-          #cv-print-container, #cv-print-container * {
-            visibility: visible;
-          }
           #cv-print-container {
-            position: absolute;
-            left: 0;
-            top: 0;
-            margin: 0 !important;
-            padding: 0 !important;
+            transform: none !important;
+            position: relative !important;
+            left: auto !important;
+            top: auto !important;
+            margin: 0 auto !important;
+            width: 210mm !important;
+            min-width: 210mm !important;
           }
           .cv-page {
             box-shadow: none !important;
+            margin: 0 !important;
+            width: 210mm !important;
+            height: 297mm !important;
+            overflow: hidden !important;
+            page-break-after: always;
+            page-break-inside: avoid;
           }
           @page {
             size: A4;
-            margin: 0;
+            margin: 0 !important;
           }
         }
       `}} />

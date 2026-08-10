@@ -58,7 +58,7 @@ export function CVViewer({ data }: CVViewerProps) {
   };
 
   return (
-    <div ref={containerRef} className="w-full bg-gray-200 py-4 md:py-8 min-h-screen overflow-auto relative">
+    <div ref={containerRef} className="w-full bg-gray-200 py-4 md:py-8 min-h-screen overflow-auto relative print:bg-white print:py-0 print:min-h-0 print:overflow-visible">
       
       {/* Zoom Controls */}
       <div className="fixed bottom-[100px] right-6 md:bottom-8 md:right-8 z-40 bg-white/80 backdrop-blur-md shadow-xl rounded-full p-1.5 flex flex-col items-center gap-2 print:hidden border border-gray-200/50">
@@ -95,16 +95,16 @@ export function CVViewer({ data }: CVViewerProps) {
         UI & PRINT PAGES
         Robust scaling wrapper to allow 2D panning without flex-box clipping bugs.
       */}
-      <div className="w-full flex justify-center min-w-max pb-16">
+      <div className="w-full flex justify-center min-w-max pb-16 print:pb-0 print:min-w-0 print:block">
         <div 
           style={{ 
             width: `${794 * scale}px`, 
             height: `${1122 * pages * scale + (pages - 1) * 32 * scale}px` 
           }}
-          className="relative transition-all duration-200"
+          className="relative transition-all duration-200 print:!w-auto print:!h-auto print:!transform-none"
         >
           <div 
-            className="flex flex-col gap-8 print:block print:gap-0 absolute top-0 left-0 w-[210mm]"
+            className="flex flex-col gap-8 print:block print:gap-0 absolute top-0 left-0 w-[210mm] print:relative print:mx-auto"
             id="cv-print-container"
             style={{ 
               transform: `scale(${scale})`,
@@ -120,7 +120,7 @@ export function CVViewer({ data }: CVViewerProps) {
                 {/* Translate the content up to show the correct slice */}
                 <div 
                   className="cv-instance absolute left-0 w-full"
-                  style={{ top: `calc(-297mm * ${i})` }}
+                  style={{ top: `calc(-100% * ${i})` }}
                 >
                   {renderTemplate()}
                 </div>

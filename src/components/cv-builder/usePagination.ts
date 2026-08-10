@@ -143,7 +143,24 @@ export function usePagination(dependencies: any[]) {
     }
 
     window.addEventListener('resize', runPagination);
-    return () => window.removeEventListener('resize', runPagination);
+    
+    // Add ResizeObserver to detect when the container becomes visible (e.g., mobile preview toggled)
+    const measurer = document.getElementById('cv-content-measurer');
+    let resizeObserver: ResizeObserver | null = null;
+    if (measurer) {
+      resizeObserver = new ResizeObserver(() => {
+        // Only repaginate if it has actual height (not display: none)
+        if (measurer.getBoundingClientRect().height > 0) {
+          runPagination();
+        }
+      });
+      resizeObserver.observe(measurer);
+    }
+
+    return () => {
+      window.removeEventListener('resize', runPagination);
+      if (resizeObserver) resizeObserver.disconnect();
+    };
   }, dependencies);
 
   return { pages, isPaginating, forceRepaginate: runPagination };
