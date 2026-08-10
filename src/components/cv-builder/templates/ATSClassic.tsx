@@ -81,7 +81,7 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
       {/* SUMMARY */}
       <div className="mb-6">
         <SectionHeader title="SUMMARY" thickTop={true} />
-        <p className="text-justify text-black">
+        <p className={`text-justify ${!personal?.bio ? 'text-gray-400' : 'text-black'}`}>
           {bio}
         </p>
       </div>
@@ -98,7 +98,7 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
             ))}
           </ul>
         ) : (
-          <ul className="grid grid-cols-3 gap-x-4 gap-y-2 list-disc pl-5">
+          <ul className="grid grid-cols-3 gap-x-4 gap-y-2 list-disc pl-5 text-gray-400">
             <li className="pl-1 leading-snug">Adobe Creative Suite (Photoshop, Illustrator, InDesign, XD)</li>
             <li className="pl-1 leading-snug">Typography & Layout Design</li>
             <li className="pl-1 leading-snug">Web Design (HTML, CSS, WordPress)</li>
@@ -149,12 +149,12 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
               </div>
             ))
           ) : (
-            <div>
+            <div className="text-gray-400">
               <div className="flex justify-between items-baseline mb-0.5">
                 <div className="font-bold">Bachelor's Degree in Graphic Design</div>
                 <div className="font-medium text-[9pt]">2017</div>
               </div>
-              <div className="text-black">University of California, Berkeley, USA</div>
+              <div className="text-gray-400">University of California, Berkeley, USA</div>
             </div>
           )}
         </div>
@@ -199,13 +199,13 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
               </div>
             ))
           ) : (
-            <>
-              <div>
+            <div className="text-gray-400">
+              <div className="mb-4">
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className="font-bold">Senior Graphic Designer</div>
                   <div className="font-medium text-[9pt]">2020 – Present</div>
                 </div>
-                <div className="text-black mb-1.5 italic">Creative Edge Agency (San Francisco, USA)</div>
+                <div className="text-gray-400 mb-1.5 italic">Creative Edge Agency (San Francisco, USA)</div>
                 <ul className="list-disc pl-5 space-y-1">
                   <li className="pl-1">Led the design and development of branding materials, increasing brand visibility by 40%.</li>
                   <li className="pl-1">Designed UI/UX layouts for web and mobile applications, improving user engagement.</li>
@@ -219,7 +219,7 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
                   <div className="font-bold">Graphic Designer</div>
                   <div className="font-medium text-[9pt]">2017 – 2020</div>
                 </div>
-                <div className="text-black mb-1.5 italic">PixelWorks Studio (Los Angeles, USA)</div>
+                <div className="text-gray-400 mb-1.5 italic">PixelWorks Studio (Los Angeles, USA)</div>
                 <ul className="list-disc pl-5 space-y-1">
                   <li className="pl-1">Developed logo designs and corporate branding for clients, enhancing brand recognition.</li>
                   <li className="pl-1">Designed website layouts and digital graphics, improving website traffic by 30%.</li>
@@ -228,7 +228,7 @@ export function ATSClassic({ data }: { data: CVDataPayload }) {
                   <li className="pl-1">Collaborated with marketing teams to develop visually appealing advertising materials.</li>
                 </ul>
               </div>
-            </>
+            </div>
           )}
         </div>
       </div>

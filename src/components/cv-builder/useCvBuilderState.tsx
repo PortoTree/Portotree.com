@@ -16,6 +16,9 @@ export function useCvBuilderState() {
     if (debounceConfigTimeout.current) clearTimeout(debounceConfigTimeout.current);
     debounceConfigTimeout.current = setTimeout(() => {
       saveCVConfig(config).catch(console.error);
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('dashboard_cv_cache');
+      }
     }, 1000);
   }, []);
 
@@ -25,6 +28,9 @@ export function useCvBuilderState() {
     if (debouncePortfolioTimeout.current) clearTimeout(debouncePortfolioTimeout.current);
     debouncePortfolioTimeout.current = setTimeout(() => {
       savePortfolio(portfolio).catch(console.error);
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('dashboard_cv_cache');
+      }
     }, 1000);
   }, []);
 

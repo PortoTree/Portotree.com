@@ -18,6 +18,9 @@ export function CVViewer({ data }: CVViewerProps) {
   const { showToast } = useUI();
 
   const calculateDefaultScale = () => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      return 0.45;
+    }
     if (!containerRef.current) return 1;
     const containerWidth = containerRef.current.clientWidth;
     const targetWidth = 794;

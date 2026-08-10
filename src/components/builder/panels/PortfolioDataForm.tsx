@@ -71,7 +71,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
   useEffect(() => {
     const sectionParam = searchParams.get('section');
     if (sectionParam) {
-      if (['photo', 'name_headline', 'bio'].includes(sectionParam)) {
+      if (['photo', 'name_headline', 'bio', 'contact'].includes(sectionParam)) {
         setOpenSection('personal');
       } else {
         setOpenSection(sectionParam);

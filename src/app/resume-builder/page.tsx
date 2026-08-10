@@ -5,7 +5,7 @@ import { CVViewer } from "@/components/cv-builder/CVViewer";
 import { CVDataForm } from "@/components/cv-builder/CVDataForm";
 import { Navbar } from "@/components/layout/Navbar"; // Assume this exists
 import { Button } from "@/components/ui/button";
-import { Loader2, Eye, EyeOff, Download, ArrowLeft, Edit, Palette } from "lucide-react";
+import { Loader2, Eye, EyeOff, Download, ArrowLeft, Edit, Palette, Info } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -34,10 +34,24 @@ export default function CVBuilderPage() {
       {/* Top Navbar - hidden when printing */}
       <div className="print:hidden h-16 bg-white border-b flex items-center justify-between px-4 md:px-6 shrink-0 sticky top-0 z-50">
         <div className="flex items-center gap-2 md:gap-4">
-          <Link href="/dashboard" className="text-gray-500 hover:text-black transition-colors">
+          <Link href="/personal/dashboard/resume" className="text-gray-500 hover:text-black transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <h1 className="font-bold text-base md:text-lg">CV Builder</h1>
+          <h1 className="font-bold text-base md:text-lg hidden md:block shrink-0">CV Builder</h1>
+          
+          <div className="hidden lg:block h-6 w-px bg-slate-200 mx-1"></div>
+          <a 
+            href="https://chat.whatsapp.com/EinEUnLQthc3M0wrlyRuhR"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors border border-red-100 hover:border-red-200 group shrink-0"
+            title="Join grub whatsapp kami untuk memberikan pesan kritik dan saran"
+          >
+            <Info className="w-4 h-4 group-hover:text-red-700 transition-colors shrink-0" />
+            <span className="text-[10px] md:text-xs font-bold group-hover:text-red-700 transition-colors whitespace-nowrap">
+              Mengalami masalah?
+            </span>
+          </a>
         </div>
         <div className="flex items-center gap-2 md:gap-4">
           {/* Mobile Navigation Toggles */}
@@ -87,7 +101,7 @@ export default function CVBuilderPage() {
           
           {sidebarMode === 'design' && (
             <div className="flex flex-col">
-              <div className="p-4 border-b bg-gray-50 sticky top-0 z-10">
+              <div className="p-4 border-b bg-gray-50 relative md:sticky md:top-0 z-10">
                 <h2 className="font-bold text-sm uppercase text-gray-500">Pengaturan Desain</h2>
                 <p className="text-xs text-gray-500 mt-1">Ubah tampilan visual dan sembunyikan item khusus untuk CV.</p>
               </div>
@@ -129,11 +143,11 @@ export default function CVBuilderPage() {
 
           {sidebarMode === 'edit' && (
             <div className="flex flex-col">
-              <div className="p-4 border-b bg-gray-50 sticky top-0 z-10">
+              <div className="p-4 border-b bg-gray-50 relative md:sticky md:top-0 z-10">
                 <h2 className="font-bold text-sm uppercase text-gray-500">Isi Data CV</h2>
                 <p className="text-xs text-gray-500 mt-1">Data yang diisi di sini akan tersinkronisasi otomatis dengan Profil Portofolio Anda.</p>
               </div>
-              <div className="p-4">
+              <div className="flex-1 overflow-hidden flex flex-col">
                 <CVDataForm data={portfolio} onChange={updatePortfolio} isCVMode={true} />
               </div>
             </div>

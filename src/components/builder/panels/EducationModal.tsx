@@ -206,14 +206,6 @@ export function EducationModal({ isOpen, onClose, onSave, initialData }: Props) 
             </label>
           </div>
 
-          <div className="space-y-1.5 pt-2">
-            <Label className="text-slate-700">Deskripsi</Label>
-            <RichTextEditor 
-              value={formData.description}
-              onChange={(val) => handleChange('description', val)}
-              placeholder="IPK, prestasi, atau informasi tambahan..."
-            />
-          </div>
         </div>
 
         {/* Footer */}

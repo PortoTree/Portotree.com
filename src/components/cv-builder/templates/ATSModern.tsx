@@ -106,14 +106,14 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                     </li>
                   ))
                 ) : (
-                  <>
+                  <div className="text-gray-400 flex flex-col gap-1.5">
                     <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">•</span> Communication</li>
                     <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">•</span> Problem Solving</li>
                     <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">•</span> Time Management</li>
                     <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">•</span> Teamwork</li>
                     <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">•</span> Adaptability</li>
                     <li className="flex items-center gap-2"><span className="text-gray-400 text-xs">•</span> Attention to Detail</li>
-                  </>
+                  </div>
                 )}
               </ul>
             </div>
@@ -176,20 +176,20 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                       </div>
                     ))
                   ) : (
-                    <>
+                    <div className="text-gray-400">
                       <div className="relative break-inside-avoid mb-4">
-                        <div className="absolute -left-[20.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
+                        <div className="absolute -left-[20.5px] top-1.5 w-2 h-2 bg-gray-400 rounded-full" />
                         <h4 className="font-bold uppercase text-[9.5pt] tracking-wider mb-0.5">BORCELLE SCHOOL</h4>
-                        <div className="text-[9.5pt] text-gray-700 mb-0.5">Really Great High School</div>
-                        <div className="text-[9pt] text-gray-500">2010 - 2014</div>
+                        <div className="text-[9.5pt] text-gray-400 mb-0.5">Really Great High School</div>
+                        <div className="text-[9pt] text-gray-400">2010 - 2014</div>
                       </div>
                       <div className="relative break-inside-avoid mb-4">
-                        <div className="absolute -left-[20.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
+                        <div className="absolute -left-[20.5px] top-1.5 w-2 h-2 bg-gray-400 rounded-full" />
                         <h4 className="font-bold uppercase text-[9.5pt] tracking-wider mb-0.5">LICERIA OF TECHNOLOGY</h4>
-                        <div className="text-[9.5pt] text-gray-700 mb-0.5">Really Great University</div>
-                        <div className="text-[9pt] text-gray-500">2014 - 2016</div>
+                        <div className="text-[9.5pt] text-gray-400 mb-0.5">Really Great University</div>
+                        <div className="text-[9pt] text-gray-400">2014 - 2016</div>
                       </div>
-                    </>
+                    </div>
                   )}
                 </div>
               </div>
@@ -245,7 +245,7 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
           
           <div className="cv-section">
             <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-4">Summary</h3>
-            <p className="text-[10pt] text-gray-700 leading-relaxed text-justify">
+            <p className={`text-[10pt] leading-relaxed text-justify ${!personal?.bio ? 'text-gray-400' : 'text-gray-700'}`}>
               {bio}
             </p>
           </div>
@@ -274,14 +274,14 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                       </div>
                     ))
                   ) : (
-                    <>
+                    <div className="text-gray-400">
                       <div className="relative break-inside-avoid mb-4">
-                        <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
+                        <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-400 rounded-full" />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">MANAGED</h4>
-                        <div className="text-[9.5pt] text-gray-700 mb-2 font-medium">
+                        <div className="text-[9.5pt] text-gray-400 mb-2 font-medium">
                           Ingoude Company <span className="mx-2 text-gray-300">|</span> 2016 - Present
                         </div>
-                        <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-700 leading-[1.6]">
+                        <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-400 leading-[1.6]">
                           <li>Expert at maintaining relations with corporate clients</li>
                           <li>Responsible for key accounts worth millions</li>
                           <li>Managed multi-platform regional and national campaigns</li>
@@ -289,12 +289,12 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                       </div>
                       
                       <div className="relative break-inside-avoid mb-4">
-                        <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
+                        <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-400 rounded-full" />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">CREATED</h4>
-                        <div className="text-[9.5pt] text-gray-700 mb-2 font-medium">
+                        <div className="text-[9.5pt] text-gray-400 mb-2 font-medium">
                           Arowwai Industries <span className="mx-2 text-gray-300">|</span> 2014 - 2016
                         </div>
-                        <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-700 leading-[1.6]">
+                        <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-400 leading-[1.6]">
                           <li>Expert at maintaining relations with corporate clients</li>
                           <li>Responsible for key accounts worth thousands</li>
                           <li>Managed multi-platform regional and national campaigns</li>
@@ -302,18 +302,18 @@ export function ATSModern({ data }: { data: CVDataPayload }) {
                       </div>
                       
                       <div className="relative break-inside-avoid mb-4">
-                        <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
+                        <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-400 rounded-full" />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">IMPROVED</h4>
-                        <div className="text-[9.5pt] text-gray-700 mb-2 font-medium">
+                        <div className="text-[9.5pt] text-gray-400 mb-2 font-medium">
                           Studio Shodwe <span className="mx-2 text-gray-300">|</span> 2010 - 2014
                         </div>
-                        <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-700 leading-[1.6]">
+                        <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-400 leading-[1.6]">
                           <li>Expert at maintaining relations with corporate clients</li>
                           <li>Together with the creative director, manage a team of design and marketing professionals</li>
                           <li>Managed multi-platform regional and national campaigns</li>
                         </ul>
                       </div>
-                    </>
+                    </div>
                   )}
                 </div>
               </div>
