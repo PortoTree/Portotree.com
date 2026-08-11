@@ -44,17 +44,20 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col custom-scrollbar overflow-x-hidden">
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-M3PL8V36K6" strategy="afterInteractive" />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
+      <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-M3PL8V36K6"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
             gtag('config', 'G-M3PL8V36K6');
-          `}
-        </Script>
+          `
+        }} />
+      </head>
+      <body className="min-h-full flex flex-col custom-scrollbar overflow-x-hidden">
+
         <UIProvider>
           {children}
           
