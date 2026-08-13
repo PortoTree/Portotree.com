@@ -22,8 +22,18 @@ import {
   MapPin,
   Clock,
   CheckCircle2,
-  Trophy
+  Trophy,
+  Mail
 } from "lucide-react";
+
+const FEATURES_DATA = [
+  { icon: Layout, title: "Sistem Data-Driven", desc: "Konten dan desain terpisah secara cerdas. Anda cukup fokus mengisi data profil, lalu sistem akan otomatis menyusunnya ke berbagai pilihan template tanpa perlu mendesain dari nol." },
+  { icon: Globe, title: "Link Simple & Profesional", desc: "Dapatkan link cantik yang mudah diingat (contoh: portotree.com/w/nama untuk portofolio pekerja, dan portotree.com/c/nama untuk profil bisnis/perusahaan)." },
+  { icon: FileText, title: "ATS Friendly Resume", desc: "Generator CV yang dioptimalkan untuk lolos seleksi sistem ATS HRD." },
+  { icon: Zap, title: "Super Cepat", desc: "Infrastruktur modern menjamin halaman Anda dimuat dalam hitungan detik." },
+  { icon: ShieldCheck, title: "Aman & Terpercaya", desc: "Data Anda dienkripsi dan kami menyediakan SSL gratis untuk setiap halaman." },
+  { icon: Users, title: "Kolaborasi Tim", desc: "Kelola halaman Company Profile bersama tim secara *real-time*." },
+];
 
 export default function Home() {
   const [showPortoOptions, setShowPortoOptions] = useState(false);
@@ -74,9 +84,9 @@ export default function Home() {
                       <ArrowRight className="w-5 h-5 ml-2" />
                     </Button>
                   </Link>
-                  <Link href="#choose-journey" className="w-full sm:w-auto">
+                  <Link href="#products" className="w-full sm:w-auto">
                     <Button size="lg" variant="outline" className="w-full h-14 px-8 text-base font-bold rounded-full bg-white hover:bg-slate-50 transition-all border-slate-200 text-slate-700 shadow-sm hover:-translate-y-1">
-                      Lihat Fitur Kami
+                      Lihat Produk Kami
                     </Button>
                   </Link>
                 </div>
@@ -105,51 +115,65 @@ export default function Home() {
         </section>
 
 
-        {/* 3. CHOOSE YOUR JOURNEY */}
-        <section id="choose-journey" className="py-16 md:py-24 bg-slate-50 relative overflow-hidden">
+        {/* 3. OUR PRODUCTS */}
+        <section id="products" className="py-16 md:py-24 bg-slate-50 relative overflow-hidden">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
           <div className="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
             <div className="text-center mb-10 md:mb-16">
-              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-4 md:mb-6 leading-tight">Pilih Perjalanan Anda</h2>
+              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-4 md:mb-6 leading-tight">Produk Kami</h2>
               <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                PortoTree dirancang fleksibel. Apakah Anda seorang personal yang ingin menonjolkan karya, atau sebuah perusahaan yang ingin tampil kredibel?
+                Rangkaian alat lengkap yang didesain khusus untuk mempercepat perjalanan karier dan profesionalisme Anda.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
-              {/* Journey 1: Personal */}
-              <a href={getSubdomainUrl('portofolio', '/personal')} className="group block">
-                <div className="h-full bg-white rounded-3xl p-8 md:p-10 border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
-                  <div className="w-16 h-16 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center mb-8">
-                    <Briefcase className="w-8 h-8" />
+            <div className="grid md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+              {/* Product 1: Portofolio Builder */}
+              <a href={getSubdomainUrl('portofolio')} className="group block h-full">
+                <div className="h-full bg-white rounded-3xl p-8 border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden flex flex-col">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-green-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+                  <div className="w-14 h-14 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center mb-6">
+                    <Globe className="w-7 h-7" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Untuk Personal & Freelancer</h3>
-                  <p className="text-gray-600 mb-8 leading-relaxed">
-                    Buat portofolio profesional, CV yang ramah ATS, dan halaman profil link-in-bio untuk memamerkan keahlian Anda ke perekrut dan klien.
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Portofolio Builder</h3>
+                  <p className="text-gray-600 mb-6 leading-relaxed flex-grow text-sm">
+                    Bangun halaman portofolio digital dan profil link-in-bio keren Anda sendiri dengan kustomisasi link yang mudah diingat.
                   </p>
-                  <div className="flex items-center text-green-600 font-bold">
-                    Jelajahi Fitur Portofolio <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <div className="flex items-center text-green-600 font-bold text-sm mt-auto">
+                    Bangun Portofolio <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
               </a>
 
-              {/* Journey 2: Company */}
-              <a href={getSubdomainUrl('portofolio', '/company')} className="group block">
-                <div className="h-full bg-white rounded-3xl p-8 md:p-10 border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
-                  <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-8">
-                    <Building2 className="w-8 h-8" />
+              {/* Product 2: CV Builder */}
+              <a href={getSubdomainUrl('resume')} className="group block h-full">
+                <div className="h-full bg-white rounded-3xl p-8 border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden flex flex-col">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+                  <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                    <FileText className="w-7 h-7" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-                    Untuk Bisnis & Perusahaan
-                    <span className="text-[10px] font-bold bg-amber-100 text-amber-700 px-2 py-1 rounded-full uppercase tracking-widest leading-none">Soon</span>
-                  </h3>
-                  <p className="text-gray-600 mb-8 leading-relaxed">
-                    Bangun company profile elegan yang menampilkan layanan, portofolio proyek perusahaan, dan tim Anda untuk meyakinkan calon investor.
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">CV Builder</h3>
+                  <p className="text-gray-600 mb-6 leading-relaxed flex-grow text-sm">
+                    Buat CV / Resume standar ATS (Applicant Tracking System) yang profesional dalam hitungan menit untuk meningkatkan peluang lolos HRD.
                   </p>
-                  <div className="flex items-center text-blue-600 font-bold">
-                    Jelajahi Fitur Perusahaan <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <div className="flex items-center text-blue-600 font-bold text-sm mt-auto">
+                    Buat CV Sekarang <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </a>
+
+              {/* Product 3: Surat Generator */}
+              <a href={getSubdomainUrl('surat')} className="group block h-full">
+                <div className="h-full bg-white rounded-3xl p-8 border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden flex flex-col">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+                  <div className="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mb-6">
+                    <Mail className="w-7 h-7" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Surat Generator</h3>
+                  <p className="text-gray-600 mb-6 leading-relaxed flex-grow text-sm">
+                    Buat berbagai macam surat profesional secara otomatis dengan bantuan AI. Mulai dari surat lamaran kerja (Cover Letter) hingga surat pengunduran diri.
+                  </p>
+                  <div className="flex items-center text-amber-600 font-bold text-sm mt-auto">
+                    Buat Surat <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
               </a>
@@ -168,24 +192,20 @@ export default function Home() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-              {[
-                { icon: <Layout className="w-6 h-6" />, title: "Live Canvas Editor", desc: "Cukup klik komponen di layar untuk langsung mengedit teks, gaya desain, atau menghapus blok yang tidak diperlukan." },
-                { icon: <Globe className="w-6 h-6" />, title: "Link Simple & Profesional", desc: "Dapatkan link cantik yang mudah diingat (contoh: portotree.com/w/nama untuk portofolio pekerja, dan portotree.com/c/nama untuk profil bisnis/perusahaan)." },
-                { icon: <FileText className="w-6 h-6" />, title: "ATS Friendly Resume", desc: "Generator CV yang dioptimalkan untuk lolos seleksi sistem ATS HRD." },
-                { icon: <Zap className="w-6 h-6" />, title: "Super Cepat", desc: "Infrastruktur modern menjamin halaman Anda dimuat dalam hitungan detik." },
-                { icon: <ShieldCheck className="w-6 h-6" />, title: "Aman & Terpercaya", desc: "Data Anda dienkripsi dan kami menyediakan SSL gratis untuk setiap halaman." },
-                { icon: <Users className="w-6 h-6" />, title: "Kolaborasi Tim", desc: "Kelola halaman Company Profile bersama tim secara *real-time*." },
-              ].map((feature, i) => (
-                <div key={i} className="md:p-8 md:rounded-3xl md:bg-slate-50 md:border md:border-slate-100 md:hover:border-green-200 transition-colors">
-                  <div className="flex items-center gap-4 mb-2 md:block md:mb-0">
-                    <div className="w-12 h-12 bg-slate-50 md:bg-white rounded-xl shadow-sm flex items-center justify-center text-green-600 shrink-0 md:mb-6">
-                      {feature.icon}
+              {FEATURES_DATA.map((feature, i) => {
+                const Icon = feature.icon;
+                return (
+                  <div key={i} className="md:p-8 md:rounded-3xl md:bg-slate-50 md:border md:border-slate-100 md:hover:border-green-200 transition-colors">
+                    <div className="flex items-center gap-4 mb-2 md:block md:mb-0">
+                      <div className="w-12 h-12 bg-slate-50 md:bg-white rounded-xl shadow-sm flex items-center justify-center text-green-600 shrink-0 md:mb-6">
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      <h4 className="text-lg md:text-xl font-bold text-gray-900 md:mb-3 leading-tight">{feature.title}</h4>
                     </div>
-                    <h4 className="text-lg md:text-xl font-bold text-gray-900 md:mb-3 leading-tight">{feature.title}</h4>
+                    <p className="text-sm md:text-base text-gray-600 leading-relaxed ml-16 md:ml-0">{feature.desc}</p>
                   </div>
-                  <p className="text-sm md:text-base text-gray-600 leading-relaxed ml-16 md:ml-0">{feature.desc}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
