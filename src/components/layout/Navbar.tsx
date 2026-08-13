@@ -308,47 +308,15 @@ export function Navbar() {
                   <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-72 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
                     <div className="bg-white rounded-xl p-2 shadow-xl border border-slate-100 flex flex-col">
 
-                      <div className="relative group/sub">
-                        <a href={getSubdomainUrl('portofolio')} className="flex items-center justify-between p-3 rounded-lg hover:bg-emerald-50 transition-colors mt-1 cursor-pointer group/item">
-                          <div className="flex items-start gap-4">
-                            <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
-                              <Layout className="w-5 h-5" />
-                            </div>
-                            <div>
-                              <div className="font-bold text-sm text-slate-800">Buat Portofolio</div>
-                              <div className="text-xs text-slate-500 mt-0.5">Pamerkan karya Anda</div>
-                            </div>
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-slate-400 shrink-0 group-hover/item:translate-x-1 transition-transform" />
-                        </a>
-                        
-                        {/* Sub-menu on Hover */}
-                        <div className="absolute top-0 left-full ml-1 w-64 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 -translate-x-2 group-hover/sub:translate-x-0 z-50">
-                          <div className="bg-white rounded-xl p-2 shadow-xl border border-slate-100 flex flex-col">
-                            <a href={getSubdomainUrl('portofolio', '/personal')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-green-50 transition-colors group/item">
-                              <div className="bg-green-100/50 p-2.5 rounded-lg text-green-600 shrink-0 transition-transform group-hover/item:scale-110">
-                                <Users className="w-4 h-4" />
-                              </div>
-                              <div>
-                                <div className="font-bold text-sm text-slate-800">Untuk Personal</div>
-                                <div className="text-xs text-slate-500 mt-0.5">Portofolio personal</div>
-                              </div>
-                            </a>
-                            <a href={getSubdomainUrl('portofolio', '/company')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-green-50 transition-colors mt-1 group/item">
-                              <div className="bg-green-100/50 p-2.5 rounded-lg text-green-600 shrink-0 transition-transform group-hover/item:scale-110">
-                                <Building2 className="w-4 h-4" />
-                              </div>
-                              <div>
-                                <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
-                                  Untuk Perusahaan
-                                  <span className="text-[9px] font-bold uppercase tracking-widest bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full">Soon</span>
-                                </div>
-                                <div className="text-xs text-slate-500 mt-0.5">Company profile B2B</div>
-                              </div>
-                            </a>
-                          </div>
+                      <a href={getSubdomainUrl('portofolio')} className="flex items-start gap-4 p-3 rounded-lg hover:bg-emerald-50 transition-colors mt-1 group/item">
+                        <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
+                          <Layout className="w-5 h-5" />
                         </div>
-                      </div>
+                        <div>
+                          <div className="font-bold text-sm text-slate-800">Buat Portofolio</div>
+                          <div className="text-xs text-slate-500 mt-0.5">Pamerkan karya Anda</div>
+                        </div>
+                      </a>
                       <a href={getSubdomainUrl('resume')} className="flex items-start gap-4 p-3 rounded-lg hover:bg-amber-50 transition-colors mt-1 group/item">
                         <div className="bg-amber-100/50 p-2.5 rounded-lg text-amber-600 shrink-0 transition-transform group-hover/item:scale-110">
                           <FileText className="w-5 h-5" />
@@ -633,7 +601,7 @@ export function Navbar() {
                         <div className={`col-start-1 row-start-1 flex flex-col transition-opacity duration-300 ${showMobilePortoSub ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
 
                           
-                          <button onClick={() => setShowMobilePortoSub(true)} className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-emerald-50 transition-colors mt-1 group/item">
+                          <button onClick={() => { window.location.href = getSubdomainUrl('portofolio'); setIsFabOpen(false); setShowMobilePortoSub(false); }} className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-emerald-50 transition-colors mt-1 group/item">
                             <div className="flex items-start gap-4 text-left">
                               <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
                                 <Layout className="w-5 h-5" />
@@ -643,10 +611,9 @@ export function Navbar() {
                                 <div className="text-xs text-slate-500 mt-0.5">Pamerkan karya Anda</div>
                               </div>
                             </div>
-                            <ChevronRight className="w-4 h-4 text-slate-400 shrink-0 group-hover/item:translate-x-1 transition-transform" />
                           </button>
                           
-                          <button onClick={() => { router.push('/resume'); setIsFabOpen(false); setShowMobilePortoSub(false); }} className="w-full text-left flex items-start gap-4 p-3 rounded-lg hover:bg-amber-50 transition-colors mt-1 group/item">
+                          <button onClick={() => { window.location.href = getSubdomainUrl('resume'); setIsFabOpen(false); setShowMobilePortoSub(false); }} className="w-full text-left flex items-start gap-4 p-3 rounded-lg hover:bg-amber-50 transition-colors mt-1 group/item">
                             <div className="bg-amber-100/50 p-2.5 rounded-lg text-amber-600 shrink-0 transition-transform group-hover/item:scale-110">
                               <FileText className="w-5 h-5" />
                             </div>
@@ -657,37 +624,6 @@ export function Navbar() {
                               <div className="text-xs text-slate-500 mt-0.5">Bikin CV standar ATS</div>
                             </div>
                           </button>
-                        </div>
-                        
-                        {/* Sub Menu */}
-                        <div className={`col-start-1 row-start-1 flex flex-col transition-opacity duration-300 ${showMobilePortoSub ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                          <button onClick={() => setShowMobilePortoSub(false)} className="w-full text-left flex items-center gap-2 p-3 text-slate-500 hover:text-slate-800 transition-colors border-b border-slate-100 mb-2">
-                            <ChevronLeft className="w-4 h-4" />
-                            <span className="text-sm font-bold">Kembali</span>
-                          </button>
-                          
-                          <a href={getSubdomainUrl('portofolio', '/personal')} className="w-full text-left flex items-start gap-4 p-3 rounded-lg hover:bg-green-50 transition-colors group/item">
-                            <div className="bg-green-100/50 p-2.5 rounded-lg text-green-600 shrink-0 transition-transform group-hover/item:scale-110">
-                              <Users className="w-4 h-4" />
-                            </div>
-                            <div>
-                              <div className="font-bold text-sm text-slate-800">Untuk Personal</div>
-                              <div className="text-xs text-slate-500 mt-0.5">Portofolio personal</div>
-                            </div>
-                          </a>
-                          
-                          <a href={getSubdomainUrl('portofolio', '/company')} className="w-full text-left flex items-start gap-4 p-3 rounded-lg hover:bg-green-50 transition-colors mt-1 group/item">
-                            <div className="bg-green-100/50 p-2.5 rounded-lg text-green-600 shrink-0 transition-transform group-hover/item:scale-110">
-                              <Building2 className="w-4 h-4" />
-                            </div>
-                            <div>
-                              <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
-                                Untuk Perusahaan
-                                <span className="text-[9px] font-bold uppercase tracking-widest bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full">Soon</span>
-                              </div>
-                              <div className="text-xs text-slate-500 mt-0.5">Company profile B2B</div>
-                            </div>
-                          </a>
                         </div>
                       </div>
                     </motion.div>

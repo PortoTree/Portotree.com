@@ -32,11 +32,10 @@ const FEATURES_DATA = [
   { icon: FileText, title: "ATS Friendly Resume", desc: "Generator CV yang dioptimalkan untuk lolos seleksi sistem ATS HRD." },
   { icon: Zap, title: "Super Cepat", desc: "Infrastruktur modern menjamin halaman Anda dimuat dalam hitungan detik." },
   { icon: ShieldCheck, title: "Aman & Terpercaya", desc: "Data Anda dienkripsi dan kami menyediakan SSL gratis untuk setiap halaman." },
-  { icon: Users, title: "Kolaborasi Tim", desc: "Kelola halaman Company Profile bersama tim secara *real-time*." },
+  { icon: Users, title: "Desain Responsif", desc: "Tampilan portofolio otomatis menyesuaikan secara sempurna di layar HP, tablet, maupun desktop." },
 ];
 
 export default function Home() {
-  const [showPortoOptions, setShowPortoOptions] = useState(false);
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 overflow-x-hidden">
@@ -73,8 +72,8 @@ export default function Home() {
                   </span>
                 </h1>
                 
-                <p className="text-base sm:text-lg text-gray-600 font-medium leading-relaxed mb-8 max-w-lg">
-                  Mulai bangun identitas profesional Anda lewat portofolio yang menarik, resume ramah ATS, hingga company profile elegan secara gratis dalam satu platform.
+                <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-lg leading-relaxed">
+                  Mulai bangun identitas profesional Anda lewat portofolio yang menarik, resume ramah ATS, hingga surat profesional secara gratis dalam satu platform.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto justify-center lg:justify-start items-center">
@@ -269,40 +268,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 6. COMPANY PREVIEW */}
-        <section className="py-16 md:py-24 bg-white overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6 md:px-8">
-            <div className="flex flex-col md:flex-row-reverse items-center gap-16">
-              <div className="w-full md:w-1/2 space-y-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold">
-                  Untuk Perusahaan
-                </div>
-                <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-gray-900">
-                  Bangun Kepercayaan Klien B2B Anda
-                </h2>
-                <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                  Buat halaman profil perusahaan (Company Profile) yang menawan. Konsepnya semudah membuat portofolio personal, namun dilengkapi dengan blok konten khusus untuk layanan, klien, struktur organisasi, dan testimoni B2B.
-                </p>
-                <ul className="space-y-4 pt-4 text-gray-700">
-                  <li className="flex items-center gap-3"><Trophy className="text-blue-600 w-6 h-6" /> Showcase Produk & Layanan</li>
-                  <li className="flex items-center gap-3"><Building2 className="text-blue-600 w-6 h-6" /> Struktur Tim & About Us</li>
-                  <li className="flex items-center gap-3"><MapPin className="text-blue-600 w-6 h-6" /> Integrasi Maps & Kontak Bisnis</li>
-                </ul>
-              </div>
-              <div className="w-full md:w-1/2 relative">
-                {/* Mockup Frame */}
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200 bg-white p-2">
-                  <div className="flex gap-1.5 px-2 pb-2 pt-1 border-b border-gray-100 mb-2">
-                    <div className="w-3 h-3 rounded-full bg-gray-300"></div>
-                    <div className="w-3 h-3 rounded-full bg-gray-300"></div>
-                    <div className="w-3 h-3 rounded-full bg-gray-300"></div>
-                  </div>
-                  <img src="/mockup2.webp" alt="Company Preview" className="w-full h-auto rounded-lg object-cover" onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=800&auto=format&fit=crop"; }} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* 7. HOW IT WORKS */}
         <section className="py-16 md:py-24 bg-slate-50 border-t border-gray-200">
@@ -343,7 +308,6 @@ export default function Home() {
             <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
               {[
                 { icon: "🌱", title: "Portfolio Builder", status: "LIVE", active: true },
-                { icon: "🌿", title: "Company Profile", status: "LIVE", active: true },
                 { icon: "🌳", title: "Advanced Analytics", status: "Coming Soon", active: false },
                 { icon: "🌲", title: "Premium Templates", status: "Coming Soon", active: false },
                 { icon: "🌲", title: "Custom Integrations", status: "Coming Soon", active: false },
@@ -379,49 +343,17 @@ export default function Home() {
             </div>
             
             <div className="grid sm:grid-cols-2 gap-6 md:gap-8 max-w-3xl mx-auto">
-              <div 
-                onClick={() => setShowPortoOptions(!showPortoOptions)}
-                className={`group grid p-6 sm:py-12 sm:px-8 rounded-3xl border transition-all duration-300 shadow-sm cursor-pointer ${
-                  showPortoOptions 
-                    ? 'border-green-600 ring-4 ring-green-50 bg-white' 
-                    : 'border-green-600 bg-white text-green-600 hover:bg-green-600 hover:text-white hover:shadow-md'
-                }`}
+              <a 
+                href={getSubdomainUrl('portofolio')} 
+                className="group flex flex-row sm:flex-col items-center justify-start sm:justify-center p-6 sm:py-12 sm:px-8 rounded-3xl border border-green-600 bg-white text-green-600 hover:bg-green-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
               >
-                {/* Unexpanded State */}
-                <div 
-                  className={`col-start-1 row-start-1 flex items-center justify-start sm:justify-center flex-row sm:flex-col transition-opacity duration-300 ease-in-out ${
-                    showPortoOptions ? 'opacity-0 pointer-events-none' : 'opacity-100'
-                  }`}
-                >
-                  <div className="shrink-0 w-16 h-16 sm:w-24 sm:h-24 bg-green-100/80 group-hover:bg-white/20 text-green-600 group-hover:text-white rounded-full flex items-center justify-center mr-4 sm:mr-0 mb-0 sm:mb-6 group-hover:scale-110 transition-all duration-300">
-                    <Globe className="w-8 h-8 sm:w-12 sm:h-12" strokeWidth={1.5} />
-                  </div>
-                  <span className="font-bold text-xl sm:text-2xl text-left sm:text-center">
-                    Buat Portofolio
-                  </span>
+                <div className="shrink-0 w-16 h-16 sm:w-24 sm:h-24 bg-green-100/80 group-hover:bg-white/20 text-green-600 group-hover:text-white rounded-full flex items-center justify-center mr-4 sm:mr-0 mb-0 sm:mb-6 group-hover:scale-110 transition-all duration-300">
+                  <Globe className="w-8 h-8 sm:w-12 sm:h-12" strokeWidth={1.5} />
                 </div>
-
-                <div 
-                  className={`col-start-1 row-start-1 w-full flex flex-row items-stretch justify-center gap-3 sm:gap-4 transition-opacity duration-300 ease-in-out ${
-                    showPortoOptions ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                  }`}
-                >
-                  <a href={getSubdomainUrl('portofolio', '/personal')} className="flex-1 bg-slate-50 border border-slate-200 hover:border-green-500 hover:bg-green-50 rounded-2xl p-3 sm:p-5 flex flex-col items-center justify-center text-center group/item transition-colors" onClick={(e) => e.stopPropagation()}>
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center mb-2 sm:mb-3 shadow-sm group-hover/item:scale-110 transition-transform shrink-0">
-                      <Users className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
-                    </div>
-                    <span className="font-bold text-sm sm:text-base text-slate-800 leading-tight">Untuk <br className="block sm:hidden" />Personal</span>
-                    <span className="text-[10px] sm:text-xs text-slate-500 mt-1">Portofolio <br className="block sm:hidden" />personal</span>
-                  </a>
-                  <a href={getSubdomainUrl('portofolio', '/company')} className="flex-1 bg-slate-50 border border-slate-200 hover:border-green-500 hover:bg-green-50 rounded-2xl p-3 sm:p-5 flex flex-col items-center justify-center text-center group/item transition-colors" onClick={(e) => e.stopPropagation()}>
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center mb-2 sm:mb-3 shadow-sm group-hover/item:scale-110 transition-transform shrink-0">
-                      <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
-                    </div>
-                    <span className="font-bold text-sm sm:text-base text-slate-800 leading-tight">Untuk <br className="block sm:hidden" />Perusahaan</span>
-                    <span className="text-[10px] sm:text-xs text-slate-500 mt-1">Company profile <br className="block sm:hidden" />B2B</span>
-                  </a>
-                </div>
-              </div>
+                <span className="font-bold text-xl sm:text-2xl text-left sm:text-center">
+                  Buat Portofolio
+                </span>
+              </a>
               
               <a 
                 href={getSubdomainUrl('resume')} 
