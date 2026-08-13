@@ -7,7 +7,7 @@ import { LayoutDashboard, Settings, User, Globe, FileText, CreditCard, Briefcase
 
 const navItems = [
   { href: "/personal/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
-  { href: "/personal/dashboard/job-feed", label: "Job Feed", icon: Briefcase, badge: "Progress" },
+  { href: "/personal/dashboard/portofind", label: "Portofind", icon: Briefcase, badge: "Progress" },
   { href: "/personal/dashboard/portfolio", label: "Portofolio", icon: Globe },
   { href: "/personal/dashboard/resume", label: "CV Builder", icon: FileText },
   { href: "/personal/dashboard/surat-generator", label: "Surat generator", icon: Mail },

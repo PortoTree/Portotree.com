@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, Briefcase, Layout, FileText, X, Users, Building2, ChevronLeft, ChevronRight, Menu, Lightbulb, BookOpen, Newspaper, Home, Layers, Phone, Package, Info, ShieldCheck, FileSignature } from 'lucide-react';
+import { ChevronDown, ShoppingCart, Briefcase, Layout, FileText, X, Users, Building2, ChevronLeft, ChevronRight, Menu, Lightbulb, BookOpen, Newspaper, Home, Layers, Phone, Package, Info, ShieldCheck, FileSignature } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -328,6 +328,28 @@ export function Navbar() {
                           <div className="text-xs text-slate-500 mt-0.5">Bikin CV standar ATS</div>
                         </div>
                       </a>
+                      <a href={getSubdomainUrl('portofind')} className="flex items-start gap-4 p-3 rounded-lg hover:bg-blue-50 transition-colors mt-1 group/item">
+                        <div className="bg-blue-100/50 p-2.5 rounded-lg text-blue-600 shrink-0 transition-transform group-hover/item:scale-110">
+                          <Briefcase className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                            Portofind <span className="text-[9px] font-bold uppercase tracking-widest bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded-full">Soon</span>
+                          </div>
+                          <div className="text-xs text-slate-500 mt-0.5">Temukan peluang karir</div>
+                        </div>
+                      </a>
+                      <a href={getSubdomainUrl('marketsee')} className="flex items-start gap-4 p-3 rounded-lg hover:bg-purple-50 transition-colors mt-1 group/item">
+                        <div className="bg-purple-100/50 p-2.5 rounded-lg text-purple-600 shrink-0 transition-transform group-hover/item:scale-110">
+                          <ShoppingCart className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                            Marketsee <span className="text-[9px] font-bold uppercase tracking-widest bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded-full">Soon</span>
+                          </div>
+                          <div className="text-xs text-slate-500 mt-0.5">Jual produk & karya digital</div>
+                        </div>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -622,6 +644,30 @@ export function Navbar() {
                                 Buat CV
                               </div>
                               <div className="text-xs text-slate-500 mt-0.5">Bikin CV standar ATS</div>
+                            </div>
+                          </button>
+                          
+                          <button onClick={() => { window.location.href = getSubdomainUrl('portofind'); setIsFabOpen(false); setShowMobilePortoSub(false); }} className="w-full text-left flex items-start gap-4 p-3 rounded-lg hover:bg-blue-50 transition-colors mt-1 group/item">
+                            <div className="bg-blue-100/50 p-2.5 rounded-lg text-blue-600 shrink-0 transition-transform group-hover/item:scale-110">
+                              <Briefcase className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                                Portofind <span className="text-[9px] font-bold uppercase tracking-widest bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded-full">Soon</span>
+                              </div>
+                              <div className="text-xs text-slate-500 mt-0.5">Temukan peluang karir</div>
+                            </div>
+                          </button>
+                          
+                          <button onClick={() => { window.location.href = getSubdomainUrl('marketsee'); setIsFabOpen(false); setShowMobilePortoSub(false); }} className="w-full text-left flex items-start gap-4 p-3 rounded-lg hover:bg-purple-50 transition-colors mt-1 group/item">
+                            <div className="bg-purple-100/50 p-2.5 rounded-lg text-purple-600 shrink-0 transition-transform group-hover/item:scale-110">
+                              <ShoppingCart className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                                Marketsee <span className="text-[9px] font-bold uppercase tracking-widest bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded-full">Soon</span>
+                              </div>
+                              <div className="text-xs text-slate-500 mt-0.5">Jual produk & karya digital</div>
                             </div>
                           </button>
                         </div>

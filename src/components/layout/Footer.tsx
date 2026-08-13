@@ -25,7 +25,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-green-100">
               <li><a href={getSubdomainUrl('portofolio')} className="hover:text-white transition-colors">Buat Portofolio</a></li>
               <li><a href={getSubdomainUrl('resume')} className="hover:text-white transition-colors">Buat CV</a></li>
-              <li><Link href="/job-feed" className="hover:text-white transition-colors flex items-center gap-2">Job Feed <span className="text-[9px] font-bold uppercase tracking-widest bg-white/20 text-white px-1.5 py-0.5 rounded-full">Soon</span></Link></li>
+              <li><Link href="/portofind" className="hover:text-white transition-colors flex items-center gap-2">Portofind <span className="text-[9px] font-bold uppercase tracking-widest bg-white/20 text-white px-1.5 py-0.5 rounded-full">Soon</span></Link></li>
             </ul>
           </div>
           <div>

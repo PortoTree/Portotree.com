@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { getSubdomainUrl } from "@/lib/url";
+import { getSubdomainUrl, getMainUrl } from "@/lib/url";
 import { Button } from "@/components/ui/button";
 import { PortfolioViewer } from "@/components/builder/PortfolioViewer";
 import { placeholderPortfolioData } from "@/lib/portfolioData";
@@ -23,8 +23,8 @@ import {
   Clock,
   CheckCircle2,
   Trophy,
-  Mail
-} from "lucide-react";
+  Mail,
+  ShoppingCart} from "lucide-react";
 
 const FEATURES_DATA = [
   { icon: Layout, title: "Sistem Data-Driven", desc: "Konten dan desain terpisah secara cerdas. Anda cukup fokus mengisi data profil, lalu sistem akan otomatis menyusunnya ke berbagai pilihan template tanpa perlu mendesain dari nol." },
@@ -173,6 +173,48 @@ export default function Home() {
                   </p>
                   <div className="flex items-center text-amber-600 font-bold text-sm mt-auto">
                     Buat Surat <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 md:gap-8 mt-6 md:mt-8 max-w-6xl mx-auto">
+              {/* Product 4: Portofind */}
+              <a href={getSubdomainUrl('portofind')} className="group block h-full">
+                <div className="h-full bg-white rounded-3xl p-8 border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden flex flex-col">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+                  <div className="w-14 h-14 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mb-6">
+                    <Briefcase className="w-7 h-7" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-3">
+                    Portofind
+                    <span className="text-[10px] font-bold uppercase tracking-widest bg-indigo-100 text-indigo-600 px-2 py-1 rounded-full leading-none">Soon</span>
+                  </h3>
+                  <p className="text-gray-600 mb-6 leading-relaxed flex-grow text-sm">
+                    Temukan peluang karir dan proyek freelance terbaik yang sesuai dengan keahlian Anda. Terhubung langsung dengan rekruter.
+                  </p>
+                  <div className="flex items-center text-indigo-600 font-bold text-sm mt-auto">
+                    Pelajari Lebih Lanjut <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </a>
+
+              {/* Product 5: Marketsee */}
+              <a href={getSubdomainUrl('marketsee')} className="group block h-full">
+                <div className="h-full bg-white rounded-3xl p-8 border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden flex flex-col">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-purple-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+                  <div className="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                    <ShoppingCart className="w-7 h-7" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-3">
+                    Marketsee
+                    <span className="text-[10px] font-bold uppercase tracking-widest bg-purple-100 text-purple-600 px-2 py-1 rounded-full leading-none">Soon</span>
+                  </h3>
+                  <p className="text-gray-600 mb-6 leading-relaxed flex-grow text-sm">
+                    Marketplace digital untuk menjual karya dan produk buatan Anda. Mulai dari script, website, desain grafis, hingga e-book.
+                  </p>
+                  <div className="flex items-center text-purple-600 font-bold text-sm mt-auto">
+                    Kunjungi Marketsee <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
               </a>

@@ -56,7 +56,7 @@ export default function PrivacyPolicyPage() {
           <div className="prose prose-slate prose-emerald md:prose-lg max-w-none">
             
             <p className="lead text-xl text-slate-700 mb-10">
-              Selamat datang di PortoTree. Kami sangat menghargai privasi Anda dan berkomitmen untuk melindungi data pribadi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat menggunakan layanan pembuatan portofolio, CV, dan Job Feed di platform kami.
+              Selamat datang di PortoTree. Kami sangat menghargai privasi Anda dan berkomitmen untuk melindungi data pribadi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat menggunakan layanan pembuatan portofolio, CV, dan Portofind di platform kami.
             </p>
 
             <div className="space-y-12">
@@ -89,7 +89,7 @@ export default function PrivacyPolicyPage() {
                 <ul className="space-y-3 text-slate-600 ml-14 list-disc">
                   <li>Menyediakan, memelihara, dan meningkatkan fitur layanan PortoTree (termasuk halaman Portofolio dan CV Anda).</li>
                   <li>Menampilkan identitas profesional Anda sesuai dengan pengaturan visibilitas yang Anda pilih.</li>
-                  <li>Memfasilitasi koneksi dengan perusahaan atau rekruter melalui fitur Job Feed (mendatang).</li>
+                  <li>Memfasilitasi koneksi dengan perusahaan atau rekruter melalui fitur Portofind (mendatang).</li>
                   <li>Mengirimkan pembaruan layanan, newsletter, atau pemberitahuan terkait keamanan akun.</li>
                 </ul>
               </div>
@@ -167,7 +167,7 @@ export default function PrivacyPolicyPage() {
                 {/* FAQ 2 */}
                 <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                   <h4 className="text-lg font-bold text-slate-800 mb-2">Apakah PortoTree membagikan data saya ke perusahaan perekrut?</h4>
-                  <p className="text-slate-600 text-base m-0">PortoTree tidak akan pernah menjual atau membagikan data pribadi Anda secara diam-diam. Informasi Anda hanya akan dibagikan ke perusahaan jika Anda secara sadar melamar pekerjaan melalui fitur Job Feed kami.</p>
+                  <p className="text-slate-600 text-base m-0">PortoTree tidak akan pernah menjual atau membagikan data pribadi Anda secara diam-diam. Informasi Anda hanya akan dibagikan ke perusahaan jika Anda secara sadar melamar pekerjaan melalui fitur Portofind kami.</p>
                 </div>
                 
                 {/* FAQ 3 */}
