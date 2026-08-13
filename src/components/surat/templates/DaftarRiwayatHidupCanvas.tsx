@@ -10,9 +10,9 @@ export function DaftarRiwayatHidupCanvas({ formData, signatureData }: DaftarRiwa
   const validRiwayatOrganisasi = (formData.riwayatOrganisasi || []).filter((item: any) => item.tahunMulai || item.tahunSelesai || item.tahun || item.deskripsi);
 
   return (
-    <div className="px-[20mm] py-[20mm] print:py-0 text-[12pt] leading-[1.6] flex flex-col flex-1 bg-white" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
+    <div className="px-[20mm] py-[12mm] text-[12pt] leading-[1.5] flex flex-col flex-1 bg-white" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
       {/* Header */}
-      <h2 className="text-center font-bold text-xl pt-12 mb-10 tracking-wide uppercase underline underline-offset-4 cv-section break-inside-avoid">
+      <h2 className="text-center font-bold text-xl pt-4 mb-8 tracking-wide uppercase underline underline-offset-4 cv-section break-inside-avoid">
         DAFTAR RIWAYAT HIDUP
       </h2>
 
@@ -87,20 +87,18 @@ export function DaftarRiwayatHidupCanvas({ formData, signatureData }: DaftarRiwa
             {validPendidikanFormal.length > 0 && (
               <div className="mb-4">
                 <h4 className="font-bold mb-2">Pendidikan Formal</h4>
-                <table className="w-full ml-4">
-                  <tbody>
-                    {validPendidikanFormal.map((item: any, idx: number) => (
-                      <tr key={idx} className="break-inside-avoid">
-                        <td className="w-40 pb-2 align-top">
-                          {item.tahunMulai || item.tahunSelesai 
-                            ? `${item.tahunMulai || ''} ${item.tahunMulai && item.tahunSelesai ? '-' : ''} ${item.tahunSelesai || ''}`.trim()
-                            : (item.tahun || '')}
-                        </td>
-                        <td className="pb-2 align-top">{item.institusi || ''}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div className="w-full ml-4 flex flex-col">
+                  {validPendidikanFormal.map((item: any, idx: number) => (
+                    <div key={idx} className="break-inside-avoid flex pb-2">
+                      <div className="w-40 shrink-0">
+                        {item.tahunMulai || item.tahunSelesai 
+                          ? `${item.tahunMulai || ''} ${item.tahunMulai && item.tahunSelesai ? '-' : ''} ${item.tahunSelesai || ''}`.trim()
+                          : (item.tahun || '')}
+                      </div>
+                      <div>{item.institusi || ''}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
@@ -108,20 +106,18 @@ export function DaftarRiwayatHidupCanvas({ formData, signatureData }: DaftarRiwa
             {validPendidikanNonformal.length > 0 && (
               <div className="mb-4">
                 <h4 className="font-bold mb-2">Pendidikan Nonformal</h4>
-                <table className="w-full ml-4">
-                  <tbody>
-                    {validPendidikanNonformal.map((item: any, idx: number) => (
-                      <tr key={idx} className="break-inside-avoid">
-                        <td className="w-40 pb-2 align-top">
-                          {item.tahunMulai || item.tahunSelesai 
-                            ? `${item.tahunMulai || ''} ${item.tahunMulai && item.tahunSelesai ? '-' : ''} ${item.tahunSelesai || ''}`.trim()
-                            : (item.tahun || '')}
-                        </td>
-                        <td className="pb-2 align-top">{item.institusi || ''}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div className="w-full ml-4 flex flex-col">
+                  {validPendidikanNonformal.map((item: any, idx: number) => (
+                    <div key={idx} className="break-inside-avoid flex pb-2">
+                      <div className="w-40 shrink-0">
+                        {item.tahunMulai || item.tahunSelesai 
+                          ? `${item.tahunMulai || ''} ${item.tahunMulai && item.tahunSelesai ? '-' : ''} ${item.tahunSelesai || ''}`.trim()
+                          : (item.tahun || '')}
+                      </div>
+                      <div>{item.institusi || ''}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -132,21 +128,19 @@ export function DaftarRiwayatHidupCanvas({ formData, signatureData }: DaftarRiwa
       {validPengalamanKerja.length > 0 && (
         <div className="mb-6 cv-section">
           <h3 className="font-bold mb-4 uppercase">PENGALAMAN KERJA</h3>
-          <table className="w-full ml-4">
-            <tbody>
-              {validPengalamanKerja.map((item: any, idx: number) => (
-                <tr key={idx} className="break-inside-avoid">
-                  <td className="w-52 pb-2">
-                    {item.tahunMulai || item.tahunSelesai 
-                      ? `${item.tahunMulai || ''} ${item.tahunMulai && item.tahunSelesai ? '-' : ''} ${item.tahunSelesai || ''}`.trim()
-                      : (item.tahun || '')}
-                  </td>
-                  <td className="w-4 pb-2">:</td>
-                  <td className="pb-2">{item.deskripsi || ''}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="w-full ml-4 flex flex-col">
+            {validPengalamanKerja.map((item: any, idx: number) => (
+              <div key={idx} className="break-inside-avoid flex pb-2">
+                <div className="w-52 shrink-0">
+                  {item.tahunMulai || item.tahunSelesai 
+                    ? `${item.tahunMulai || ''} ${item.tahunMulai && item.tahunSelesai ? '-' : ''} ${item.tahunSelesai || ''}`.trim()
+                    : (item.tahun || '')}
+                </div>
+                <div className="w-4 shrink-0">:</div>
+                <div>{item.deskripsi || ''}</div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
@@ -154,33 +148,31 @@ export function DaftarRiwayatHidupCanvas({ formData, signatureData }: DaftarRiwa
       {validRiwayatOrganisasi.length > 0 && (
         <div className="mb-6 cv-section">
           <h3 className="font-bold mb-4 uppercase">RIWAYAT ORGANISASI</h3>
-          <table className="w-full ml-4">
-            <tbody>
-              {validRiwayatOrganisasi.map((item: any, idx: number) => (
-                <tr key={idx} className="break-inside-avoid">
-                  <td className="w-52 pb-2">
-                    {item.tahunMulai || item.tahunSelesai 
-                      ? `${item.tahunMulai || ''} ${item.tahunMulai && item.tahunSelesai ? '-' : ''} ${item.tahunSelesai || ''}`.trim()
-                      : (item.tahun || '')}
-                  </td>
-                  <td className="w-4 pb-2">:</td>
-                  <td className="pb-2">{item.deskripsi || ''}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="w-full ml-4 flex flex-col">
+            {validRiwayatOrganisasi.map((item: any, idx: number) => (
+              <div key={idx} className="break-inside-avoid flex pb-2">
+                <div className="w-52 shrink-0">
+                  {item.tahunMulai || item.tahunSelesai 
+                    ? `${item.tahunMulai || ''} ${item.tahunMulai && item.tahunSelesai ? '-' : ''} ${item.tahunSelesai || ''}`.trim()
+                    : (item.tahun || '')}
+                </div>
+                <div className="w-4 shrink-0">:</div>
+                <div>{item.deskripsi || ''}</div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
       {/* Closing Statement */}
       <div className="mb-6">
-        <p className="mb-4">
+        <p className="mb-2">
           Demikian Surat Riwayat Hidup ini saya buat dengan sebenar-benarnya dan dapat dipertanggungjawabkan.
         </p>
       </div>
 
       {/* Signature */}
-      <div className="flex justify-end pr-8 mt-12 pt-8 cv-section break-inside-avoid">
+      <div className="flex justify-end pr-8 mt-6 pt-4 cv-section break-inside-avoid">
         <div className="text-center">
           <p className="mb-4">Hormat Saya,</p>
           

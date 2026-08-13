@@ -5,7 +5,7 @@ interface PengunduranDiriCanvasProps {
 
 export function PengunduranDiriCanvas({ formData, signatureData }: PengunduranDiriCanvasProps) {
   return (
-    <div className="px-[20mm] py-[20mm] print:py-0 text-[12pt] leading-[1.6] flex flex-col flex-1 bg-white" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
+    <div className="px-[20mm] py-[20mm] text-[12pt] leading-[1.6] flex flex-col flex-1 bg-white" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
       {/* Header */}
       <h2 className="text-center font-bold text-xl pt-12 mb-12 tracking-wide uppercase underline underline-offset-4 cv-section break-inside-avoid">
         SURAT PENGUNDURAN DIRI

@@ -6,7 +6,7 @@ interface LamaranKerjaCanvasProps {
 
 export function LamaranKerjaCanvas({ formData, signatureData, berkasList }: LamaranKerjaCanvasProps) {
   return (
-    <div className="px-[20mm] py-[8mm] print:py-0 text-[11pt] leading-[1.5] flex flex-col flex-1 bg-white" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
+    <div className="px-[20mm] py-[8mm] text-[11pt] leading-[1.5] flex flex-col flex-1 bg-white" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
       {/* Header */}
       <h2 className="text-center font-bold text-lg pt-8 mb-6 tracking-wide uppercase cv-section break-inside-avoid">
         SURAT LAMARAN PEKERJAAN
