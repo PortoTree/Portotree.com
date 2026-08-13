@@ -664,7 +664,7 @@ export default function SuratGeneratorPage() {
             }
           `}} />
           <div className="bg-white">
-            <SuratViewer showMobilePreview={false} dependency={printDraft.data?.formData}>
+            <SuratViewer showMobilePreview={true} dependency={printDraft.data?.formData}>
               <SuratCanvasRenderer 
                 type={printDraft.slug}
                 formData={printDraft.data?.formData || {}}

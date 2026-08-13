@@ -50,7 +50,7 @@ export function SuratViewer({ children, showMobilePreview, dependency, type }: S
   const handleResetZoom = () => setScale(defaultScale);
 
   return (
-    <main ref={containerRef} className={`flex-1 h-full overflow-y-auto overflow-x-auto bg-gray-100/50 print:bg-white print:overflow-visible transition-all duration-300 ${!showMobilePreview ? 'hidden md:block' : 'block'}`}>
+    <main ref={containerRef} className={`flex-1 h-full overflow-y-auto overflow-x-auto bg-gray-100/50 print:bg-white print:overflow-visible print:block transition-all duration-300 ${!showMobilePreview ? 'hidden md:block' : 'block'}`}>
       
       {/* Zoom Controls */}
       <div className={`fixed bottom-[100px] right-6 md:bottom-8 md:right-8 z-40 bg-white/80 backdrop-blur-md shadow-xl rounded-full p-1.5 flex-col items-center gap-2 print:hidden border border-gray-200/50 ${!showMobilePreview ? 'hidden md:flex' : 'flex'}`}>
