@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { User, Mail, ShieldAlert, CheckCircle2, Clock, MoreVertical, ExternalLink, Ban, Trash2 } from "lucide-react";
+import { User, Mail, ShieldAlert, CheckCircle2, Clock, MoreVertical, ExternalLink, Ban, Trash2, Globe, FileText } from "lucide-react";
 import { useUI } from "@/components/ui/UIProvider";
 import { toggleSuspendUser, deleteUserAccount, impersonateUser } from "@/app/actions/admin";
 import { useRouter } from "next/navigation";
@@ -97,7 +97,7 @@ export function UsersTable({ initialUsers }: { initialUsers: any[] }) {
             <tr className="bg-slate-50 text-slate-500 text-sm border-b border-slate-200">
               <th className="px-6 py-4 font-medium">Pengguna</th>
               <th className="px-6 py-4 font-medium">Status Langganan</th>
-              <th className="px-6 py-4 font-medium">Limit Unduhan</th>
+              <th className="px-6 py-4 font-medium">Aset Dibuat</th>
               <th className="px-6 py-4 font-medium">Bergabung Pada</th>
               <th className="px-6 py-4 font-medium text-right">Aksi</th>
             </tr>
@@ -141,15 +141,37 @@ export function UsersTable({ initialUsers }: { initialUsers: any[] }) {
                   )}
                 </td>
                 <td className="px-6 py-4">
-                  <div className="text-sm text-slate-600 space-y-1">
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="text-slate-500">CV:</span>
-                      <span className="font-medium">{user.freeResumeCount}/1</span>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="text-slate-500">Surat:</span>
-                      <span className="font-medium">{user.freeSuratCount}/1</span>
-                    </div>
+                  <div className="flex items-center gap-5">
+                    {user.username && (
+                      <a 
+                        href={`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/p/${user.username}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-col items-center gap-1 hover:scale-110 transition-transform cursor-pointer group" 
+                        title={`Lihat Portofolio: @${user.username}`}
+                      >
+                        <Globe className="w-5 h-5 text-blue-500 group-hover:text-blue-600 drop-shadow-sm" />
+                        <span className="text-[10px] font-bold text-blue-600">Live</span>
+                      </a>
+                    )}
+                    
+                    {user.freeResumeCount > 0 && (
+                      <div className="flex flex-col items-center gap-1" title="Pernah Membuat CV">
+                        <FileText className="w-5 h-5 text-indigo-500" />
+                        <span className="text-[10px] font-medium text-slate-500">{user.freeResumeCount}/1</span>
+                      </div>
+                    )}
+
+                    {user.freeSuratCount > 0 && (
+                      <div className="flex flex-col items-center gap-1" title="Pernah Membuat Surat">
+                        <Mail className="w-5 h-5 text-amber-500" />
+                        <span className="text-[10px] font-medium text-slate-500">{user.freeSuratCount}/1</span>
+                      </div>
+                    )}
+                    
+                    {!user.username && user.freeResumeCount === 0 && user.freeSuratCount === 0 && (
+                      <span className="text-sm text-slate-400 italic">Belum ada aset</span>
+                    )}
                   </div>
                 </td>
                 <td className="px-6 py-4">

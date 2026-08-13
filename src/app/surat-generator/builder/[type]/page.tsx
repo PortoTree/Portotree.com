@@ -519,10 +519,10 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
 
       {/* Paywall Modal */}
       {showPaywall && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 p-6 flex flex-col items-center text-center">
-            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
-              <Download className="w-8 h-8 text-emerald-600" />
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+              <Download className="w-8 h-8 text-red-600" />
             </div>
             <h3 className="text-xl font-bold text-slate-800 mb-2">Limit Unduh Gratis Habis!</h3>
             <p className="text-slate-600 mb-6 leading-relaxed">
@@ -549,13 +549,12 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
 
       {/* Loading Overlay saat Cek Limit */}
       {isCheckingLimit && (
-        <div className="fixed inset-0 z-[120] flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm">
-          <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-          <p className="text-slate-700 font-medium">Memeriksa kuota...</p>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-3">
+            <img src="/loading-gif.gif" alt="Loading..." className="w-48 h-48 md:w-64 md:h-64 object-contain opacity-90" />
+          </div>
         </div>
-      )}
-
-      {/* Top Navbar - hidden when printing */}
+      )}{/* Top Navbar - hidden when printing */}
       <div className="print:hidden h-16 bg-white border-b flex items-center justify-between px-4 md:px-6 shrink-0 sticky top-0 z-50">
         <div className="flex items-center gap-2 md:gap-4">
           <Link href="/personal/dashboard/surat-generator" className="text-gray-500 hover:text-black transition-colors">

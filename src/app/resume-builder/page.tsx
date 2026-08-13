@@ -262,6 +262,45 @@ export default function CVBuilderPage() {
           }
         }
       `}} />
+
+      {/* Paywall Modal */}
+      {showPaywall && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 p-4 animate-in fade-in duration-200 print:hidden">
+          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 p-6 flex flex-col items-center text-center">
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+              <Download className="w-8 h-8 text-red-600" />
+            </div>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Limit Unduh Gratis Habis!</h3>
+            <p className="text-slate-600 mb-6 leading-relaxed">
+              Anda telah menggunakan jatah 1x unduh gratis untuk CV. Dapatkan akses cetak <span className="font-semibold text-slate-800">sepuasnya tanpa batas dan tanpa watermark</span> dengan berlangganan Paket Premium.
+            </p>
+            
+            <div className="flex flex-col gap-3 w-full">
+              <button 
+                onClick={() => router.push('/personal/dashboard/langganan')}
+                className="w-full py-3 px-4 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all active:scale-95 shadow-md shadow-emerald-200 flex items-center justify-center gap-2"
+              >
+                Lihat Paket Langganan
+              </button>
+              <button 
+                onClick={() => setShowPaywall(false)}
+                className="w-full py-3 px-4 bg-white text-slate-500 font-medium rounded-xl hover:bg-slate-50 transition-all active:scale-95 border border-slate-200"
+              >
+                Nanti Dulu
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Loading Overlay saat Cek Limit */}
+      {isCheckingLimit && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/80 backdrop-blur-sm print:hidden">
+          <div className="flex flex-col items-center gap-3">
+            <img src="/loading-gif.gif" alt="Loading..." className="w-48 h-48 md:w-64 md:h-64 object-contain opacity-90" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -13,34 +13,38 @@ export default function LanggananPage() {
     {
       id: "1_MONTH",
       name: "1 Bulan",
-      price: 20000,
+      price: 12000,
+      originalPrice: 20000,
       duration: "Akses 30 Hari",
       popular: false,
-      savings: null
+      savings: "Hemat Rp 8.000"
     },
     {
       id: "3_MONTHS",
       name: "3 Bulan",
-      price: 50000,
+      price: 18000,
+      originalPrice: 48000,
       duration: "Akses 90 Hari",
       popular: true,
-      savings: "Hemat Rp 10.000"
+      savings: "Hemat Rp 30.000"
     },
     {
       id: "6_MONTHS",
       name: "6 Bulan",
-      price: 90000,
+      price: 52000,
+      originalPrice: 75000,
       duration: "Akses 180 Hari",
       popular: false,
-      savings: "Hemat Rp 30.000"
+      savings: "Hemat Rp 23.000"
     },
     {
       id: "12_MONTHS",
       name: "12 Bulan",
-      price: 150000,
+      price: 104000,
+      originalPrice: 127000,
       duration: "Akses 365 Hari",
       popular: false,
-      savings: "Hemat Rp 90.000"
+      savings: "Hemat Rp 23.000"
     }
   ];
 
@@ -64,14 +68,14 @@ export default function LanggananPage() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-8">
+    <div className="w-full max-w-4xl mx-auto py-6 md:py-8 px-4 md:px-6 lg:px-8">
       {/* Header Section */}
-      <div className="text-center mb-10">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-100 mb-4">
-          <Crown className="w-8 h-8 text-amber-500" />
+      <div className="text-center mb-8 md:mb-10">
+        <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-amber-100 mb-3 md:mb-4">
+          <Crown className="w-6 h-6 md:w-8 md:h-8 text-amber-500" />
         </div>
-        <h1 className="text-3xl font-extrabold text-slate-800 mb-3">Upgrade ke Premium</h1>
-        <p className="text-slate-500 max-w-lg mx-auto leading-relaxed">
+        <h1 className="text-2xl md:text-3xl font-extrabold text-slate-800 mb-2 md:mb-3">Upgrade ke Premium</h1>
+        <p className="text-sm md:text-base text-slate-500 max-w-lg mx-auto leading-relaxed px-2 md:px-0">
           Buka akses tanpa batas ke semua fitur PortoTree. Bebas bikin dan unduh CV atau Surat kapan saja, tanpa batasan, tanpa watermark.
         </p>
       </div>
@@ -104,45 +108,50 @@ export default function LanggananPage() {
         </div>
 
         {/* Right: Pricing Plans */}
-        <div className="flex-1 flex flex-col gap-4">
+        <div className="flex-1 flex flex-col gap-3 md:gap-4">
           {plans.map((plan) => (
             <div 
               key={plan.id}
               onClick={() => setSelectedPlan(plan.id)}
-              className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all duration-200 ${
+              className={`relative border-2 rounded-2xl p-4 md:p-5 cursor-pointer transition-all duration-200 ${
                 selectedPlan === plan.id 
-                  ? 'border-emerald-500 bg-emerald-50/50 shadow-md scale-[1.02]' 
+                  ? 'border-emerald-500 bg-emerald-50/50 shadow-md md:scale-[1.02]' 
                   : 'border-slate-200 bg-white hover:border-emerald-200 hover:bg-slate-50'
               }`}
             >
               {plan.popular && (
-                <div className="absolute -top-3 right-4 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
+                <div className="absolute -top-3 right-4 bg-amber-500 text-white text-[9px] md:text-[10px] font-bold uppercase tracking-wider px-2 md:px-3 py-0.5 md:py-1 rounded-full shadow-sm">
                   Paling Populer
                 </div>
               )}
               
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 md:gap-4">
                 {/* Radio check visualization */}
-                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                <div className={`w-4 h-4 md:w-5 md:h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
                   selectedPlan === plan.id ? 'border-emerald-500' : 'border-slate-300'
                 }`}>
-                  {selectedPlan === plan.id && <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full" />}
+                  {selectedPlan === plan.id && <div className="w-2 h-2 md:w-2.5 md:h-2.5 bg-emerald-500 rounded-full" />}
                 </div>
 
-                <div className="flex-1 flex items-center justify-between">
+                <div className="flex-1 flex items-center justify-between gap-2">
                   <div>
-                    <h3 className={`font-bold text-lg mb-1 ${selectedPlan === plan.id ? 'text-emerald-700' : 'text-slate-800'}`}>
+                    <h3 className={`font-bold text-base md:text-lg mb-0.5 md:mb-1 ${selectedPlan === plan.id ? 'text-emerald-700' : 'text-slate-800'}`}>
                       {plan.name}
                     </h3>
-                    <p className="text-sm text-slate-500">{plan.duration}</p>
+                    <p className="text-xs md:text-sm text-slate-500">{plan.duration}</p>
                   </div>
                   
                   <div className="text-right">
-                    <div className="font-extrabold text-xl text-slate-800">
+                    {plan.originalPrice && (
+                      <div className="text-[10px] md:text-xs text-slate-400 line-through mb-0.5">
+                        Rp {plan.originalPrice.toLocaleString('id-ID')}
+                      </div>
+                    )}
+                    <div className="font-extrabold text-lg md:text-xl text-slate-800 leading-tight">
                       Rp {plan.price.toLocaleString('id-ID')}
                     </div>
                     {plan.savings && (
-                      <div className="text-xs font-semibold text-emerald-600 mt-1">
+                      <div className="text-[10px] md:text-xs font-semibold text-emerald-600 mt-0.5 md:mt-1">
                         {plan.savings}
                       </div>
                     )}
