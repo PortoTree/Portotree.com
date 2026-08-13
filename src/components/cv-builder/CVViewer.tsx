@@ -8,9 +8,11 @@ import { useUI } from '@/components/ui/UIProvider';
 
 interface CVViewerProps {
   data: CVDataPayload;
+  forceScale?: number;
+  hideZoomControls?: boolean;
 }
 
-export function CVViewer({ data }: CVViewerProps) {
+export function CVViewer({ data, forceScale, hideZoomControls }: CVViewerProps) {
   const { pages } = usePagination([data]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -18,6 +20,7 @@ export function CVViewer({ data }: CVViewerProps) {
   const { showToast } = useUI();
 
   const calculateDefaultScale = () => {
+    if (forceScale !== undefined) return forceScale;
     if (typeof window !== 'undefined' && window.innerWidth < 768) {
       return 0.43;
     }
@@ -61,21 +64,23 @@ export function CVViewer({ data }: CVViewerProps) {
     <div ref={containerRef} className="w-full bg-gray-200 py-4 md:py-8 min-h-screen overflow-auto relative print:bg-white print:py-0 print:min-h-0 print:overflow-visible">
       
       {/* Zoom Controls */}
-      <div className="fixed bottom-[100px] right-6 md:bottom-8 md:right-8 z-40 bg-white/80 backdrop-blur-md shadow-xl rounded-full p-1.5 flex flex-col items-center gap-2 print:hidden border border-gray-200/50">
-        <button onClick={handleZoomIn} className="p-2 rounded-full hover:bg-gray-100/80 text-gray-700 transition-colors bg-transparent">
-          <ZoomIn className="w-5 h-5" />
-        </button>
-        <span className="text-[10px] font-bold text-gray-700 text-center select-none leading-none w-8">
-          {Math.round(scale * 100)}%
-        </span>
-        <button onClick={handleZoomOut} className="p-2 rounded-full hover:bg-gray-100/80 text-gray-700 transition-colors bg-transparent">
-          <ZoomOut className="w-5 h-5" />
-        </button>
-        <div className="w-4 h-px bg-gray-300/60 my-0.5"></div>
-        <button onClick={handleResetZoom} className="p-2 rounded-full hover:bg-gray-100/80 text-gray-700 transition-colors bg-transparent" title="Fit to Screen">
-          <Maximize className="w-5 h-5" />
-        </button>
-      </div>
+      {!hideZoomControls && (
+        <div className="fixed bottom-[100px] right-6 md:bottom-8 md:right-8 z-40 bg-white/80 backdrop-blur-md shadow-xl rounded-full p-1.5 flex flex-col items-center gap-2 print:hidden border border-gray-200/50">
+          <button onClick={handleZoomIn} className="p-2 rounded-full hover:bg-gray-100/80 text-gray-700 transition-colors bg-transparent">
+            <ZoomIn className="w-5 h-5" />
+          </button>
+          <span className="text-[10px] font-bold text-gray-700 text-center select-none leading-none w-8">
+            {Math.round(scale * 100)}%
+          </span>
+          <button onClick={handleZoomOut} className="p-2 rounded-full hover:bg-gray-100/80 text-gray-700 transition-colors bg-transparent">
+            <ZoomOut className="w-5 h-5" />
+          </button>
+          <div className="w-4 h-px bg-gray-300/60 my-0.5"></div>
+          <button onClick={handleResetZoom} className="p-2 rounded-full hover:bg-gray-100/80 text-gray-700 transition-colors bg-transparent" title="Fit to Screen">
+            <Maximize className="w-5 h-5" />
+          </button>
+        </div>
+      )}
 
       {/* 
         MASTER MEASURER

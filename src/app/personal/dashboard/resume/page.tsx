@@ -77,7 +77,7 @@ export default function ResumeDashboardPage() {
                 >
                   {/* Wrap with a fixed A4 container to maintain aspect ratio in preview */}
                   <div className="bg-white shadow-xl" style={{ width: '210mm', minHeight: '297mm' }}>
-                    <CVViewer data={data} />
+                    <CVViewer data={data} forceScale={1} hideZoomControls={true} />
                   </div>
                 </div>
               )}
