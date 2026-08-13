@@ -10,10 +10,16 @@ import { LamaranKerjaForm } from "@/components/surat/forms/LamaranKerjaForm";
 import { PengunduranDiriForm } from "@/components/surat/forms/PengunduranDiriForm";
 import { DaftarRiwayatHidupForm } from "@/components/surat/forms/DaftarRiwayatHidupForm";
 import { KeteranganSakitForm } from "@/components/surat/forms/KeteranganSakitForm";
+import { IzinKerjaForm } from "@/components/surat/forms/IzinKerjaForm";
+import { KuasaForm } from "@/components/surat/forms/KuasaForm";
+import { MagangForm } from "@/components/surat/forms/MagangForm";
 import { LamaranKerjaCanvas } from "@/components/surat/templates/LamaranKerjaCanvas";
 import { PengunduranDiriCanvas } from "@/components/surat/templates/PengunduranDiriCanvas";
 import { DaftarRiwayatHidupCanvas } from "@/components/surat/templates/DaftarRiwayatHidupCanvas";
 import { KeteranganSakitCanvas } from "@/components/surat/templates/KeteranganSakitCanvas";
+import { IzinKerjaCanvas } from "@/components/surat/templates/IzinKerjaCanvas";
+import { KuasaCanvas } from "@/components/surat/templates/KuasaCanvas";
+import { MagangCanvas } from "@/components/surat/templates/MagangCanvas";
 import { SuratViewer } from "@/components/surat/SuratViewer";
 
 export default function SuratBuilderPage({ params }: { params: Promise<{ type: string }> }) {
@@ -265,6 +271,40 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
         />
       );
     }
+    if (type === 'izin-kerja') {
+      return (
+        <IzinKerjaForm
+          formData={formData} 
+          handleFormChange={handleFormChange} 
+          signatureData={signatureData} 
+          setSignatureData={setSignatureData} 
+        />
+      );
+    }
+    if (type === 'kuasa') {
+      return (
+        <KuasaForm
+          formData={formData} 
+          handleFormChange={handleFormChange} 
+          signatureData={signatureData} 
+          setSignatureData={setSignatureData} 
+        />
+      );
+    }
+    if (type === 'magang') {
+      return (
+        <MagangForm
+          formData={formData} 
+          handleFormChange={handleFormChange} 
+          signatureData={signatureData} 
+          setSignatureData={setSignatureData} 
+          berkasList={berkasList} 
+          addBerkas={addBerkas} 
+          updateBerkas={updateBerkas} 
+          removeBerkas={removeBerkas} 
+        />
+      );
+    }
     return (
       <LamaranKerjaForm 
         formData={formData} 
@@ -301,6 +341,31 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
         <KeteranganSakitCanvas
           formData={formData} 
           signatureData={signatureData} 
+        />
+      );
+    }
+    if (type === 'izin-kerja') {
+      return (
+        <IzinKerjaCanvas
+          formData={formData} 
+          signatureData={signatureData} 
+        />
+      );
+    }
+    if (type === 'kuasa') {
+      return (
+        <KuasaCanvas
+          formData={formData} 
+          signatureData={signatureData} 
+        />
+      );
+    }
+    if (type === 'magang') {
+      return (
+        <MagangCanvas
+          formData={formData} 
+          signatureData={signatureData} 
+          berkasList={berkasList}
         />
       );
     }
@@ -394,7 +459,12 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
           {activeTab === 'form' ? (
             <div className="flex flex-col">
               <div className="p-4 border-b bg-gray-50 relative md:sticky md:top-0 z-10">
-              <h2 className="font-bold text-sm uppercase text-gray-500">Isi Data Surat</h2>
+              <h2 className="font-bold text-sm uppercase text-gray-500">
+                ISI DATA {(() => {
+                  const activeTemplate = [...populerTemplates, ...lainnyaTemplates].find(t => t.slug === type);
+                  return activeTemplate ? activeTemplate.title : 'SURAT';
+                })()}
+              </h2>
               <p className="text-xs text-gray-500 mt-1">Lengkapi informasi di bawah ini untuk menyusun surat secara otomatis.</p>
             </div>
             {renderFormContent()}

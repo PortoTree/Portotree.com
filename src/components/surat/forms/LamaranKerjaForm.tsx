@@ -38,7 +38,7 @@ export function LamaranKerjaForm({
           className={`w-full flex items-center justify-between p-4 transition-colors ${expandedSection === 'data-diri' ? 'bg-emerald-600' : 'bg-slate-50/50 hover:bg-slate-50 border-b border-slate-100'}`}
         >
           <div className="flex items-center gap-3">
-            <User className={`w-4 h-4 ${expandedSection === 'data-diri' ? 'text-white' : 'text-slate-500'}`} />
+            <User className={`w-4 h-4 ${expandedSection === 'data-diri' ? 'text-white' : 'text-emerald-500'}`} />
             <span className={`font-bold text-[15px] ${expandedSection === 'data-diri' ? 'text-white' : 'text-slate-700'}`}>Data Diri</span>
           </div>
           <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expandedSection === 'data-diri' ? 'text-white rotate-180' : 'text-slate-400'}`} />
@@ -124,7 +124,7 @@ export function LamaranKerjaForm({
           className={`w-full flex items-center justify-between p-4 transition-colors ${expandedSection === 'posisi' ? 'bg-emerald-600' : 'hover:bg-slate-50 border-b border-slate-100'}`}
         >
           <div className="flex items-center gap-3">
-            <Briefcase className={`w-4 h-4 ${expandedSection === 'posisi' ? 'text-white' : 'text-slate-500'}`} />
+            <Briefcase className={`w-4 h-4 ${expandedSection === 'posisi' ? 'text-white' : 'text-emerald-500'}`} />
             <span className={`font-bold text-[15px] ${expandedSection === 'posisi' ? 'text-white' : 'text-slate-700'}`}>Posisi Pekerjaan</span>
           </div>
           <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expandedSection === 'posisi' ? 'text-white rotate-180' : 'text-slate-400'}`} />
@@ -148,7 +148,7 @@ export function LamaranKerjaForm({
           className={`w-full flex items-center justify-between p-4 transition-colors ${expandedSection === 'berkas' ? 'bg-emerald-600' : 'hover:bg-slate-50 border-b border-slate-100'}`}
         >
           <div className="flex items-center gap-3">
-            <FileText className={`w-4 h-4 ${expandedSection === 'berkas' ? 'text-white' : 'text-slate-500'}`} />
+            <FileText className={`w-4 h-4 ${expandedSection === 'berkas' ? 'text-white' : 'text-emerald-500'}`} />
             <span className={`font-bold text-[15px] ${expandedSection === 'berkas' ? 'text-white' : 'text-slate-700'}`}>Lamaran Berkas</span>
           </div>
           <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expandedSection === 'berkas' ? 'text-white rotate-180' : 'text-slate-400'}`} />
@@ -195,7 +195,7 @@ export function LamaranKerjaForm({
           className={`w-full flex items-center justify-between p-4 transition-colors ${expandedSection === 'informasi' ? 'bg-emerald-600' : 'hover:bg-slate-50 border-b border-slate-100'}`}
         >
           <div className="flex items-center gap-3">
-            <Info className={`w-4 h-4 ${expandedSection === 'informasi' ? 'text-white' : 'text-slate-500'}`} />
+            <Info className={`w-4 h-4 ${expandedSection === 'informasi' ? 'text-white' : 'text-emerald-500'}`} />
             <span className={`font-bold text-[15px] ${expandedSection === 'informasi' ? 'text-white' : 'text-slate-700'}`}>Informasi Surat</span>
           </div>
           <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expandedSection === 'informasi' ? 'text-white rotate-180' : 'text-slate-400'}`} />
