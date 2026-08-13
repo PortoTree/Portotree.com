@@ -100,8 +100,8 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
                   )}
                 </div>
                 
-                <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest">{modal.title}</h3>
-                <p className="text-[11px] text-gray-500 font-medium leading-relaxed">
+                <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest">{modal.title}</h3>
+                <p className="text-sm text-gray-500 font-medium leading-relaxed">
                   {modal.message}
                 </p>
                 
@@ -112,7 +112,7 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
                         if (modal.onCancel) modal.onCancel();
                         closeModal();
                       }}
-                      className="py-3 px-4 rounded-2xl bg-white border border-gray-200 text-[10px] font-bold text-gray-600 uppercase tracking-widest hover:bg-gray-50 transition-all active:scale-95 shadow-sm"
+                      className="py-3 px-4 rounded-2xl bg-white border border-gray-200 text-xs font-bold text-gray-600 uppercase tracking-widest hover:bg-gray-50 transition-all active:scale-95 shadow-sm"
                     >
                       {modal.cancelText || 'Batal'}
                     </button>
@@ -122,7 +122,7 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
                       modal.onConfirm();
                       if (modal.cancelText !== 'hidden') closeModal();
                     }}
-                    className={`py-3 px-4 rounded-2xl text-[10px] font-bold text-white uppercase tracking-widest transition-all active:scale-95 shadow-md ${
+                    className={`py-3 px-4 rounded-2xl text-xs font-bold text-white uppercase tracking-widest transition-all active:scale-95 shadow-md ${
                       modal.cancelText === 'hidden' ? 'w-full' : ''
                     } ${
                       modal.variant === 'danger' 

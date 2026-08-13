@@ -326,7 +326,7 @@ export default function SuratGeneratorPage() {
         <div className="mb-10">
           <h2 className="text-xl font-bold text-slate-800 mb-6">Surat yang Sedang Dibuat (Draft)</h2>
           
-          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hidden md:block">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
@@ -338,11 +338,11 @@ export default function SuratGeneratorPage() {
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {savedLetters.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((letter) => (
-                    <tr key={letter.slug} className="hover:bg-slate-50/50 transition-colors">
+                    <tr key={letter.draftKey} className="hover:bg-slate-50/50 transition-colors">
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center shrink-0">
-                            <FileText className="w-5 h-5 text-orange-500" />
+                          <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
+                            <FileText className="w-5 h-5 text-emerald-600" />
                           </div>
                           <div>
                             <h3 className="font-semibold text-slate-800 text-sm">{letter.title}</h3>
@@ -359,21 +359,21 @@ export default function SuratGeneratorPage() {
                         <div className="flex items-center justify-end gap-2">
                           <button 
                             onClick={() => handlePreview(letter)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-800 transition-colors text-[13px] font-medium"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500 text-emerald-600 hover:bg-emerald-50 transition-colors text-[13px] font-medium"
                           >
-                            <Eye className="w-4 h-4" /> <span className="hidden sm:inline">Preview</span>
+                            <Eye className="w-4 h-4" /> <span className="hidden lg:inline">Preview</span>
                           </button>
                           <Link 
                             href={`/surat-generator/builder/${letter.slug}${letter.draftId ? `?id=${letter.draftId}` : ''}`}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors text-[13px] font-medium"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors text-[13px] font-medium border border-emerald-600"
                           >
-                            <Edit className="w-4 h-4" /> <span className="hidden sm:inline">Edit</span>
+                            <Edit className="w-4 h-4" /> <span className="hidden lg:inline">Edit</span>
                           </Link>
                           <button 
                             onClick={() => handleDownload(letter)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-colors text-[13px] font-medium"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500 text-emerald-600 hover:bg-emerald-50 transition-colors text-[13px] font-medium"
                           >
-                            <Download className="w-4 h-4" /> <span className="hidden sm:inline">Download</span>
+                            <Download className="w-4 h-4" /> <span className="hidden lg:inline">Download</span>
                           </button>
                           
                           {/* Three dots menu */}
@@ -421,9 +421,88 @@ export default function SuratGeneratorPage() {
                 </tbody>
               </table>
             </div>
+          </div>
+
+          {/* Mobile Card Layout */}
+          <div className="md:hidden flex flex-col gap-3">
+            {savedLetters.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((letter) => (
+              <div key={letter.draftKey} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm relative">
+                <div className="flex items-start justify-between mb-1.5">
+                  <div className="flex items-center gap-2 pr-8">
+                    <FileText className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <h3 className="font-semibold text-slate-800 text-[15px] leading-tight line-clamp-2">{letter.title}</h3>
+                  </div>
+                  {/* three dots absolute to top right */}
+                  <div className="absolute top-3 right-2">
+                    <button
+                      onClick={() => setActiveDropdown(activeDropdown === letter.draftKey ? null : letter.draftKey)}
+                      className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+                    >
+                      <MoreVertical className="w-5 h-5" />
+                    </button>
+                    
+                    {activeDropdown === letter.draftKey && (
+                      <div className="absolute right-0 mt-1 w-40 bg-white border border-slate-200 rounded-xl shadow-lg py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
+                        <button
+                          onClick={() => {
+                            setRenameDraft(letter);
+                            setNewTitle(letter.title);
+                            setRenameModalOpen(true);
+                            setActiveDropdown(null);
+                          }}
+                          className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                        >
+                          <Pencil className="w-4 h-4 text-slate-400" /> Rename
+                        </button>
+                        <button
+                          onClick={() => handleDuplicate(letter)}
+                          className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                        >
+                          <Copy className="w-4 h-4 text-slate-400" /> Duplicate
+                        </button>
+                        <div className="h-px bg-slate-100 my-1"></div>
+                        <button
+                          onClick={() => handleDelete(letter.draftKey)}
+                          className="w-full text-left px-4 py-2 text-[13px] text-red-600 hover:bg-red-50 flex items-center gap-2"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-400" /> Delete
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-4 ml-6">
+                  <Clock className="w-3 h-3" />
+                  <span>{formatDate(letter.lastModified)}</span>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-2">
+                  <Link 
+                    href={`/surat-generator/builder/${letter.slug}${letter.draftId ? `?id=${letter.draftId}` : ''}`}
+                    className="flex justify-center items-center py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 transition-colors text-white text-[13px] font-semibold border border-emerald-600"
+                  >
+                    Edit
+                  </Link>
+                  <button 
+                    onClick={() => handlePreview(letter)}
+                    className="flex justify-center items-center py-2.5 rounded-lg border border-emerald-500 hover:bg-emerald-50 transition-colors text-emerald-600 text-[13px] font-semibold"
+                  >
+                    Preview
+                  </button>
+                  <button 
+                    onClick={() => handleDownload(letter)}
+                    className="flex justify-center items-center py-2.5 rounded-lg border border-emerald-500 hover:bg-emerald-50 transition-colors text-emerald-600 text-[13px] font-semibold"
+                  >
+                    Download
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
             
-            {savedLetters.length > itemsPerPage && (
-              <div className="p-4 border-t border-slate-100 flex items-center justify-between bg-white">
+          {savedLetters.length > itemsPerPage && (
+            <div className="p-4 mt-2 border border-slate-200 md:border-t-0 flex items-center justify-between bg-white rounded-xl md:rounded-t-none md:rounded-b-xl shadow-sm">
                 <span className="text-xs text-slate-500">
                   Menampilkan {(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, savedLetters.length)} dari {savedLetters.length} draft
                 </span>
@@ -446,7 +525,6 @@ export default function SuratGeneratorPage() {
                 </div>
               </div>
             )}
-          </div>
         </div>
       )}
 
@@ -480,31 +558,26 @@ export default function SuratGeneratorPage() {
         </div>
       )}
 
-      {/* Preview Modal */}
+      {/* Preview Fullscreen Overlay */}
       {previewSlug && previewData && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 md:p-8">
-          <div className="bg-white rounded-2xl w-full max-w-4xl h-[90vh] flex flex-col overflow-hidden shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between p-4 border-b bg-slate-50 shrink-0">
-              <h3 className="font-bold text-slate-800">Preview Surat</h3>
-              <button 
-                onClick={() => { setPreviewSlug(null); setPreviewData(null); }}
-                className="w-8 h-8 rounded-full bg-white border flex items-center justify-center hover:bg-slate-100 transition-colors text-slate-500"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto bg-slate-200 flex flex-col items-center py-8">
-              {/* Scale container to make it look like an image preview */}
-              <div className="transform scale-[0.6] sm:scale-75 md:scale-90 origin-top shadow-xl">
-                <SuratCanvasRenderer 
-                  type={previewSlug}
-                  formData={previewData?.formData || {}}
-                  signatureData={previewData?.signatureData || null}
-                  berkasList={previewData?.berkasList || []}
-                />
-              </div>
-            </div>
+        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex flex-col items-center overflow-y-auto py-12 animate-in fade-in duration-200">
+          {/* Floating Close Button */}
+          <button 
+            onClick={() => { setPreviewSlug(null); setPreviewData(null); }}
+            className="fixed top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-colors text-white z-[110] shadow-xl"
+            title="Tutup Preview"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          
+          {/* Canvas Wrapper */}
+          <div className="transform scale-[0.55] sm:scale-75 md:scale-100 origin-top shadow-2xl transition-transform bg-white w-[210mm] min-h-[297mm]">
+            <SuratCanvasRenderer 
+              type={previewSlug}
+              formData={previewData?.formData || {}}
+              signatureData={previewData?.signatureData || null}
+              berkasList={previewData?.berkasList || []}
+            />
           </div>
         </div>
       )}
