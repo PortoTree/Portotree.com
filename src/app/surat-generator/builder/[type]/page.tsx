@@ -81,6 +81,39 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(`suratBuilder_${type}`);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.formData) setFormData(parsed.formData);
+        if (parsed.signatureData !== undefined) setSignatureData(parsed.signatureData);
+        if (parsed.berkasList) setBerkasList(parsed.berkasList);
+      }
+    } catch (e) {
+      console.error("Failed to load surat builder state", e);
+    } finally {
+      setIsLoaded(true);
+    }
+  }, [type]);
+
+  // Save to localStorage whenever data changes
+  useEffect(() => {
+    if (!isLoaded) return;
+    try {
+      localStorage.setItem(`suratBuilder_${type}`, JSON.stringify({
+        formData,
+        signatureData,
+        berkasList
+      }));
+    } catch (e) {
+      console.error("Failed to save surat builder state", e);
+    }
+  }, [formData, signatureData, berkasList, isLoaded, type]);
+
   const { showConfirm } = useUI();
 
   const addBerkas = () => {
