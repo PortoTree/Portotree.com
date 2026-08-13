@@ -50,7 +50,10 @@ export function InvoiceCanvas({ formData, signatureData }: InvoiceCanvasProps) {
   };
 
   return (
-    <div className="bg-white w-full max-w-[21cm] mx-auto min-h-[29.7cm] shadow-md print:shadow-none text-black font-['Arial',_sans-serif] leading-[1.5] flex flex-col relative overflow-hidden">
+    <div 
+      className="bg-white w-full max-w-[21cm] mx-auto min-h-[29.7cm] shadow-md print:shadow-none text-black font-['Arial',_sans-serif] leading-[1.5] flex flex-col relative overflow-hidden"
+      style={{ WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' } as React.CSSProperties}
+    >
       
       {/* Background Shapes */}
       <div className="absolute top-0 left-0 w-0 h-0 border-t-[100px] border-t-[#0b4393] border-r-[250px] border-r-transparent"></div>

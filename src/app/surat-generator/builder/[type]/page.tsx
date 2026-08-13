@@ -596,7 +596,7 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
                 <h2 className="font-bold text-sm uppercase text-gray-500">Pilih Template</h2>
                 <p className="text-xs text-gray-500 mt-1">Pilih desain template surat lamaran yang sesuai dengan kebutuhan Anda.</p>
               </div>
-              <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+              <div className="flex-1 overflow-y-auto p-4 pb-32 custom-scrollbar">
                 <div className="flex flex-col gap-6">
                   <div>
                     <h3 className="font-bold text-xs uppercase text-slate-500 mb-3 px-1">Surat Populer</h3>
