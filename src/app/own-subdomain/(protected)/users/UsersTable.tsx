@@ -119,9 +119,9 @@ export function UsersTable({ initialUsers }: { initialUsers: any[] }) {
                         <Mail className="w-3 h-3" />
                         {user.email}
                         {user.emailVerified ? (
-                          <CheckCircle2 className="w-3 h-3 text-emerald-500 ml-1" title="Email Terverifikasi" />
+                          <span title="Email Terverifikasi"><CheckCircle2 className="w-3 h-3 text-emerald-500 ml-1" /></span>
                         ) : (
-                          <ShieldAlert className="w-3 h-3 text-amber-500 ml-1" title="Email Belum Terverifikasi" />
+                          <span title="Email Belum Terverifikasi"><ShieldAlert className="w-3 h-3 text-amber-500 ml-1" /></span>
                         )}
                       </div>
                     </div>
