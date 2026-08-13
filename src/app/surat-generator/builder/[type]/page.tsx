@@ -9,9 +9,11 @@ import { useUI } from "@/components/ui/UIProvider";
 import { LamaranKerjaForm } from "@/components/surat/forms/LamaranKerjaForm";
 import { PengunduranDiriForm } from "@/components/surat/forms/PengunduranDiriForm";
 import { DaftarRiwayatHidupForm } from "@/components/surat/forms/DaftarRiwayatHidupForm";
+import { KeteranganSakitForm } from "@/components/surat/forms/KeteranganSakitForm";
 import { LamaranKerjaCanvas } from "@/components/surat/templates/LamaranKerjaCanvas";
 import { PengunduranDiriCanvas } from "@/components/surat/templates/PengunduranDiriCanvas";
 import { DaftarRiwayatHidupCanvas } from "@/components/surat/templates/DaftarRiwayatHidupCanvas";
+import { KeteranganSakitCanvas } from "@/components/surat/templates/KeteranganSakitCanvas";
 import { SuratViewer } from "@/components/surat/SuratViewer";
 
 export default function SuratBuilderPage({ params }: { params: Promise<{ type: string }> }) {
@@ -21,27 +23,114 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [activeTab, setActiveTab] = useState<'form' | 'template'>('form');
   
-  const templates = [
+  const populerTemplates = [
     {
-      id: 1,
+      id: "lamaran-pekerjaan",
       title: "Surat Lamaran Pekerjaan",
-      description: "Surat lamaran kerja profesional",
+      description: "Template lamaran kerja sesuai standar HR",
       slug: "lamaran-pekerjaan",
       icon: FileText,
     },
     {
-      id: 2,
+      id: "pengunduran-diri",
       title: "Surat Pengunduran Diri",
-      description: "Surat resign profesional",
+      description: "Template resign resmi dan profesional",
       slug: "pengunduran-diri",
-      icon: Mail,
+      icon: FileText,
     },
     {
-      id: 3,
-      title: "Daftar Riwayat Hidup",
-      description: "Riwayat hidup dalam format surat",
+      id: "daftar-riwayat-hidup",
+      title: "Surat Riwayat Hidup",
+      description: "Template CV formal untuk administrasi",
       slug: "daftar-riwayat-hidup",
-      icon: PenTool,
+      icon: FileText,
+    },
+    {
+      id: "keterangan-sakit",
+      title: "Surat Keterangan Sakit",
+      description: "Template surat sakit resmi",
+      slug: "keterangan-sakit",
+      icon: FileText,
+    },
+    {
+      id: "izin-kerja",
+      title: "Surat Izin Tidak Masuk Kerja",
+      description: "Template izin tidak masuk kerja",
+      slug: "izin-kerja",
+      icon: FileText,
+    },
+    {
+      id: "kuasa",
+      title: "Surat Kuasa",
+      description: "Template surat kuasa hukum resmi",
+      slug: "kuasa",
+      icon: FileText,
+    },
+  ];
+
+  const lainnyaTemplates = [
+    {
+      id: "magang",
+      title: "Surat Permohonan Magang Kerja",
+      description: "Template permohonan magang mahasiswa",
+      slug: "magang",
+      icon: FileText,
+    },
+    {
+      id: "kesanggupan",
+      title: "Surat Pernyataan Kesanggupan",
+      description: "Template pernyataan kesanggupan",
+      slug: "kesanggupan",
+      icon: FileText,
+    },
+    {
+      id: "izin-kuliah",
+      title: "Surat Izin Tidak Masuk Kuliah",
+      description: "Template izin tidak masuk kuliah",
+      slug: "izin-kuliah",
+      icon: FileText,
+    },
+    {
+      id: "izin-sekolah",
+      title: "Surat Izin Tidak Masuk Sekolah",
+      description: "Template izin tidak masuk sekolah",
+      slug: "izin-sekolah",
+      icon: FileText,
+    },
+    {
+      id: "pernyataan",
+      title: "Surat Pernyataan",
+      description: "Template surat pernyataan umum",
+      slug: "pernyataan",
+      icon: FileText,
+    },
+    {
+      id: "belum-menikah",
+      title: "Surat Pernyataan Belum Menikah",
+      description: "Template surat pernyataan status belum menikah",
+      slug: "belum-menikah",
+      icon: FileText,
+    },
+    {
+      id: "cuti",
+      title: "Surat Permohonan Izin Cuti Kerja",
+      description: "Template surat permohonan izin cuti kerja",
+      slug: "cuti",
+      icon: FileText,
+    },
+    {
+      id: "izin-ortu",
+      title: "Surat Izin Orang Tua",
+      description: "Template izin dari orang tua",
+      slug: "izin-ortu",
+      icon: FileText,
+    },
+    {
+      id: "invoice",
+      title: "Invoice",
+      description: "Template invoice profesional",
+      slug: "invoice",
+      icon: FileText,
     },
   ];
 
@@ -166,6 +255,16 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
         />
       );
     }
+    if (type === 'keterangan-sakit') {
+      return (
+        <KeteranganSakitForm
+          formData={formData} 
+          handleFormChange={handleFormChange} 
+          signatureData={signatureData} 
+          setSignatureData={setSignatureData} 
+        />
+      );
+    }
     return (
       <LamaranKerjaForm 
         formData={formData} 
@@ -192,6 +291,14 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
     if (type === 'daftar-riwayat-hidup') {
       return (
         <DaftarRiwayatHidupCanvas
+          formData={formData} 
+          signatureData={signatureData} 
+        />
+      );
+    }
+    if (type === 'keterangan-sakit') {
+      return (
+        <KeteranganSakitCanvas
           formData={formData} 
           signatureData={signatureData} 
         />
@@ -299,39 +406,82 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
                 <p className="text-xs text-gray-500 mt-1">Pilih desain template surat lamaran yang sesuai dengan kebutuhan Anda.</p>
               </div>
               <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
-                <div className="flex flex-col gap-3">
-                  {templates.map((template) => {
-                    const IconComponent = template.icon;
-                    return (
-                      <Link
-                        key={template.id}
-                        href={`/surat-generator/builder/${template.slug}`}
-                        className={`bg-white border rounded-[14px] p-4 flex flex-col shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group ${
-                          type === template.slug ? 'border-emerald-500 ring-1 ring-emerald-500/20' : 'border-slate-200/80 hover:border-emerald-200'
-                        }`}
-                        onClick={() => setActiveTab('form')}
-                      >
-                        {type === template.slug && (
-                          <div className="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">
-                            AKTIF
-                          </div>
-                        )}
-                        <div className="flex items-start gap-4">
-                          <div className={`w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 transition-colors ${
-                            type === template.slug ? 'bg-emerald-600' : 'bg-slate-100 group-hover:bg-emerald-500'
-                          }`}>
-                            <IconComponent className={`w-5 h-5 ${type === template.slug ? 'text-white' : 'text-slate-400 group-hover:text-white'}`} />
-                          </div>
-                          <div className="flex flex-col pt-0.5">
-                            <h3 className={`font-bold text-[14px] leading-snug mb-1 ${
-                              type === template.slug ? 'text-emerald-700' : 'text-slate-700 group-hover:text-emerald-700'
-                            }`}>{template.title}</h3>
-                            <p className="text-[12px] text-slate-500 leading-relaxed">{template.description}</p>
-                          </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
+                <div className="flex flex-col gap-6">
+                  <div>
+                    <h3 className="font-bold text-xs uppercase text-slate-500 mb-3 px-1">Surat Populer</h3>
+                    <div className="flex flex-col gap-3">
+                      {populerTemplates.map((template) => {
+                        const IconComponent = template.icon;
+                        return (
+                          <Link
+                            key={template.id}
+                            href={`/surat-generator/builder/${template.slug}`}
+                            className={`bg-white border rounded-[14px] p-4 flex flex-col shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group ${
+                              type === template.slug ? 'border-emerald-500 ring-1 ring-emerald-500/20' : 'border-slate-200/80 hover:border-emerald-200'
+                            }`}
+                            onClick={() => setActiveTab('form')}
+                          >
+                            {type === template.slug && (
+                              <div className="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">
+                                AKTIF
+                              </div>
+                            )}
+                            <div className="flex items-start gap-4">
+                              <div className={`w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 transition-colors ${
+                                type === template.slug ? 'bg-emerald-50' : 'bg-slate-50 group-hover:bg-emerald-50'
+                              }`}>
+                                <IconComponent className={`w-5 h-5 ${type === template.slug ? 'text-emerald-500' : 'text-slate-700 group-hover:text-emerald-500'}`} />
+                              </div>
+                              <div className="flex flex-col pt-0.5">
+                                <h3 className={`font-bold text-[14px] leading-snug mb-1 ${
+                                  type === template.slug ? 'text-emerald-700' : 'text-slate-700 group-hover:text-emerald-700'
+                                }`}>{template.title}</h3>
+                                <p className="text-[12px] text-slate-500 leading-relaxed">{template.description}</p>
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-xs uppercase text-slate-500 mb-3 px-1">Surat Lainnya</h3>
+                    <div className="flex flex-col gap-3">
+                      {lainnyaTemplates.map((template) => {
+                        const IconComponent = template.icon;
+                        return (
+                          <Link
+                            key={template.id}
+                            href={`/surat-generator/builder/${template.slug}`}
+                            className={`bg-white border rounded-[14px] p-4 flex flex-col shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group ${
+                              type === template.slug ? 'border-emerald-500 ring-1 ring-emerald-500/20' : 'border-slate-200/80 hover:border-emerald-200'
+                            }`}
+                            onClick={() => setActiveTab('form')}
+                          >
+                            {type === template.slug && (
+                              <div className="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">
+                                AKTIF
+                              </div>
+                            )}
+                            <div className="flex items-start gap-4">
+                              <div className={`w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 transition-colors ${
+                                type === template.slug ? 'bg-emerald-50' : 'bg-slate-50 group-hover:bg-emerald-50'
+                              }`}>
+                                <IconComponent className={`w-5 h-5 ${type === template.slug ? 'text-emerald-500' : 'text-slate-700 group-hover:text-emerald-500'}`} />
+                              </div>
+                              <div className="flex flex-col pt-0.5">
+                                <h3 className={`font-bold text-[14px] leading-snug mb-1 ${
+                                  type === template.slug ? 'text-emerald-700' : 'text-slate-700 group-hover:text-emerald-700'
+                                }`}>{template.title}</h3>
+                                <p className="text-[12px] text-slate-500 leading-relaxed">{template.description}</p>
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -64,7 +64,7 @@ export function DaftarRiwayatHidupForm({
           className={`w-full flex items-center justify-between p-4 transition-colors ${expandedSection === 'biodata' ? 'bg-emerald-600' : 'bg-slate-50/50 hover:bg-slate-50 border-b border-slate-100'}`}
         >
           <div className="flex items-center gap-3">
-            <span className={`font-bold text-lg ${expandedSection === 'biodata' ? 'text-white' : 'text-blue-500'}`}>#</span>
+            <User className={`w-4 h-4 ${expandedSection === 'biodata' ? 'text-white' : 'text-emerald-500'}`} />
             <span className={`font-bold text-[15px] ${expandedSection === 'biodata' ? 'text-white' : 'text-slate-700'}`}>Biodata Diri</span>
           </div>
           <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expandedSection === 'biodata' ? 'text-white rotate-180' : 'text-slate-400'}`} />
@@ -177,7 +177,7 @@ export function DaftarRiwayatHidupForm({
           className={`w-full flex items-center justify-between p-4 transition-colors ${expandedSection === 'formal' ? 'bg-emerald-600' : 'hover:bg-slate-50 border-b border-slate-100'}`}
         >
           <div className="flex items-center gap-3">
-            <span className={`font-bold text-lg ${expandedSection === 'formal' ? 'text-white' : 'text-blue-500'}`}>#</span>
+            <GraduationCap className={`w-4 h-4 ${expandedSection === 'formal' ? 'text-white' : 'text-emerald-500'}`} />
             <span className={`font-bold text-[15px] ${expandedSection === 'formal' ? 'text-white' : 'text-slate-700'}`}>Pendidikan Formal</span>
           </div>
           <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expandedSection === 'formal' ? 'text-white rotate-180' : 'text-slate-400'}`} />
@@ -226,7 +226,7 @@ export function DaftarRiwayatHidupForm({
           className={`w-full flex items-center justify-between p-4 transition-colors ${expandedSection === 'nonformal' ? 'bg-emerald-600' : 'hover:bg-slate-50 border-b border-slate-100'}`}
         >
           <div className="flex items-center gap-3">
-            <span className={`font-bold text-lg ${expandedSection === 'nonformal' ? 'text-white' : 'text-blue-500'}`}>#</span>
+            <Award className={`w-4 h-4 ${expandedSection === 'nonformal' ? 'text-white' : 'text-emerald-500'}`} />
             <span className={`font-bold text-[15px] ${expandedSection === 'nonformal' ? 'text-white' : 'text-slate-700'}`}>Pendidikan Nonformal</span>
           </div>
           <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expandedSection === 'nonformal' ? 'text-white rotate-180' : 'text-slate-400'}`} />
@@ -275,7 +275,7 @@ export function DaftarRiwayatHidupForm({
           className={`w-full flex items-center justify-between p-4 transition-colors ${expandedSection === 'pengalaman' ? 'bg-emerald-600' : 'hover:bg-slate-50 border-b border-slate-100'}`}
         >
           <div className="flex items-center gap-3">
-            <Briefcase className={`w-4 h-4 ${expandedSection === 'pengalaman' ? 'text-white' : 'text-blue-500'}`} />
+            <Briefcase className={`w-4 h-4 ${expandedSection === 'pengalaman' ? 'text-white' : 'text-emerald-500'}`} />
             <span className={`font-bold text-[15px] ${expandedSection === 'pengalaman' ? 'text-white' : 'text-slate-700'}`}>Pengalaman Kerja</span>
           </div>
           <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expandedSection === 'pengalaman' ? 'text-white rotate-180' : 'text-slate-400'}`} />
@@ -324,7 +324,7 @@ export function DaftarRiwayatHidupForm({
           className={`w-full flex items-center justify-between p-4 transition-colors ${expandedSection === 'organisasi' ? 'bg-emerald-600' : 'hover:bg-slate-50 border-b border-slate-100'}`}
         >
           <div className="flex items-center gap-3">
-            <span className={`font-bold text-lg ${expandedSection === 'organisasi' ? 'text-white' : 'text-blue-500'}`}>#</span>
+            <Users className={`w-4 h-4 ${expandedSection === 'organisasi' ? 'text-white' : 'text-emerald-500'}`} />
             <span className={`font-bold text-[15px] ${expandedSection === 'organisasi' ? 'text-white' : 'text-slate-700'}`}>Riwayat Organisasi</span>
           </div>
           <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expandedSection === 'organisasi' ? 'text-white rotate-180' : 'text-slate-400'}`} />
