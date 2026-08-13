@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { usePagination } from '@/components/cv-builder/usePagination';
+import { useSuratPagination } from './useSuratPagination';
 import { ZoomIn, ZoomOut, Maximize } from 'lucide-react';
 
 interface SuratViewerProps {
@@ -9,7 +9,7 @@ interface SuratViewerProps {
 }
 
 export function SuratViewer({ children, showMobilePreview, dependency }: SuratViewerProps) {
-  const { pages } = usePagination([dependency]);
+  const { pages, forceRepaginate } = useSuratPagination([dependency]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [defaultScale, setDefaultScale] = useState(1);
@@ -71,7 +71,7 @@ export function SuratViewer({ children, showMobilePreview, dependency }: SuratVi
         className="fixed top-0 left-0 opacity-0 pointer-events-none print:hidden z-[-50]" 
         style={{ width: '210mm' }}
       >
-        <div id="cv-content-measurer" className="bg-white min-h-[297mm] flex flex-col">
+        <div id="cv-content-measurer" className="bg-white min-h-[297mm] flex flex-col" style={{ minWidth: '210mm' }}>
           {children}
         </div>
       </div>

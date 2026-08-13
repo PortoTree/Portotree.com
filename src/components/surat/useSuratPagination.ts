@@ -3,31 +3,32 @@ import { useEffect, useState, useCallback } from 'react';
 // A4 height in pixels at standard 96 DPI (297mm = 1122.52px)
 const A4_HEIGHT_PX = 1122.5;
 
-export function usePagination(dependencies: any[]) {
+export function useSuratPagination(dependencies: any[]) {
   const [pages, setPages] = useState<number>(1);
   const [isPaginating, setIsPaginating] = useState(true);
 
   const runPagination = useCallback(() => {
     setIsPaginating(true);
     
-    // The master measurer container
-    const measurer = document.getElementById('cv-content-measurer');
-    if (!measurer) return;
-
-    // 1. Reset all previously added pagination margins in the measurer
-    const measurerElements = measurer.querySelectorAll('.break-inside-avoid');
-    measurerElements.forEach((el: any) => {
-      el.style.marginTop = '0px';
-    });
-    
-    // Also reset any margin on section containers
-    const sections = measurer.querySelectorAll('.cv-section');
-    sections.forEach((section: any) => {
-      section.style.marginTop = '0px';
-    });
-
-    // Allow DOM to update
+    // Use a small timeout to ensure DOM is fully updated before measuring
     setTimeout(() => {
+      const measurer = document.getElementById('cv-content-measurer');
+      if (!measurer) {
+        setIsPaginating(false);
+        return;
+      }
+
+      // Ensure A4 ratio is perfectly maintained regardless of mobile viewport scaling
+      // A4 ratio is exactly 297 / 210.
+      const actualWidth = measurer.getBoundingClientRect().width;
+      const PAGE_HEIGHT = actualWidth * (297 / 210);
+      
+      // 1. Reset all previously applied margins
+      const measurerElements = measurer.querySelectorAll('.break-inside-avoid, .cv-section');
+      measurerElements.forEach((el: any) => {
+        el.style.marginTop = '0px';
+      });
+
       const pushes: { el: any; pushAmount: number }[] = [];
       const measurerRect = measurer.getBoundingClientRect();
       
@@ -65,13 +66,13 @@ export function usePagination(dependencies: any[]) {
         const relativeBottom = relativeTop + rectToMeasure.height;
 
         // Which page does this element start and end on?
-        const startPage = Math.floor(relativeTop / A4_HEIGHT_PX) + 1;
-        const endPage = Math.floor(relativeBottom / A4_HEIGHT_PX) + 1;
+        const startPage = Math.floor((relativeTop + 1) / PAGE_HEIGHT); // page index (0-based) where element starts
+        const endPage = Math.floor((relativeBottom - 1) / PAGE_HEIGHT); // page index where element ends
 
         // If it crosses a page boundary, push it down to the next page
         if (endPage > startPage) {
           // Calculate how much margin we need to push it to the exact start of the next page
-          const nextPageTop = startPage * A4_HEIGHT_PX;
+          const nextPageTop = (startPage + 1) * PAGE_HEIGHT;
           const pushAmount = nextPageTop - relativeTop;
           
           // Add 20px buffer so it doesn't touch the exact edge
@@ -89,13 +90,10 @@ export function usePagination(dependencies: any[]) {
 
       // After pushing elements, recalculate total height to determine number of pages
       const newTotalHeight = measurer.getBoundingClientRect().height;
-      const newPageCount = Math.max(1, Math.ceil(newTotalHeight / A4_HEIGHT_PX));
+      const newPageCount = Math.max(1, Math.ceil(newTotalHeight / PAGE_HEIGHT));
       
       setPages(newPageCount);
 
-      // Now apply these exact same pushes to ALL visual/print instances of the CV
-      // We can't rely on array index anymore since elToPush might be a section OR an item.
-      // Instead, we assign a unique data-id to the elements in the measurer, 
       // then find the corresponding element in the clones and apply the margin.
       
       let pushIdCounter = 0;
