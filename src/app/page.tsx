@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -28,7 +28,7 @@ import {
 
 const FEATURES_DATA = [
   { icon: Layout, title: "Sistem Data-Driven", desc: "Konten dan desain terpisah secara cerdas. Anda cukup fokus mengisi data profil, lalu sistem akan otomatis menyusunnya ke berbagai pilihan template tanpa perlu mendesain dari nol." },
-  { icon: Globe, title: "Link Simple & Profesional", desc: "Dapatkan link cantik yang mudah diingat (contoh: portotree.com/w/nama untuk portofolio pekerja, dan portotree.com/c/nama untuk profil bisnis/perusahaan)." },
+  { icon: Globe, title: "Link Simple & Profesional", desc: "Dapatkan link portofolio profesional yang mudah diingat dan dibagikan (contoh: portotree.com/p/username)." },
   { icon: FileText, title: "ATS Friendly Resume", desc: "Generator CV yang dioptimalkan untuk lolos seleksi sistem ATS HRD." },
   { icon: Zap, title: "Super Cepat", desc: "Infrastruktur modern menjamin halaman Anda dimuat dalam hitungan detik." },
   { icon: ShieldCheck, title: "Aman & Terpercaya", desc: "Data Anda dienkripsi dan kami menyediakan SSL gratis untuk setiap halaman." },
@@ -36,6 +36,31 @@ const FEATURES_DATA = [
 ];
 
 export default function Home() {
+  const words = ["Identitas", "Karier", "Karya"];
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [wordIndex, setWordIndex] = useState(0);
+
+  useEffect(() => {
+    const currentWord = words[wordIndex % words.length];
+    
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        setDisplayText(currentWord.substring(0, displayText.length + 1));
+        if (displayText.length === currentWord.length) {
+          setTimeout(() => setIsDeleting(true), 1500); // pause at full word
+        }
+      } else {
+        setDisplayText(currentWord.substring(0, displayText.length - 1));
+        if (displayText.length === 0) {
+          setIsDeleting(false);
+          setWordIndex((prev) => prev + 1);
+        }
+      }
+    }, isDeleting ? 40 : 80);
+
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, wordIndex]);
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 overflow-x-hidden">
@@ -65,11 +90,19 @@ export default function Home() {
                   Platform Identitas Digital
                 </div>
                 
-                <h1 className="text-[2.5rem] leading-[1.15] sm:text-5xl lg:text-[3.25rem] xl:text-6xl font-extrabold tracking-tight text-gray-900 mb-5 lg:mb-6 lg:leading-[1.1]">
-                  <span className="lg:whitespace-nowrap">Satu Platform untuk</span> <br className="hidden lg:block" />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600">
-                    Semua Identitas Digital Anda
+                <h1 className="text-[2.5rem] leading-[1.15] sm:text-5xl lg:text-[3.25rem] xl:text-6xl font-extrabold tracking-tight mb-5 lg:mb-6 flex flex-col">
+                  <span className="lg:whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600">Satu platform untuk</span>
+                  <span className="py-1 md:py-2 flex items-center min-h-[1.2em]">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500 pb-2">
+                      {displayText}
+                    </span>
+                    <motion.span 
+                      animate={{ opacity: [1, 0] }} 
+                      transition={{ repeat: Infinity, duration: 0.8 }}
+                      className="inline-block w-1 md:w-1.5 h-[1em] bg-orange-500 ml-1.5 md:ml-2 mb-2"
+                    />
                   </span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600">Digital anda</span>
                 </h1>
                 
                 <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-lg leading-relaxed">
@@ -112,6 +145,34 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+
+        {/* 7. HOW IT WORKS */}
+        <section className="py-16 md:py-24 bg-slate-50 border-t border-gray-200">
+          <div className="max-w-7xl mx-auto px-6 md:px-8 text-center">
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-10 md:mb-16 leading-tight">Tampil Online dalam 3 Langkah</h2>
+            
+            <div className="grid md:grid-cols-3 gap-10 md:gap-12 relative">
+              {/* Connector line for desktop */}
+              <div className="hidden md:block absolute top-12 left-[15%] right-[15%] h-0.5 bg-green-200 -z-10"></div>
+              
+              {[
+                { step: "1", title: "Daftar & Pilih Jalur", desc: "Buat akun gratis dan mulailah membuat karya melalui fitur/produk kami." },
+                { step: "2", title: "Sesuaikan Desain", desc: "Pilih template dasar lalu isi data lengkap pada form yang di sediakan, secara otomatis akan terisi di template portofolio anda." },
+                { step: "3", title: "Publikasi ke Dunia", desc: "Copy link yang tersedia atau custom domain anda, lalu bagikan link ke semua orang!" },
+              ].map((item, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <div className="w-24 h-24 rounded-full bg-green-600 text-white flex items-center justify-center text-3xl font-black mb-8 shadow-xl shadow-green-600/20 ring-8 ring-green-50">
+                    {item.step}
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">{item.title}</h3>
+                  <p className="text-gray-600 leading-relaxed max-w-sm">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
 
 
         {/* 3. OUR PRODUCTS */}
@@ -311,67 +372,6 @@ export default function Home() {
         </section>
 
 
-        {/* 7. HOW IT WORKS */}
-        <section className="py-16 md:py-24 bg-slate-50 border-t border-gray-200">
-          <div className="max-w-7xl mx-auto px-6 md:px-8 text-center">
-            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-10 md:mb-16 leading-tight">Tampil Online dalam 3 Langkah</h2>
-            
-            <div className="grid md:grid-cols-3 gap-10 md:gap-12 relative">
-              {/* Connector line for desktop */}
-              <div className="hidden md:block absolute top-12 left-[15%] right-[15%] h-0.5 bg-green-200 -z-10"></div>
-              
-              {[
-                { step: "1", title: "Daftar & Pilih Jalur", desc: "Buat akun gratis dan pilih apakah Anda ingin membuat Profil Personal atau Profil Perusahaan." },
-                { step: "2", title: "Sesuaikan Desain", desc: "Pilih template dasar lalu klik langsung di layar (live edit) untuk mengubah isi konten, warna, dan desain sesuka Anda." },
-                { step: "3", title: "Publikasi ke Dunia", desc: "Copy link yang tersedia atau custom domain anda, lalu bagikan link ke semua orang!" },
-              ].map((item, i) => (
-                <div key={i} className="flex flex-col items-center">
-                  <div className="w-24 h-24 rounded-full bg-green-600 text-white flex items-center justify-center text-3xl font-black mb-8 shadow-xl shadow-green-600/20 ring-8 ring-green-50">
-                    {item.step}
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">{item.title}</h3>
-                  <p className="text-gray-600 leading-relaxed max-w-sm">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* 8. ROADMAP */}
-        <section className="py-16 md:py-24 bg-white">
-          <div className="max-w-4xl mx-auto px-6 md:px-8">
-            <div className="text-center mb-10 md:mb-16">
-              <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4">Roadmap Kami</h2>
-              <p className="text-lg text-gray-600">
-                Kami terus berkembang. Berikut adalah rencana pembaruan fitur PortoTree di masa mendatang.
-              </p>
-            </div>
-            
-            <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
-              {[
-                { icon: "🌱", title: "Portfolio Builder", status: "LIVE", active: true },
-                { icon: "🌳", title: "Advanced Analytics", status: "Coming Soon", active: false },
-                { icon: "🌲", title: "Premium Templates", status: "Coming Soon", active: false },
-                { icon: "🌲", title: "Custom Integrations", status: "Coming Soon", active: false },
-              ].map((item, i) => (
-                <div key={i} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                  <div className={`flex items-center justify-center w-10 h-10 rounded-full border-4 border-white shadow shrink-0 z-10 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 ${item.active ? 'bg-green-100' : 'bg-slate-100'}`}>
-                    <span className="text-lg">{item.icon}</span>
-                  </div>
-                  <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-xl font-bold text-gray-900">{item.title}</h4>
-                      <span className={`text-xs font-bold px-3 py-1 rounded-full ${item.active ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600'}`}>
-                        {item.status}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* 9. CTA */}
         <section className="pt-16 pb-24 md:pt-20 bg-slate-50 border-t border-border/40">
           <div className="w-full max-w-4xl mx-auto px-6 md:px-8">
@@ -384,7 +384,7 @@ export default function Home() {
               </p>
             </div>
             
-            <div className="grid sm:grid-cols-2 gap-6 md:gap-8 max-w-3xl mx-auto">
+            <div className="grid sm:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
               <a 
                 href={getSubdomainUrl('portofolio')} 
                 className="group flex flex-row sm:flex-col items-center justify-start sm:justify-center p-6 sm:py-12 sm:px-8 rounded-3xl border border-green-600 bg-white text-green-600 hover:bg-green-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
@@ -406,6 +406,18 @@ export default function Home() {
                 </div>
                 <span className="font-bold text-xl sm:text-2xl text-left sm:text-center">
                   Buat CV
+                </span>
+              </a>
+
+              <a 
+                href={getSubdomainUrl('surat')} 
+                className="group flex flex-row sm:flex-col items-center justify-start sm:justify-center p-6 sm:py-12 sm:px-8 rounded-3xl border border-amber-600 bg-white text-amber-600 hover:bg-amber-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
+              >
+                <div className="shrink-0 w-16 h-16 sm:w-24 sm:h-24 bg-amber-100/80 group-hover:bg-white/20 text-amber-600 group-hover:text-white rounded-full flex items-center justify-center mr-4 sm:mr-0 mb-0 sm:mb-6 group-hover:scale-110 transition-all duration-300">
+                  <Mail className="w-8 h-8 sm:w-12 sm:h-12" strokeWidth={1.5} />
+                </div>
+                <span className="font-bold text-xl sm:text-2xl text-left sm:text-center">
+                  Buat Surat
                 </span>
               </a>
             </div>

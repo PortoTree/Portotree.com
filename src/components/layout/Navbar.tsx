@@ -122,13 +122,19 @@ export function Navbar() {
     return () => unsubscribe();
   }, []);
 
-  const { data: swrData } = useSWR(isLoggedIn ? 'my-portfolio-navbar' : null, fetcher, {
+  // Always fetch session state from server to sync cross-subdomain auth
+  const { data: swrData } = useSWR('my-portfolio-navbar', fetcher, {
     dedupingInterval: 5 * 60 * 1000
   });
 
   useEffect(() => {
-    if (swrData?.data?.personal?.photoUrl) {
-      setPhotoUrl(swrData.data.personal.photoUrl);
+    if (swrData) {
+      if (swrData.success) {
+        setIsLoggedIn(true);
+        if (swrData.data?.personal?.photoUrl) {
+          setPhotoUrl(swrData.data.personal.photoUrl);
+        }
+      }
     }
   }, [swrData]);
 
