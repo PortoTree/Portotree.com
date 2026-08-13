@@ -442,8 +442,8 @@ export default function SuratBuilderPage({ params }: { params: { type: string } 
                     <p className="mb-4">Hormat Saya,</p>
                     
                     {signatureData ? (
-                      <div className="mb-1 w-28 h-16 mx-auto flex items-center justify-center -rotate-2">
-                        <img src={signatureData} alt="Tanda Tangan" className="max-w-full max-h-full object-contain" />
+                      <div className="mb-1 w-40 h-24 mx-auto flex items-center justify-center -rotate-2">
+                        <img src={signatureData} alt="Tanda Tangan" className="max-w-full max-h-full object-contain scale-110" />
                       </div>
                     ) : (
                       <p className="font-['Brush_Script_MT',cursive] text-4xl mb-4 transform -rotate-2 text-slate-300 opacity-90">
