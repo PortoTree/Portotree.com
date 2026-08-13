@@ -13,6 +13,14 @@ import { KeteranganSakitForm } from "@/components/surat/forms/KeteranganSakitFor
 import { IzinKerjaForm } from "@/components/surat/forms/IzinKerjaForm";
 import { KuasaForm } from "@/components/surat/forms/KuasaForm";
 import { MagangForm } from "@/components/surat/forms/MagangForm";
+import { KesanggupanForm } from "@/components/surat/forms/KesanggupanForm";
+import { PernyataanForm } from "@/components/surat/forms/PernyataanForm";
+import { IzinKuliahForm } from "@/components/surat/forms/IzinKuliahForm";
+import { IzinSekolahForm } from "@/components/surat/forms/IzinSekolahForm";
+import { PernyataanBelumMenikahForm } from "@/components/surat/forms/PernyataanBelumMenikahForm";
+import { CutiForm } from "@/components/surat/forms/CutiForm";
+import { IzinOrtuForm } from "@/components/surat/forms/IzinOrtuForm";
+import { InvoiceForm } from "@/components/surat/forms/InvoiceForm";
 import { LamaranKerjaCanvas } from "@/components/surat/templates/LamaranKerjaCanvas";
 import { PengunduranDiriCanvas } from "@/components/surat/templates/PengunduranDiriCanvas";
 import { DaftarRiwayatHidupCanvas } from "@/components/surat/templates/DaftarRiwayatHidupCanvas";
@@ -20,7 +28,36 @@ import { KeteranganSakitCanvas } from "@/components/surat/templates/KeteranganSa
 import { IzinKerjaCanvas } from "@/components/surat/templates/IzinKerjaCanvas";
 import { KuasaCanvas } from "@/components/surat/templates/KuasaCanvas";
 import { MagangCanvas } from "@/components/surat/templates/MagangCanvas";
+import { KesanggupanCanvas } from "@/components/surat/templates/KesanggupanCanvas";
+import { PernyataanCanvas } from "@/components/surat/templates/PernyataanCanvas";
+import { IzinKuliahCanvas } from "@/components/surat/templates/IzinKuliahCanvas";
+import { IzinSekolahCanvas } from "@/components/surat/templates/IzinSekolahCanvas";
+import { PernyataanBelumMenikahCanvas } from "@/components/surat/templates/PernyataanBelumMenikahCanvas";
+import { CutiCanvas } from "@/components/surat/templates/CutiCanvas";
+import { IzinOrtuCanvas } from "@/components/surat/templates/IzinOrtuCanvas";
+import { InvoiceCanvas } from "@/components/surat/templates/InvoiceCanvas";
 import { SuratViewer } from "@/components/surat/SuratViewer";
+
+const formMapping: Record<string, string> = {
+  "lamaran-kerja": "Surat Lamaran Kerja",
+  "pengunduran-diri": "Surat Pengunduran Diri",
+  "daftar-riwayat-hidup": "Daftar Riwayat Hidup (CV)",
+  "keterangan-sakit": "Surat Keterangan Sakit",
+  "izin-kerja": "Surat Izin Kerja",
+  "kuasa": "Surat Kuasa",
+  "keterangan-domisili": "Surat Keterangan Domisili",
+  "keterangan-kerja": "Surat Keterangan Kerja",
+  "pernyataan": "Surat Pernyataan",
+  "perjanjian": "Surat Perjanjian",
+  "magang": "Surat Permohonan Magang",
+  "kesanggupan": "Surat Pernyataan Kesanggupan",
+  "izin-kuliah": "Surat Izin Tidak Masuk Kuliah",
+  "izin-sekolah": "Surat Izin Tidak Masuk Sekolah",
+  "belum-menikah": "Surat Pernyataan Belum Menikah",
+  "cuti": "Surat Permohonan Izin Cuti Kerja",
+  "izin-ortu": "Surat Izin Orang Tua",
+  "invoice": "Invoice"
+};
 
 export default function SuratBuilderPage({ params }: { params: Promise<{ type: string }> }) {
   const resolvedParams = use(params);
@@ -241,141 +278,225 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
   };
 
   const renderFormContent = () => {
-    if (type === 'pengunduran-diri') {
-      return (
-        <PengunduranDiriForm 
-          formData={formData} 
-          handleFormChange={handleFormChange} 
-          signatureData={signatureData} 
-          setSignatureData={setSignatureData} 
-        />
-      );
+    switch (type) {
+      case 'pengunduran-diri':
+        return (
+          <PengunduranDiriForm 
+            formData={formData} 
+            handleFormChange={handleFormChange} 
+            signatureData={signatureData} 
+            setSignatureData={setSignatureData} 
+          />
+        );
+      case 'daftar-riwayat-hidup':
+        return (
+          <DaftarRiwayatHidupForm
+            formData={formData} 
+            handleFormChange={handleFormChange} 
+            signatureData={signatureData} 
+            setSignatureData={setSignatureData} 
+          />
+        );
+      case 'keterangan-sakit':
+        return (
+          <KeteranganSakitForm
+            formData={formData} 
+            handleFormChange={handleFormChange} 
+            signatureData={signatureData} 
+            setSignatureData={setSignatureData} 
+          />
+        );
+      case 'izin-kerja':
+        return (
+          <IzinKerjaForm
+            formData={formData} 
+            handleFormChange={handleFormChange} 
+            signatureData={signatureData} 
+            setSignatureData={setSignatureData} 
+          />
+        );
+      case 'kuasa':
+        return (
+          <KuasaForm
+            formData={formData} 
+            handleFormChange={handleFormChange} 
+            signatureData={signatureData} 
+            setSignatureData={setSignatureData} 
+          />
+        );
+      case "magang":
+        return (
+          <MagangForm
+            formData={formData}
+            handleFormChange={handleFormChange}
+            signatureData={signatureData}
+            setSignatureData={setSignatureData}
+            berkasList={berkasList}
+            addBerkas={addBerkas}
+            updateBerkas={updateBerkas}
+            removeBerkas={removeBerkas}
+          />
+        );
+      case "pernyataan":
+        return (
+          <PernyataanForm
+            formData={formData}
+            handleFormChange={handleFormChange}
+            signatureData={signatureData}
+            setSignatureData={setSignatureData}
+            pernyataanList={berkasList}
+            addPernyataan={addBerkas}
+            updatePernyataan={updateBerkas}
+            removePernyataan={removeBerkas}
+          />
+        );
+      case "kesanggupan":
+        return (
+          <KesanggupanForm
+            formData={formData}
+            handleFormChange={handleFormChange}
+            signatureData={signatureData}
+            setSignatureData={setSignatureData}
+            pernyataanList={berkasList}
+            addPernyataan={addBerkas}
+            updatePernyataan={updateBerkas}
+            removePernyataan={removeBerkas}
+          />
+        );
+      case "izin-kuliah":
+        return (
+          <IzinKuliahForm
+            formData={formData}
+            handleFormChange={handleFormChange}
+            signatureData={signatureData}
+            setSignatureData={setSignatureData}
+          />
+        );
+      case "izin-sekolah":
+        return (
+          <IzinSekolahForm
+            formData={formData}
+            handleFormChange={handleFormChange}
+            signatureData={signatureData}
+            setSignatureData={setSignatureData}
+          />
+        );
+      case "belum-menikah":
+        return (
+          <PernyataanBelumMenikahForm
+            formData={formData}
+            handleFormChange={handleFormChange}
+            signatureData={signatureData}
+            setSignatureData={setSignatureData}
+          />
+        );
+      case "cuti":
+        return (
+          <CutiForm
+            formData={formData}
+            handleFormChange={handleFormChange}
+            signatureData={signatureData}
+            setSignatureData={setSignatureData}
+          />
+        );
+      case "izin-ortu":
+        return (
+          <IzinOrtuForm
+            formData={formData}
+            handleFormChange={handleFormChange}
+            signatureData={signatureData}
+            setSignatureData={setSignatureData}
+          />
+        );
+      case "invoice":
+        return (
+          <InvoiceForm
+            formData={formData}
+            handleFormChange={handleFormChange}
+            signatureData={signatureData}
+            setSignatureData={setSignatureData}
+          />
+        );
+      default:
+        return (
+          <LamaranKerjaForm 
+            formData={formData} 
+            handleFormChange={handleFormChange} 
+            signatureData={signatureData} 
+            setSignatureData={setSignatureData} 
+            berkasList={berkasList} 
+            updateBerkas={updateBerkas} 
+            removeBerkas={removeBerkas} 
+            addBerkas={addBerkas} 
+          />
+        );
     }
-    if (type === 'daftar-riwayat-hidup') {
-      return (
-        <DaftarRiwayatHidupForm
-          formData={formData} 
-          handleFormChange={handleFormChange} 
-          signatureData={signatureData} 
-          setSignatureData={setSignatureData} 
-        />
-      );
-    }
-    if (type === 'keterangan-sakit') {
-      return (
-        <KeteranganSakitForm
-          formData={formData} 
-          handleFormChange={handleFormChange} 
-          signatureData={signatureData} 
-          setSignatureData={setSignatureData} 
-        />
-      );
-    }
-    if (type === 'izin-kerja') {
-      return (
-        <IzinKerjaForm
-          formData={formData} 
-          handleFormChange={handleFormChange} 
-          signatureData={signatureData} 
-          setSignatureData={setSignatureData} 
-        />
-      );
-    }
-    if (type === 'kuasa') {
-      return (
-        <KuasaForm
-          formData={formData} 
-          handleFormChange={handleFormChange} 
-          signatureData={signatureData} 
-          setSignatureData={setSignatureData} 
-        />
-      );
-    }
-    if (type === 'magang') {
-      return (
-        <MagangForm
-          formData={formData} 
-          handleFormChange={handleFormChange} 
-          signatureData={signatureData} 
-          setSignatureData={setSignatureData} 
-          berkasList={berkasList} 
-          addBerkas={addBerkas} 
-          updateBerkas={updateBerkas} 
-          removeBerkas={removeBerkas} 
-        />
-      );
-    }
-    return (
-      <LamaranKerjaForm 
-        formData={formData} 
-        handleFormChange={handleFormChange} 
-        signatureData={signatureData} 
-        setSignatureData={setSignatureData} 
-        berkasList={berkasList} 
-        updateBerkas={updateBerkas} 
-        removeBerkas={removeBerkas} 
-        addBerkas={addBerkas} 
-      />
-    );
   };
 
   const renderCanvasContent = () => {
-    if (type === 'pengunduran-diri') {
-      return (
-        <PengunduranDiriCanvas 
-          formData={formData} 
-          signatureData={signatureData} 
-        />
-      );
+    switch (type) {
+      case 'pengunduran-diri':
+        return (
+          <PengunduranDiriCanvas 
+            formData={formData} 
+            signatureData={signatureData} 
+          />
+        );
+      case 'daftar-riwayat-hidup':
+        return (
+          <DaftarRiwayatHidupCanvas
+            formData={formData} 
+            signatureData={signatureData} 
+          />
+        );
+      case 'keterangan-sakit':
+        return (
+          <KeteranganSakitCanvas
+            formData={formData} 
+            signatureData={signatureData} 
+          />
+        );
+      case 'izin-kerja':
+        return (
+          <IzinKerjaCanvas
+            formData={formData} 
+            signatureData={signatureData} 
+          />
+        );
+      case 'kuasa':
+        return (
+          <KuasaCanvas
+            formData={formData} 
+            signatureData={signatureData} 
+          />
+        );
+      case "magang":
+        return <MagangCanvas formData={formData} signatureData={signatureData} berkasList={berkasList} />;
+      case "pernyataan":
+        return <PernyataanCanvas formData={formData} signatureData={signatureData} pernyataanList={berkasList} />;
+      case "kesanggupan":
+        return <KesanggupanCanvas formData={formData} signatureData={signatureData} pernyataanList={berkasList} />;
+      case "izin-kuliah":
+        return <IzinKuliahCanvas formData={formData} signatureData={signatureData} />;
+      case "izin-sekolah":
+        return <IzinSekolahCanvas formData={formData} signatureData={signatureData} />;
+      case "belum-menikah":
+        return <PernyataanBelumMenikahCanvas formData={formData} signatureData={signatureData} />;
+      case "cuti":
+        return <CutiCanvas formData={formData} signatureData={signatureData} />;
+      case "izin-ortu":
+        return <IzinOrtuCanvas formData={formData} signatureData={signatureData} />;
+      case "invoice":
+        return <InvoiceCanvas formData={formData} signatureData={signatureData} />;
+      default:
+        return (
+          <LamaranKerjaCanvas 
+            formData={formData} 
+            signatureData={signatureData} 
+            berkasList={berkasList} 
+          />
+        );
     }
-    if (type === 'daftar-riwayat-hidup') {
-      return (
-        <DaftarRiwayatHidupCanvas
-          formData={formData} 
-          signatureData={signatureData} 
-        />
-      );
-    }
-    if (type === 'keterangan-sakit') {
-      return (
-        <KeteranganSakitCanvas
-          formData={formData} 
-          signatureData={signatureData} 
-        />
-      );
-    }
-    if (type === 'izin-kerja') {
-      return (
-        <IzinKerjaCanvas
-          formData={formData} 
-          signatureData={signatureData} 
-        />
-      );
-    }
-    if (type === 'kuasa') {
-      return (
-        <KuasaCanvas
-          formData={formData} 
-          signatureData={signatureData} 
-        />
-      );
-    }
-    if (type === 'magang') {
-      return (
-        <MagangCanvas
-          formData={formData} 
-          signatureData={signatureData} 
-          berkasList={berkasList}
-        />
-      );
-    }
-    return (
-      <LamaranKerjaCanvas 
-        formData={formData} 
-        signatureData={signatureData} 
-        berkasList={berkasList} 
-      />
-    );
   };
 
   return (
