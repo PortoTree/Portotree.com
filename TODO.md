@@ -124,3 +124,18 @@
 - **File Terdampak:**
   - `C:\PortoTree\src\app\resume-subdomain\layout.tsx` [NEW]
   - `C:\PortoTree\src\app\portofolio-subdomain\layout.tsx` [NEW]
+
+## Kategori: Frontend (Surat Builder)
+- **Status:** Selesai
+- **Perubahan:**
+  - Mengimplementasikan sistem Paginasi multi-halaman pada Surat Builder agar UX rendering persis seperti CV Builder (dipecah menjadi kanvas A4 bertingkat).
+  - Membuat komponen `SuratViewer.tsx` yang menggunakan *hook* `usePagination` (mendaur ulang komponen pengukur tinggi elemen tersembunyi `surat-content-measurer`).
+  - Mengubah struktur `page.tsx` dari yang awalnya melakukan *render* kanvas tunggal panjang menjadi membungkusnya dalam `<SuratViewer>` yang meniru `CVViewer`.
+  - Menambahkan kelas-kelas *CSS* `cv-section` dan `break-inside-avoid` pada setiap elemen grup data (Pendidikan, Pengalaman Kerja, dst) serta baris tabel (`<tr>`) pada `DaftarRiwayatHidupCanvas`, `LamaranKerjaCanvas`, dan `PengunduranDiriCanvas` agar proses pembagian halaman oleh kalkulator halaman tidak memotong teks dan tabel secara paksa.
+  - Memperbaiki jarak kosong bagian atas pada setiap judul template agar memiliki proporsi ideal dan tidak mepet.
+- **File Terdampak:**
+  - `c:\PortoTree\src\components\surat\SuratViewer.tsx`
+  - `c:\PortoTree\src\app\surat-generator\builder\[type]\page.tsx`
+  - `c:\PortoTree\src\components\surat\templates\DaftarRiwayatHidupCanvas.tsx`
+  - `c:\PortoTree\src\components\surat\templates\LamaranKerjaCanvas.tsx`
+  - `c:\PortoTree\src\components\surat\templates\PengunduranDiriCanvas.tsx`

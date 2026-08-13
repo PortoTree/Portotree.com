@@ -1,48 +1,50 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { ArrowLeft, Download, Info, ChevronDown, Save, FileText, User, Briefcase, Trash2, Plus, LayoutTemplate, Eye, Edit, ZoomIn, ZoomOut, Maximize } from "lucide-react";
+import { useState, useRef, useEffect, use } from "react";
+import { ArrowLeft, Download, Info, ChevronDown, Save, FileText, User, Briefcase, Trash2, Plus, LayoutTemplate, Eye, Edit, ZoomIn, ZoomOut, Maximize, Mail, PenTool } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useUI } from "@/components/ui/UIProvider";
-import { SignaturePad } from "@/components/ui/SignaturePad";
 
-export default function SuratBuilderPage({ params }: { params: { type: string } }) {
+import { LamaranKerjaForm } from "@/components/surat/forms/LamaranKerjaForm";
+import { PengunduranDiriForm } from "@/components/surat/forms/PengunduranDiriForm";
+import { DaftarRiwayatHidupForm } from "@/components/surat/forms/DaftarRiwayatHidupForm";
+import { LamaranKerjaCanvas } from "@/components/surat/templates/LamaranKerjaCanvas";
+import { PengunduranDiriCanvas } from "@/components/surat/templates/PengunduranDiriCanvas";
+import { DaftarRiwayatHidupCanvas } from "@/components/surat/templates/DaftarRiwayatHidupCanvas";
+import { SuratViewer } from "@/components/surat/SuratViewer";
+
+export default function SuratBuilderPage({ params }: { params: Promise<{ type: string }> }) {
+  const resolvedParams = use(params);
+  const type = resolvedParams.type;
+
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [activeTab, setActiveTab] = useState<'form' | 'template'>('form');
-  const [expandedSection, setExpandedSection] = useState('data-diri');
   
-  // Canvas Scaling State
-  const containerRef = useRef<HTMLElement>(null);
-  const [scale, setScale] = useState(1);
-  const [defaultScale, setDefaultScale] = useState(1);
+  const templates = [
+    {
+      id: 1,
+      title: "Surat Lamaran Pekerjaan",
+      description: "Surat lamaran kerja profesional",
+      slug: "lamaran-pekerjaan",
+      icon: FileText,
+    },
+    {
+      id: 2,
+      title: "Surat Pengunduran Diri",
+      description: "Surat resign profesional",
+      slug: "pengunduran-diri",
+      icon: Mail,
+    },
+    {
+      id: 3,
+      title: "Daftar Riwayat Hidup",
+      description: "Riwayat hidup dalam format surat",
+      slug: "daftar-riwayat-hidup",
+      icon: PenTool,
+    },
+  ];
 
-  useEffect(() => {
-    const calculateDefaultScale = () => {
-      if (typeof window !== 'undefined' && window.innerWidth < 768) {
-        return 0.43;
-      }
-      if (!containerRef.current) return 1;
-      const containerWidth = containerRef.current.clientWidth;
-      const targetWidth = 794;
-      const padding = 64;
-      if (containerWidth < targetWidth + padding) {
-        return (containerWidth - padding) / targetWidth;
-      }
-      return 1;
-    };
-
-    const updateDefaultScale = () => {
-      const newScale = calculateDefaultScale();
-      setDefaultScale(newScale);
-    };
-    
-    updateDefaultScale();
-    setScale(calculateDefaultScale());
-
-    window.addEventListener('resize', updateDefaultScale);
-    return () => window.removeEventListener('resize', updateDefaultScale);
-  }, [showMobilePreview]);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -59,7 +61,14 @@ export default function SuratBuilderPage({ params }: { params: { type: string } 
     posisi: '',
     penerimaSurat: '',
     tempatSurat: '',
-    tanggalSurat: ''
+    tanggalSurat: '',
+    perusahaan: '',
+    tanggalPengunduran: '',
+    kewarganegaraan: '',
+    pendidikanFormal: [],
+    pendidikanNonformal: [],
+    pengalamanKerja: [],
+    riwayatOrganisasi: []
   });
   const [signatureData, setSignatureData] = useState<string | null>(null);
 
@@ -73,10 +82,6 @@ export default function SuratBuilderPage({ params }: { params: { type: string } 
   };
 
   const { showConfirm } = useUI();
-
-  const toggleSection = (section: string) => {
-    setExpandedSection(prev => prev === section ? '' : section);
-  };
 
   const addBerkas = () => {
     setBerkasList([...berkasList, { id: Date.now(), name: '' }]);
@@ -105,6 +110,67 @@ export default function SuratBuilderPage({ params }: { params: { type: string } 
     } else {
       window.print();
     }
+  };
+
+  const renderFormContent = () => {
+    if (type === 'pengunduran-diri') {
+      return (
+        <PengunduranDiriForm 
+          formData={formData} 
+          handleFormChange={handleFormChange} 
+          signatureData={signatureData} 
+          setSignatureData={setSignatureData} 
+        />
+      );
+    }
+    if (type === 'daftar-riwayat-hidup') {
+      return (
+        <DaftarRiwayatHidupForm
+          formData={formData} 
+          handleFormChange={handleFormChange} 
+          signatureData={signatureData} 
+          setSignatureData={setSignatureData} 
+        />
+      );
+    }
+    return (
+      <LamaranKerjaForm 
+        formData={formData} 
+        handleFormChange={handleFormChange} 
+        signatureData={signatureData} 
+        setSignatureData={setSignatureData} 
+        berkasList={berkasList} 
+        updateBerkas={updateBerkas} 
+        removeBerkas={removeBerkas} 
+        addBerkas={addBerkas} 
+      />
+    );
+  };
+
+  const renderCanvasContent = () => {
+    if (type === 'pengunduran-diri') {
+      return (
+        <PengunduranDiriCanvas 
+          formData={formData} 
+          signatureData={signatureData} 
+        />
+      );
+    }
+    if (type === 'daftar-riwayat-hidup') {
+      return (
+        <DaftarRiwayatHidupCanvas
+          formData={formData} 
+          signatureData={signatureData} 
+        />
+      );
+    }
+    return (
+      <LamaranKerjaCanvas 
+        formData={formData} 
+        signatureData={signatureData} 
+        berkasList={berkasList} 
+      />
+    );
   };
 
   return (
@@ -167,202 +233,7 @@ export default function SuratBuilderPage({ params }: { params: { type: string } 
               <h2 className="font-bold text-sm uppercase text-gray-500">Isi Data Surat</h2>
               <p className="text-xs text-gray-500 mt-1">Lengkapi informasi di bawah ini untuk menyusun surat secara otomatis.</p>
             </div>
-            <div className="flex-1 overflow-hidden flex flex-col p-4 gap-4">
-              
-              {/* Section: Data Diri */}
-              <div className={`border rounded-lg overflow-hidden bg-white shadow-sm transition-colors duration-200 ${expandedSection === 'data-diri' ? 'border-emerald-200' : 'border-slate-200'}`}>
-                <button 
-                  onClick={() => toggleSection('data-diri')}
-                  className={`w-full flex items-center justify-between p-4 transition-colors ${expandedSection === 'data-diri' ? 'bg-emerald-600' : 'bg-slate-50/50 hover:bg-slate-50 border-b border-slate-100'}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <User className={`w-4 h-4 ${expandedSection === 'data-diri' ? 'text-white' : 'text-slate-500'}`} />
-                    <span className={`font-bold text-[15px] ${expandedSection === 'data-diri' ? 'text-white' : 'text-slate-700'}`}>Data Diri</span>
-                  </div>
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expandedSection === 'data-diri' ? 'text-white rotate-180' : 'text-slate-400'}`} />
-                </button>
-                {expandedSection === 'data-diri' && (
-                  <div className="p-4 flex flex-col gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[13px] font-medium text-slate-600">Nama Lengkap</label>
-                      <input type="text" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" placeholder="Peri Penolong" value={formData.nama} onChange={(e) => handleFormChange('nama', e.target.value)} />
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[13px] font-medium text-slate-600">Tempat Lahir</label>
-                        <input type="text" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" placeholder="Appiano Gentile" value={formData.tempatLahir} onChange={(e) => handleFormChange('tempatLahir', e.target.value)} />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[13px] font-medium text-slate-600">Tanggal Lahir</label>
-                        <input type="text" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" placeholder="3 Maret 1908" value={formData.tanggalLahir} onChange={(e) => handleFormChange('tanggalLahir', e.target.value)} />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[13px] font-medium text-slate-600">Jenis Kelamin</label>
-                        <select value={formData.jenisKelamin} onChange={(e) => handleFormChange('jenisKelamin', e.target.value)} className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-white">
-                          <option value="" disabled>Pilih...</option>
-                          <option value="Laki-laki">Laki-laki</option>
-                          <option value="Perempuan">Perempuan</option>
-                        </select>
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[13px] font-medium text-slate-600">Status Pernikahan</label>
-                        <select value={formData.statusPernikahan} onChange={(e) => handleFormChange('statusPernikahan', e.target.value)} className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-white">
-                          <option value="" disabled>Pilih...</option>
-                          <option value="Belum Kawin">Belum Kawin</option>
-                          <option value="Kawin">Kawin</option>
-                          <option value="Cerai Hidup">Cerai Hidup</option>
-                          <option value="Cerai Mati">Cerai Mati</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[13px] font-medium text-slate-600">Agama</label>
-                        <input type="text" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" placeholder="Islam" value={formData.agama} onChange={(e) => handleFormChange('agama', e.target.value)} />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[13px] font-medium text-slate-600">Pendidikan Terakhir</label>
-                        <input type="text" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" placeholder="SMKN 1 Milan" value={formData.pendidikan} onChange={(e) => handleFormChange('pendidikan', e.target.value)} />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[13px] font-medium text-slate-600">Email</label>
-                        <input type="email" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" placeholder="email@contoh.com" value={formData.email} onChange={(e) => handleFormChange('email', e.target.value)} />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[13px] font-medium text-slate-600">Nomor Telepon</label>
-                        <input type="tel" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" placeholder="08123456789" value={formData.telepon} onChange={(e) => handleFormChange('telepon', e.target.value)} />
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[13px] font-medium text-slate-600">Alamat Lengkap</label>
-                      <textarea className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all min-h-[80px] resize-none" placeholder="Appiano Gentile, Milan" value={formData.alamat} onChange={(e) => handleFormChange('alamat', e.target.value)} />
-                    </div>
-
-                    <div className="flex flex-col gap-1.5 mt-2">
-                      <label className="text-[13px] font-medium text-slate-600">Tanda Tangan</label>
-                      <SignaturePad onSignatureChange={setSignatureData} />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Section: Posisi Pekerjaan */}
-              <div className={`border rounded-lg overflow-hidden bg-white shadow-sm transition-colors duration-200 ${expandedSection === 'posisi' ? 'border-emerald-200' : 'border-slate-200'}`}>
-                <button 
-                  onClick={() => toggleSection('posisi')}
-                  className={`w-full flex items-center justify-between p-4 transition-colors ${expandedSection === 'posisi' ? 'bg-emerald-600' : 'hover:bg-slate-50 border-b border-slate-100'}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Briefcase className={`w-4 h-4 ${expandedSection === 'posisi' ? 'text-white' : 'text-slate-500'}`} />
-                    <span className={`font-bold text-[15px] ${expandedSection === 'posisi' ? 'text-white' : 'text-slate-700'}`}>Posisi Pekerjaan</span>
-                  </div>
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expandedSection === 'posisi' ? 'text-white rotate-180' : 'text-slate-400'}`} />
-                </button>
-                {expandedSection === 'posisi' && (
-                  <div className="p-4 flex flex-col gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[13px] font-medium text-slate-600">
-                        Posisi yang Dilamar <span className="text-red-500">*</span>
-                      </label>
-                      <input type="text" className="w-full border border-slate-300 rounded-md px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" placeholder="driver" value={formData.posisi} onChange={(e) => handleFormChange('posisi', e.target.value)} />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Section: Lamaran Berkas */}
-              <div className={`border rounded-lg overflow-hidden bg-white shadow-sm transition-colors duration-200 ${expandedSection === 'berkas' ? 'border-emerald-200' : 'border-slate-200'}`}>
-                <button 
-                  onClick={() => toggleSection('berkas')}
-                  className={`w-full flex items-center justify-between p-4 transition-colors ${expandedSection === 'berkas' ? 'bg-emerald-600' : 'hover:bg-slate-50 border-b border-slate-100'}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <FileText className={`w-4 h-4 ${expandedSection === 'berkas' ? 'text-white' : 'text-slate-500'}`} />
-                    <span className={`font-bold text-[15px] ${expandedSection === 'berkas' ? 'text-white' : 'text-slate-700'}`}>Lamaran Berkas</span>
-                  </div>
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expandedSection === 'berkas' ? 'text-white rotate-180' : 'text-slate-400'}`} />
-                </button>
-                {expandedSection === 'berkas' && (
-                  <div className="p-4 flex flex-col gap-4">
-                    <div className="flex flex-col gap-3">
-                      <label className="text-[13px] font-medium text-slate-600 mb-[-4px]">
-                        Nama Berkas <span className="text-red-500">*</span>
-                      </label>
-                      {berkasList.map((berkas) => (
-                        <div key={berkas.id} className="flex items-center gap-2">
-                          <input 
-                            type="text" 
-                            className="flex-1 border border-slate-300 rounded-md px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" 
-                            placeholder="Contoh: Ijazah, KTP, KK ..." 
-                            value={berkas.name}
-                            onChange={(e) => updateBerkas(berkas.id, e.target.value)}
-                          />
-                          <button 
-                            onClick={() => removeBerkas(berkas.id)}
-                            className="w-10 h-10 shrink-0 bg-red-500 hover:bg-red-600 text-white rounded-md flex items-center justify-center transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                    <button 
-                      onClick={addBerkas}
-                      className="w-fit flex items-center gap-2 text-emerald-600 border border-emerald-600 hover:bg-emerald-50 px-4 py-2 rounded-lg font-medium text-sm transition-colors mt-1"
-                    >
-                      <Plus className="w-4 h-4 stroke-[2.5]" />
-                      Tambah Nama Berkas
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Section: Informasi Surat */}
-              <div className={`border rounded-lg overflow-hidden bg-white shadow-sm transition-colors duration-200 ${expandedSection === 'informasi' ? 'border-emerald-200' : 'border-slate-200'}`}>
-                <button 
-                  onClick={() => toggleSection('informasi')}
-                  className={`w-full flex items-center justify-between p-4 transition-colors ${expandedSection === 'informasi' ? 'bg-emerald-600' : 'hover:bg-slate-50 border-b border-slate-100'}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Info className={`w-4 h-4 ${expandedSection === 'informasi' ? 'text-white' : 'text-slate-500'}`} />
-                    <span className={`font-bold text-[15px] ${expandedSection === 'informasi' ? 'text-white' : 'text-slate-700'}`}>Informasi Surat</span>
-                  </div>
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expandedSection === 'informasi' ? 'text-white rotate-180' : 'text-slate-400'}`} />
-                </button>
-                {expandedSection === 'informasi' && (
-                  <div className="p-4 flex flex-col gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[13px] font-medium text-slate-600">
-                        Penerima Surat <span className="text-red-500">*</span>
-                      </label>
-                      <input type="text" className="w-full border border-slate-300 rounded-md px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" placeholder="Contoh: HRD PT Maju Jaya" value={formData.penerimaSurat} onChange={(e) => handleFormChange('penerimaSurat', e.target.value)} />
-                    </div>
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[13px] font-medium text-slate-600">
-                        Tempat Surat <span className="text-red-500">*</span>
-                      </label>
-                      <input type="text" className="w-full border border-slate-300 rounded-md px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" placeholder="Contoh: Jakarta" value={formData.tempatSurat} onChange={(e) => handleFormChange('tempatSurat', e.target.value)} />
-                    </div>
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[13px] font-medium text-slate-600">
-                        Tanggal Surat <span className="text-red-500">*</span>
-                      </label>
-                      <input type="date" className="w-full border border-slate-300 rounded-md px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" value={formData.tanggalSurat} onChange={(e) => handleFormChange('tanggalSurat', e.target.value)} />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-            </div>
+            {renderFormContent()}
           </div>
           ) : (
             <div className="flex flex-col h-full bg-slate-50/30">
@@ -370,187 +241,50 @@ export default function SuratBuilderPage({ params }: { params: { type: string } 
                 <h2 className="font-bold text-sm uppercase text-gray-500">Pilih Template</h2>
                 <p className="text-xs text-gray-500 mt-1">Pilih desain template surat lamaran yang sesuai dengan kebutuhan Anda.</p>
               </div>
-              <div className="flex-1 p-8 flex flex-col items-center justify-center text-center">
-                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4 border border-slate-200 shadow-sm">
-                  <LayoutTemplate className="w-7 h-7 text-slate-400" />
+              <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+                <div className="flex flex-col gap-3">
+                  {templates.map((template) => {
+                    const IconComponent = template.icon;
+                    return (
+                      <Link
+                        key={template.id}
+                        href={`/surat-generator/builder/${template.slug}`}
+                        className={`bg-white border rounded-[14px] p-4 flex flex-col shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group ${
+                          type === template.slug ? 'border-emerald-500 ring-1 ring-emerald-500/20' : 'border-slate-200/80 hover:border-emerald-200'
+                        }`}
+                        onClick={() => setActiveTab('form')}
+                      >
+                        {type === template.slug && (
+                          <div className="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">
+                            AKTIF
+                          </div>
+                        )}
+                        <div className="flex items-start gap-4">
+                          <div className={`w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 transition-colors ${
+                            type === template.slug ? 'bg-emerald-600' : 'bg-slate-100 group-hover:bg-emerald-500'
+                          }`}>
+                            <IconComponent className={`w-5 h-5 ${type === template.slug ? 'text-white' : 'text-slate-400 group-hover:text-white'}`} />
+                          </div>
+                          <div className="flex flex-col pt-0.5">
+                            <h3 className={`font-bold text-[14px] leading-snug mb-1 ${
+                              type === template.slug ? 'text-emerald-700' : 'text-slate-700 group-hover:text-emerald-700'
+                            }`}>{template.title}</h3>
+                            <p className="text-[12px] text-slate-500 leading-relaxed">{template.description}</p>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
-                <h3 className="text-base font-bold text-slate-700">Koleksi Template</h3>
-                <p className="text-sm text-slate-500 mt-2 max-w-[280px] leading-relaxed">
-                  Berbagai macam pilihan desain template surat generator sedang dalam tahap pengembangan dan akan segera hadir di sini.
-                </p>
               </div>
             </div>
           )}
         </div>
 
-        {/* Zoom Controls */}
-        <div className={`fixed bottom-[100px] right-6 md:bottom-8 md:right-8 z-40 bg-white/80 backdrop-blur-md shadow-xl rounded-full p-1.5 flex-col items-center gap-2 print:hidden border border-gray-200/50 ${!showMobilePreview ? 'hidden md:flex' : 'flex'}`}>
-          <button onClick={() => setScale(s => Math.min(s + 0.15, 2))} className="p-2 rounded-full hover:bg-gray-100/80 text-gray-700 transition-colors bg-transparent">
-            <ZoomIn className="w-5 h-5" />
-          </button>
-          <span className="text-[10px] font-bold text-gray-700 text-center select-none leading-none w-8">
-            {Math.round(scale * 100)}%
-          </span>
-          <button onClick={() => setScale(s => Math.max(s - 0.15, 0.3))} className="p-2 rounded-full hover:bg-gray-100/80 text-gray-700 transition-colors bg-transparent">
-            <ZoomOut className="w-5 h-5" />
-          </button>
-          <div className="w-4 h-px bg-gray-300/60 my-0.5"></div>
-          <button onClick={() => setScale(defaultScale)} className="p-2 rounded-full hover:bg-gray-100/80 text-gray-700 transition-colors bg-transparent" title="Fit to Screen">
-            <Maximize className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Main Canvas Workspace */}
-        <main ref={containerRef} className={`flex-1 h-full overflow-y-auto overflow-x-auto bg-gray-100/50 print:bg-white print:overflow-visible transition-all duration-300 ${!showMobilePreview ? 'hidden md:block' : 'block'}`}>
-          <div className="w-full min-h-full flex justify-center py-4 md:py-8 print:p-0 min-w-max print:min-w-0 print:block">
-            {/* Style Khusus Print A4 untuk memaksa 1 Halaman */}
-            <style dangerouslySetInnerHTML={{__html: `
-              @media print {
-                @page {
-                  size: A4 portrait;
-                  margin: 0;
-                }
-                body {
-                  margin: 0;
-                  padding: 0;
-                  background: white;
-                }
-              }
-            `}} />
-            
-            {/* Scaled Wrapper */}
-            <div 
-              style={{ 
-                width: `${794 * scale}px`, 
-                height: `${1123 * scale}px` 
-              }}
-              className="relative transition-all duration-200 print:!w-auto print:!h-auto print:!transform-none"
-            >
-              {/* A4 Paper Template */}
-              <div 
-                style={{ 
-                  transform: `scale(${scale})`,
-                  transformOrigin: 'top left'
-                }}
-                className="w-[794px] min-h-[1123px] h-fit md:h-[1123px] bg-white shadow-xl md:rounded-lg print:shadow-none print:rounded-none absolute top-0 left-0 print:w-[210mm] print:h-[297mm] print:overflow-hidden box-border flex flex-col print:relative print:mx-auto"
-              >
-                <div className="px-[20mm] py-[12mm] text-[11pt] leading-[1.5] flex flex-col flex-1" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
-                
-                {/* Header */}
-                <h2 className="text-center font-bold text-lg mb-6 tracking-wide uppercase">
-                  SURAT LAMARAN PEKERJAAN
-                </h2>
-
-                <div className="text-right mb-6">
-                  <p>{formData.tempatSurat || 'Tempat'}, {formData.tanggalSurat ? new Date(formData.tanggalSurat).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Tanggal'}</p>
-                </div>
-
-                {/* Recipient */}
-                <div className="mb-6 leading-tight">
-                  <p>Kepada Yth:</p>
-                  <p className="whitespace-pre-wrap">{formData.penerimaSurat || '[Penerima Surat]'}</p>
-                </div>
-
-                {/* Content */}
-                <div className="mb-4">
-                  <p className="mb-1.5">Dengan hormat,</p>
-                  <p className="indent-10 text-justify">
-                    Berdasarkan informasi yang saya peroleh bahwa perusahaan yang Bapak/Ibu pimpin saat ini memerlukan pegawai sebagai <strong>{formData.posisi || '[Posisi]'}</strong>. Oleh karena itu saya mengajukan permohonan untuk mengisi posisi tersebut dan siap di tempatkan dimana saja.
-                  </p>
-                </div>
-
-                <div className="mb-4">
-                  <p className="mb-1.5">Saya yang bertanda tangan di bawah ini:</p>
-                  <table className="w-full ml-4">
-                    <tbody>
-                      <tr>
-                        <td className="w-48 pb-1">Nama</td>
-                        <td className="pb-1">: {formData.nama || '[Nama Lengkap]'}</td>
-                      </tr>
-                      <tr>
-                        <td className="pb-1">Tempat/Tanggal Lahir</td>
-                        <td className="pb-1">: {formData.tempatLahir || '[Tempat Lahir]'}, {formData.tanggalLahir || '[Tanggal Lahir]'}</td>
-                      </tr>
-                      <tr>
-                        <td className="pb-1">Alamat</td>
-                        <td className="pb-1">: {formData.alamat || '[Alamat Lengkap]'}</td>
-                      </tr>
-                      <tr>
-                        <td className="pb-1">Jenis Kelamin</td>
-                        <td className="pb-1">: {formData.jenisKelamin || '[Jenis Kelamin]'}</td>
-                      </tr>
-                      <tr>
-                        <td className="pb-1">Status Pernikahan</td>
-                        <td className="pb-1">: {formData.statusPernikahan || '[Status Pernikahan]'}</td>
-                      </tr>
-                      <tr>
-                        <td className="pb-1">Agama</td>
-                        <td className="pb-1">: {formData.agama || '[Agama]'}</td>
-                      </tr>
-                      <tr>
-                        <td className="pb-1">Lulusan</td>
-                        <td className="pb-1">: {formData.pendidikan || '[Pendidikan Terakhir]'}</td>
-                      </tr>
-                      <tr>
-                        <td className="pb-1">No. Telepon</td>
-                        <td className="pb-1">: {formData.telepon || '[Nomor Telepon]'}</td>
-                      </tr>
-                      <tr>
-                        <td className="pb-1">Email</td>
-                        <td className="pb-1">: {formData.email || '[Email]'}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="mb-6">
-                  <p className="mb-1.5">Sebagai bahan pertimbangan bagi Bapak/ Ibu bersama ini turut saya lampirkan:</p>
-                  <ol className="list-decimal list-inside ml-4">
-                    {berkasList.map((berkas, index) => (
-                      <li key={berkas.id} className="pb-1">
-                        <span className="inline-block w-52">{berkas.name || '[Nama Berkas]'}</span>
-                        {berkas.name && (
-                          <span>1 Lembar{index === berkasList.length - 1 ? '.' : ''}</span>
-                        )}
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-
-                <div className="mb-6">
-                  <p className="indent-10 text-justify">
-                    Demikianlah surat permohonan kerja ini saya buat dengan sebenar-benarnya, besar harapan saya sudilah kiranya Bapak/Ibu dapat menerima saya bekerja di perusahaan yang Bapak/Ibu pimpin.
-                  </p>
-                  <p className="indent-10 text-justify mt-1">
-                    Atas perhatian Bapak/Ibu sebelum dan sesudahnya saya ucapkan terima kasih.
-                  </p>
-                </div>
-
-                {/* Signature */}
-                <div className="flex justify-end pr-8 mt-auto pt-8">
-                  <div className="text-center">
-                    <p className="mb-4">Hormat Saya,</p>
-                    
-                    {signatureData ? (
-                      <div className="mb-1 w-40 h-24 mx-auto flex items-center justify-center -rotate-2">
-                        <img src={signatureData} alt="Tanda Tangan" className="max-w-full max-h-full object-contain scale-110" />
-                      </div>
-                    ) : (
-                      <p className="font-['Brush_Script_MT',cursive] text-4xl mb-4 transform -rotate-2 text-slate-300 opacity-90">
-                        TTD
-                      </p>
-                    )}
-                    
-                    <p className="underline decoration-1 underline-offset-4">{formData.nama || '[Nama Lengkap]'}</p>
-                  </div>
-                </div>
-
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </main>
+        {/* Main Canvas Workspace using SuratViewer */}
+        <SuratViewer showMobilePreview={showMobilePreview} dependency={formData}>
+          {renderCanvasContent()}
+        </SuratViewer>
       </div>
 
       {/* Mobile Preview Toggle */}
