@@ -102,7 +102,7 @@ export function SuratViewer({ children, showMobilePreview, dependency }: SuratVi
           className="relative transition-all duration-200 print:!w-auto print:!h-auto print:!transform-none"
         >
           <div 
-            className="flex flex-col gap-8 print:block print:gap-0 absolute top-0 left-0 w-[210mm] print:relative print:mx-auto"
+            className="flex flex-col gap-8 print:block print:gap-0 absolute top-0 left-0 w-[210mm] print:relative print:mx-auto print:!transform-none"
             style={{ 
               transform: `scale(${scale})`,
               transformOrigin: 'top left'
