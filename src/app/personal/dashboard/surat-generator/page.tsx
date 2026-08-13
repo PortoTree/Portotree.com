@@ -286,7 +286,7 @@ export default function SuratGeneratorPage() {
   const TemplateCard = ({ template, isPopuler = false }: { template: any, isPopuler?: boolean }) => (
     <Link
       href={`/surat-generator/builder/${template.slug}`}
-      className={`${isPopuler ? 'bg-emerald-50/80 border-emerald-200 hover:border-emerald-400' : 'bg-white border-slate-200 hover:border-emerald-300'} border hover:shadow-md transition-all rounded-[14px] p-5 flex items-center gap-4 cursor-pointer group`}
+      className={`${isPopuler ? 'bg-emerald-50/80 border-emerald-200 hover:border-emerald-400' : 'bg-white border-slate-200 hover:border-emerald-300'} border hover:shadow-md transition-all active:scale-[0.98] rounded-[14px] p-5 flex items-center gap-4 cursor-pointer group`}
     >
       <div className={`w-12 h-12 rounded-xl ${isPopuler ? 'bg-emerald-100/60' : 'bg-emerald-50'} flex items-center justify-center shrink-0 transition-colors`}>
         <FileText className={`w-[22px] h-[22px] ${isPopuler ? 'text-emerald-600' : 'text-emerald-500'}`} />
@@ -359,19 +359,19 @@ export default function SuratGeneratorPage() {
                         <div className="flex items-center justify-end gap-2">
                           <button 
                             onClick={() => handlePreview(letter)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500 text-emerald-600 hover:bg-emerald-50 transition-colors text-[13px] font-medium"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500 text-emerald-600 hover:bg-emerald-50 transition-all active:scale-95 text-[13px] font-medium"
                           >
                             <Eye className="w-4 h-4" /> <span className="hidden lg:inline">Preview</span>
                           </button>
                           <Link 
                             href={`/surat-generator/builder/${letter.slug}${letter.draftId ? `?id=${letter.draftId}` : ''}`}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors text-[13px] font-medium border border-emerald-600"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-all active:scale-95 text-[13px] font-medium border border-emerald-600"
                           >
                             <Edit className="w-4 h-4" /> <span className="hidden lg:inline">Edit</span>
                           </Link>
                           <button 
                             onClick={() => handleDownload(letter)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500 text-emerald-600 hover:bg-emerald-50 transition-colors text-[13px] font-medium"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500 text-emerald-600 hover:bg-emerald-50 transition-all active:scale-95 text-[13px] font-medium"
                           >
                             <Download className="w-4 h-4" /> <span className="hidden lg:inline">Download</span>
                           </button>
@@ -380,7 +380,7 @@ export default function SuratGeneratorPage() {
                           <div className="relative">
                             <button
                               onClick={() => setActiveDropdown(activeDropdown === letter.draftKey ? null : letter.draftKey)}
-                              className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors ml-1"
+                              className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-all active:scale-95 ml-1"
                             >
                               <MoreVertical className="w-5 h-5" />
                             </button>
@@ -436,7 +436,7 @@ export default function SuratGeneratorPage() {
                   <div className="absolute top-3 right-2">
                     <button
                       onClick={() => setActiveDropdown(activeDropdown === letter.draftKey ? null : letter.draftKey)}
-                      className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+                      className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-all active:scale-95"
                     >
                       <MoreVertical className="w-5 h-5" />
                     </button>
@@ -480,19 +480,19 @@ export default function SuratGeneratorPage() {
                 <div className="grid grid-cols-3 gap-2">
                   <Link 
                     href={`/surat-generator/builder/${letter.slug}${letter.draftId ? `?id=${letter.draftId}` : ''}`}
-                    className="flex justify-center items-center py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 transition-colors text-white text-[13px] font-semibold border border-emerald-600"
+                    className="flex justify-center items-center py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 transition-all active:scale-95 text-white text-[13px] font-semibold border border-emerald-600"
                   >
                     Edit
                   </Link>
                   <button 
                     onClick={() => handlePreview(letter)}
-                    className="flex justify-center items-center py-2.5 rounded-lg border border-emerald-500 hover:bg-emerald-50 transition-colors text-emerald-600 text-[13px] font-semibold"
+                    className="flex justify-center items-center py-2.5 rounded-lg border border-emerald-500 hover:bg-emerald-50 transition-all active:scale-95 text-emerald-600 text-[13px] font-semibold"
                   >
                     Preview
                   </button>
                   <button 
                     onClick={() => handleDownload(letter)}
-                    className="flex justify-center items-center py-2.5 rounded-lg border border-emerald-500 hover:bg-emerald-50 transition-colors text-emerald-600 text-[13px] font-semibold"
+                    className="flex justify-center items-center py-2.5 rounded-lg border border-emerald-500 hover:bg-emerald-50 transition-all active:scale-95 text-emerald-600 text-[13px] font-semibold"
                   >
                     Download
                   </button>
@@ -510,7 +510,7 @@ export default function SuratGeneratorPage() {
                   <button
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
-                    className="p-1.5 rounded-md border text-slate-500 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="p-1.5 rounded-md border text-slate-500 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
@@ -518,7 +518,7 @@ export default function SuratGeneratorPage() {
                   <button
                     onClick={() => setCurrentPage(prev => Math.min(Math.ceil(savedLetters.length / itemsPerPage), prev + 1))}
                     disabled={currentPage === Math.ceil(savedLetters.length / itemsPerPage)}
-                    className="p-1.5 rounded-md border text-slate-500 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="p-1.5 rounded-md border text-slate-500 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>
@@ -564,7 +564,7 @@ export default function SuratGeneratorPage() {
           {/* Floating Close Button */}
           <button 
             onClick={() => { setPreviewSlug(null); setPreviewData(null); }}
-            className="fixed top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-colors text-white z-[110] shadow-xl"
+            className="fixed top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-all active:scale-95 text-white z-[110] shadow-xl"
             title="Tutup Preview"
           >
             <X className="w-6 h-6" />
@@ -590,7 +590,7 @@ export default function SuratGeneratorPage() {
               <h3 className="font-bold text-slate-800">Ubah Nama Surat</h3>
               <button 
                 onClick={() => setRenameModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 transition-colors"
+                className="text-slate-400 hover:text-slate-600 transition-all active:scale-95"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -611,14 +611,14 @@ export default function SuratGeneratorPage() {
             <div className="px-6 py-4 border-t border-slate-100 bg-slate-50 flex items-center justify-end gap-3">
               <button 
                 onClick={() => setRenameModalOpen(false)}
-                className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-200 rounded-lg transition-colors"
+                className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-200 rounded-lg transition-all active:scale-95"
               >
                 Batal
               </button>
               <button 
                 onClick={handleRenameSubmit}
                 disabled={!newTitle.trim()}
-                className="px-4 py-2 text-sm font-medium bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-4 py-2 text-sm font-medium bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95"
               >
                 Simpan
               </button>
