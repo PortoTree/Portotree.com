@@ -185,26 +185,26 @@ export function DaftarRiwayatHidupForm({
         {expandedSection === 'formal' && (
           <div className="p-4 flex flex-col gap-4">
             {formData.pendidikanFormal && formData.pendidikanFormal.length > 0 && (
-              <div className="grid grid-cols-[1fr_1fr_2fr_auto] gap-4 px-1">
-                <label className="text-[13px] font-medium text-slate-700">Tahun Mulai <span className="text-red-500">*</span></label>
-                <label className="text-[13px] font-medium text-slate-700">Tahun Selesai <span className="text-red-500">*</span></label>
-                <label className="text-[13px] font-medium text-slate-700">Nama Institusi <span className="text-red-500">*</span></label>
-                <label className="text-[13px] font-medium text-slate-700 text-center w-10">Action</label>
+              <div className="grid grid-cols-[1fr_1fr_2fr_auto] gap-2 sm:gap-4 px-1">
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700">Tahun Mulai&nbsp;<span className="text-red-500">*</span></label>
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700">Tahun Selesai&nbsp;<span className="text-red-500">*</span></label>
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700">Nama Institusi&nbsp;<span className="text-red-500">*</span></label>
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700 text-center w-8 sm:w-10">Action</label>
               </div>
             )}
             
             <div className="flex flex-col gap-3">
               {(formData.pendidikanFormal || []).map((item: any, index: number) => (
-                <div key={index} className="grid grid-cols-[1fr_1fr_2fr_auto] gap-4 items-center">
-                  <input type="text" placeholder="Tahun Mulai" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunMulai || ''} onChange={(e) => handleArrayChange('pendidikanFormal', index, 'tahunMulai', e.target.value.replace(/\D/g, ''))} />
-                  <input type="text" placeholder="Tahun Selesai" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunSelesai || ''} onChange={(e) => handleArrayChange('pendidikanFormal', index, 'tahunSelesai', e.target.value.replace(/\D/g, ''))} />
-                  <input type="text" placeholder="Nama Institusi" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.institusi || ''} onChange={(e) => handleArrayChange('pendidikanFormal', index, 'institusi', e.target.value)} />
+                <div key={index} className="grid grid-cols-[1fr_1fr_2fr_auto] gap-2 sm:gap-4 items-center">
+                  <input type="text" placeholder="Mulai" className="w-full border border-slate-300 rounded-md px-2 sm:px-3 py-2 text-[13px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunMulai || ''} onChange={(e) => handleArrayChange('pendidikanFormal', index, 'tahunMulai', e.target.value.replace(/\D/g, ''))} />
+                  <input type="text" placeholder="Selesai" className="w-full border border-slate-300 rounded-md px-2 sm:px-3 py-2 text-[13px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunSelesai || ''} onChange={(e) => handleArrayChange('pendidikanFormal', index, 'tahunSelesai', e.target.value.replace(/\D/g, ''))} />
+                  <input type="text" placeholder="Institusi" className="w-full border border-slate-300 rounded-md px-2 sm:px-3 py-2 text-[13px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.institusi || ''} onChange={(e) => handleArrayChange('pendidikanFormal', index, 'institusi', e.target.value)} />
                   { (formData.pendidikanFormal || []).length > 1 ? (
-                    <button onClick={() => removeArrayItem('pendidikanFormal', index)} className="w-10 h-10 flex items-center justify-center text-red-500 bg-red-50 border border-red-200 hover:bg-red-100 rounded-md transition-colors">
-                      <Trash2 className="w-4 h-4" />
+                    <button onClick={() => removeArrayItem('pendidikanFormal', index)} className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-red-500 bg-red-50 border border-red-200 hover:bg-red-100 rounded-md transition-colors">
+                      <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                     </button>
                   ) : (
-                    <div className="w-10 h-10" />
+                    <div className="w-8 h-8 sm:w-10 sm:h-10" />
                   )}
                 </div>
               ))}
@@ -234,26 +234,26 @@ export function DaftarRiwayatHidupForm({
         {expandedSection === 'nonformal' && (
           <div className="p-4 flex flex-col gap-4">
             {formData.pendidikanNonformal && formData.pendidikanNonformal.length > 0 && (
-              <div className="grid grid-cols-[1fr_1fr_2fr_auto] gap-4 px-1">
-                <label className="text-[13px] font-medium text-slate-700">Tahun Mulai <span className="text-red-500">*</span></label>
-                <label className="text-[13px] font-medium text-slate-700">Tahun Selesai <span className="text-red-500">*</span></label>
-                <label className="text-[13px] font-medium text-slate-700">Nama Institusi <span className="text-red-500">*</span></label>
-                <label className="text-[13px] font-medium text-slate-700 text-center w-10">Action</label>
+              <div className="grid grid-cols-[1fr_1fr_2fr_auto] gap-2 sm:gap-4 px-1">
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700">Tahun Mulai&nbsp;<span className="text-red-500">*</span></label>
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700">Tahun Selesai&nbsp;<span className="text-red-500">*</span></label>
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700">Nama Institusi&nbsp;<span className="text-red-500">*</span></label>
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700 text-center w-8 sm:w-10">Action</label>
               </div>
             )}
             
             <div className="flex flex-col gap-3">
               {(formData.pendidikanNonformal || []).map((item: any, index: number) => (
-                <div key={index} className="grid grid-cols-[1fr_1fr_2fr_auto] gap-4 items-center">
-                  <input type="text" placeholder="Tahun Mulai" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunMulai || ''} onChange={(e) => handleArrayChange('pendidikanNonformal', index, 'tahunMulai', e.target.value.replace(/\D/g, ''))} />
-                  <input type="text" placeholder="Tahun Selesai" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunSelesai || ''} onChange={(e) => handleArrayChange('pendidikanNonformal', index, 'tahunSelesai', e.target.value.replace(/\D/g, ''))} />
-                  <input type="text" placeholder="Nama Institusi" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.institusi || ''} onChange={(e) => handleArrayChange('pendidikanNonformal', index, 'institusi', e.target.value)} />
+                <div key={index} className="grid grid-cols-[1fr_1fr_2fr_auto] gap-2 sm:gap-4 items-center">
+                  <input type="text" placeholder="Mulai" className="w-full border border-slate-300 rounded-md px-2 sm:px-3 py-2 text-[13px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunMulai || ''} onChange={(e) => handleArrayChange('pendidikanNonformal', index, 'tahunMulai', e.target.value.replace(/\D/g, ''))} />
+                  <input type="text" placeholder="Selesai" className="w-full border border-slate-300 rounded-md px-2 sm:px-3 py-2 text-[13px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunSelesai || ''} onChange={(e) => handleArrayChange('pendidikanNonformal', index, 'tahunSelesai', e.target.value.replace(/\D/g, ''))} />
+                  <input type="text" placeholder="Institusi" className="w-full border border-slate-300 rounded-md px-2 sm:px-3 py-2 text-[13px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.institusi || ''} onChange={(e) => handleArrayChange('pendidikanNonformal', index, 'institusi', e.target.value)} />
                   { (formData.pendidikanNonformal || []).length > 1 ? (
-                    <button onClick={() => removeArrayItem('pendidikanNonformal', index)} className="w-10 h-10 flex items-center justify-center text-red-500 bg-red-50 border border-red-200 hover:bg-red-100 rounded-md transition-colors">
-                      <Trash2 className="w-4 h-4" />
+                    <button onClick={() => removeArrayItem('pendidikanNonformal', index)} className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-red-500 bg-red-50 border border-red-200 hover:bg-red-100 rounded-md transition-colors">
+                      <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                     </button>
                   ) : (
-                    <div className="w-10 h-10" />
+                    <div className="w-8 h-8 sm:w-10 sm:h-10" />
                   )}
                 </div>
               ))}
@@ -283,26 +283,26 @@ export function DaftarRiwayatHidupForm({
         {expandedSection === 'pengalaman' && (
           <div className="p-4 flex flex-col gap-4">
             {formData.pengalamanKerja && formData.pengalamanKerja.length > 0 && (
-              <div className="grid grid-cols-[1fr_1fr_2fr_auto] gap-4 px-1">
-                <label className="text-[13px] font-medium text-slate-700">Tahun Mulai <span className="text-red-500">*</span></label>
-                <label className="text-[13px] font-medium text-slate-700">Tahun Selesai <span className="text-red-500">*</span></label>
-                <label className="text-[13px] font-medium text-slate-700">Nama Perusahaan <span className="text-red-500">*</span></label>
-                <label className="text-[13px] font-medium text-slate-700 text-center w-10">Action</label>
+              <div className="grid grid-cols-[1fr_1fr_2fr_auto] gap-2 sm:gap-4 px-1">
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700">Tahun Mulai&nbsp;<span className="text-red-500">*</span></label>
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700">Tahun Selesai&nbsp;<span className="text-red-500">*</span></label>
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700">Nama Perusahaan&nbsp;<span className="text-red-500">*</span></label>
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700 text-center w-8 sm:w-10">Action</label>
               </div>
             )}
             
             <div className="flex flex-col gap-3">
               {(formData.pengalamanKerja || []).map((item: any, index: number) => (
-                <div key={index} className="grid grid-cols-[1fr_1fr_2fr_auto] gap-4 items-center">
-                  <input type="text" placeholder="Tahun Mulai" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunMulai || ''} onChange={(e) => handleArrayChange('pengalamanKerja', index, 'tahunMulai', e.target.value.replace(/\D/g, ''))} />
-                  <input type="text" placeholder="Tahun Selesai" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunSelesai || ''} onChange={(e) => handleArrayChange('pengalamanKerja', index, 'tahunSelesai', e.target.value.replace(/\D/g, ''))} />
-                  <input type="text" placeholder="Nama Perusahaan" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.deskripsi || ''} onChange={(e) => handleArrayChange('pengalamanKerja', index, 'deskripsi', e.target.value)} />
+                <div key={index} className="grid grid-cols-[1fr_1fr_2fr_auto] gap-2 sm:gap-4 items-center">
+                  <input type="text" placeholder="Mulai" className="w-full border border-slate-300 rounded-md px-2 sm:px-3 py-2 text-[13px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunMulai || ''} onChange={(e) => handleArrayChange('pengalamanKerja', index, 'tahunMulai', e.target.value.replace(/\D/g, ''))} />
+                  <input type="text" placeholder="Selesai" className="w-full border border-slate-300 rounded-md px-2 sm:px-3 py-2 text-[13px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunSelesai || ''} onChange={(e) => handleArrayChange('pengalamanKerja', index, 'tahunSelesai', e.target.value.replace(/\D/g, ''))} />
+                  <input type="text" placeholder="Perusahaan" className="w-full border border-slate-300 rounded-md px-2 sm:px-3 py-2 text-[13px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.deskripsi || ''} onChange={(e) => handleArrayChange('pengalamanKerja', index, 'deskripsi', e.target.value)} />
                   { (formData.pengalamanKerja || []).length > 1 ? (
-                    <button onClick={() => removeArrayItem('pengalamanKerja', index)} className="w-10 h-10 flex items-center justify-center text-red-500 bg-red-50 border border-red-200 hover:bg-red-100 rounded-md transition-colors">
-                      <Trash2 className="w-4 h-4" />
+                    <button onClick={() => removeArrayItem('pengalamanKerja', index)} className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-red-500 bg-red-50 border border-red-200 hover:bg-red-100 rounded-md transition-colors">
+                      <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                     </button>
                   ) : (
-                    <div className="w-10 h-10" />
+                    <div className="w-8 h-8 sm:w-10 sm:h-10" />
                   )}
                 </div>
               ))}
@@ -332,26 +332,26 @@ export function DaftarRiwayatHidupForm({
         {expandedSection === 'organisasi' && (
           <div className="p-4 flex flex-col gap-4">
             {formData.riwayatOrganisasi && formData.riwayatOrganisasi.length > 0 && (
-              <div className="grid grid-cols-[1fr_1fr_2fr_auto] gap-4 px-1">
-                <label className="text-[13px] font-medium text-slate-700">Tahun Mulai <span className="text-red-500">*</span></label>
-                <label className="text-[13px] font-medium text-slate-700">Tahun Selesai <span className="text-red-500">*</span></label>
-                <label className="text-[13px] font-medium text-slate-700">Nama Organisasi <span className="text-red-500">*</span></label>
-                <label className="text-[13px] font-medium text-slate-700 text-center w-10">Action</label>
+              <div className="grid grid-cols-[1fr_1fr_2fr_auto] gap-2 sm:gap-4 px-1">
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700">Tahun Mulai&nbsp;<span className="text-red-500">*</span></label>
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700">Tahun Selesai&nbsp;<span className="text-red-500">*</span></label>
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700">Nama Organisasi&nbsp;<span className="text-red-500">*</span></label>
+                <label className="text-[11px] sm:text-[13px] leading-tight font-medium text-slate-700 text-center w-8 sm:w-10">Action</label>
               </div>
             )}
             
             <div className="flex flex-col gap-3">
               {(formData.riwayatOrganisasi || []).map((item: any, index: number) => (
-                <div key={index} className="grid grid-cols-[1fr_1fr_2fr_auto] gap-4 items-center">
-                  <input type="text" placeholder="Tahun Mulai" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunMulai || ''} onChange={(e) => handleArrayChange('riwayatOrganisasi', index, 'tahunMulai', e.target.value.replace(/\D/g, ''))} />
-                  <input type="text" placeholder="Tahun Selesai" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunSelesai || ''} onChange={(e) => handleArrayChange('riwayatOrganisasi', index, 'tahunSelesai', e.target.value.replace(/\D/g, ''))} />
-                  <input type="text" placeholder="Nama Organisasi" className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.deskripsi || ''} onChange={(e) => handleArrayChange('riwayatOrganisasi', index, 'deskripsi', e.target.value)} />
+                <div key={index} className="grid grid-cols-[1fr_1fr_2fr_auto] gap-2 sm:gap-4 items-center">
+                  <input type="text" placeholder="Mulai" className="w-full border border-slate-300 rounded-md px-2 sm:px-3 py-2 text-[13px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunMulai || ''} onChange={(e) => handleArrayChange('riwayatOrganisasi', index, 'tahunMulai', e.target.value.replace(/\D/g, ''))} />
+                  <input type="text" placeholder="Selesai" className="w-full border border-slate-300 rounded-md px-2 sm:px-3 py-2 text-[13px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.tahunSelesai || ''} onChange={(e) => handleArrayChange('riwayatOrganisasi', index, 'tahunSelesai', e.target.value.replace(/\D/g, ''))} />
+                  <input type="text" placeholder="Organisasi" className="w-full border border-slate-300 rounded-md px-2 sm:px-3 py-2 text-[13px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" value={item.deskripsi || ''} onChange={(e) => handleArrayChange('riwayatOrganisasi', index, 'deskripsi', e.target.value)} />
                   { (formData.riwayatOrganisasi || []).length > 1 ? (
-                    <button onClick={() => removeArrayItem('riwayatOrganisasi', index)} className="w-10 h-10 flex items-center justify-center text-red-500 bg-red-50 border border-red-200 hover:bg-red-100 rounded-md transition-colors">
-                      <Trash2 className="w-4 h-4" />
+                    <button onClick={() => removeArrayItem('riwayatOrganisasi', index)} className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-red-500 bg-red-50 border border-red-200 hover:bg-red-100 rounded-md transition-colors">
+                      <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                     </button>
                   ) : (
-                    <div className="w-10 h-10" />
+                    <div className="w-8 h-8 sm:w-10 sm:h-10" />
                   )}
                 </div>
               ))}
