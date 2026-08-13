@@ -199,6 +199,30 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
+          {/* Mobile Navigation Toggles */}
+          <div className="flex md:hidden items-center bg-slate-100 p-1 rounded-xl">
+            <button 
+              onClick={() => {
+                setActiveTab('form');
+                setShowMobilePreview(false);
+              }} 
+              className={`p-2 rounded-lg transition-all ${activeTab === 'form' ? 'bg-white shadow-sm text-emerald-600' : 'text-gray-500'}`}
+              title="Isi Data Surat"
+            >
+              <Edit className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={() => {
+                setActiveTab('template');
+                setShowMobilePreview(false);
+              }} 
+              className={`p-2 rounded-lg transition-all ${activeTab === 'template' ? 'bg-white shadow-sm text-emerald-600' : 'text-gray-500'}`}
+              title="Pilih Template Surat"
+            >
+              <FileText className="w-5 h-5" />
+            </button>
+          </div>
+
           <Button onClick={handlePrint} className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-3 md:px-4">
             <Download className="w-4 h-4 md:mr-2" />
             <span className="hidden md:inline">Download PDF</span>
@@ -214,14 +238,14 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
             className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all shadow-sm ${activeTab === 'form' ? 'bg-emerald-600 text-white shadow-emerald-200' : 'bg-white text-slate-400 hover:bg-slate-50 hover:text-emerald-600'}`}
             title="Isi Data Surat"
           >
-            <FileText className="w-5 h-5" />
+            <Edit className="w-5 h-5" />
           </button>
           <button 
             onClick={() => setActiveTab('template')}
             className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all shadow-sm ${activeTab === 'template' ? 'bg-emerald-600 text-white shadow-emerald-200' : 'bg-white text-slate-400 hover:bg-slate-50 hover:text-emerald-600'}`}
             title="Pilih Template Surat"
           >
-            <LayoutTemplate className="w-5 h-5" />
+            <FileText className="w-5 h-5" />
           </button>
         </aside>
 
