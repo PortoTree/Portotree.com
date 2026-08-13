@@ -84,6 +84,7 @@ export function SuratViewer({ children, showMobilePreview, dependency }: SuratVi
           .cv-page, .cv-instance, #cv-content-measurer {
             -webkit-text-size-adjust: 100%;
             text-size-adjust: 100%;
+            max-height: 999999px;
           }
           @media print {
             @page {
