@@ -159,7 +159,6 @@ export function KeteranganSakitForm({
                 Tanda Tangan Pembuat Surat <span className="text-red-500">*</span>
               </label>
               <SignaturePad 
-                initialSignature={signatureData || undefined}
                 onSignatureChange={setSignatureData}
               />
             </div>
