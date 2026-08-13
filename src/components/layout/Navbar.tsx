@@ -96,6 +96,7 @@ const BlogDropdownContent = () => (
 
 export function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAuthLoaded, setIsAuthLoaded] = useState(false);
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [showFabTooltip, setShowFabTooltip] = useState(false);
   const [hasDismissedTooltip, setHasDismissedTooltip] = useState(false);
@@ -106,6 +107,8 @@ export function Navbar() {
   const [isMobileProdukOpen, setIsMobileProdukOpen] = useState(false);
   const [isMobileBlogOpen, setIsMobileBlogOpen] = useState(false);
   const [isPortofolioDomain, setIsPortofolioDomain] = useState(false);
+  const [isSuratDomain, setIsSuratDomain] = useState(false);
+  const [isResumeDomain, setIsResumeDomain] = useState(false);
   const router = useRouter();
   const pathname = usePathname() || '';
   const isSubdomain = pathname.startsWith('/portofolio-subdomain') || pathname.startsWith('/resume-subdomain');
@@ -114,20 +117,26 @@ export function Navbar() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setIsPortofolioDomain(window.location.hostname.includes('portofolio'));
+      setIsSuratDomain(window.location.hostname.includes('surat'));
+      setIsResumeDomain(window.location.hostname.includes('resume'));
     }
     
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setIsLoggedIn(!!user);
+      setIsAuthLoaded(true);
     });
     return () => unsubscribe();
   }, []);
 
   // Always fetch session state from server to sync cross-subdomain auth
-  const { data: swrData } = useSWR('my-portfolio-navbar', fetcher, {
+  const { data: swrData, isLoading: swrLoading } = useSWR('my-portfolio-navbar', fetcher, {
     dedupingInterval: 5 * 60 * 1000
   });
 
   useEffect(() => {
+    if (!swrLoading) {
+      setIsAuthLoaded(true);
+    }
     if (swrData) {
       if (swrData.success) {
         setIsLoggedIn(true);
@@ -136,7 +145,7 @@ export function Navbar() {
         }
       }
     }
-  }, [swrData]);
+  }, [swrData, swrLoading]);
 
   const handleLogout = async () => {
     try {
@@ -243,12 +252,18 @@ export function Navbar() {
                 <Image 
                   src="/logo-landscape.png" 
                   alt="PortoTree" 
-                  width={200} 
-                  height={50} 
-                  className="h-10 w-auto" 
-                  priority 
+                  width={200}
+                  height={50}
+                  className="h-10 w-auto"
+                  priority
                 />
               </Link>
+              {isSuratDomain && (
+                <span className="text-lg font-bold bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent -ml-1">Surat</span>
+              )}
+              {isResumeDomain && (
+                <span className="text-lg font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent -ml-1">Resume</span>
+              )}
               {pathname.includes('/personal') && (
                 <span className="text-lg font-bold bg-gradient-to-r from-orange-500 to-amber-400 bg-clip-text text-transparent -ml-1">Personal</span>
               )}
@@ -384,8 +399,15 @@ export function Navbar() {
             )}
             
             <div className="flex items-center gap-4">
-              {/* Tombol Utama (Disembunyikan di Mobile) */}
-              <a href={isLoggedIn ? "/personal/dashboard" : getMainUrl("/register")} className="hidden md:block">
+              {!isAuthLoaded ? (
+                <div className="flex items-center gap-4">
+                  <div className="hidden md:block w-[140px] h-10 bg-slate-200 animate-pulse rounded-full"></div>
+                  <div className="w-8 h-8 border-2 border-transparent bg-slate-200 animate-pulse rounded-full"></div>
+                </div>
+              ) : (
+                <>
+                  {/* Tombol Utama (Disembunyikan di Mobile) */}
+                  <a href={isLoggedIn ? "/personal/dashboard" : getMainUrl("/register")} className="hidden md:block">
                 <Button className="rounded-full px-6 bg-slate-900 hover:bg-slate-800 text-white font-medium border-0">
                   {isLoggedIn ? "Dashboard" : "Daftar Sekarang"}
                 </Button>
@@ -444,6 +466,8 @@ export function Navbar() {
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
+                </>
+              )}
             </div>
           </div>
         </header>

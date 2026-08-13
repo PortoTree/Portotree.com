@@ -93,7 +93,7 @@ export default function SuratSubdomain() {
             <p className="text-slate-600 max-w-xl mx-auto leading-relaxed">Template surat profesional yang dipercaya untuk mempermudah urusan administrasi Anda.</p>
           </div>
 
-          <div className="bg-slate-50/50 rounded-[2rem] p-6 md:p-8 lg:p-12 border border-slate-200/60 shadow-sm">
+          <div className="md:bg-slate-50/50 md:rounded-[2rem] py-4 md:p-8 lg:p-12 md:border md:border-slate-200/60 md:shadow-sm">
             <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-10 text-center">
               Surat <span className="text-emerald-600 border-b-4 border-emerald-300">Populer</span>
             </h3>
