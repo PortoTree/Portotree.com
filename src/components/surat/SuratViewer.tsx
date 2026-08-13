@@ -78,8 +78,13 @@ export function SuratViewer({ children, showMobilePreview, dependency }: SuratVi
 
       {/* UI & PRINT PAGES */}
       <div className="w-full flex justify-center py-4 md:py-8 min-w-max print:p-0 print:min-w-0 print:block">
-        {/* Style Khusus Print A4 */}
+        {/* Style Khusus Print A4 dan Anti Font-Boosting Mobile */}
         <style dangerouslySetInnerHTML={{__html: `
+          /* Mencegah mobile browser memperbesar teks secara otomatis (Font Boosting / Text Autosizing) */
+          .cv-page, .cv-instance, #cv-content-measurer {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+          }
           @media print {
             @page {
               size: A4 portrait;

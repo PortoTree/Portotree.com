@@ -109,7 +109,7 @@ export function CVViewer({ data, forceScale, hideZoomControls }: CVViewerProps) 
           className="relative transition-all duration-200 print:!w-auto print:!h-auto print:!transform-none"
         >
           <div 
-            className="flex flex-col gap-8 print:block print:gap-0 absolute top-0 left-0 w-[210mm] print:relative print:mx-auto"
+            className="flex flex-col gap-8 print:block print:gap-0 absolute top-0 left-0 w-[210mm] print:relative print:mx-auto print:!transform-none"
             id="cv-print-container"
             style={{ 
               transform: `scale(${scale})`,
@@ -148,6 +148,24 @@ export function CVViewer({ data, forceScale, hideZoomControls }: CVViewerProps) 
           </div>
         </div>
       </div>
+      <style dangerouslySetInnerHTML={{__html: `
+        /* Mencegah mobile browser memperbesar teks secara otomatis (Font Boosting / Text Autosizing) */
+        .cv-page, .cv-instance, #cv-content-measurer {
+          -webkit-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+        }
+        @media print {
+          @page {
+            size: A4 portrait;
+            margin: 0;
+          }
+          body {
+            margin: 0;
+            padding: 0;
+            background: white;
+          }
+        }
+      `}} />
     </div>
   );
 }
