@@ -63,7 +63,7 @@ export default function LanggananPage() {
     // For now we simulate the delay and show an upcoming warning
     setTimeout(() => {
       setIsProcessing(false);
-      showToast("Sistem pembayaran sedang dalam tahap integrasi akhir. Silakan coba lagi nanti.", "warning");
+      showToast("Sistem pembayaran sedang dalam tahap integrasi akhir. Silakan coba lagi nanti.", "info");
     }, 1500);
   };
 
