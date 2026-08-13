@@ -549,7 +549,7 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
             </button>
           </div>
 
-          <Button onClick={handlePrint} className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-3 md:px-4">
+          <Button onClick={handlePrint} className={`bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-3 md:px-4 ${!showMobilePreview ? 'hidden md:flex' : 'flex'}`}>
             <Download className="w-4 h-4 md:mr-2" />
             <span className="hidden md:inline">Download PDF</span>
           </Button>
@@ -578,7 +578,7 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
         {/* Middle Sidebar - Active Panel - hidden when printing */}
         <div className={`w-full md:w-[550px] shrink-0 border-r bg-white overflow-y-auto custom-scrollbar print:hidden h-full relative z-10 ${showMobilePreview ? 'hidden md:block' : 'block'}`}>
           {activeTab === 'form' ? (
-            <div className="flex flex-col">
+            <div className="flex flex-col pb-32">
               <div className="p-4 border-b bg-gray-50 relative md:sticky md:top-0 z-10">
               <h2 className="font-bold text-sm uppercase text-gray-500">
                 ISI DATA {(() => {

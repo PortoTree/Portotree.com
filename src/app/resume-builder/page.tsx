@@ -115,7 +115,7 @@ export default function CVBuilderPage() {
             </button>
           </div>
 
-          <Button onClick={handlePrint} className="bg-green-600 hover:bg-green-700 text-white rounded-full px-3 md:px-4">
+          <Button onClick={handlePrint} className={`bg-green-600 hover:bg-green-700 text-white rounded-full px-3 md:px-4 ${!showMobilePreview ? 'hidden md:flex' : 'flex'}`}>
             <Download className="w-4 h-4 md:mr-2" />
             <span className="hidden md:inline">Download PDF</span>
           </Button>
