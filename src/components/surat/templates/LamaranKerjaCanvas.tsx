@@ -6,9 +6,9 @@ interface LamaranKerjaCanvasProps {
 
 export function LamaranKerjaCanvas({ formData, signatureData, berkasList }: LamaranKerjaCanvasProps) {
   return (
-    <div className="px-[20mm] py-[12mm] print:py-0 text-[11pt] leading-[1.5] flex flex-col flex-1 bg-white" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
+    <div className="px-[20mm] py-[8mm] print:py-0 text-[11pt] leading-[1.5] flex flex-col flex-1 bg-white" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
       {/* Header */}
-      <h2 className="text-center font-bold text-lg pt-12 mb-6 tracking-wide uppercase cv-section break-inside-avoid">
+      <h2 className="text-center font-bold text-lg pt-8 mb-6 tracking-wide uppercase cv-section break-inside-avoid">
         SURAT LAMARAN PEKERJAAN
       </h2>
 
@@ -98,7 +98,7 @@ export function LamaranKerjaCanvas({ formData, signatureData, berkasList }: Lama
       </div>
 
       {/* Signature */}
-      <div className="flex justify-end pr-8 mt-4 pt-8 cv-section break-inside-avoid">
+      <div className="flex justify-end pr-8 mt-4 pt-4 cv-section break-inside-avoid">
         <div className="text-center">
           <p className="mb-4">Hormat Saya,</p>
           
