@@ -560,18 +560,18 @@ export default function SuratGeneratorPage() {
 
       {/* Preview Fullscreen Overlay */}
       {previewSlug && previewData && (
-        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex flex-col items-center overflow-y-auto py-12 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex flex-col items-center overflow-y-auto overflow-x-hidden py-12 animate-in fade-in duration-200">
           {/* Floating Close Button */}
           <button 
             onClick={() => { setPreviewSlug(null); setPreviewData(null); }}
-            className="fixed top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-all active:scale-95 text-white z-[110] shadow-xl"
+            className="fixed top-4 right-4 md:top-6 md:right-6 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-all active:scale-95 text-white z-[110] shadow-xl"
             title="Tutup Preview"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5 md:w-6 md:h-6" />
           </button>
           
           {/* Canvas Wrapper */}
-          <div className="transform scale-[0.55] sm:scale-75 md:scale-100 origin-top shadow-2xl transition-transform bg-white w-[210mm] min-h-[297mm]">
+          <div className="transform scale-[0.43] sm:scale-75 md:scale-100 origin-top shadow-2xl transition-transform bg-white w-[210mm] min-h-[297mm]">
             <SuratCanvasRenderer 
               type={previewSlug}
               formData={previewData?.formData || {}}
