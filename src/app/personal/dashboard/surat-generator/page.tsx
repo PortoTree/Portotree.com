@@ -7,6 +7,8 @@ import { FileText, Search, Clock, Edit, Trash2, Eye, X, ChevronLeft, ChevronRigh
 import { SuratCanvasRenderer } from "@/components/surat/SuratCanvasRenderer";
 import { SuratViewer } from "@/components/surat/SuratViewer";
 import { useUI } from "@/components/ui/UIProvider";
+import { checkDownloadLimit } from "@/app/actions/subscription";
+import { useRouter } from "next/navigation";
 
 export default function SuratGeneratorPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,7 +23,11 @@ export default function SuratGeneratorPage() {
   const [renameDraft, setRenameDraft] = useState<any>(null);
   const [newTitle, setNewTitle] = useState("");
   const [printDraft, setPrintDraft] = useState<any>(null);
-  const { showConfirm } = useUI();
+  const { showConfirm, showToast } = useUI();
+  
+  const router = useRouter();
+  const [isCheckingLimit, setIsCheckingLimit] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   // Reset builder initialization flag so entering builder always shows loading
   useEffect(() => {
@@ -260,7 +266,20 @@ export default function SuratGeneratorPage() {
     }
   }, [printDraft]);
 
-  const handleDownload = (letter: any) => {
+  const handleDownload = async (letter: any) => {
+    setIsCheckingLimit(true);
+    const limitCheck = await checkDownloadLimit('surat');
+    setIsCheckingLimit(false);
+
+    if (!limitCheck.success) {
+      if (limitCheck.limitReached) {
+        setShowPaywall(true);
+      } else {
+        showToast("Terjadi kesalahan sistem, silakan coba lagi", "error");
+      }
+      return;
+    }
+
     if (window.innerWidth >= 768) {
       showConfirm({
         title: "Perhatian Sebelum Cetak",
@@ -324,7 +343,7 @@ export default function SuratGeneratorPage() {
 
       {savedLetters.length > 0 && searchQuery === "" && (
         <div className="mb-10">
-          <h2 className="text-xl font-bold text-slate-800 mb-6">Surat yang Sedang Dibuat (Draft)</h2>
+          <h2 className="text-xl font-bold text-slate-800 mb-6">Surat kamu</h2>
           
           <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hidden md:block">
             <div className="overflow-x-auto">
@@ -624,6 +643,44 @@ export default function SuratGeneratorPage() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Paywall Modal */}
+      {showPaywall && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 p-6 flex flex-col items-center text-center">
+            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+              <Download className="w-8 h-8 text-emerald-600" />
+            </div>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Limit Unduh Gratis Habis!</h3>
+            <p className="text-slate-600 mb-6 leading-relaxed">
+              Anda telah menggunakan jatah 1x unduh gratis untuk Surat. Dapatkan akses cetak <span className="font-semibold text-slate-800">sepuasnya tanpa batas dan tanpa watermark</span> dengan berlangganan Paket Premium.
+            </p>
+            
+            <div className="flex flex-col gap-3 w-full">
+              <button 
+                onClick={() => router.push('/personal/dashboard/langganan')}
+                className="w-full py-3 px-4 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all active:scale-95 shadow-md shadow-emerald-200 flex items-center justify-center gap-2"
+              >
+                Lihat Paket Langganan
+              </button>
+              <button 
+                onClick={() => setShowPaywall(false)}
+                className="w-full py-3 px-4 bg-white text-slate-500 font-medium rounded-xl hover:bg-slate-50 transition-all active:scale-95 border border-slate-200"
+              >
+                Nanti Dulu
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Loading Overlay saat Cek Limit */}
+      {isCheckingLimit && (
+        <div className="fixed inset-0 z-[120] flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm">
+          <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+          <p className="text-slate-700 font-medium">Memeriksa kuota...</p>
         </div>
       )}
 

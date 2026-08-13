@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, use } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { ArrowLeft, Download, Info, ChevronDown, Save, FileText, User, Briefcase, Trash2, Plus, LayoutTemplate, Eye, Edit, ZoomIn, ZoomOut, Maximize, Mail, PenTool } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,7 @@ import { IzinOrtuForm } from "@/components/surat/forms/IzinOrtuForm";
 import { InvoiceForm } from "@/components/surat/forms/InvoiceForm";
 import { SuratCanvasRenderer } from "@/components/surat/SuratCanvasRenderer";
 import { SuratViewer } from "@/components/surat/SuratViewer";
+import { checkDownloadLimit } from "@/app/actions/subscription";
 
 const formMapping: Record<string, string> = {
   "lamaran-kerja": "Surat Lamaran Kerja",
@@ -49,6 +50,14 @@ const formMapping: Record<string, string> = {
 export default function SuratBuilderPage({ params }: { params: Promise<{ type: string }> }) {
   const resolvedParams = use(params);
   const type = resolvedParams.type;
+
+  const [isMobilePreviewOpen, setIsMobilePreviewOpen] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [isSaved, setIsSaved] = useState(false);
+
+  const router = useRouter();
+  const [isCheckingLimit, setIsCheckingLimit] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [activeTab, setActiveTab] = useState<'form' | 'template'>('form');
@@ -257,7 +266,7 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
     }
   }, [formData, signatureData, berkasList, isLoaded, draftKey]);
 
-  const { showConfirm } = useUI();
+  const { showConfirm, showToast } = useUI();
 
   const addBerkas = () => {
     setBerkasList([...berkasList, { id: Date.now(), name: '' }]);
@@ -271,10 +280,23 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
     setBerkasList(berkasList.map(b => b.id === id ? { ...b, name: newName } : b));
   };
 
-  const handlePrint = () => {
+  const handlePrint = async () => {
     // If auto-printing from iframe (print=true), bypass the warning modal
     if (searchParams.get('print') === 'true') {
       window.print();
+      return;
+    }
+
+    setIsCheckingLimit(true);
+    const limitCheck = await checkDownloadLimit('surat');
+    setIsCheckingLimit(false);
+
+    if (!limitCheck.success) {
+      if (limitCheck.limitReached) {
+        setShowPaywall(true);
+      } else {
+        showToast("Terjadi kesalahan sistem, silakan coba lagi", "error");
+      }
       return;
     }
 
@@ -492,6 +514,44 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
               {isChangingTemplate ? 'Menyiapkan template...' : 'Surat sedang di siapkan...'}
             </p>
           </div>
+        </div>
+      )}
+
+      {/* Paywall Modal */}
+      {showPaywall && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 p-6 flex flex-col items-center text-center">
+            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+              <Download className="w-8 h-8 text-emerald-600" />
+            </div>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Limit Unduh Gratis Habis!</h3>
+            <p className="text-slate-600 mb-6 leading-relaxed">
+              Anda telah menggunakan jatah 1x unduh gratis untuk Surat. Dapatkan akses cetak <span className="font-semibold text-slate-800">sepuasnya tanpa batas dan tanpa watermark</span> dengan berlangganan Paket Premium.
+            </p>
+            
+            <div className="flex flex-col gap-3 w-full">
+              <button 
+                onClick={() => router.push('/personal/dashboard/langganan')}
+                className="w-full py-3 px-4 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all active:scale-95 shadow-md shadow-emerald-200 flex items-center justify-center gap-2"
+              >
+                Lihat Paket Langganan
+              </button>
+              <button 
+                onClick={() => setShowPaywall(false)}
+                className="w-full py-3 px-4 bg-white text-slate-500 font-medium rounded-xl hover:bg-slate-50 transition-all active:scale-95 border border-slate-200"
+              >
+                Nanti Dulu
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Loading Overlay saat Cek Limit */}
+      {isCheckingLimit && (
+        <div className="fixed inset-0 z-[120] flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm">
+          <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+          <p className="text-slate-700 font-medium">Memeriksa kuota...</p>
         </div>
       )}
 

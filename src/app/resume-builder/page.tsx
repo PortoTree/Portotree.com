@@ -9,13 +9,19 @@ import { Loader2, Eye, EyeOff, Download, ArrowLeft, Edit, Palette, Info } from "
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useUI } from "@/components/ui/UIProvider";
+import { useRouter } from "next/navigation";
+import { checkDownloadLimit } from "@/app/actions/subscription";
 
 export default function CVBuilderPage() {
   const { data, isLoading, updateConfig, updatePortfolio, toggleVisibility } = useCvBuilderState();
   const [sidebarMode, setSidebarMode] = useState<'edit' | 'design'>('edit');
   const [showMobilePreview, setShowMobilePreview] = useState(false);
-  const { showConfirm } = useUI();
+  const { showConfirm, showToast } = useUI();
   const [forcedLoading, setForcedLoading] = useState(true);
+
+  const router = useRouter();
+  const [isCheckingLimit, setIsCheckingLimit] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setForcedLoading(false), 2000);
@@ -23,7 +29,20 @@ export default function CVBuilderPage() {
   }, []);
 
   // Basic print function
-  const handlePrint = () => {
+  const handlePrint = async () => {
+    setIsCheckingLimit(true);
+    const limitCheck = await checkDownloadLimit('cv');
+    setIsCheckingLimit(false);
+
+    if (!limitCheck.success) {
+      if (limitCheck.limitReached) {
+        setShowPaywall(true);
+      } else {
+        showToast("Terjadi kesalahan sistem, silakan coba lagi", "error");
+      }
+      return;
+    }
+
     if (window.innerWidth >= 768) {
       showConfirm({
         title: "Perhatian Sebelum Cetak",
