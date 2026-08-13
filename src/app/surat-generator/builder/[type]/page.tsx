@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowLeft, Download, Info, ChevronDown, Save, FileText, User, Briefcase, Trash2, Plus } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { ArrowLeft, Download, Info, ChevronDown, Save, FileText, User, Briefcase, Trash2, Plus, LayoutTemplate, Eye, Edit, ZoomIn, ZoomOut, Maximize } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useUI } from "@/components/ui/UIProvider";
@@ -9,7 +9,40 @@ import { SignaturePad } from "@/components/ui/SignaturePad";
 
 export default function SuratBuilderPage({ params }: { params: { type: string } }) {
   const [showMobilePreview, setShowMobilePreview] = useState(false);
+  const [activeTab, setActiveTab] = useState<'form' | 'template'>('form');
   const [expandedSection, setExpandedSection] = useState('data-diri');
+  
+  // Canvas Scaling State
+  const containerRef = useRef<HTMLElement>(null);
+  const [scale, setScale] = useState(1);
+  const [defaultScale, setDefaultScale] = useState(1);
+
+  useEffect(() => {
+    const calculateDefaultScale = () => {
+      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+        return 0.43;
+      }
+      if (!containerRef.current) return 1;
+      const containerWidth = containerRef.current.clientWidth;
+      const targetWidth = 794;
+      const padding = 64;
+      if (containerWidth < targetWidth + padding) {
+        return (containerWidth - padding) / targetWidth;
+      }
+      return 1;
+    };
+
+    const updateDefaultScale = () => {
+      const newScale = calculateDefaultScale();
+      setDefaultScale(newScale);
+    };
+    
+    updateDefaultScale();
+    setScale(calculateDefaultScale());
+
+    window.addEventListener('resize', updateDefaultScale);
+    return () => window.removeEventListener('resize', updateDefaultScale);
+  }, [showMobilePreview]);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -111,17 +144,26 @@ export default function SuratBuilderPage({ params }: { params: { type: string } 
         {/* Far Left - Icon Sidebar - hidden when printing */}
         <aside className="print:hidden w-16 shrink-0 bg-white border-r flex-col items-center py-4 space-y-4 z-20 hidden md:flex">
           <button 
-            className="w-10 h-10 rounded-2xl flex items-center justify-center transition-all bg-emerald-600 text-white shadow-md"
+            onClick={() => setActiveTab('form')}
+            className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all shadow-sm ${activeTab === 'form' ? 'bg-emerald-600 text-white shadow-emerald-200' : 'bg-white text-slate-400 hover:bg-slate-50 hover:text-emerald-600'}`}
             title="Isi Data Surat"
           >
             <FileText className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={() => setActiveTab('template')}
+            className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all shadow-sm ${activeTab === 'template' ? 'bg-emerald-600 text-white shadow-emerald-200' : 'bg-white text-slate-400 hover:bg-slate-50 hover:text-emerald-600'}`}
+            title="Pilih Template Surat"
+          >
+            <LayoutTemplate className="w-5 h-5" />
           </button>
         </aside>
 
         {/* Middle Sidebar - Active Panel - hidden when printing */}
         <div className={`w-full md:w-[550px] shrink-0 border-r bg-white overflow-y-auto custom-scrollbar print:hidden h-full relative z-10 ${showMobilePreview ? 'hidden md:block' : 'block'}`}>
-          <div className="flex flex-col">
-            <div className="p-4 border-b bg-gray-50 relative md:sticky md:top-0 z-10">
+          {activeTab === 'form' ? (
+            <div className="flex flex-col">
+              <div className="p-4 border-b bg-gray-50 relative md:sticky md:top-0 z-10">
               <h2 className="font-bold text-sm uppercase text-gray-500">Isi Data Surat</h2>
               <p className="text-xs text-gray-500 mt-1">Lengkapi informasi di bawah ini untuk menyusun surat secara otomatis.</p>
             </div>
@@ -322,11 +364,45 @@ export default function SuratBuilderPage({ params }: { params: { type: string } 
 
             </div>
           </div>
+          ) : (
+            <div className="flex flex-col h-full bg-slate-50/30">
+              <div className="p-4 border-b bg-gray-50 relative md:sticky md:top-0 z-10">
+                <h2 className="font-bold text-sm uppercase text-gray-500">Pilih Template</h2>
+                <p className="text-xs text-gray-500 mt-1">Pilih desain template surat lamaran yang sesuai dengan kebutuhan Anda.</p>
+              </div>
+              <div className="flex-1 p-8 flex flex-col items-center justify-center text-center">
+                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4 border border-slate-200 shadow-sm">
+                  <LayoutTemplate className="w-7 h-7 text-slate-400" />
+                </div>
+                <h3 className="text-base font-bold text-slate-700">Koleksi Template</h3>
+                <p className="text-sm text-slate-500 mt-2 max-w-[280px] leading-relaxed">
+                  Berbagai macam pilihan desain template surat generator sedang dalam tahap pengembangan dan akan segera hadir di sini.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Zoom Controls */}
+        <div className={`fixed bottom-[100px] right-6 md:bottom-8 md:right-8 z-40 bg-white/80 backdrop-blur-md shadow-xl rounded-full p-1.5 flex-col items-center gap-2 print:hidden border border-gray-200/50 ${!showMobilePreview ? 'hidden md:flex' : 'flex'}`}>
+          <button onClick={() => setScale(s => Math.min(s + 0.15, 2))} className="p-2 rounded-full hover:bg-gray-100/80 text-gray-700 transition-colors bg-transparent">
+            <ZoomIn className="w-5 h-5" />
+          </button>
+          <span className="text-[10px] font-bold text-gray-700 text-center select-none leading-none w-8">
+            {Math.round(scale * 100)}%
+          </span>
+          <button onClick={() => setScale(s => Math.max(s - 0.15, 0.3))} className="p-2 rounded-full hover:bg-gray-100/80 text-gray-700 transition-colors bg-transparent">
+            <ZoomOut className="w-5 h-5" />
+          </button>
+          <div className="w-4 h-px bg-gray-300/60 my-0.5"></div>
+          <button onClick={() => setScale(defaultScale)} className="p-2 rounded-full hover:bg-gray-100/80 text-gray-700 transition-colors bg-transparent" title="Fit to Screen">
+            <Maximize className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Main Canvas Workspace */}
-        <main className={`flex-1 h-full overflow-y-auto overflow-x-hidden bg-gray-100/50 print:bg-white print:overflow-visible transition-all duration-300 ${!showMobilePreview ? 'hidden md:block' : 'block'}`}>
-          <div className="min-h-full p-4 md:p-8 flex justify-center items-start print:p-0">
+        <main ref={containerRef} className={`flex-1 h-full overflow-y-auto overflow-x-auto bg-gray-100/50 print:bg-white print:overflow-visible transition-all duration-300 ${!showMobilePreview ? 'hidden md:block' : 'block'}`}>
+          <div className="w-full min-h-full flex justify-center py-4 md:py-8 print:p-0 min-w-max print:min-w-0 print:block">
             {/* Style Khusus Print A4 untuk memaksa 1 Halaman */}
             <style dangerouslySetInnerHTML={{__html: `
               @media print {
@@ -342,9 +418,23 @@ export default function SuratBuilderPage({ params }: { params: { type: string } 
               }
             `}} />
             
-            {/* A4 Paper Template */}
-            <div className="w-full max-w-[794px] min-h-[1123px] h-fit md:h-[1123px] bg-white shadow-xl md:rounded-lg print:shadow-none print:rounded-none relative shrink-0 print:w-[210mm] print:h-[297mm] print:overflow-hidden box-border flex flex-col">
-              <div className="px-[20mm] py-[12mm] text-[11pt] leading-[1.5] flex flex-col flex-1" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
+            {/* Scaled Wrapper */}
+            <div 
+              style={{ 
+                width: `${794 * scale}px`, 
+                height: `${1123 * scale}px` 
+              }}
+              className="relative transition-all duration-200 print:!w-auto print:!h-auto print:!transform-none"
+            >
+              {/* A4 Paper Template */}
+              <div 
+                style={{ 
+                  transform: `scale(${scale})`,
+                  transformOrigin: 'top left'
+                }}
+                className="w-[794px] min-h-[1123px] h-fit md:h-[1123px] bg-white shadow-xl md:rounded-lg print:shadow-none print:rounded-none absolute top-0 left-0 print:w-[210mm] print:h-[297mm] print:overflow-hidden box-border flex flex-col print:relative print:mx-auto"
+              >
+                <div className="px-[20mm] py-[12mm] text-[11pt] leading-[1.5] flex flex-col flex-1" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
                 
                 {/* Header */}
                 <h2 className="text-center font-bold text-lg mb-6 tracking-wide uppercase">
@@ -455,6 +545,8 @@ export default function SuratBuilderPage({ params }: { params: { type: string } 
                   </div>
                 </div>
 
+                </div>
+
               </div>
             </div>
           </div>
@@ -462,14 +554,13 @@ export default function SuratBuilderPage({ params }: { params: { type: string } 
       </div>
 
       {/* Mobile Preview Toggle */}
-      <div className="md:hidden fixed bottom-6 right-6 z-50 print:hidden">
-        <Button 
-          onClick={() => setShowMobilePreview(!showMobilePreview)}
-          className="rounded-full w-14 h-14 shadow-xl bg-emerald-600 hover:bg-emerald-700 flex items-center justify-center border-2 border-white"
-        >
-          {showMobilePreview ? <FileText className="w-6 h-6 text-white" /> : <Save className="w-6 h-6 text-white" />}
-        </Button>
-      </div>
+      <button
+        onClick={() => setShowMobilePreview(!showMobilePreview)}
+        className={`md:hidden fixed bottom-6 right-6 z-50 px-6 py-3.5 rounded-full shadow-2xl text-[15px] font-bold uppercase tracking-wide transition-all flex items-center gap-2.5 print:hidden ${!showMobilePreview ? 'bg-emerald-600 text-white' : 'bg-slate-50 text-slate-900 border border-slate-200'}`}
+      >
+        {showMobilePreview ? <Edit className="w-5 h-5 stroke-[2.5]" /> : <Eye className="w-5 h-5 stroke-[2.5]" />} 
+        <span>{showMobilePreview ? 'Edit Data' : 'Preview'}</span>
+      </button>
 
     </div>
   );

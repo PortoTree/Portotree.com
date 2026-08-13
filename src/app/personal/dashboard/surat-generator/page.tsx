@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FileText, Mail, PenTool, Plus } from "lucide-react";
 
 export default function SuratGeneratorPage() {
@@ -6,18 +7,21 @@ export default function SuratGeneratorPage() {
       id: 1,
       title: "Surat Lamaran Pekerjaan",
       description: "Surat lamaran kerja profesional",
+      slug: "lamaran-pekerjaan",
       icon: <FileText className="w-5 h-5 text-white" />,
     },
     {
       id: 2,
       title: "Surat Pengunduran Diri",
       description: "Surat resign profesional",
+      slug: "pengunduran-diri",
       icon: <Mail className="w-5 h-5 text-white" />,
     },
     {
       id: 3,
       title: "Daftar Riwayat Hidup",
       description: "Riwayat hidup dalam format surat",
+      slug: "daftar-riwayat-hidup",
       icon: <PenTool className="w-5 h-5 text-white" />,
     },
   ];
@@ -41,9 +45,12 @@ export default function SuratGeneratorPage() {
                 <p className="text-[13px] text-slate-500 leading-relaxed">{template.description}</p>
               </div>
             </div>
-            <button className="w-fit bg-emerald-600 hover:bg-emerald-700 text-white text-[13px] font-semibold py-2 px-5 rounded-lg transition-colors mt-auto">
+            <Link 
+              href={`/surat-generator/builder/${template.slug}`}
+              className="w-fit bg-emerald-600 hover:bg-emerald-700 text-white text-[13px] font-semibold py-2 px-5 rounded-lg transition-colors mt-auto"
+            >
               Buat Sekarang
-            </button>
+            </Link>
           </div>
         ))}
       </div>
