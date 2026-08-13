@@ -18,13 +18,6 @@ export function usePagination(dependencies: any[]) {
         return;
       }
       
-      // Calculate dynamic A4 height based on browser's actual rendering of 297mm
-      // This prevents bugs on mobile devices where 297mm does not exactly equal 1122.5px
-      const referencePage = document.querySelector('.cv-page');
-      const dynamicA4Height = referencePage ? referencePage.getBoundingClientRect().height : A4_HEIGHT_PX;
-      // We'll use this dynamic height for our calculations
-      const PAGE_HEIGHT = dynamicA4Height;
-
       // 1. Reset all previously applied margins
       const measurerElements = measurer.querySelectorAll('.break-inside-avoid, .cv-section');
       measurerElements.forEach((el: any) => {
@@ -68,13 +61,13 @@ export function usePagination(dependencies: any[]) {
         const relativeBottom = relativeTop + rectToMeasure.height;
 
         // Which page does this element start and end on?
-        const startPage = Math.floor((relativeTop + 1) / PAGE_HEIGHT); // page index (0-based) where element starts
-        const endPage = Math.floor((relativeBottom - 1) / PAGE_HEIGHT); // page index where element ends
+        const startPage = Math.floor((relativeTop + 1) / A4_HEIGHT_PX); // page index (0-based) where element starts
+        const endPage = Math.floor((relativeBottom - 1) / A4_HEIGHT_PX); // page index where element ends
 
         // If it crosses a page boundary, push it down to the next page
         if (endPage > startPage) {
           // Calculate how much margin we need to push it to the exact start of the next page
-          const nextPageTop = (startPage + 1) * PAGE_HEIGHT;
+          const nextPageTop = (startPage + 1) * A4_HEIGHT_PX;
           const pushAmount = nextPageTop - relativeTop;
           
           // Add 20px buffer so it doesn't touch the exact edge
@@ -92,7 +85,7 @@ export function usePagination(dependencies: any[]) {
 
       // After pushing elements, recalculate total height to determine number of pages
       const newTotalHeight = measurer.getBoundingClientRect().height;
-      const newPageCount = Math.max(1, Math.ceil(newTotalHeight / PAGE_HEIGHT));
+      const newPageCount = Math.max(1, Math.ceil(newTotalHeight / A4_HEIGHT_PX));
       
       setPages(newPageCount);
 
