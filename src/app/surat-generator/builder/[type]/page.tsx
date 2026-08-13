@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, use } from "react";
+import { useSearchParams } from "next/navigation";
 import { ArrowLeft, Download, Info, ChevronDown, Save, FileText, User, Briefcase, Trash2, Plus, LayoutTemplate, Eye, Edit, ZoomIn, ZoomOut, Maximize, Mail, PenTool } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -21,21 +22,7 @@ import { PernyataanBelumMenikahForm } from "@/components/surat/forms/PernyataanB
 import { CutiForm } from "@/components/surat/forms/CutiForm";
 import { IzinOrtuForm } from "@/components/surat/forms/IzinOrtuForm";
 import { InvoiceForm } from "@/components/surat/forms/InvoiceForm";
-import { LamaranKerjaCanvas } from "@/components/surat/templates/LamaranKerjaCanvas";
-import { PengunduranDiriCanvas } from "@/components/surat/templates/PengunduranDiriCanvas";
-import { DaftarRiwayatHidupCanvas } from "@/components/surat/templates/DaftarRiwayatHidupCanvas";
-import { KeteranganSakitCanvas } from "@/components/surat/templates/KeteranganSakitCanvas";
-import { IzinKerjaCanvas } from "@/components/surat/templates/IzinKerjaCanvas";
-import { KuasaCanvas } from "@/components/surat/templates/KuasaCanvas";
-import { MagangCanvas } from "@/components/surat/templates/MagangCanvas";
-import { KesanggupanCanvas } from "@/components/surat/templates/KesanggupanCanvas";
-import { PernyataanCanvas } from "@/components/surat/templates/PernyataanCanvas";
-import { IzinKuliahCanvas } from "@/components/surat/templates/IzinKuliahCanvas";
-import { IzinSekolahCanvas } from "@/components/surat/templates/IzinSekolahCanvas";
-import { PernyataanBelumMenikahCanvas } from "@/components/surat/templates/PernyataanBelumMenikahCanvas";
-import { CutiCanvas } from "@/components/surat/templates/CutiCanvas";
-import { IzinOrtuCanvas } from "@/components/surat/templates/IzinOrtuCanvas";
-import { InvoiceCanvas } from "@/components/surat/templates/InvoiceCanvas";
+import { SuratCanvasRenderer } from "@/components/surat/SuratCanvasRenderer";
 import { SuratViewer } from "@/components/surat/SuratViewer";
 
 const formMapping: Record<string, string> = {
@@ -65,6 +52,26 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
 
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [activeTab, setActiveTab] = useState<'form' | 'template'>('form');
+  const [isChangingTemplate, setIsChangingTemplate] = useState(false);
+  const [forcedLoading, setForcedLoading] = useState(false);
+
+  useEffect(() => {
+    setIsChangingTemplate(false);
+  }, [type]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isInitialized = sessionStorage.getItem('surat_builder_initialized');
+      if (!isInitialized) {
+        setForcedLoading(true);
+        const timer = setTimeout(() => {
+          setForcedLoading(false);
+          sessionStorage.setItem('surat_builder_initialized', 'true');
+        }, 2000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, []);
   
   const populerTemplates = [
     {
@@ -75,17 +82,34 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
       icon: FileText,
     },
     {
-      id: "pengunduran-diri",
-      title: "Surat Pengunduran Diri",
-      description: "Template resign resmi dan profesional",
-      slug: "pengunduran-diri",
-      icon: FileText,
-    },
-    {
       id: "daftar-riwayat-hidup",
       title: "Surat Riwayat Hidup",
       description: "Template CV formal untuk administrasi",
       slug: "daftar-riwayat-hidup",
+      icon: FileText,
+    },
+    {
+      id: "invoice",
+      title: "Invoice",
+      description: "Template invoice profesional",
+      slug: "invoice",
+      icon: FileText,
+    },
+    {
+      id: "izin-kerja",
+      title: "Surat Izin Tidak Masuk Kerja",
+      description: "Template izin tidak masuk kerja",
+      slug: "izin-kerja",
+      icon: FileText,
+    },
+  ];
+
+  const lainnyaTemplates = [
+    {
+      id: "pengunduran-diri",
+      title: "Surat Pengunduran Diri",
+      description: "Template resign resmi dan profesional",
+      slug: "pengunduran-diri",
       icon: FileText,
     },
     {
@@ -96,22 +120,12 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
       icon: FileText,
     },
     {
-      id: "izin-kerja",
-      title: "Surat Izin Tidak Masuk Kerja",
-      description: "Template izin tidak masuk kerja",
-      slug: "izin-kerja",
-      icon: FileText,
-    },
-    {
       id: "kuasa",
       title: "Surat Kuasa",
       description: "Template surat kuasa hukum resmi",
       slug: "kuasa",
       icon: FileText,
     },
-  ];
-
-  const lainnyaTemplates = [
     {
       id: "magang",
       title: "Surat Permohonan Magang Kerja",
@@ -168,13 +182,6 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
       slug: "izin-ortu",
       icon: FileText,
     },
-    {
-      id: "invoice",
-      title: "Invoice",
-      description: "Template invoice profesional",
-      slug: "invoice",
-      icon: FileText,
-    },
   ];
 
   
@@ -214,11 +221,14 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
   };
 
   const [isLoaded, setIsLoaded] = useState(false);
+  const searchParams = useSearchParams();
+  const draftId = searchParams.get('id');
+  const draftKey = draftId ? `suratBuilder_${type}_${draftId}` : `suratBuilder_${type}`;
 
   // Load from localStorage on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(`suratBuilder_${type}`);
+      const saved = localStorage.getItem(draftKey);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed.formData) setFormData(parsed.formData);
@@ -236,15 +246,16 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
   useEffect(() => {
     if (!isLoaded) return;
     try {
-      localStorage.setItem(`suratBuilder_${type}`, JSON.stringify({
+      localStorage.setItem(draftKey, JSON.stringify({
         formData,
         signatureData,
-        berkasList
+        berkasList,
+        lastModified: new Date().toISOString()
       }));
     } catch (e) {
       console.error("Failed to save surat builder state", e);
     }
-  }, [formData, signatureData, berkasList, isLoaded, type]);
+  }, [formData, signatureData, berkasList, isLoaded, draftKey]);
 
   const { showConfirm } = useUI();
 
@@ -261,6 +272,12 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
   };
 
   const handlePrint = () => {
+    // If auto-printing from iframe (print=true), bypass the warning modal
+    if (searchParams.get('print') === 'true') {
+      window.print();
+      return;
+    }
+
     if (window.innerWidth >= 768) {
       showConfirm({
         title: "Perhatian Sebelum Cetak",
@@ -434,73 +451,50 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
   };
 
   const renderCanvasContent = () => {
-    switch (type) {
-      case 'pengunduran-diri':
-        return (
-          <PengunduranDiriCanvas 
-            formData={formData} 
-            signatureData={signatureData} 
-          />
-        );
-      case 'daftar-riwayat-hidup':
-        return (
-          <DaftarRiwayatHidupCanvas
-            formData={formData} 
-            signatureData={signatureData} 
-          />
-        );
-      case 'keterangan-sakit':
-        return (
-          <KeteranganSakitCanvas
-            formData={formData} 
-            signatureData={signatureData} 
-          />
-        );
-      case 'izin-kerja':
-        return (
-          <IzinKerjaCanvas
-            formData={formData} 
-            signatureData={signatureData} 
-          />
-        );
-      case 'kuasa':
-        return (
-          <KuasaCanvas
-            formData={formData} 
-            signatureData={signatureData} 
-          />
-        );
-      case "magang":
-        return <MagangCanvas formData={formData} signatureData={signatureData} berkasList={berkasList} />;
-      case "pernyataan":
-        return <PernyataanCanvas formData={formData} signatureData={signatureData} pernyataanList={berkasList} />;
-      case "kesanggupan":
-        return <KesanggupanCanvas formData={formData} signatureData={signatureData} pernyataanList={berkasList} />;
-      case "izin-kuliah":
-        return <IzinKuliahCanvas formData={formData} signatureData={signatureData} />;
-      case "izin-sekolah":
-        return <IzinSekolahCanvas formData={formData} signatureData={signatureData} />;
-      case "belum-menikah":
-        return <PernyataanBelumMenikahCanvas formData={formData} signatureData={signatureData} />;
-      case "cuti":
-        return <CutiCanvas formData={formData} signatureData={signatureData} />;
-      case "izin-ortu":
-        return <IzinOrtuCanvas formData={formData} signatureData={signatureData} />;
-      case "invoice":
-        return <InvoiceCanvas formData={formData} signatureData={signatureData} />;
-      default:
-        return (
-          <LamaranKerjaCanvas 
-            formData={formData} 
-            signatureData={signatureData} 
-            berkasList={berkasList} 
-          />
-        );
-    }
+    return (
+      <SuratCanvasRenderer 
+        type={type as string} 
+        formData={formData} 
+        signatureData={signatureData} 
+        berkasList={berkasList} 
+      />
+    );
   };
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-slate-100 print:bg-white print:h-auto print:overflow-visible">
+      
+      {/* Loading Overlay when switching template or initial load */}
+      {(forcedLoading || isChangingTemplate) && (
+        <div className="fixed inset-0 z-[9999] bg-white/80 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in duration-200">
+          <img 
+            src="/loading-gif.gif" 
+            alt="Loading..."
+            className="w-48 h-48 md:w-64 md:h-64 object-contain opacity-90"
+          />
+          <div className="flex flex-col items-center justify-center -mt-2 md:-mt-6">
+            <div className="w-48 md:w-64 h-1.5 bg-slate-200 rounded-full overflow-hidden relative shadow-inner">
+              <div className="absolute top-0 bottom-0 left-0 bg-emerald-500 rounded-full w-full"
+                style={{
+                  animation: 'progress 2s linear forwards'
+                }}
+              ></div>
+            </div>
+            <style>
+              {`
+                @keyframes progress {
+                  0% { width: 0%; }
+                  100% { width: 100%; }
+                }
+              `}
+            </style>
+            <p className="text-slate-500 text-xs md:text-sm mt-3 font-medium tracking-widest uppercase">
+              {isChangingTemplate ? 'Menyiapkan template...' : 'Surat sedang di siapkan...'}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Top Navbar - hidden when printing */}
       <div className="print:hidden h-16 bg-white border-b flex items-center justify-between px-4 md:px-6 shrink-0 sticky top-0 z-50">
         <div className="flex items-center gap-2 md:gap-4">
@@ -597,7 +591,7 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
                 <p className="text-xs text-gray-500 mt-1">Pilih desain template surat lamaran yang sesuai dengan kebutuhan Anda.</p>
               </div>
               <div className="flex-1 overflow-y-auto p-4 pb-32 custom-scrollbar">
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-10">
                   <div>
                     <h3 className="font-bold text-xs uppercase text-slate-500 mb-3 px-1">Surat Populer</h3>
                     <div className="flex flex-col gap-3">
@@ -610,7 +604,10 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
                             className={`bg-white border rounded-[14px] p-4 flex flex-col shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group ${
                               type === template.slug ? 'border-emerald-500 ring-1 ring-emerald-500/20' : 'border-slate-200/80 hover:border-emerald-200'
                             }`}
-                            onClick={() => setActiveTab('form')}
+                            onClick={() => {
+                              setActiveTab('form');
+                              if (type !== template.slug) setIsChangingTemplate(true);
+                            }}
                           >
                             {type === template.slug && (
                               <div className="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">
@@ -648,7 +645,10 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
                             className={`bg-white border rounded-[14px] p-4 flex flex-col shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group ${
                               type === template.slug ? 'border-emerald-500 ring-1 ring-emerald-500/20' : 'border-slate-200/80 hover:border-emerald-200'
                             }`}
-                            onClick={() => setActiveTab('form')}
+                            onClick={() => {
+                              setActiveTab('form');
+                              if (type !== template.slug) setIsChangingTemplate(true);
+                            }}
                           >
                             {type === template.slug && (
                               <div className="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">
@@ -680,7 +680,7 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
         </div>
 
         {/* Main Canvas Workspace using SuratViewer */}
-        <SuratViewer showMobilePreview={showMobilePreview} dependency={formData}>
+        <SuratViewer showMobilePreview={showMobilePreview} dependency={formData} type={type as string}>
           {renderCanvasContent()}
         </SuratViewer>
       </div>

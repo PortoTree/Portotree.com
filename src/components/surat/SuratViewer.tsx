@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSuratPagination } from './useSuratPagination';
-import { ZoomIn, ZoomOut, Maximize } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize, XCircle } from 'lucide-react';
+import { useUI } from '@/components/ui/UIProvider';
 
 interface SuratViewerProps {
   children: React.ReactNode;
   showMobilePreview: boolean;
   dependency: any;
+  type?: string;
 }
 
-export function SuratViewer({ children, showMobilePreview, dependency }: SuratViewerProps) {
+export function SuratViewer({ children, showMobilePreview, dependency, type }: SuratViewerProps) {
+  const { showToast } = useUI();
   const { pages, forceRepaginate } = useSuratPagination([dependency]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -127,6 +130,21 @@ export function SuratViewer({ children, showMobilePreview, dependency }: SuratVi
                 >
                   {children}
                 </div>
+
+                {type && type !== 'invoice' && (
+                  <div className="absolute bottom-3 right-6 flex items-center gap-1.5 z-10">
+                    <button 
+                      onClick={() => showToast("Upgrade ke Premium untuk menghilangkan watermark ini!", "info")}
+                      className="print:hidden text-red-500 hover:text-red-600 transition-colors bg-white/50 rounded-full backdrop-blur-sm pointer-events-auto"
+                      title="Hilangkan Watermark"
+                    >
+                      <XCircle className="w-3.5 h-3.5" />
+                    </button>
+                    <span className="text-[8pt] text-gray-400/60 font-medium pointer-events-none tracking-wide print:text-gray-400">
+                      Made with PortoTree.com
+                    </span>
+                  </div>
+                )}
               </div>
             ))}
           </div>
