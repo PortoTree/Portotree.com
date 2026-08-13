@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signInWithCustomToken } from "firebase/auth";
 import { auth } from "@/lib/firebase/client";
 import { createSession } from "@/app/actions/auth";
 
-export default function ImpersonatePage() {
+function ImpersonateContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -58,3 +58,18 @@ export default function ImpersonatePage() {
     </div>
   );
 }
+
+export default function ImpersonatePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mb-6"></div>
+        <h1 className="text-2xl font-bold text-slate-800 mb-2">Mengalihkan Sesi...</h1>
+        <p className="text-slate-500 max-w-sm">Sedang mempersiapkan dashboard untuk akun ini. Harap tunggu sebentar.</p>
+      </div>
+    }>
+      <ImpersonateContent />
+    </Suspense>
+  );
+}
+
