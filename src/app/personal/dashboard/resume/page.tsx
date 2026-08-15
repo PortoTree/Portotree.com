@@ -81,23 +81,21 @@ export default function ResumeDashboardPage() {
               )}
             </div>
             
-            <div className="p-5">
-              <div className="grid grid-cols-2 gap-2">
+            <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-center gap-4">
                 <a
                   href="/resume-builder"
-                  className="flex items-center justify-center gap-2 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors text-sm"
+                  className="flex items-center justify-center gap-2 py-2 px-6 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors text-sm shadow-sm"
                 >
                   <Edit3 className="w-4 h-4" />
                   Edit Resume
                 </a>
                 <a
                   href="/resume-builder"
-                  className="flex items-center justify-center gap-2 py-3 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 transition-colors text-sm"
+                  className="flex items-center justify-center gap-2 py-2 px-6 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 transition-colors text-sm shadow-sm"
                 >
                   <Download className="w-4 h-4" />
                   Download PDF
                 </a>
-              </div>
             </div>
           </div>
 
