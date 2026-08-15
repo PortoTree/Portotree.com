@@ -22,29 +22,29 @@ export default function LanggananPage() {
     {
       id: "3_MONTHS",
       name: "3 Bulan",
-      price: 18000,
+      price: 32000,
       originalPrice: 48000,
       duration: "Akses 90 Hari",
       popular: true,
-      savings: "Hemat Rp 30.000"
+      savings: "Hemat Rp 16.000"
     },
     {
       id: "6_MONTHS",
       name: "6 Bulan",
-      price: 52000,
-      originalPrice: 75000,
+      price: 55000,
+      originalPrice: 85000,
       duration: "Akses 180 Hari",
       popular: false,
-      savings: "Hemat Rp 23.000"
+      savings: "Hemat Rp 30.000"
     },
     {
       id: "12_MONTHS",
       name: "12 Bulan",
-      price: 104000,
-      originalPrice: 127000,
+      price: 90000,
+      originalPrice: 149000,
       duration: "Akses 365 Hari",
       popular: false,
-      savings: "Hemat Rp 23.000"
+      savings: "Hemat Rp 59.000"
     }
   ];
 
