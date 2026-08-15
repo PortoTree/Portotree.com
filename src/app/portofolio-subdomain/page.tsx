@@ -118,7 +118,7 @@ export default function Home() {
               <div className="flex flex-col items-center">
                 <div className="flex items-center gap-3">
                   <Globe className="w-8 h-8 text-green-600" />
-                  <p className="text-4xl font-bold text-foreground">1,000+</p>
+                  <p className="text-4xl font-bold text-foreground">100+</p>
                 </div>
                 <p className="text-base text-muted-foreground font-medium mt-1">Portofolio Dibuat</p>
               </div>
