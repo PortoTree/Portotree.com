@@ -63,12 +63,10 @@ export default function ResumeDashboardPage() {
         <p className="text-slate-500 text-sm mt-1">Kelola resume berstandar ATS Anda.</p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6">
-        {/* KOLOM KIRI */}
-        <div className="flex-1 min-w-0 space-y-4">
-          
-          {/* PREVIEW KARTU */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+      <div className="space-y-6">
+        
+        {/* PREVIEW KARTU FULL WIDTH */}
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
             <div className="bg-slate-100 relative overflow-hidden border-b border-slate-200" style={{ height: '340px' }}>
               {data && (
                 <div 
@@ -103,12 +101,17 @@ export default function ResumeDashboardPage() {
             </div>
           </div>
 
-          <ProgressResume />
-        </div>
+        {/* ROW BAWAH: Progress Kiri, Info Kanan */}
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
+          
+          {/* KOLOM KIRI: PROGRESS RESUME */}
+          <div className="flex-1 min-w-0 w-full">
+            <ProgressResume />
+          </div>
 
-        {/* KOLOM KANAN */}
-        <div className="w-full md:w-72 flex-shrink-0 space-y-4">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+          {/* KOLOM KANAN: RESUME INFO */}
+          <div className="w-full lg:w-72 flex-shrink-0">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
             <div className="flex items-center gap-2 mb-4">
               <Settings className="w-4 h-4 text-blue-600" />
               <h3 className="font-bold text-slate-800 text-sm">Resume Info</h3>
@@ -130,7 +133,7 @@ export default function ResumeDashboardPage() {
             </div>
           </div>
         </div>
-
+      </div>
       </div>
     </div>
   );

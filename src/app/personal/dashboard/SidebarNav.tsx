@@ -7,18 +7,20 @@ import { LayoutDashboard, Settings, User, Globe, FileText, CreditCard, Briefcase
 
 const navItems = [
   { href: "/personal/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
-  { href: "/personal/dashboard/portofind", label: "Portofind", icon: Briefcase, badge: "Progress" },
-  { href: "/personal/dashboard/portfolio", label: "Portofolio", icon: Globe },
+  // { href: "/personal/dashboard/portofind", label: "Portofind", icon: Briefcase, badge: "Progress" },
+  { href: "/personal/dashboard/portofolio", label: "Portofolio", icon: Globe },
   { href: "/personal/dashboard/resume", label: "CV Builder", icon: FileText },
   { href: "/personal/dashboard/surat-generator", label: "Surat generator", icon: Mail },
-  { href: "/personal/dashboard/langganan", label: "Langganan", icon: CreditCard, badge: "Progress" },
-  { href: "/personal/dashboard/account", label: "Akun", icon: User, badge: "Progress" },
-  { href: "/personal/dashboard/settings", label: "Pengaturan", icon: Settings, badge: "Progress" },
+  { href: "/personal/dashboard/langganan", label: "Langganan", icon: CreditCard },
+  { href: "/personal/dashboard/account", label: "Akun", icon: User },
 ];
 
-export default function SidebarNav() {
+export default function SidebarNav({ isPortofind }: { isPortofind?: boolean }) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Group classes to hide text/badges if collapsed, but show on hover
+  const textVisibilityClass = isPortofind ? 'opacity-0 w-0 overflow-hidden group-hover/sidebar:opacity-100 group-hover/sidebar:w-auto transition-all duration-300' : 'opacity-100 w-auto';
 
   return (
     <>
@@ -38,11 +40,11 @@ export default function SidebarNav() {
                   : "text-slate-600 hover:bg-slate-100"
               }`}
             >
-              <Icon className="w-5 h-5" />
-              <div className="flex items-center gap-2">
-                <span>{label}</span>
+              <Icon className="w-6 h-6 shrink-0" />
+              <div className={`flex items-center gap-2 ${textVisibilityClass}`}>
+                <span className="whitespace-nowrap">{label}</span>
                 {badge && (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-500 uppercase tracking-wider">{badge}</span>
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-500 uppercase tracking-wider whitespace-nowrap">{badge}</span>
                 )}
               </div>
             </Link>
@@ -51,15 +53,15 @@ export default function SidebarNav() {
         </div>
         
         {/* DESKTOP FOOTER */}
-        <div className="p-5 mt-auto border-t border-slate-200 bg-slate-50/80">
+        <div className={`p-5 mt-auto border-t border-slate-200 bg-slate-50/80 transition-all duration-300 ${isPortofind ? 'opacity-0 hidden group-hover/sidebar:opacity-100 group-hover/sidebar:block' : 'opacity-100 block'}`}>
           <a 
             href="https://chat.whatsapp.com/EinEUnLQthc3M0wrlyRuhR"
             target="_blank"
             rel="noopener noreferrer"
             className="block group bg-white border border-slate-200 p-3 rounded-xl shadow-sm hover:bg-red-50 hover:border-red-200 hover:shadow-md transition-all"
           >
-            <div className="flex items-center gap-1.5 text-sm font-bold text-red-600 group-hover:text-red-700 transition-colors">
-              <Info className="w-4 h-4" />
+            <div className="flex items-center gap-1.5 text-sm font-bold text-red-600 group-hover:text-red-700 transition-colors whitespace-nowrap">
+              <Info className="w-4 h-4 shrink-0" />
               <span>Mengalami masalah?</span>
             </div>
             <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">

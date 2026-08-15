@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/cleanup-portofind",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}

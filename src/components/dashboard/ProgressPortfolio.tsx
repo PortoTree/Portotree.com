@@ -59,7 +59,7 @@ export default function ProgressPortfolio() {
   const progressPercentage = Math.round((completedCount / checklist.length) * 100);
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6 mt-6">
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       {/* Header */}
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">

@@ -378,21 +378,24 @@ export default function SuratGeneratorPage() {
                         <div className="flex items-center justify-end gap-2">
                           <button 
                             onClick={() => handlePreview(letter)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500 text-emerald-600 hover:bg-emerald-50 transition-all active:scale-95 text-[13px] font-medium"
+                            className="p-2 rounded-full border border-emerald-500 text-emerald-600 hover:bg-emerald-50 transition-all active:scale-95 flex items-center justify-center bg-white"
+                            title="Preview"
                           >
-                            <Eye className="w-4 h-4" /> <span className="hidden lg:inline">Preview</span>
+                            <Eye className="w-4 h-4" />
                           </button>
                           <Link 
                             href={`/surat-generator/builder/${letter.slug}${letter.draftId ? `?id=${letter.draftId}` : ''}`}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-all active:scale-95 text-[13px] font-medium border border-emerald-600"
+                            className="p-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700 transition-all active:scale-95 border border-emerald-600 flex items-center justify-center shadow-sm"
+                            title="Edit"
                           >
-                            <Edit className="w-4 h-4" /> <span className="hidden lg:inline">Edit</span>
+                            <Edit className="w-4 h-4" />
                           </Link>
                           <button 
                             onClick={() => handleDownload(letter)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500 text-emerald-600 hover:bg-emerald-50 transition-all active:scale-95 text-[13px] font-medium"
+                            className="p-2 rounded-full border border-emerald-500 text-emerald-600 hover:bg-emerald-50 transition-all active:scale-95 flex items-center justify-center bg-white"
+                            title="Download"
                           >
-                            <Download className="w-4 h-4" /> <span className="hidden lg:inline">Download</span>
+                            <Download className="w-4 h-4" />
                           </button>
                           
                           {/* Three dots menu */}

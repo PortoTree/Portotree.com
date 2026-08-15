@@ -1,16 +1,76 @@
-export default function ComingSoonPage() {
-  return (
-    <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-white border border-slate-100 rounded-2xl shadow-sm min-h-[400px]">
-      <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400">
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12 6 12 12 16 14" />
-        </svg>
-      </div>
-      <h2 className="text-2xl font-bold text-slate-800 mb-2">Coming Soon</h2>
-      <p className="text-slate-500 text-center max-w-sm">
-        Halaman ini di sembunyikan sementara waktu dan akan segera hadir.
-      </p>
-    </div>
-  );
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { adminAuth, adminDb } from "@/lib/firebase/server";
+import AccountClient from "./AccountClient";
+
+export const metadata = {
+  title: "Akun Saya | PortoTree",
+};
+
+export default async function AccountPage() {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("session")?.value;
+
+  if (!sessionCookie) {
+    redirect("/login");
+  }
+
+  let decodedToken: any = null;
+  let userRecord: any = null;
+  let stats: any = {
+    isPremium: false,
+    premiumUntil: null,
+    isSuspended: false,
+    freeResumeCount: 0,
+    freeSuratCount: 0
+  };
+
+  let portfolioPhoto = "";
+  let portfolioName = "";
+
+  try {
+    decodedToken = await adminAuth.verifySessionCookie(sessionCookie, true);
+    userRecord = await adminAuth.getUser(decodedToken.uid);
+
+    const userDoc = await adminDb.collection("users").doc(decodedToken.uid).get();
+    if (userDoc.exists) {
+      const data = userDoc.data();
+      
+      const now = Date.now();
+      let isPremium = data?.isPremium || false;
+      if (isPremium && data?.premiumUntil && data.premiumUntil <= now) {
+        isPremium = false; // Expired
+      }
+
+      stats = {
+        isPremium: isPremium,
+        premiumUntil: data?.premiumUntil || null,
+        isSuspended: data?.isSuspended || false,
+        freeResumeCount: data?.freeResumeCount || 0,
+        freeSuratCount: data?.freeSuratCount || 0,
+      };
+    }
+
+    const portfolioDoc = await adminDb.collection("portfolios").doc(decodedToken.uid).get();
+    if (portfolioDoc.exists) {
+      const pData = portfolioDoc.data();
+      portfolioPhoto = pData?.data?.personal?.photoUrl || "";
+      portfolioName = pData?.data?.personal?.fullName || pData?.username || "";
+    }
+
+  } catch (error) {
+    console.error("Error fetching account data:", error);
+    redirect("/login");
+  }
+
+  const userData = {
+    uid: userRecord.uid,
+    email: userRecord.email,
+    name: portfolioName || userRecord.displayName || "",
+    picture: portfolioPhoto || userRecord.photoURL || "",
+    email_verified: userRecord.emailVerified,
+    creationTime: userRecord.metadata.creationTime,
+  };
+
+  return <AccountClient user={userData} stats={stats} />;
 }

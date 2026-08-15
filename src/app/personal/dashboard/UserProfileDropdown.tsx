@@ -17,12 +17,14 @@ export default function UserProfileDropdown({
   email, 
   name, 
   logoutAction,
-  variant = "sidebar"
+  variant = "sidebar",
+  isPortofind
 }: { 
   email?: string;
   name?: string;
   logoutAction: () => Promise<void>;
   variant?: "sidebar" | "header";
+  isPortofind?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -82,6 +84,10 @@ export default function UserProfileDropdown({
     );
   }
 
+  // Handle visibility based on sidebar hover state when in portofind mode
+  const textVisibilityClass = isPortofind ? 'opacity-0 w-0 h-0 overflow-hidden group-hover/sidebar:opacity-100 group-hover/sidebar:w-auto group-hover/sidebar:h-auto transition-all duration-300' : 'opacity-100 w-auto h-auto';
+  const iconVisibilityClass = isPortofind ? 'opacity-0 w-0 h-0 overflow-hidden group-hover/sidebar:opacity-100 group-hover/sidebar:w-4 group-hover/sidebar:h-4 transition-all duration-300' : 'opacity-100 w-4 h-4';
+
   return (
     <div className="relative p-3 border-b border-slate-100" ref={dropdownRef}>
       <button 
@@ -93,15 +99,15 @@ export default function UserProfileDropdown({
             {photoUrl ? (
               <img src={photoUrl} alt="Profile" className="w-full h-full object-cover" />
             ) : (
-              <User className="w-5 h-5" />
+              <User className="w-5 h-5 shrink-0" />
             )}
           </div>
-          <div className="flex flex-col overflow-hidden pr-2">
+          <div className={`flex flex-col pr-2 shrink-0 ${textVisibilityClass}`}>
             <span className="text-slate-800 font-medium truncate leading-tight text-sm">{name || "User"}</span>
             <span className="text-slate-500 text-xs truncate leading-tight">{email}</span>
           </div>
         </div>
-        <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`text-slate-400 shrink-0 transition-all ${isOpen ? 'rotate-180' : ''} ${iconVisibilityClass}`} />
       </button>
 
       {isOpen && (

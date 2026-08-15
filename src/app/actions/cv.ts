@@ -49,6 +49,45 @@ export async function getCVData() {
   }
 }
 
+export async function getCVDataByUserId(uid: string) {
+  try {
+    if (!uid) return { success: false, error: "UID tidak valid" };
+
+    const portfolioRef = adminDb.collection('portfolios').doc(uid);
+    const cvConfigRef = adminDb.collection('cvConfigs').doc(uid);
+
+    const [portfolioDoc, cvConfigDoc] = await Promise.all([
+      portfolioRef.get(),
+      cvConfigRef.get()
+    ]);
+
+    const rawPortfolio = portfolioDoc.exists ? portfolioDoc.data() : null;
+    let portfolioDataOnly = rawPortfolio?.data || defaultPortfolioData;
+    
+    while (portfolioDataOnly && portfolioDataOnly.data && !portfolioDataOnly.personal && !portfolioDataOnly.activeSections) {
+      portfolioDataOnly = portfolioDataOnly.data;
+    }
+
+    if (rawPortfolio?.username && portfolioDataOnly.personal && !portfolioDataOnly.personal.portfolioUrl) {
+      portfolioDataOnly.personal.portfolioUrl = `portotree.com/p/${rawPortfolio.username}`;
+    }
+
+    const safePortfolioData = JSON.parse(JSON.stringify(portfolioDataOnly));
+    const safeConfigData = JSON.parse(JSON.stringify(cvConfigDoc.exists ? cvConfigDoc.data() : defaultCVConfig));
+
+    return {
+      success: true,
+      data: {
+        portfolio: safePortfolioData,
+        config: { ...defaultCVConfig, ...safeConfigData }
+      }
+    };
+  } catch (error: any) {
+    console.error("[DEBUG] getCVDataByUserId error:", error);
+    return { success: false, error: error.message };
+  }
+}
+
 export async function saveCVConfig(config: CVConfig) {
   try {
     const uid = await getAuthenticatedUid();

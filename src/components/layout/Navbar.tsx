@@ -349,7 +349,7 @@ export function Navbar() {
                           <div className="text-xs text-slate-500 mt-0.5">Bikin CV standar ATS</div>
                         </div>
                       </a>
-                      <a href={getSubdomainUrl('portofind')} className="flex items-start gap-4 p-3 rounded-lg hover:bg-blue-50 transition-colors mt-1 group/item">
+                      {/* <a href={getSubdomainUrl('portofind')} className="flex items-start gap-4 p-3 rounded-lg hover:bg-blue-50 transition-colors mt-1 group/item">
                         <div className="bg-blue-100/50 p-2.5 rounded-lg text-blue-600 shrink-0 transition-transform group-hover/item:scale-110">
                           <Briefcase className="w-5 h-5" />
                         </div>
@@ -370,7 +370,7 @@ export function Navbar() {
                           </div>
                           <div className="text-xs text-slate-500 mt-0.5">Jual produk & karya digital</div>
                         </div>
-                      </a>
+                      </a> */}
                     </div>
                   </div>
                 </div>
@@ -677,7 +677,7 @@ export function Navbar() {
                             </div>
                           </button>
                           
-                          <button onClick={() => { window.location.href = getSubdomainUrl('portofind'); setIsFabOpen(false); setShowMobilePortoSub(false); }} className="w-full text-left flex items-start gap-4 p-3 rounded-lg hover:bg-blue-50 transition-colors mt-1 group/item">
+                          {/* <button onClick={() => { window.location.href = getSubdomainUrl('portofind'); setIsFabOpen(false); setShowMobilePortoSub(false); }} className="w-full text-left flex items-start gap-4 p-3 rounded-lg hover:bg-blue-50 transition-colors mt-1 group/item">
                             <div className="bg-blue-100/50 p-2.5 rounded-lg text-blue-600 shrink-0 transition-transform group-hover/item:scale-110">
                               <Briefcase className="w-5 h-5" />
                             </div>
@@ -699,7 +699,7 @@ export function Navbar() {
                               </div>
                               <div className="text-xs text-slate-500 mt-0.5">Jual produk & karya digital</div>
                             </div>
-                          </button>
+                          </button> */}
                         </div>
                       </div>
                     </motion.div>

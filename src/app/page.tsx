@@ -239,8 +239,7 @@ export default function Home() {
               </a>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6 md:gap-8 mt-6 md:mt-8 max-w-6xl mx-auto">
-              {/* Product 4: Portofind */}
+            {/* <div className="grid md:grid-cols-2 gap-6 md:gap-8 mt-6 md:mt-8 max-w-6xl mx-auto">
               <a href={getSubdomainUrl('portofind')} className="group block h-full">
                 <div className="h-full bg-white rounded-3xl p-8 border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden flex flex-col">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
@@ -260,7 +259,6 @@ export default function Home() {
                 </div>
               </a>
 
-              {/* Product 5: Marketsee */}
               <a href={getSubdomainUrl('marketsee')} className="group block h-full">
                 <div className="h-full bg-white rounded-3xl p-8 border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden flex flex-col">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-purple-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
@@ -279,7 +277,7 @@ export default function Home() {
                   </div>
                 </div>
               </a>
-            </div>
+            </div> */}
           </div>
         </section>
 

@@ -150,14 +150,10 @@ export default function PortfolioPage() {
         <p className="text-slate-500 text-sm mt-1">Kelola dan pantau performa portofolio publik Anda.</p>
       </div>
 
-      {/* 2-KOLOM: kiri besar, kanan lebih kecil */}
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="space-y-6">
 
-        {/* ══ KOLOM KIRI ══════════════════════════════════════ */}
-        <div className="flex-1 min-w-0 space-y-4">
-
-          {/* KARTU PREVIEW */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        {/* KARTU PREVIEW FULL WIDTH */}
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
 
             {/* Area gelap preview */}
             <div className="bg-slate-100 relative overflow-hidden border-b border-slate-200" style={{ height: '340px' }}>
@@ -203,16 +199,17 @@ export default function PortfolioPage() {
             </div>
           </div>
 
-          {/* PROGRESS PORTFOLIO */}
-          <ProgressPortfolio />
-        </div>
+        {/* ROW BAWAH: Progress Kiri, Info Kanan */}
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
+          
+          {/* KOLOM KIRI: PROGRESS PORTFOLIO */}
+          <div className="flex-1 min-w-0 w-full">
+            <ProgressPortfolio />
+          </div>
 
-        {/* ══ KOLOM KANAN ═════════════════════════════════════ */}
-        <div className="w-full md:w-72 flex-shrink-0 space-y-4">
-
-
-          {/* PORTFOLIO INFO */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+          {/* KOLOM KANAN: PORTFOLIO INFO */}
+          <div className="w-full lg:w-72 flex-shrink-0">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
             <div className="flex items-center gap-2 mb-4">
               <Settings className="w-4 h-4 text-emerald-500" />
               <h3 className="font-bold text-slate-800 text-sm">Portfolio Info</h3>
@@ -263,6 +260,7 @@ export default function PortfolioPage() {
             </div>
           </div>
         </div>
+      </div>
       </div>
 
       {/* MODAL UBAH LINK */}

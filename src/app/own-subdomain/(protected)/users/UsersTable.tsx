@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { User, Mail, ShieldAlert, CheckCircle2, Clock, MoreVertical, ExternalLink, Ban, Trash2, Globe, FileText } from "lucide-react";
+import { User, Mail, ShieldAlert, CheckCircle2, Clock, MoreVertical, ExternalLink, Ban, Trash2, Globe, FileText, Crown, XCircle } from "lucide-react";
 import { useUI } from "@/components/ui/UIProvider";
-import { toggleSuspendUser, deleteUserAccount, impersonateUser } from "@/app/actions/admin";
+import { toggleSuspendUser, deleteUserAccount, impersonateUser, updateUserPremiumStatus } from "@/app/actions/admin";
 import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
@@ -11,6 +11,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
 
 export function UsersTable({ initialUsers }: { initialUsers: any[] }) {
@@ -87,6 +90,38 @@ export function UsersTable({ initialUsers }: { initialUsers: any[] }) {
       });
       return;
     }
+  };
+
+  const handlePremiumAction = async (uid: string, durationMonths: number | null) => {
+    const user = users.find(u => u.uid === uid);
+    if (!user) return;
+
+    const actionText = durationMonths === null 
+      ? "menghapus akses Premium" 
+      : `memberikan akses Premium ${durationMonths} Bulan`;
+
+    showConfirm({
+      title: "Ubah Status Premium?",
+      message: `Apakah Anda yakin ingin ${actionText} kepada ${user.username || user.displayName}?`,
+      variant: durationMonths === null ? "danger" : "primary",
+      confirmText: "Ya, Ubah",
+      cancelText: "Batal",
+      onConfirm: async () => {
+        showToast("Memproses perubahan...", "info");
+        const res = await updateUserPremiumStatus(uid, durationMonths);
+        if (res.success) {
+          setUsers(users.map(u => 
+            u.uid === uid 
+              ? { ...u, isPremium: res.isPremium, premiumUntil: res.premiumUntil } 
+              : u
+          ));
+          showToast(`Berhasil ${actionText}`, "success");
+          router.refresh();
+        } else {
+          showToast("Gagal mengubah status: " + res.error, "error");
+        }
+      }
+    });
   };
 
   return (
@@ -198,6 +233,38 @@ export function UsersTable({ initialUsers }: { initialUsers: any[] }) {
                         <span className="font-medium">Masuk Dashboard</span>
                       </DropdownMenuItem>
                       
+                      <DropdownMenuSeparator />
+                      
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-md cursor-pointer">
+                          <Crown className="w-4 h-4 shrink-0 text-amber-500" />
+                          <span className="font-medium">Ubah Paket Premium</span>
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent className="w-48 p-1">
+                          <DropdownMenuItem onClick={() => handlePremiumAction(user.uid, 1)} className="cursor-pointer">
+                            <span>Paket 1 Bulan</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handlePremiumAction(user.uid, 3)} className="cursor-pointer">
+                            <span>Paket 3 Bulan</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handlePremiumAction(user.uid, 6)} className="cursor-pointer">
+                            <span>Paket 6 Bulan</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handlePremiumAction(user.uid, 12)} className="cursor-pointer">
+                            <span>Paket 12 Bulan</span>
+                          </DropdownMenuItem>
+                          {user.isPremium && (
+                            <>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem onClick={() => handlePremiumAction(user.uid, null)} className="cursor-pointer text-red-600 focus:text-red-700 focus:bg-red-50">
+                                <XCircle className="w-4 h-4 mr-2" />
+                                <span>Hapus Premium</span>
+                              </DropdownMenuItem>
+                            </>
+                          )}
+                        </DropdownMenuSubContent>
+                      </DropdownMenuSub>
+
                       <DropdownMenuSeparator />
                       
                       {user.isSuspended ? (

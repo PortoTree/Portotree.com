@@ -197,3 +197,35 @@ export async function getDashboardStats() {
     return { success: false, error: error.message };
   }
 }
+
+/**
+ * Set or remove premium status for a user.
+ * @param durationMonths Number of months for the premium subscription, or null to remove premium.
+ */
+export async function updateUserPremiumStatus(uid: string, durationMonths: number | null) {
+  const isAuthorized = await isAdmin();
+  if (!isAuthorized) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  try {
+    const isPremium = durationMonths !== null;
+    let premiumUntil = null;
+    
+    if (isPremium && durationMonths > 0) {
+      const date = new Date();
+      date.setMonth(date.getMonth() + durationMonths);
+      premiumUntil = date.getTime();
+    }
+
+    await adminDb.collection("users").doc(uid).set({
+      isPremium,
+      premiumUntil
+    }, { merge: true });
+
+    return { success: true, isPremium, premiumUntil };
+  } catch (error: any) {
+    console.error("Error updating user premium status:", error);
+    return { success: false, error: error.message };
+  }
+}

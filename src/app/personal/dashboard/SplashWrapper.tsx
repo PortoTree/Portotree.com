@@ -1,18 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function SplashWrapper({ children }: { children: React.ReactNode }) {
   const [showSplash, setShowSplash] = useState(true);
+  const pathname = usePathname();
 
   useEffect(() => {
-    // Tampilkan splash selama 2 detik setiap kali di-refresh / mount
+    // Tampilkan splash setiap kali pindah halaman (pathname berubah)
+    setShowSplash(true);
     const timer = setTimeout(() => {
       setShowSplash(false);
-    }, 2000);
+    }, 1500); // 1.5 detik agar tidak terlalu lama saat pindah tab
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [pathname]);
 
   return (
     <>
