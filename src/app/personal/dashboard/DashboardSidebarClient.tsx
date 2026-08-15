@@ -28,8 +28,8 @@ export default function DashboardSidebarClient({
 
   return (
     <div className={`w-full flex-shrink-0 relative z-50 ${wrapperWidthClass}`}>
-      <aside className={`w-full bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col md:h-screen transition-[width,box-shadow] duration-300 ease-in-out md:absolute md:top-0 md:left-0 overflow-hidden ${innerSidebarClass}`}>
-      <div className={`h-16 flex items-center border-b border-slate-200 shrink-0 overflow-hidden ${isPortofind ? 'px-0 justify-center group-hover/sidebar:px-6' : 'px-6 justify-between'}`}>
+      <aside className={`w-full bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col md:h-screen transition-[width,box-shadow] duration-300 ease-in-out md:absolute md:top-0 md:left-0 md:overflow-hidden ${innerSidebarClass}`}>
+      <div className={`h-16 flex items-center border-b border-slate-200 shrink-0 md:overflow-hidden ${isPortofind ? 'px-0 justify-center group-hover/sidebar:px-6' : 'px-6 justify-between'}`}>
         <Link href="/" className={`flex items-center shrink-0 ${isPortofind ? 'justify-center group-hover/sidebar:justify-start' : 'justify-start'}`}>
           {/* Logo Icon (Visible only when collapsed) */}
           <div className={`relative h-11 w-11 shrink-0 ${isPortofind ? 'block group-hover/sidebar:hidden' : 'hidden'}`}>
@@ -53,7 +53,7 @@ export default function DashboardSidebarClient({
       </div>
       
       {/* Hanya tampil di sidebar untuk desktop */}
-      <div className={`hidden md:block transition-all duration-300 overflow-hidden`}>
+      <div className={`hidden md:block transition-all duration-300`}>
         <UserProfileDropdown 
           email={email}
           name={name}

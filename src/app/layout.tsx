@@ -3,7 +3,6 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from "next/script";
 import "./globals.css";
-import { DevToast } from "@/components/layout/DevToast";
 import { Toaster } from "@/components/ui/sonner";
 import { UIProvider } from "@/components/ui/UIProvider";
 
@@ -49,10 +48,6 @@ export default function RootLayout({
         <GoogleAnalytics gaId="G-M3PL8V36K6" />
         <UIProvider>
           {children}
-          
-          {/* Temporary Development Toast */}
-          <DevToast />
-          
           {/* Sonner Toaster */}
           <Toaster position="top-center" style={{ zIndex: 99999 }} />
         </UIProvider>

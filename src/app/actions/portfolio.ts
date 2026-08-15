@@ -142,13 +142,22 @@ export async function updateUsername(newUsername: string): Promise<{ success: bo
       claimedAt: FieldValue.serverTimestamp(),
     });
 
+    const existingData = existingPortfolio.data()?.data;
+    
     // 3. Update portfolio document
+    const portfolioUpdate: any = {
+      username: newUsername,
+      updatedAt: FieldValue.serverTimestamp(),
+    };
+    
+    if (existingData?.personal) {
+      existingData.personal.portfolioUrl = `portotree.com/p/${newUsername}`;
+      portfolioUpdate.data = existingData;
+    }
+
     batch.set(
       portfolioRef,
-      {
-        username: newUsername,
-        updatedAt: FieldValue.serverTimestamp(),
-      },
+      portfolioUpdate,
       { merge: true }
     );
 

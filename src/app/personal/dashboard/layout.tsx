@@ -22,13 +22,22 @@ export default async function DashboardLayout({
   }
 
   let decodedToken: any = null;
-  let username = "";
+  let fullName = "";
   let isSuspended = false;
   try {
     decodedToken = await adminAuth.verifySessionCookie(sessionCookie, true);
     const portfolioDoc = await adminDb.collection("portfolios").doc(decodedToken.uid).get();
     if (portfolioDoc.exists) {
-      username = portfolioDoc.data()?.username || "";
+      const pData = portfolioDoc.data();
+      fullName = pData?.data?.personal?.fullName || pData?.data?.personal?.name || "";
+    }
+    
+    if (!fullName) {
+      const resumeDoc = await adminDb.collection("resumes").doc(decodedToken.uid).get();
+      if (resumeDoc.exists) {
+        const rData = resumeDoc.data();
+        fullName = rData?.data?.personal?.fullName || rData?.data?.personal?.name || "";
+      }
     }
     
     const userDoc = await adminDb.collection("users").doc(decodedToken.uid).get();
@@ -75,7 +84,7 @@ export default async function DashboardLayout({
         {/* SIDEBAR */}
         <DashboardSidebarClient 
           email={decodedToken.email}
-          name={username || decodedToken.name || decodedToken.email?.split('@')[0]}
+          name={fullName || "Guest"}
           logoutAction={handleLogout}
         />
 

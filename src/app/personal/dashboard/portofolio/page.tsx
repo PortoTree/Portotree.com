@@ -52,7 +52,7 @@ export default function PortfolioPage() {
   const [saveError, setSaveError] = useState("");
   
   // SWR Config: Hemat kuota Firestore Read!
-  const { data: swrData } = useSWR('my-portfolio-dashboard', fetcher, {
+  const { data: swrData, mutate } = useSWR('my-portfolio-dashboard', fetcher, {
     revalidateOnFocus: false, // Tidak nge-read ulang setiap pindah tab
     revalidateOnReconnect: true,
     dedupingInterval: 300000, // Caching 5 menit sebelum nge-read Firestore lagi
@@ -132,6 +132,25 @@ export default function PortfolioPage() {
       const result = await updateUsername(linkInput);
       if (result.success) {
         setMyUsername(linkInput); // update local state immediately
+        
+        // Perbarui state portfolioData agar visual langsung berubah
+        setPortfolioData(prev => ({
+          ...prev,
+          personal: {
+            ...prev.personal,
+            portfolioUrl: `portotree.com/p/${linkInput}`
+          }
+        }));
+
+        // Perbarui SWR cache agar tetap tersimpan jika di-refresh dalam waktu 5 menit
+        if (swrData) {
+          const newData = { ...swrData.data };
+          if (newData?.personal) {
+            newData.personal.portfolioUrl = `portotree.com/p/${linkInput}`;
+          }
+          mutate({ ...swrData, username: linkInput, data: newData }, false);
+        }
+        
         setIsLinkModalOpen(false);
       } else {
         setSaveError(result.error || "Gagal mengubah link");
@@ -145,9 +164,9 @@ export default function PortfolioPage() {
 
   return (
     <div className="p-6 md:p-8 max-w-6xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900">Portofolio Saya</h1>
-        <p className="text-slate-500 text-sm mt-1">Kelola dan pantau performa portofolio publik Anda.</p>
+      <div className="mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-3xl font-extrabold text-slate-800 mb-1.5 md:mb-2">Portofolio Saya</h1>
+        <p className="text-sm md:text-base text-slate-500">Kelola dan pantau performa portofolio publik Anda.</p>
       </div>
 
       <div className="space-y-6">
@@ -160,10 +179,10 @@ export default function PortfolioPage() {
               <div 
                 className="absolute top-0 left-0 pointer-events-none"
                 style={{ 
-                  width: '200%', 
-                  height: '200%', 
+                  width: '133.33%', 
+                  height: '133.33%', 
                   transformOrigin: 'top left',
-                  transform: 'scale(0.5)' 
+                  transform: 'scale(0.75)' 
                 }}
               >
                 <PortfolioViewer data={portfolioData} showPlaceholders={true} />
@@ -171,11 +190,10 @@ export default function PortfolioPage() {
             </div>
 
             {/* Tombol aksi */}
-            <div className="p-5">
-              <div className="grid grid-cols-3 gap-2">
+            <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-center gap-4">
                 <a
                   href="/personal/portfolio-builder?mode=template"
-                  className="flex flex-col items-center justify-center gap-1.5 py-2.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors text-xs"
+                  className="flex items-center justify-center gap-2 py-2 px-6 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors text-sm shadow-sm"
                 >
                   <Edit3 className="w-4 h-4" />
                   Edit
@@ -184,18 +202,11 @@ export default function PortfolioPage() {
                   href={`https://${portfolioLink}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col items-center justify-center gap-1.5 py-2.5 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 transition-colors text-xs"
+                  className="flex items-center justify-center gap-2 py-2 px-6 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 transition-colors text-sm shadow-sm"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Visit
                 </a>
-                <button
-                  className="flex flex-col items-center justify-center gap-1.5 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-white font-bold rounded-xl hover:from-amber-500 hover:to-yellow-600 transition-all shadow-sm shadow-amber-200 text-xs"
-                >
-                  <Share2 className="w-4 h-4" />
-                  Share
-                </button>
-              </div>
             </div>
           </div>
 

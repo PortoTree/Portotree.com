@@ -1,14 +1,46 @@
 "use client";
 
-import { useState } from "react";
-import { User, Mail, ShieldAlert, CheckCircle2, Clock, Crown, KeyRound, ExternalLink, CalendarDays, FileText, Check } from "lucide-react";
+import { useState, useEffect } from "react";
+import { User, Mail, ShieldAlert, CheckCircle2, Clock, Crown, KeyRound, ExternalLink, FileText, Pencil, Globe } from "lucide-react";
 import { useUI } from "@/components/ui/UIProvider";
 import { sendPasswordReset } from "@/app/actions/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ProfilePersonalForm, ProfileEducationForm, ProfileExperienceForm } from "./ProfileForms";
 
-export default function AccountClient({ user, stats }: { user: any, stats: any }) {
+export default function AccountClient({ user, stats, portfolioData }: { user: any, stats: any, portfolioData?: any }) {
   const { showToast, showConfirm } = useUI();
+  const router = useRouter();
   const [isResetting, setIsResetting] = useState(false);
+  const [suratFallback, setSuratFallback] = useState<any>({});
+  const [localData, setLocalData] = useState<any>(portfolioData || {});
+  
+  const [editingPersonal, setEditingPersonal] = useState(false);
+  const [editingEducation, setEditingEducation] = useState(false);
+  const [editingExperience, setEditingExperience] = useState(false);
+
+  useEffect(() => {
+    try {
+      const fallback: any = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('suratBuilder_')) {
+          const saved = localStorage.getItem(key);
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.nama && !fallback.fullName) fallback.fullName = parsed.nama;
+            if (parsed.email && !fallback.email) fallback.email = parsed.email;
+            if ((parsed.nomorHp || parsed.telepon) && !fallback.phone) fallback.phone = parsed.nomorHp || parsed.telepon;
+            if (parsed.alamat && !fallback.address) fallback.address = parsed.alamat;
+            if (parsed.jenisKelamin && !fallback.gender) fallback.gender = parsed.jenisKelamin;
+            if (parsed.tempatLahir && parsed.tanggalLahir && !fallback.dateOfBirth) fallback.dateOfBirth = `${parsed.tempatLahir}, ${parsed.tanggalLahir}`;
+            if (parsed.kewarganegaraan && !fallback.nationality) fallback.nationality = parsed.kewarganegaraan;
+          }
+        }
+      }
+      setSuratFallback(fallback);
+    } catch(e) {}
+  }, []);
 
   const handleResetPassword = async () => {
     showConfirm({
@@ -32,8 +64,7 @@ export default function AccountClient({ user, stats }: { user: any, stats: any }
   };
 
   const isPremium = stats.isPremium;
-  const isSuspended = stats.isSuspended;
-
+  
   // Format Premium Until
   let premiumDateStr = "";
   if (isPremium && stats.premiumUntil) {
@@ -49,11 +80,11 @@ export default function AccountClient({ user, stats }: { user: any, stats: any }
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-6 md:py-8 px-4 md:px-6 lg:px-8 pb-10 animate-fade-in-up">
+    <div className="w-full max-w-5xl mx-auto py-6 md:py-8 px-4 md:px-6 lg:px-8 pb-10 animate-fade-in-up">
       {/* Header Section */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-slate-800 mb-2">Akun Saya</h1>
-        <p className="text-slate-500">Kelola informasi profil, status langganan, dan penggunaan kuota Anda.</p>
+      <div className="mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-3xl font-extrabold text-slate-800 mb-1.5 md:mb-2">Akun Saya</h1>
+        <p className="text-sm md:text-base text-slate-500">Kelola informasi profil, status langganan, dan penggunaan kuota Anda.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -78,7 +109,7 @@ export default function AccountClient({ user, stats }: { user: any, stats: any }
               </div>
               
               <h2 className="text-xl font-bold text-slate-800 truncate w-full px-2">
-                {user.name || "Tanpa Nama"}
+                {localData?.personal?.fullName || localData?.personal?.name || suratFallback.fullName || user.name || "Tanpa Nama"}
               </h2>
               <div className="flex items-center justify-center gap-1.5 text-sm text-slate-500 mt-1 mb-4">
                 <Mail className="w-3.5 h-3.5 shrink-0" />
@@ -89,6 +120,18 @@ export default function AccountClient({ user, stats }: { user: any, stats: any }
                   <ShieldAlert className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                 )}
               </div>
+              
+              {user.username ? (
+                <a href={`/p/${user.username}`} target="_blank" className="flex items-center justify-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 py-2 px-4 rounded-full transition-colors mb-4 w-full">
+                  <Globe className="w-4 h-4 shrink-0" />
+                  <span className="truncate">portotree.com/p/{user.username}</span>
+                </a>
+              ) : (
+                <div className="flex items-center justify-center gap-2 text-sm font-medium text-slate-400 bg-slate-50 py-2 px-4 rounded-full mb-4 w-full border border-dashed border-slate-200">
+                  <Globe className="w-4 h-4 shrink-0" />
+                  <span className="truncate">Belum memiliki portofolio</span>
+                </div>
+              )}
 
               {/* Status Badge */}
               <div className="w-full mt-2">
@@ -115,6 +158,10 @@ export default function AccountClient({ user, stats }: { user: any, stats: any }
                     </Link>
                   </div>
                 )}
+                
+                <div className="w-full text-center mt-3 text-xs text-slate-500 font-medium">
+                  Bergabung sejak {joinedDateStr || "-"}
+                </div>
               </div>
             </div>
           </div>
@@ -139,17 +186,15 @@ export default function AccountClient({ user, stats }: { user: any, stats: any }
             </div>
             <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
           </button>
-        </div>
-
-        {/* Right Column: Stats & Details */}
-        <div className="md:col-span-2 flex flex-col gap-6">
+          
+          {/* Statistik Penggunaan (Moved from Right Column) */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
             <h3 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
               <FileText className="w-5 h-5 text-emerald-500" />
               Statistik Penggunaan
             </h3>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-4">
               
               {/* CV Card */}
               <div className="p-5 rounded-xl border border-slate-100 bg-slate-50 relative overflow-hidden group hover:border-emerald-200 transition-colors">
@@ -198,81 +243,150 @@ export default function AccountClient({ user, stats }: { user: any, stats: any }
                   <Mail className="w-32 h-32" />
                 </div>
               </div>
+              
             </div>
           </div>
+        </div>
 
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-            <h3 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-              <User className="w-5 h-5 text-indigo-500" />
-              Detail Akun
+        {/* Right Column: Profile Information */}
+        <div className="md:col-span-2 flex flex-col gap-6">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 lg:p-8 flex flex-col h-full">
+            <h3 className="text-xl font-bold text-slate-800 mb-8 flex items-center gap-2 border-b border-slate-100 pb-4">
+              <User className="w-6 h-6 text-indigo-500" />
+              Informasi Data Diri Lengkap
             </h3>
             
-            <div className="space-y-4">
-              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
-                    <CalendarDays className="w-4 h-4 text-slate-500" />
+            {/* Data Personal */}
+            <div className="mb-10">
+              <div className="flex items-center gap-3 mb-5 pb-2 border-b border-slate-50">
+                <h4 className="text-base font-bold text-slate-800">Data Personal</h4>
+                {!editingPersonal && (
+                  <button onClick={() => setEditingPersonal(true)} className="p-1.5 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors" title="Edit Data Personal">
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+              
+              {editingPersonal ? (
+                <ProfilePersonalForm 
+                  data={localData?.personal || {}} 
+                  onSave={(d) => { setLocalData({...localData, personal: d}); setEditingPersonal(false); router.refresh(); }} 
+                  onCancel={() => setEditingPersonal(false)} 
+                />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
+                  <div>
+                    <div className="text-sm font-bold text-slate-700">Nama Lengkap</div>
+                    <div className="text-slate-600 mt-1.5">{localData?.personal?.fullName || localData?.personal?.name || suratFallback.fullName || user?.name || <span className="text-slate-400 italic">(Belum diisi)</span>}</div>
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-slate-700">Tanggal Bergabung</div>
-                    <div className="text-xs text-slate-500">Kapan akun ini dibuat</div>
+                    <div className="text-sm font-bold text-slate-700">Email</div>
+                    <div className="text-slate-600 mt-1.5">{localData?.personal?.email || suratFallback.email || user?.email || <span className="text-slate-400 italic">(Belum diisi)</span>}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-slate-700">Nomor Telepon</div>
+                    <div className="text-slate-600 mt-1.5">{localData?.personal?.phone || suratFallback.phone || <span className="text-slate-400 italic">(Belum diisi)</span>}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-slate-700">Tanggal Lahir</div>
+                    <div className="text-slate-600 mt-1.5">{localData?.personal?.dateOfBirth || suratFallback.dateOfBirth || <span className="text-slate-400 italic">(Belum diisi)</span>}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-slate-700">Kewarganegaraan</div>
+                    <div className="text-slate-600 mt-1.5">{localData?.personal?.nationality || suratFallback.nationality || <span className="text-slate-400 italic">(Belum diisi)</span>}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-slate-700">Jenis Kelamin</div>
+                    <div className="text-slate-600 mt-1.5">{localData?.personal?.gender || suratFallback.gender || <span className="text-slate-400 italic">(Belum diisi)</span>}</div>
+                  </div>
+                  <div className="md:col-span-2">
+                    <div className="text-sm font-bold text-slate-700">Alamat</div>
+                    <div className="text-slate-600 mt-1.5">{localData?.personal?.address || suratFallback.address || <span className="text-slate-400 italic">(Belum diisi)</span>}</div>
                   </div>
                 </div>
-                <div className="text-sm font-medium text-slate-800">
-                  {joinedDateStr || "-"}
-                </div>
+              )}
+            </div>
+
+            {/* Data Pendidikan */}
+            <div className="mb-10">
+              <div className="flex items-center gap-3 mb-5 pb-2 border-b border-slate-50">
+                <h4 className="text-base font-bold text-slate-800">Data Pendidikan</h4>
+                {!editingEducation && (
+                  <button onClick={() => setEditingEducation(true)} className="p-1.5 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors" title="Edit Data Pendidikan">
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
 
-              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
-                    <Check className="w-4 h-4 text-slate-500" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-slate-700">Status Verifikasi Email</div>
-                    <div className="text-xs text-slate-500">Keamanan akun</div>
-                  </div>
+              {editingEducation ? (
+                <ProfileEducationForm 
+                  items={localData?.education || []} 
+                  onSave={(d) => { setLocalData({...localData, education: d}); setEditingEducation(false); }} 
+                  onCancel={() => setEditingEducation(false)} 
+                />
+              ) : localData?.education && localData.education.length > 0 ? (
+                <div className="flex flex-col gap-6">
+                  {localData.education.map((edu: any, index: number) => (
+                    <div key={index} className="flex gap-4">
+                      <div className="mt-1 w-2.5 h-2.5 rounded-full bg-indigo-500 shrink-0"></div>
+                      <div>
+                        <div className="font-bold text-slate-800">{edu.school || "Nama Institusi"}</div>
+                        <div className="text-sm font-medium text-indigo-600 mt-0.5">{edu.degree || "Gelar/Jurusan"}</div>
+                        <div className="text-xs text-slate-500 mt-1 font-medium">
+                          {edu.startDate || "Tanggal Mulai"} - {edu.endDate || "Tanggal Selesai"}
+                        </div>
+                        {edu.description && <p className="text-sm text-slate-600 mt-2 leading-relaxed">{edu.description}</p>}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div>
-                  {user.email_verified ? (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      Terverifikasi
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
-                      <ShieldAlert className="w-3.5 h-3.5" />
-                      Belum Diverifikasi
-                    </span>
-                  )}
+              ) : (
+                <div className="p-6 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-center text-slate-400 text-sm font-medium">
+                  Belum ada data pendidikan
                 </div>
+              )}
+            </div>
+
+            {/* Data Pengalaman Kerja */}
+            <div>
+              <div className="flex items-center gap-3 mb-5 pb-2 border-b border-slate-50">
+                <h4 className="text-base font-bold text-slate-800">Data Pengalaman Kerja</h4>
+                {!editingExperience && (
+                  <button onClick={() => setEditingExperience(true)} className="p-1.5 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors" title="Edit Data Pengalaman">
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
-                    <ShieldAlert className="w-4 h-4 text-slate-500" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-slate-700">Status Akun</div>
-                    <div className="text-xs text-slate-500">Kondisi blokir sistem</div>
-                  </div>
+              {editingExperience ? (
+                <ProfileExperienceForm 
+                  items={localData?.experience || []} 
+                  onSave={(d) => { setLocalData({...localData, experience: d}); setEditingExperience(false); }} 
+                  onCancel={() => setEditingExperience(false)} 
+                />
+              ) : localData?.experience && localData.experience.length > 0 ? (
+                <div className="flex flex-col gap-6">
+                  {localData.experience.map((exp: any, index: number) => (
+                    <div key={index} className="flex gap-4">
+                      <div className="mt-1 w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></div>
+                      <div>
+                        <div className="font-bold text-slate-800">{exp.position || "Posisi"}</div>
+                        <div className="text-sm font-medium text-emerald-600 mt-0.5">{exp.company || "Nama Perusahaan"}</div>
+                        <div className="text-xs text-slate-500 mt-1 font-medium">
+                          {exp.startDate || "Tanggal Mulai"} - {exp.endDate || "Tanggal Selesai"}
+                        </div>
+                        {exp.description && <p className="text-sm text-slate-600 mt-2 leading-relaxed">{exp.description}</p>}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div>
-                  {isSuspended ? (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
-                      Ditangguhkan
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
-                      Aktif Normal
-                    </span>
-                  )}
+              ) : (
+                <div className="p-6 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-center text-slate-400 text-sm font-medium">
+                  Belum ada data pengalaman kerja
                 </div>
-              </div>
+              )}
             </div>
           </div>
-
         </div>
       </div>
     </div>
