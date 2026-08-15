@@ -349,6 +349,17 @@ export function Navbar() {
                           <div className="text-xs text-slate-500 mt-0.5">Bikin CV standar ATS</div>
                         </div>
                       </a>
+                      <a href={getSubdomainUrl('surat')} className="flex items-start gap-4 p-3 rounded-lg hover:bg-indigo-50 transition-colors mt-1 group/item">
+                        <div className="bg-indigo-100/50 p-2.5 rounded-lg text-indigo-600 shrink-0 transition-transform group-hover/item:scale-110">
+                          <FileSignature className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                            Surat Generator
+                          </div>
+                          <div className="text-xs text-slate-500 mt-0.5">Bikin surat resmi dengan mudah</div>
+                        </div>
+                      </a>
                       {/* <a href={getSubdomainUrl('portofind')} className="flex items-start gap-4 p-3 rounded-lg hover:bg-blue-50 transition-colors mt-1 group/item">
                         <div className="bg-blue-100/50 p-2.5 rounded-lg text-blue-600 shrink-0 transition-transform group-hover/item:scale-110">
                           <Briefcase className="w-5 h-5" />
@@ -674,6 +685,18 @@ export function Navbar() {
                                 Buat CV
                               </div>
                               <div className="text-xs text-slate-500 mt-0.5">Bikin CV standar ATS</div>
+                            </div>
+                          </button>
+                          
+                          <button onClick={() => { window.location.href = getSubdomainUrl('surat'); setIsFabOpen(false); setShowMobilePortoSub(false); }} className="w-full text-left flex items-start gap-4 p-3 rounded-lg hover:bg-indigo-50 transition-colors mt-1 group/item">
+                            <div className="bg-indigo-100/50 p-2.5 rounded-lg text-indigo-600 shrink-0 transition-transform group-hover/item:scale-110">
+                              <FileSignature className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <div className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                                Surat Generator
+                              </div>
+                              <div className="text-xs text-slate-500 mt-0.5">Bikin surat resmi dengan mudah</div>
                             </div>
                           </button>
                           

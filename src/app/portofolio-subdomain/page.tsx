@@ -3,12 +3,13 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, LayoutTemplate, Link as LinkIcon, QrCode, FileText, Globe, Share2, Eye, Briefcase, ChevronLeft, ChevronRight, Rocket, CheckCircle2, Layout } from "lucide-react";
+import { ArrowRight, LayoutTemplate, Link as LinkIcon, QrCode, FileText, Globe, Share2, Eye, Briefcase, ChevronLeft, ChevronRight, Rocket, CheckCircle2, Layout, Mail } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { PortfolioViewer } from "@/components/builder/PortfolioViewer";
 import { placeholderPortfolioData } from "@/lib/portfolioData";
+import { getMainUrl, getSubdomainUrl } from "@/lib/url";
 import {
   Dialog,
   DialogContent,
@@ -299,7 +300,7 @@ export default function Home() {
                 subtitle: "Fokus tunjukkan keahlian baru untuk meyakinkan perekrut."
               }
             ].map((item, i) => (
-              <Link href={`/untuk-siapa#${item.id}`} key={i} className="relative w-[85vw] shrink-0 snap-center md:flex-1 md:w-auto ml-4 md:ml-0 block group">
+              <a href={getMainUrl(`/untuk-siapa#${item.id}`)} key={i} className="relative w-[85vw] shrink-0 snap-center md:flex-1 md:w-auto ml-4 md:ml-0 block group">
                 <motion.div 
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -319,7 +320,7 @@ export default function Home() {
                     <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{item.subtitle}</p>
                   </div>
                 </motion.div>
-              </Link>
+              </a>
             ))}
 
             {/* Spacer for right padding on mobile */}
@@ -512,9 +513,9 @@ export default function Home() {
               </p>
             </div>
             
-            <div className="grid sm:grid-cols-2 gap-6 md:gap-8 max-w-3xl mx-auto">
-              <Link 
-                href="/register" 
+            <div className="grid sm:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
+              <a 
+                href={getSubdomainUrl('portofolio')} 
                 className="group flex flex-row sm:flex-col items-center justify-start sm:justify-center p-6 sm:py-12 sm:px-8 rounded-3xl border border-green-600 bg-white text-green-600 hover:bg-green-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
               >
                 <div className="shrink-0 w-16 h-16 sm:w-24 sm:h-24 bg-green-100/80 group-hover:bg-white/20 text-green-600 group-hover:text-white rounded-full flex items-center justify-center mr-4 sm:mr-0 mb-0 sm:mb-6 group-hover:scale-110 transition-all duration-300">
@@ -523,10 +524,10 @@ export default function Home() {
                 <span className="font-bold text-xl sm:text-2xl text-left sm:text-center">
                   Buat Portofolio
                 </span>
-              </Link>
+              </a>
               
-              <Link 
-                href="/register?type=cv" 
+              <a 
+                href={getSubdomainUrl('resume')} 
                 className="group flex flex-row sm:flex-col items-center justify-start sm:justify-center p-6 sm:py-12 sm:px-8 rounded-3xl border border-blue-600 bg-white text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
               >
                 <div className="shrink-0 w-16 h-16 sm:w-24 sm:h-24 bg-blue-100/80 group-hover:bg-white/20 text-blue-600 group-hover:text-white rounded-full flex items-center justify-center mr-4 sm:mr-0 mb-0 sm:mb-6 group-hover:scale-110 transition-all duration-300">
@@ -535,7 +536,19 @@ export default function Home() {
                 <span className="font-bold text-xl sm:text-2xl text-left sm:text-center">
                   Buat CV
                 </span>
-              </Link>
+              </a>
+
+              <a 
+                href={getSubdomainUrl('surat')} 
+                className="group flex flex-row sm:flex-col items-center justify-start sm:justify-center p-6 sm:py-12 sm:px-8 rounded-3xl border border-amber-600 bg-white text-amber-600 hover:bg-amber-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
+              >
+                <div className="shrink-0 w-16 h-16 sm:w-24 sm:h-24 bg-amber-100/80 group-hover:bg-white/20 text-amber-600 group-hover:text-white rounded-full flex items-center justify-center mr-4 sm:mr-0 mb-0 sm:mb-6 group-hover:scale-110 transition-all duration-300">
+                  <Mail className="w-8 h-8 sm:w-12 sm:h-12" strokeWidth={1.5} />
+                </div>
+                <span className="font-bold text-xl sm:text-2xl text-left sm:text-center">
+                  Buat Surat
+                </span>
+              </a>
             </div>
           </div>
         </section>
