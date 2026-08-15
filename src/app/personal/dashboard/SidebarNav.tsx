@@ -28,7 +28,7 @@ export default function SidebarNav({ isPortofind }: { isPortofind?: boolean }) {
       {/* SIDEBAR NAVIGATION ITEMS (DESKTOP) */}
       <div className="hidden md:flex flex-col h-full overflow-y-auto">
         <div className="flex flex-col gap-1 p-4 flex-1">
-        {navItems.map(({ href, label, icon: Icon, exact, badge }) => {
+        {navItems.map(({ href, label, icon: Icon, exact }) => {
           const isActive = exact ? pathname === href : pathname.startsWith(href);
           return (
             <Link
@@ -43,9 +43,6 @@ export default function SidebarNav({ isPortofind }: { isPortofind?: boolean }) {
               <Icon className="w-6 h-6 shrink-0" />
               <div className={`flex items-center gap-2 ${textVisibilityClass}`}>
                 <span className="whitespace-nowrap">{label}</span>
-                {badge && (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-500 uppercase tracking-wider whitespace-nowrap">{badge}</span>
-                )}
               </div>
             </Link>
           );
@@ -110,7 +107,7 @@ export default function SidebarNav({ isPortofind }: { isPortofind?: boolean }) {
             </div>
             
             <div className="flex flex-col gap-1 p-4 overflow-y-auto flex-1">
-              {navItems.map(({ href, label, icon: Icon, exact, badge }) => {
+              {navItems.map(({ href, label, icon: Icon, exact }) => {
                 const isActive = exact ? pathname === href : pathname.startsWith(href);
                 return (
                   <Link
@@ -128,9 +125,6 @@ export default function SidebarNav({ isPortofind }: { isPortofind?: boolean }) {
                     <Icon className="w-5 h-5" />
                     <div className="flex items-center gap-2">
                       <span>{label}</span>
-                      {badge && (
-                        <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-500 uppercase tracking-wider">{badge}</span>
-                      )}
                     </div>
                   </Link>
                 );

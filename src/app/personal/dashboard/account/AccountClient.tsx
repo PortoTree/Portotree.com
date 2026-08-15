@@ -84,9 +84,9 @@ export default function AccountClient({ user, stats }: { user: any, stats: any }
                 <Mail className="w-3.5 h-3.5 shrink-0" />
                 <span className="truncate max-w-[200px]">{user.email}</span>
                 {user.email_verified ? (
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" title="Terverifikasi" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                 ) : (
-                  <ShieldAlert className="w-3.5 h-3.5 text-amber-500 shrink-0" title="Belum Terverifikasi" />
+                  <ShieldAlert className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                 )}
               </div>
 
