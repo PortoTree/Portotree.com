@@ -63,6 +63,7 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
   const [activeTab, setActiveTab] = useState<'form' | 'template'>('form');
   const [isChangingTemplate, setIsChangingTemplate] = useState(false);
   const [forcedLoading, setForcedLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setIsChangingTemplate(false);
@@ -70,6 +71,8 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      const fromDraft = new URLSearchParams(window.location.search).get('from_draft');
+      if (fromDraft === '1') return; // Skip loading screen kalau dari redirect dashboard mobile
       const isInitialized = sessionStorage.getItem('surat_builder_initialized');
       if (!isInitialized) {
         setForcedLoading(true);
@@ -81,6 +84,21 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
       }
     }
   }, []);
+
+  // Handle redirect dari dashboard mobile: auto buka preview & print
+  const searchParamsFromHook = useSearchParams();
+  useEffect(() => {
+    const fromDraft = searchParamsFromHook.get('from_draft');
+    if (fromDraft !== '1') return;
+    if (!isLoaded) return; // Tunggu data selesai load dari localStorage
+    console.log('[SuratBuilder] from_draft + isLoaded: opening mobile preview for print');
+    setShowMobilePreview(true);
+    // Beri jeda agar SuratViewer selesai render halaman A4
+    const timer = setTimeout(() => {
+      window.print();
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, [searchParamsFromHook, isLoaded]);
   
   const populerTemplates = [
     {
@@ -229,7 +247,6 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const [isLoaded, setIsLoaded] = useState(false);
   const searchParams = useSearchParams();
   const draftId = searchParams.get('id');
   const draftKey = draftId ? `suratBuilder_${type}_${draftId}` : `suratBuilder_${type}`;
@@ -488,7 +505,7 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
       
       {/* Loading Overlay when switching template or initial load */}
       {(forcedLoading || isChangingTemplate) && (
-        <div className="fixed inset-0 z-[9999] bg-white/80 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in duration-200">
+        <div className="print:hidden fixed inset-0 z-[9999] bg-white/80 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in duration-200">
           <img 
             src="/loading-gif.gif" 
             alt="Loading..."
@@ -519,7 +536,7 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
 
       {/* Paywall Modal */}
       {showPaywall && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 p-4 animate-in fade-in duration-200">
+        <div className="print:hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/20 p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 p-6 flex flex-col items-center text-center">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
               <Download className="w-8 h-8 text-red-600" />
@@ -531,14 +548,14 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
             
             <div className="flex flex-col gap-3 w-full">
               <button 
-                onClick={() => router.push('/personal/dashboard/langganan')}
-                className="w-full py-3 px-4 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all active:scale-95 shadow-md shadow-emerald-200 flex items-center justify-center gap-2"
+                onClick={() => window.open('https://api.whatsapp.com/send/?phone=6282138137351&text=Halo+min%2C+saya+mau+upgrade+akun+premium+PortoTree.&type=phone_number&app_absent=0', '_blank')}
+                className="w-full h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
               >
-                Lihat Paket Langganan
+                <span>🚀 Upgrade ke Premium</span>
               </button>
               <button 
                 onClick={() => setShowPaywall(false)}
-                className="w-full py-3 px-4 bg-white text-slate-500 font-medium rounded-xl hover:bg-slate-50 transition-all active:scale-95 border border-slate-200"
+                className="w-full h-12 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl flex items-center justify-center transition-all active:scale-[0.98]"
               >
                 Nanti Dulu
               </button>
@@ -547,14 +564,7 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
         </div>
       )}
 
-      {/* Loading Overlay saat Cek Limit */}
-      {isCheckingLimit && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/80 backdrop-blur-sm">
-          <div className="flex flex-col items-center gap-3">
-            <img src="/loading-gif.gif" alt="Loading..." className="w-48 h-48 md:w-64 md:h-64 object-contain opacity-90" />
-          </div>
-        </div>
-      )}{/* Top Navbar - hidden when printing */}
+      {/* Loading overlay for limit check removed to prevent it from ever showing up in window.print() */}{/* Top Navbar - hidden when printing */}
       <div className="print:hidden h-16 bg-white border-b flex items-center justify-between px-4 md:px-6 shrink-0 sticky top-0 z-50">
         <div className="flex items-center gap-2 md:gap-4">
           <Link href="/personal/dashboard/surat-generator" className="text-gray-500 hover:text-black transition-colors">
@@ -602,9 +612,13 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
             </button>
           </div>
 
-          <Button onClick={handlePrint} className={`bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-3 md:px-4 ${!showMobilePreview ? 'hidden md:flex' : 'flex'}`}>
-            <Download className="w-4 h-4 md:mr-2" />
-            <span className="hidden md:inline">Download PDF</span>
+          <Button onClick={handlePrint} disabled={isCheckingLimit} className={`bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-3 md:px-4 ${!showMobilePreview ? 'hidden md:flex' : 'flex'}`}>
+            {isCheckingLimit ? (
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin md:mr-2" />
+            ) : (
+              <Download className="w-4 h-4 md:mr-2" />
+            )}
+            <span className="hidden md:inline">{isCheckingLimit ? 'Mengecek...' : 'Download PDF'}</span>
           </Button>
         </div>
       </div>

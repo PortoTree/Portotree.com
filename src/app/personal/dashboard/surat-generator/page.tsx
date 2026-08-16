@@ -23,6 +23,7 @@ export default function SuratGeneratorPage() {
   const [renameDraft, setRenameDraft] = useState<any>(null);
   const [newTitle, setNewTitle] = useState("");
   const [printDraft, setPrintDraft] = useState<any>(null);
+  const [mobileDownloadMode, setMobileDownloadMode] = useState(false);
   const { showConfirm, showToast } = useUI();
   
   const router = useRouter();
@@ -281,6 +282,7 @@ export default function SuratGeneratorPage() {
     }
 
     if (window.innerWidth >= 768) {
+      // Desktop: konfirmasi lalu print
       showConfirm({
         title: "Perhatian Sebelum Cetak",
         message: "Jika layar cetak (Preview PDF) terlihat kosong atau terpotong, pastikan Anda mengubah pengaturan 'Margins' menjadi 'None' (Tidak Ada) pada menu pengaturan Print.",
@@ -292,7 +294,11 @@ export default function SuratGeneratorPage() {
         }
       });
     } else {
-      setPrintDraft(letter);
+      // Mobile: buka preview overlay, user bisa share/print dari browser
+      console.log('[SuratGenerator] Mobile download: opening preview overlay', letter.slug);
+      setPreviewData(letter.data);
+      setPreviewSlug(letter.slug);
+      setMobileDownloadMode(true);
     }
   };
 
@@ -585,22 +591,57 @@ export default function SuratGeneratorPage() {
         <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex flex-col items-center overflow-y-auto overflow-x-hidden py-12 animate-in fade-in duration-200">
           {/* Floating Close Button */}
           <button 
-            onClick={() => { setPreviewSlug(null); setPreviewData(null); }}
+            onClick={() => { setPreviewSlug(null); setPreviewData(null); setMobileDownloadMode(false); }}
             className="fixed top-4 right-4 md:top-6 md:right-6 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-all active:scale-95 text-white z-[110] shadow-xl"
             title="Tutup Preview"
           >
             <X className="w-5 h-5 md:w-6 md:h-6" />
           </button>
+
+          {/* Banner instruksi download mobile */}
+          {mobileDownloadMode && (
+            <div className="w-full max-w-sm mx-auto mb-4 px-4">
+              <div className="bg-amber-500 text-white rounded-2xl px-4 py-3 flex items-start gap-3 shadow-lg">
+                <span className="text-lg mt-0.5">💡</span>
+                <div>
+                  <p className="font-bold text-sm">Cara Download PDF di HP</p>
+                  <p className="text-xs mt-0.5 text-amber-100">Ketuk tombol <strong>Share / Bagikan</strong> di browser, lalu pilih <strong>"Print"</strong> atau <strong>"Simpan sebagai PDF"</strong>.</p>
+                </div>
+              </div>
+            </div>
+          )}
           
-          {/* Canvas Wrapper */}
-          <div className="transform scale-[0.43] sm:scale-75 md:scale-100 origin-top shadow-2xl transition-transform bg-white w-[210mm] min-h-[297mm]">
-            <SuratCanvasRenderer 
-              type={previewSlug}
-              formData={previewData?.formData || {}}
-              signatureData={previewData?.signatureData || null}
-              berkasList={previewData?.berkasList || []}
-            />
+          {/* Canvas Wrapper - outer div clips to the visual scaled size, inner div holds the actual A4 canvas */}
+          <div
+            className="surat-preview-outer relative overflow-hidden shadow-2xl bg-white mx-auto"
+            style={{
+              width: 'calc(210mm * 0.43)',
+              minHeight: 'calc(297mm * 0.43)',
+            }}
+          >
+            <div
+              className="surat-preview-inner origin-top-left"
+              style={{ transform: 'scale(0.43)', width: '210mm', minHeight: '297mm' }}
+            >
+              <SuratCanvasRenderer 
+                type={previewSlug}
+                formData={previewData?.formData || {}}
+                signatureData={previewData?.signatureData || null}
+                berkasList={previewData?.berkasList || []}
+              />
+            </div>
           </div>
+          {/* Scale up on larger screens */}
+          <style>{`
+            @media (min-width: 640px) {
+              .surat-preview-outer { width: calc(210mm * 0.75) !important; min-height: calc(297mm * 0.75) !important; }
+              .surat-preview-inner { transform: scale(0.75) !important; }
+            }
+            @media (min-width: 768px) {
+              .surat-preview-outer { width: 210mm !important; min-height: 297mm !important; }
+              .surat-preview-inner { transform: scale(1) !important; }
+            }
+          `}</style>
         </div>
       )}
 
@@ -679,14 +720,7 @@ export default function SuratGeneratorPage() {
         </div>
       )}
 
-      {/* Loading Overlay saat Cek Limit */}
-      {isCheckingLimit && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/80 backdrop-blur-sm">
-          <div className="flex flex-col items-center gap-3">
-            <img src="/loading-gif.gif" alt="Loading..." className="w-48 h-48 md:w-64 md:h-64 object-contain opacity-90" />
-          </div>
-        </div>
-      )}
+      {/* Loading overlay removed to prevent intrusive logo screen during download limit check */}
 
       {/* Hidden Print Container using Portal to escape Dashboard layout */}
       {printDraft && typeof window !== 'undefined' && createPortal(
