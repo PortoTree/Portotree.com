@@ -419,10 +419,10 @@ export function Navbar() {
                 <>
                   {/* Tombol Utama (Disembunyikan di Mobile) */}
                   <a href={isLoggedIn ? getMainUrl("/personal/dashboard") : getMainUrl("/register")} className="hidden md:block">
-                <Button className="rounded-full px-6 bg-slate-900 hover:bg-slate-800 text-white font-medium border-0">
-                  {isLoggedIn ? "Dashboard" : "Daftar Sekarang"}
-                </Button>
-              </a>
+                    <Button className="rounded-full px-6 bg-slate-900 hover:bg-slate-800 text-white font-medium border-0">
+                      {isLoggedIn ? "Dashboard" : "Daftar Sekarang"}
+                    </Button>
+                  </a>
 
               {/* Icon Profil User */}
               <DropdownMenu modal={false}>
@@ -447,7 +447,7 @@ export function Navbar() {
                   {isLoggedIn ? (
                     <>
                       <DropdownMenuItem 
-                        onClick={() => window.location.href = getMainUrl('/personal/dashboard')} 
+                        onClick={() => { window.location.href = getMainUrl('/personal/dashboard'); }} 
                         className="cursor-pointer font-medium w-full"
                       >
                         Dashboard
