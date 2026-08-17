@@ -2,6 +2,8 @@
 
 import { adminDb } from "@/lib/firebase/server";
 import { FieldValue } from "firebase-admin/firestore";
+import { MASTER_CATEGORIES } from "@/lib/blogCategories";
+
 
 export type BlogPost = {
   id: string;
@@ -180,3 +182,37 @@ export async function deleteBlog(id: string): Promise<{ success: boolean; error?
     return { success: false, error: "Gagal menghapus blog." };
   }
 }
+
+// GET unique categories that have at least 1 published post
+export async function getPublishedCategories(): Promise<{
+  success: boolean;
+  data?: { slug: string; label: string; description: string }[];
+  error?: string;
+}> {
+  try {
+    const snapshot = await adminDb
+      .collection("blogs")
+      .where("status", "==", "published")
+      .get();
+
+    const dbLabels = new Set<string>();
+    snapshot.docs.forEach((doc) => {
+      const cat = doc.data().category as string | undefined;
+      if (cat) dbLabels.add(cat.trim());
+    });
+
+    // Filter master list to only those present in DB (preserves order)
+    const categories = MASTER_CATEGORIES.filter((c) =>
+      Array.from(dbLabels).some(
+        (label) => label.toLowerCase() === c.label.toLowerCase()
+      )
+    );
+
+    console.log("[getPublishedCategories] categories found:", categories.map(c => c.slug));
+    return { success: true, data: categories };
+  } catch (error: any) {
+    console.error("[getPublishedCategories] Error:", error);
+    return { success: false, error: "Gagal mengambil kategori." };
+  }
+}
+

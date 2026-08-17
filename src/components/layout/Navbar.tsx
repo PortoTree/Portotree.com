@@ -26,73 +26,23 @@ const fetcher = async () => {
   return null;
 };
 
-const BlogDropdownContent = () => (
-  <div className="bg-white rounded-xl p-2 shadow-xl border border-slate-100 grid grid-cols-2 gap-1">
-    <a href={getMainUrl('/blog')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
-      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
-        <Home className="w-5 h-5" />
-      </div>
-      <div>
-        <div className="font-bold text-sm text-slate-800">Beranda</div>
-        <div className="text-xs text-slate-500 mt-0.5">Halaman utama blog</div>
-      </div>
-    </a>
-    <a href={getMainUrl('/blog/tags/karier')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
-      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
-        <Briefcase className="w-5 h-5" />
-      </div>
-      <div>
-        <div className="font-bold text-sm text-slate-800">Karier</div>
-        <div className="text-xs text-slate-500 mt-0.5">Tips sukses di dunia kerja</div>
-      </div>
-    </a>
-    <a href={getMainUrl('/blog/tags/tips-trik')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
-      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
-        <Lightbulb className="w-5 h-5" />
-      </div>
-      <div>
-        <div className="font-bold text-sm text-slate-800">Tips & Trik</div>
-        <div className="text-xs text-slate-500 mt-0.5">Berbagai panduan praktis</div>
-      </div>
-    </a>
-    <a href={getMainUrl('/blog/tags/edukasi')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
-      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
-        <BookOpen className="w-5 h-5" />
-      </div>
-      <div>
-        <div className="font-bold text-sm text-slate-800">Edukasi</div>
-        <div className="text-xs text-slate-500 mt-0.5">Tambah wawasan & ilmu baru</div>
-      </div>
-    </a>
-    <a href={getMainUrl('/blog/tags/info-berita')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
-      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
-        <Newspaper className="w-5 h-5" />
-      </div>
-      <div>
-        <div className="font-bold text-sm text-slate-800">Info & Berita</div>
-        <div className="text-xs text-slate-500 mt-0.5">Update dunia profesional</div>
-      </div>
-    </a>
-    <a href={getMainUrl('/blog/tags/dokumen')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
-      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
-        <FileText className="w-5 h-5" />
-      </div>
-      <div>
-        <div className="font-bold text-sm text-slate-800">Dokumen (CV/Surat)</div>
-        <div className="text-xs text-slate-500 mt-0.5">Panduan bikin berkas penting</div>
-      </div>
-    </a>
-    <a href={getMainUrl('/blog/tags/portofolio')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
-      <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
-        <Layout className="w-5 h-5" />
-      </div>
-      <div>
-        <div className="font-bold text-sm text-slate-800">Portofolio</div>
-        <div className="text-xs text-slate-500 mt-0.5">Inspirasi karya dan desain</div>
-      </div>
-    </a>
-  </div>
-);
+// Icon map untuk kategori blog
+const CATEGORY_ICONS: Record<string, React.ReactNode> = {
+  'karier':      <Briefcase className="w-5 h-5" />,
+  'tips-trik':   <Lightbulb className="w-5 h-5" />,
+  'edukasi':     <BookOpen className="w-5 h-5" />,
+  'info-berita': <Newspaper className="w-5 h-5" />,
+  'dokumen':     <FileText className="w-5 h-5" />,
+  'portofolio':  <Layout className="w-5 h-5" />,
+};
+const CATEGORY_ICONS_SM: Record<string, React.ReactNode> = {
+  'karier':      <Briefcase className="w-4 h-4" />,
+  'tips-trik':   <Lightbulb className="w-4 h-4" />,
+  'edukasi':     <BookOpen className="w-4 h-4" />,
+  'info-berita': <Newspaper className="w-4 h-4" />,
+  'dokumen':     <FileText className="w-4 h-4" />,
+  'portofolio':  <Layout className="w-4 h-4" />,
+};
 
 export function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -109,6 +59,8 @@ export function Navbar() {
   const [isPortofolioDomain, setIsPortofolioDomain] = useState(false);
   const [isSuratDomain, setIsSuratDomain] = useState(false);
   const [isResumeDomain, setIsResumeDomain] = useState(false);
+  // Dynamic blog categories
+  const [navCategories, setNavCategories] = useState<{ slug: string; label: string; description: string }[]>([]);
   const router = useRouter();
   const pathname = usePathname() || '';
   const isSubdomain = pathname.startsWith('/portofolio-subdomain') || pathname.startsWith('/resume-subdomain');
@@ -125,6 +77,18 @@ export function Navbar() {
       setIsLoggedIn(!!user);
       setIsAuthLoaded(true);
     });
+
+    // Fetch dynamic blog categories
+    fetch('/api/blog/categories')
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.data?.length) {
+          console.log('[Navbar] blog categories loaded:', json.data.map((c: any) => c.slug));
+          setNavCategories(json.data);
+        }
+      })
+      .catch((e) => console.warn('[Navbar] failed to load blog categories', e));
+
     return () => unsubscribe();
   }, []);
 
@@ -216,26 +180,20 @@ export function Navbar() {
         {isMobileBlogOpen && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden flex flex-col pl-8 bg-slate-50/50 rounded-lg mb-2">
             <a href={getMainUrl('/blog')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
-              <Home className="w-4 h-4" /> Beranda
+              <Home className="w-4 h-4" /> Semua Artikel
             </a>
-            <a href={getMainUrl('/blog/tags/karier')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
-              <Briefcase className="w-4 h-4" /> Karier
-            </a>
-            <a href={getMainUrl('/blog/tags/tips-trik')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
-              <Lightbulb className="w-4 h-4" /> Tips & Trik
-            </a>
-            <a href={getMainUrl('/blog/tags/edukasi')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
-              <BookOpen className="w-4 h-4" /> Edukasi
-            </a>
-            <a href={getMainUrl('/blog/tags/info-berita')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
-              <Newspaper className="w-4 h-4" /> Info & Berita
-            </a>
-            <a href={getMainUrl('/blog/tags/dokumen')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
-              <FileText className="w-4 h-4" /> Dokumen (CV/Surat)
-            </a>
-            <a href={getMainUrl('/blog/tags/portofolio')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 hover:text-green-600 flex items-center gap-3 text-sm">
-              <Layout className="w-4 h-4" /> Portofolio
-            </a>
+            {navCategories.map((cat, i) => (
+              <a
+                key={cat.slug}
+                href={getMainUrl(`/blog/tags/${cat.slug}`)}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`py-3 hover:text-green-600 flex items-center gap-3 text-sm ${
+                  i < navCategories.length - 1 ? 'border-b border-slate-100' : ''
+                }`}
+              >
+                {CATEGORY_ICONS_SM[cat.slug] ?? <FileText className="w-4 h-4" />} {cat.label}
+              </a>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>
@@ -311,7 +269,28 @@ export function Navbar() {
                     Blog <ChevronDown className="w-4 h-4 ml-0.5 transition-transform duration-200 group-hover:-rotate-180" />
                   </Link>
                   <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[520px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
-                    <BlogDropdownContent />
+                    <div className="bg-white rounded-xl p-2 shadow-xl border border-slate-100 grid grid-cols-2 gap-1">
+                      <a href={getMainUrl('/blog')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item col-span-2">
+                        <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
+                          <Home className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-sm text-slate-800">Semua Artikel</div>
+                          <div className="text-xs text-slate-500 mt-0.5">Halaman utama blog</div>
+                        </div>
+                      </a>
+                      {navCategories.map((cat) => (
+                        <a key={cat.slug} href={getMainUrl(`/blog/tags/${cat.slug}`)} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+                          <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
+                            {CATEGORY_ICONS[cat.slug] ?? <FileText className="w-5 h-5" />}
+                          </div>
+                          <div>
+                            <div className="font-bold text-sm text-slate-800">{cat.label}</div>
+                            <div className="text-xs text-slate-500 mt-0.5">{cat.description}</div>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 </div>
                 <Link href={getMainUrl('/about')} className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
@@ -391,7 +370,28 @@ export function Navbar() {
                     Blog <ChevronDown className="w-4 h-4 ml-0.5 transition-transform duration-200 group-hover:-rotate-180" />
                   </Link>
                   <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[520px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
-                    <BlogDropdownContent />
+                    <div className="bg-white rounded-xl p-2 shadow-xl border border-slate-100 grid grid-cols-2 gap-1">
+                      <a href={getMainUrl('/blog')} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item col-span-2">
+                        <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
+                          <Home className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-sm text-slate-800">Semua Artikel</div>
+                          <div className="text-xs text-slate-500 mt-0.5">Halaman utama blog</div>
+                        </div>
+                      </a>
+                      {navCategories.map((cat) => (
+                        <a key={cat.slug} href={getMainUrl(`/blog/tags/${cat.slug}`)} className="flex items-start gap-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors group/item">
+                          <div className="bg-emerald-100/50 p-2.5 rounded-lg text-emerald-600 shrink-0 transition-transform group-hover/item:scale-110">
+                            {CATEGORY_ICONS[cat.slug] ?? <FileText className="w-5 h-5" />}
+                          </div>
+                          <div>
+                            <div className="font-bold text-sm text-slate-800">{cat.label}</div>
+                            <div className="text-xs text-slate-500 mt-0.5">{cat.description}</div>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 </div>
                 <Link href={getMainUrl('/about')} className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">

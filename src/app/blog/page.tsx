@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { getPublishedBlogs } from "@/app/actions/blog";
+import { getPublishedBlogs, getPublishedCategories } from "@/app/actions/blog";
+import { labelToSlug } from "@/lib/blogCategories";
 import Link from "next/link";
 import Image from "next/image";
 import { Clock, User, ArrowRight, Search, Calendar } from "lucide-react";
@@ -18,8 +19,12 @@ export default async function BlogPage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const result = await getPublishedBlogs();
+  const [result, catResult] = await Promise.all([
+    getPublishedBlogs(),
+    getPublishedCategories(),
+  ]);
   let blogs = result.data || [];
+  const dynamicCategories = catResult.data || [];
 
   const resolvedSearchParams = await searchParams;
   const q = typeof resolvedSearchParams.q === 'string' ? resolvedSearchParams.q : '';
@@ -33,16 +38,6 @@ export default async function BlogPage({
       return matchTitle || matchExcerpt || matchCategory;
     });
   }
-
-  const CATEGORIES = [
-    { slug: "semua", label: "Semua" },
-    { slug: "karier", label: "Karier" },
-    { slug: "tips-trik", label: "Tips & Trik" },
-    { slug: "edukasi", label: "Edukasi" },
-    { slug: "info-berita", label: "Info & Berita" },
-    { slug: "dokumen", label: "Dokumen (CV/Surat)" },
-    { slug: "portofolio", label: "Portofolio" }
-  ];
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("id-ID", {
@@ -102,17 +97,20 @@ export default async function BlogPage({
                   </h2>
                   <p className="text-sm lg:text-base text-[#6c6c6c]">Baca artikel terbaru untuk sukses berkarir</p>
                   
-                  {/* Category Tabs */}
+                  {/* Dynamic Category Tabs */}
                   <div className="flex flex-nowrap lg:flex-wrap items-center gap-2 mt-6 overflow-x-auto pb-2 scrollbar-hide w-full">
-                    {CATEGORIES.map((cat) => (
+                    {/* "Semua" selalu muncul */}
+                    <Link 
+                      href="/blog"
+                      className="shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-colors bg-emerald-600 text-white shadow-md"
+                    >
+                      Semua
+                    </Link>
+                    {dynamicCategories.map((cat) => (
                       <Link 
                         key={cat.slug} 
-                        href={cat.slug === 'semua' ? '/blog' : `/blog/tags/${cat.slug}`}
-                        className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                          cat.slug === 'semua' 
-                            ? "bg-emerald-600 text-white shadow-md" 
-                            : "bg-white border border-[#e9ecef] text-[#6c6c6c] hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200"
-                        }`}
+                        href={`/blog/tags/${cat.slug}`}
+                        className="shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-colors bg-white border border-[#e9ecef] text-[#6c6c6c] hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200"
                       >
                         {cat.label}
                       </Link>
@@ -158,9 +156,9 @@ export default async function BlogPage({
                         </div>
                         <div className="flex-1 p-6 lg:p-8 flex flex-col justify-center">
                           <div className="mb-3">
-                            <Link href={`/blog/tags/${blog.category?.toLowerCase() || "karier"}`}>
+                            <Link href={`/blog/tags/${labelToSlug(blog.category || 'karier')}`}>
                               <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-semibold hover:bg-emerald-100 transition-colors cursor-pointer">
-                                {CATEGORIES.find(c => c.slug === (blog.category?.toLowerCase() || 'karier'))?.label || blog.category || 'Karier'}
+                                {blog.category || 'Karier'}
                               </span>
                             </Link>
                           </div>

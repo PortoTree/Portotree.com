@@ -1,18 +1,22 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { getPublishedBlogs } from "@/app/actions/blog";
+import { getPublishedBlogs, getPublishedCategories } from "@/app/actions/blog";
+import { labelToSlug, slugToCategory } from "@/lib/blogCategories";
 import Link from "next/link";
 import Image from "next/image";
 import { Clock, User, ArrowRight, Search, Calendar } from "lucide-react";
 import { NewsletterForm } from "@/components/blog/NewsletterForm";
+import { notFound } from "next/navigation";
 
 export const revalidate = 3600; // revalidate cache every 1 hour
 
 export async function generateMetadata({ params }: { params: Promise<{ kategori: string }> }) {
   const resolvedParams = await params;
+  const cat = slugToCategory(resolvedParams.kategori);
+  const label = cat?.label || resolvedParams.kategori;
   return {
-    title: `Artikel tentang ${resolvedParams.kategori} - PortoTree`,
-    description: `Baca kumpulan artikel terbaru tentang ${resolvedParams.kategori} dari PortoTree.`,
+    title: `Artikel tentang ${label} - PortoTree`,
+    description: `Baca kumpulan artikel terbaru tentang ${label} dari PortoTree.`,
   };
 }
 
@@ -23,11 +27,21 @@ export default async function CategoryPage({
   params: Promise<{ kategori: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const result = await getPublishedBlogs();
-  let blogs = result.data || [];
-
   const resolvedParams = await params;
-  const activeCategory = resolvedParams.kategori.toLowerCase();
+  const activeSlug = resolvedParams.kategori.toLowerCase();
+
+  // Ambil kategori aktif dari master list
+  const activeCat = slugToCategory(activeSlug);
+  // Jika slug tidak dikenal sama sekali, 404
+  if (!activeCat) notFound();
+
+  const [result, catResult] = await Promise.all([
+    getPublishedBlogs(),
+    getPublishedCategories(),
+  ]);
+
+  let blogs = result.data || [];
+  const dynamicCategories = catResult.data || [];
 
   const resolvedSearchParams = await searchParams;
   const q = typeof resolvedSearchParams.q === 'string' ? resolvedSearchParams.q : '';
@@ -41,26 +55,11 @@ export default async function CategoryPage({
     });
   }
 
-  // Filter by category
+  // Filter by category - cocokkan slug aktif dengan slug dari label blog
   blogs = blogs.filter((blog) => {
-    const blogCat = (blog.category || 'Karier').toLowerCase();
-    // Handling specific cases for mismatched slugs vs DB categories if any.
-    return blogCat === activeCategory || 
-           (activeCategory === 'tips-trik' && blogCat === 'tips & trik') || 
-           (activeCategory === 'info-berita' && blogCat === 'info & berita');
+    const blogSlug = labelToSlug(blog.category || 'karier');
+    return blogSlug === activeSlug;
   });
-
-  const CATEGORIES = [
-    { slug: "semua", label: "Semua" },
-    { slug: "karier", label: "Karier" },
-    { slug: "tips-trik", label: "Tips & Trik" },
-    { slug: "edukasi", label: "Edukasi" },
-    { slug: "info-berita", label: "Info & Berita" },
-    { slug: "dokumen", label: "Dokumen (CV/Surat)" },
-    { slug: "portofolio", label: "Portofolio" }
-  ];
-
-  const activeLabel = CATEGORIES.find(c => c.slug === activeCategory)?.label || activeCategory;
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("id-ID", {
@@ -86,13 +85,13 @@ export default async function CategoryPage({
                 {/* HERO TEXT */}
                 <div className="mb-16 text-center lg:text-left">
                   <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-[#3a3a3a] mb-4 md:mb-6 tracking-tight leading-snug">
-                    Kumpulan Artikel: <span className="text-emerald-600">{activeLabel}</span>
+                    Kumpulan Artikel: <span className="text-emerald-600">{activeCat.label}</span>
                   </h1>
                   <p className="text-sm sm:text-base md:text-lg text-[#6c6c6c] mb-6 md:mb-8 max-w-2xl mx-auto lg:mx-0 px-2 lg:px-0">
-                    Baca berbagai informasi, tips, dan panduan terkait {activeLabel} untuk memaksimalkan potensi karirmu.
+                    Baca berbagai informasi, tips, dan panduan terkait {activeCat.label} untuk memaksimalkan potensi karirmu.
                   </p>
                   <div className="max-w-2xl mx-auto lg:mx-0 relative">
-                    <form action={`/blog/tags/${activeCategory}`} method="GET" className="flex items-center">
+                    <form action={`/blog/tags/${activeSlug}`} method="GET" className="flex items-center">
                       <div className="relative w-full">
                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                           <Search className="w-5 h-5 text-slate-400" />
@@ -101,7 +100,7 @@ export default async function CategoryPage({
                           type="search" 
                           name="q"
                           defaultValue={q}
-                          placeholder={`Cari di kategori ${activeLabel}...`}
+                          placeholder={`Cari di kategori ${activeCat.label}...`}
                           className="w-full pl-10 md:pl-12 pr-24 md:pr-28 py-3 md:py-4 rounded-full border border-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-sm text-slate-700 transition-all text-sm md:text-base"
                         />
                       </div>
@@ -118,14 +117,21 @@ export default async function CategoryPage({
                     Artikel Terbaru
                   </h2>
                   
-                  {/* Category Tabs */}
+                  {/* Dynamic Category Tabs */}
                   <div className="flex flex-nowrap lg:flex-wrap items-center gap-2 mt-6 overflow-x-auto pb-2 scrollbar-hide w-full">
-                    {CATEGORIES.map((cat) => (
+                    {/* "Semua" */}
+                    <Link 
+                      href="/blog"
+                      className="shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-colors bg-white border border-[#e9ecef] text-[#6c6c6c] hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200"
+                    >
+                      Semua
+                    </Link>
+                    {dynamicCategories.map((cat) => (
                       <Link 
                         key={cat.slug} 
-                        href={cat.slug === 'semua' ? '/blog' : `/blog/tags/${cat.slug}`}
+                        href={`/blog/tags/${cat.slug}`}
                         className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                          activeCategory === cat.slug 
+                          activeSlug === cat.slug 
                             ? "bg-emerald-600 text-white shadow-md" 
                             : "bg-white border border-[#e9ecef] text-[#6c6c6c] hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200"
                         }`}
@@ -172,9 +178,9 @@ export default async function CategoryPage({
                         </div>
                         <div className="flex-1 p-6 lg:p-8 flex flex-col justify-center">
                           <div className="mb-3">
-                            <Link href={`/blog/tags/${blog.category?.toLowerCase() || "karier"}`}>
+                            <Link href={`/blog/tags/${labelToSlug(blog.category || 'karier')}`}>
                               <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-semibold hover:bg-emerald-100 transition-colors cursor-pointer">
-                                {CATEGORIES.find(c => c.slug === (blog.category?.toLowerCase() || 'karier'))?.label || blog.category || 'Karier'}
+                                {blog.category || 'Karier'}
                               </span>
                             </Link>
                           </div>
