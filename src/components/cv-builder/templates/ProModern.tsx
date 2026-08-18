@@ -34,7 +34,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
   const dummyBio = "Motivated entry-level high school English Teacher with experience teaching multiple subject disciplines at all grade levels. Skilled in curriculum development, student performance improvement and classroom management.";
   const bio = personal?.bio ? personal?.bio.replace(/<[^>]+>/g, '') : (renderDummy ? dummyBio : "");
 
-  let visibleExperience = experience?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  let visibleExperience = experience?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   if (visibleExperience.length === 0) {
     visibleExperience = [
       {
@@ -48,25 +48,25 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
         description: '• Prepare 50+ students for the AP English Literature exam\n• Discuss literary works, trends and techniques with students\n• Administer written assignments and provide constructive feedback\n• Create lesson plans and instructional resources for each class',
         isDummy: true
       }
-    ];
+    ] as any;
   }
   
-  let visibleEducation = education?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  let visibleEducation = education?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   if (visibleEducation.length === 0) {
     visibleEducation = [
       {
         id: 'ed1',
         degree: 'Bachelor of Arts in Education',
-        institution: 'Johnson University',
+        school: 'Johnson University',
         startYear: '2019', endYear: '2023',
         location: 'West Charlotte, NC',
         description: '',
         isDummy: true
       }
-    ];
+    ] as any;
   }
   
-  let visibleCerts = certifications?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  let visibleCerts = certifications?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   if (visibleCerts.length === 0) {
     visibleCerts = [
       {
@@ -85,25 +85,25 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
         description: '',
         isDummy: true
       }
-    ];
+    ] as any;
   }
   
-  let visibleLanguages = languages?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  let visibleLanguages = languages?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   if (visibleLanguages.length === 0) {
     visibleLanguages = [
       { id: 'l1', name: 'English', proficiency: 'Native', isDummy: true },
       { id: 'l2', name: 'Japanese', proficiency: 'Intermediate', isDummy: true },
       { id: 'l3', name: 'Spanish', proficiency: 'Beginner', isDummy: true }
-    ];
+    ] as any;
   }
 
-  const visibleProjects = projects?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleAwards = awards?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleOrg = organization?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleInternship = internship?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleCourses = courses?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleExtracurriculars = extracurriculars?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleHobbies = hobbies?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  const visibleProjects = projects?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleAwards = awards?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleOrg = organization?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleInternship = internship?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleCourses = courses?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleExtracurriculars = extracurriculars?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleHobbies = hobbies?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
 
   const dummySkills = "Organization, Leadership, Performance improvement plan development, Creative learning techniques, Behavior management";
   const displaySkills = skills || (renderDummy ? dummySkills : "");
@@ -174,7 +174,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
             <div className={!languages || languages.length === 0 ? 'print:hidden' : ''}>
               <SectionHeader title="LANGUAGES" icon={MessageSquare} />
               <div className="flex flex-col gap-3">
-                {visibleLanguages.map(lang => (
+                {visibleLanguages.map((lang: any) => (
                   <div key={lang.id} className={`flex items-center justify-between text-[9.5pt] ${(lang as any).isDummy ? 'text-gray-400 opacity-70' : 'text-slate-800'}`}>
                     <span className="w-20">{lang.name}</span>
                     <div className="flex-1 h-0.5 bg-slate-300 relative ml-2">
@@ -194,7 +194,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
             <div className={!skills ? 'print:hidden' : ''}>
               <SectionHeader title="SKILLS" icon={Settings} />
               <ul className="flex flex-col gap-2.5">
-                {displaySkills.split(',').map((skill, i) => (
+                {displaySkills.split(',').map((skill: any, i: any) => (
                   <li key={i} className={`flex items-start gap-2 text-[9.5pt] ${!skills ? 'text-gray-400 opacity-70' : 'text-slate-800'}`}>
                     <span className="mt-1" style={{ fontSize: '8pt' }}>✓</span>
                     <span className="leading-snug">{skill.trim()}</span>
@@ -209,7 +209,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
             <div className={!hobbies || hobbies.length === 0 ? 'print:hidden' : ''}>
               <SectionHeader title="HOBBIES" icon={Heart} />
               <ul className="flex flex-col gap-2.5">
-                {visibleHobbies.map(hobby => (
+                {visibleHobbies.map((hobby: any) => (
                   <li key={hobby.id} className={`flex items-start gap-2 text-[9.5pt] ${(hobby as any).isDummy ? 'text-gray-400 opacity-70' : 'text-slate-800'}`}>
                     <span className="mt-1" style={{ fontSize: '8pt' }}>✓</span>
                     <span className="leading-snug">{hobby.name}</span>
@@ -247,10 +247,10 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
           <div className={!education || education.length === 0 ? 'print:hidden' : ''}>
             <SectionHeader title="EDUCATION" icon={GraduationCap} />
             <div className="flex flex-col gap-4">
-              {visibleEducation.map(edu => (
+              {visibleEducation.map((edu: any) => (
                 <div key={edu.id} className={(edu as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}>
                   <div className={`font-bold text-[11pt] mb-0.5 ${(edu as any).isDummy ? 'text-gray-500' : 'text-slate-900'}`}>
-                    {edu.school || edu.institution}{edu.location ? `, ${edu.location}` : ''}
+                    {edu.school || edu.school}{edu.location ? `, ${edu.location}` : ''}
                   </div>
                   <div className="flex justify-between items-center mb-1">
                     <div className={`italic ${(edu as any).isDummy ? 'text-gray-400' : 'text-slate-700'}`}>{edu.degree}</div>
@@ -271,7 +271,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
           <div className={!experience || experience.length === 0 ? 'print:hidden' : ''}>
             <SectionHeader title="EXPERIENCE" icon={Briefcase} />
             <div className="flex flex-col gap-5">
-              {visibleExperience.map(exp => (
+              {visibleExperience.map((exp: any) => (
                 <div key={exp.id} className={(exp as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}>
                   <div className={`font-bold text-[11pt] mb-0.5 ${(exp as any).isDummy ? 'text-gray-500' : 'text-slate-900'}`}>
                     {exp.company}{exp.role ? `, ${exp.role}` : ''}
@@ -281,7 +281,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                   </div>
                   {exp.description && (
                     <div className={`text-[9.5pt] ml-4 ${(exp as any).isDummy ? 'text-gray-400' : 'text-slate-700'}`}>
-                      {exp.description.split('\n').map((line, i) => {
+                      {exp.description.split('\n').map((line: any, i: any) => {
                         const cleanLine = line.trim();
                         if (!cleanLine) return null;
                         return (
@@ -304,7 +304,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
           <div className={!certifications || certifications.length === 0 ? 'print:hidden' : ''}>
             <SectionHeader title="CERTIFICATIONS" icon={Award} />
             <div className="flex flex-col gap-2 ml-4">
-              {visibleCerts.map(cert => (
+              {visibleCerts.map((cert: any) => (
                 <div key={cert.id} className={`flex gap-2 text-[10pt] ${(cert as any).isDummy ? 'text-gray-400 opacity-70' : 'text-slate-700'}`}>
                   <span className={`select-none text-[12pt] leading-none ${(cert as any).isDummy ? 'text-gray-400' : 'text-slate-800'}`}>▪</span>
                   <span>{cert.title}{cert.year ? `, ${cert.year}` : ''}</span>
@@ -319,7 +319,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
           <div className={!projects || projects.length === 0 ? 'print:hidden' : ''}>
             <SectionHeader title="PROJECTS" icon={Folder} />
             <div className="flex flex-col gap-5">
-              {visibleProjects.map(proj => (
+              {visibleProjects.map((proj: any) => (
                 <div key={proj.id} className={(proj as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}>
                   <div className={`font-bold text-[11pt] mb-0.5 ${(proj as any).isDummy ? 'text-gray-500' : 'text-slate-900'}`}>
                     {proj.title}
@@ -333,7 +333,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                   )}
                   {proj.description && (
                     <div className={`text-[9.5pt] ml-4 ${(proj as any).isDummy ? 'text-gray-400' : 'text-slate-700'}`}>
-                      {proj.description.split('\n').map((line, i) => {
+                      {proj.description.split('\n').map((line: any, i: any) => {
                         const cleanLine = line.trim();
                         if (!cleanLine) return null;
                         return (
@@ -356,7 +356,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
           <div className={!organization || organization.length === 0 ? 'print:hidden' : ''}>
             <SectionHeader title="ORGANIZATIONS" icon={Users} />
             <div className="flex flex-col gap-5">
-              {visibleOrg.map(org => (
+              {visibleOrg.map((org: any) => (
                 <div key={org.id} className={(org as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}>
                   <div className={`font-bold text-[11pt] mb-0.5 ${(org as any).isDummy ? 'text-gray-500' : 'text-slate-900'}`}>
                     {org.name}{org.role ? `, ${org.role}` : ''}
@@ -378,7 +378,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
           <div className={!internship || internship.length === 0 ? 'print:hidden' : ''}>
             <SectionHeader title="INTERNSHIP" icon={Briefcase} />
             <div className="flex flex-col gap-5">
-              {visibleInternship.map(intern => (
+              {visibleInternship.map((intern: any) => (
                 <div key={intern.id} className={(intern as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}>
                   <div className={`font-bold text-[11pt] mb-0.5 ${(intern as any).isDummy ? 'text-gray-500' : 'text-slate-900'}`}>
                     {intern.company}{intern.role ? `, ${intern.role}` : ''}
@@ -388,7 +388,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                   </div>
                   {intern.description && (
                     <div className={`text-[9.5pt] ml-4 ${(intern as any).isDummy ? 'text-gray-400' : 'text-slate-700'}`}>
-                      {intern.description.split('\n').map((line, i) => {
+                      {intern.description.split('\n').map((line: any, i: any) => {
                         const cleanLine = line.trim();
                         if (!cleanLine) return null;
                         return (
@@ -411,7 +411,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
           <div className={!courses || courses.length === 0 ? 'print:hidden' : ''}>
             <SectionHeader title="COURSES" icon={BookOpen} />
             <div className="flex flex-col gap-4">
-              {visibleCourses.map(course => (
+              {visibleCourses.map((course: any) => (
                 <div key={course.id} className={(course as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}>
                   <div className={`font-bold text-[11pt] mb-0.5 ${(course as any).isDummy ? 'text-gray-500' : 'text-slate-900'}`}>
                     {course.title}
@@ -433,7 +433,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
           <div className={!awards || awards.length === 0 ? 'print:hidden' : ''}>
             <SectionHeader title="AWARDS" icon={Trophy} />
             <div className="flex flex-col gap-4">
-              {visibleAwards.map(award => (
+              {visibleAwards.map((award: any) => (
                 <div key={award.id} className={(award as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}>
                   <div className={`font-bold text-[11pt] mb-0.5 ${(award as any).isDummy ? 'text-gray-500' : 'text-slate-900'}`}>
                     {award.title}
@@ -456,7 +456,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
           <div className={!extracurriculars || extracurriculars.length === 0 ? 'print:hidden' : ''}>
             <SectionHeader title="EXTRACURRICULARS" icon={Activity} />
             <div className="flex flex-col gap-4">
-              {visibleExtracurriculars.map(extra => (
+              {visibleExtracurriculars.map((extra: any) => (
                 <div key={extra.id} className={(extra as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}>
                   <div className={`font-bold text-[11pt] mb-0.5 ${(extra as any).isDummy ? 'text-gray-500' : 'text-slate-900'}`}>
                     {extra.title}

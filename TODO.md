@@ -139,3 +139,15 @@
   - `c:\PortoTree\src\components\surat\templates\DaftarRiwayatHidupCanvas.tsx`
   - `c:\PortoTree\src\components\surat\templates\LamaranKerjaCanvas.tsx`
   - `c:\PortoTree\src\components\surat\templates\PengunduranDiriCanvas.tsx`
+
+
+## Kategori: Frontend (Fix Build Error)
+- **Status:** Selesai
+- **Perubahan:**
+  - Memperbaiki TypeErrors terkait implicit any pada parameter callback fungsi .map() di seluruh komponen template CV.
+  - Menyelesaikan TypeError languagesList is possibly undefined di CreativeBlue.tsx dan template lainnya.
+  - Membungkus halaman /resume-builder/page.tsx dengan <Suspense> boundary karena penggunaan hook useSearchParams() untuk mencegah error prerender-error pada Next.js versi production (Turbopack).
+  - Build production berhasil dijalankan tanpa error.
+- **File Terdampak:**
+  - C:\PortoTree\src\components\cv-builder\templates\*.tsx
+  - C:\PortoTree\src\app\resume-builder\page.tsx

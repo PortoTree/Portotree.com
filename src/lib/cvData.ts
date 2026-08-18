@@ -23,6 +23,7 @@ export interface CVPersonalData {
 export interface CVPortfolioData extends Omit<PortfolioData, 'awards' | 'personal'> {
   personal: CVPersonalData;
   internship?: Array<{
+    isDummy?: boolean;
     id: string;
     role: string;
     company: string;
@@ -35,6 +36,7 @@ export interface CVPortfolioData extends Omit<PortfolioData, 'awards' | 'persona
     description: string;
   }>;
   awards?: Array<{
+    isDummy?: boolean;
     id: string;
     title: string;
     issuer: string;
@@ -44,6 +46,7 @@ export interface CVPortfolioData extends Omit<PortfolioData, 'awards' | 'persona
     imageUrl: string;
   }>;
   courses?: Array<{
+    isDummy?: boolean;
     id: string;
     title: string;
     issuer: string;
@@ -56,17 +59,20 @@ export interface CVPortfolioData extends Omit<PortfolioData, 'awards' | 'persona
     description: string;
   }>;
   languages?: Array<{
+    isDummy?: boolean;
     id: string;
     name: string;
     proficiency: string;
   }>;
   extracurriculars?: Array<{
+    isDummy?: boolean;
     id: string;
     title: string;
     issuer: string;
     year: string;
   }>;
   hobbies?: Array<{
+    isDummy?: boolean;
     id: string;
     name: string;
   }>;

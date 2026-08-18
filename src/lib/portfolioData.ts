@@ -10,12 +10,14 @@ export interface PortfolioData {
     hireMeLink?: 'email' | 'whatsapp';
   };
   social?: Array<{
+    isDummy?: boolean;
     id: string;
     platform: string;
     username: string;
     url: string;
   }>;
   experience?: Array<{
+    isDummy?: boolean;
     id: string;
     role: string;
     company: string;
@@ -28,6 +30,7 @@ export interface PortfolioData {
     description: string;
   }>;
   education?: Array<{
+    isDummy?: boolean;
     id: string;
     level: string;
     degree: string;
@@ -41,6 +44,7 @@ export interface PortfolioData {
     description: string;
   }>;
   organization?: Array<{
+    isDummy?: boolean;
     id: string;
     name: string;
     role: string;
@@ -53,6 +57,7 @@ export interface PortfolioData {
     description: string;
   }>;
   projects?: Array<{
+    isDummy?: boolean;
     id: string;
     title: string;
     description: string;
@@ -62,12 +67,14 @@ export interface PortfolioData {
     link: string;
   }>;
   certifications?: Array<{
+    isDummy?: boolean;
     id: string;
     title: string;
     description: string;
     imageUrl: string;
   }>;
   awards?: Array<{
+    isDummy?: boolean;
     id: string;
     title: string;
     issuer: string;
@@ -76,6 +83,7 @@ export interface PortfolioData {
     imageUrl: string;
   }>;
   services?: Array<{
+    isDummy?: boolean;
     id: string;
     title: string;
     link: string;

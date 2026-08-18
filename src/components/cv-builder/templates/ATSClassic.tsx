@@ -35,7 +35,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
   const dummyBio = "Creative and detail-oriented Graphic Designer with over 5 years of experience in developing engaging and innovative digital and print designs. Proficient in Adobe Creative Suite, UI/UX design, branding, and visual storytelling. Adept at collaborating with clients and marketing teams to deliver compelling visuals that drive engagement. Passionate about design trends and committed to delivering high-quality creative solutions.";
   const bio = personal?.bio ? personal?.bio.replace(/<[^>]+>/g, '') : (renderDummy ? dummyBio : "");
 
-  let visibleExperience = experience?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  let visibleExperience = experience?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   if (visibleExperience.length === 0) {
     visibleExperience = [
       {
@@ -60,31 +60,31 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
         description: '• Developed user interfaces for web and mobile applications.\n• Collaborated with the marketing team to design promotional campaigns.\n• Created high-quality illustrations and graphics for social media.',
         isDummy: true
       }
-    ];
+    ] as any;
   }
 
-  let visibleEducation = education?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  let visibleEducation = education?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   if (visibleEducation.length === 0) {
     visibleEducation = [
       {
         id: 'edu-dummy-1',
         degree: 'Bachelor of Fine Arts in Graphic Design',
-        institution: 'University of Arts',
+        school: 'University of Arts',
         location: 'Los Angeles, CA',
         startYear: '2012', endYear: '2016',
         description: '',
         isDummy: true
       }
-    ];
+    ] as any;
   }
-  const visibleProjects = projects?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleCerts = certifications?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleAwards = awards?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleOrg = organization?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleInternship = internship?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleCourses = courses?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  const visibleProjects = projects?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleCerts = certifications?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleAwards = awards?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleOrg = organization?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleInternship = internship?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleCourses = courses?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   
-  let visibleLanguages = languages?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  let visibleLanguages = languages?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   if (visibleLanguages.length === 0) {
     visibleLanguages = [
       { id: 'l1', name: 'English', proficiency: 'Native', isDummy: true },
@@ -92,8 +92,8 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
     ];
   }
   
-  const visibleExtracurriculars = extracurriculars?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleHobbies = hobbies?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  const visibleExtracurriculars = extracurriculars?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleHobbies = hobbies?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   
   const SectionHeader = ({ title, thickTop = false }: { title: string, thickTop?: boolean }) => (
     <div className="mb-3">
@@ -150,7 +150,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
           <SectionHeader title="SKILLS" />
           {skills ? (
             <ul className="grid grid-cols-3 gap-x-4 gap-y-1 list-disc pl-5">
-              {skills.split(',').map((skill, i) => (
+              {skills.split(',').map((skill: any, i: any) => (
                 <li key={i} className="pl-1 leading-snug break-words">
                   {skill.trim()}
                 </li>
@@ -176,7 +176,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
         <div className={`mb-6 ${!languages || languages.length === 0 ? 'print:hidden' : ''}`}>
           <SectionHeader title="LANGUAGES" />
           <ul className="grid grid-cols-3 gap-x-4 gap-y-1 list-disc pl-5">
-            {visibleLanguages.map(lang => (
+            {visibleLanguages.map((lang: any) => (
               <li key={lang.id} className={`pl-1 mb-2 leading-snug break-words ${(lang as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}`}>
                 <div className="flex justify-between items-end mb-1">
                   <span className={`font-medium ${(lang as any).isDummy ? 'text-gray-400' : 'text-black'}`}>{lang.name}</span>
@@ -199,13 +199,13 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
         <div className={`mb-6 ${!education || education.length === 0 ? 'print:hidden' : ''}`}>
           <SectionHeader title="EDUCATION" />
           <div className="space-y-4">
-            {visibleEducation.map(edu => (
+            {visibleEducation.map((edu: any) => (
               <div key={edu.id} className={`break-inside-avoid mb-4 ${(edu as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}`}>
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className={`font-bold ${(edu as any).isDummy ? 'text-gray-400' : ''}`}>{edu.degree} {edu.level ? `in ${edu.level}` : ''}</div>
                   <div className={`font-medium text-[9pt] ${(edu as any).isDummy ? 'text-gray-400' : ''}`}>{edu.endYear || edu.startYear}</div>
                 </div>
-                <div className={(edu as any).isDummy ? 'text-gray-400' : 'text-black'}>{edu.school || edu.institution}</div>
+                <div className={(edu as any).isDummy ? 'text-gray-400' : 'text-black'}>{edu.school || edu.school}</div>
               </div>
             ))}
           </div>
@@ -216,7 +216,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
         <div className="mb-6">
           <SectionHeader title="COURSES" />
           <div className="space-y-4">
-            {visibleCourses.map(course => (
+            {visibleCourses.map((course: any) => (
               <div key={course.id}>
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className="font-bold">{course.title}</div>
@@ -234,7 +234,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
         <div className={`mb-6 ${!experience || experience.length === 0 ? 'print:hidden' : ''}`}>
           <SectionHeader title="PROFESSIONAL EXPERIENCE" />
           <div className="space-y-5">
-            {visibleExperience.map(exp => (
+            {visibleExperience.map((exp: any) => (
               <div key={exp.id} className={`break-inside-avoid mb-4 ${(exp as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}`}>
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className={`font-bold ${(exp as any).isDummy ? 'text-gray-400' : ''}`}>{exp.role}</div>
@@ -243,7 +243,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
                 <div className={`mb-1.5 italic ${(exp as any).isDummy ? 'text-gray-400' : 'text-black'}`}>{exp.company} {exp.location ? `(${exp.location})` : ''}</div>
                 {exp.description && (
                   <ul className="list-disc pl-5 space-y-1">
-                    {exp.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line, i) => (
+                    {exp.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line: any, i: any) => (
                       <li key={i} className="pl-1">{line.replace(/^-\s*/, '')}</li>
                     ))}
                   </ul>
@@ -258,7 +258,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
         <div className="mb-6">
           <SectionHeader title="INTERNSHIP EXPERIENCE" />
           <div className="space-y-5">
-            {visibleInternship.map(intern => (
+            {visibleInternship.map((intern: any) => (
               <div key={intern.id} className="break-inside-avoid mb-4">
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className="font-bold">{intern.role}</div>
@@ -267,7 +267,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
                 <div className="text-black mb-1.5 italic">{intern.company} {intern.location ? `(${intern.location})` : ''}</div>
                 {intern.description && (
                   <ul className="list-disc pl-5 space-y-1">
-                    {intern.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line, i) => (
+                    {intern.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line: any, i: any) => (
                       <li key={i} className="pl-1">{line.replace(/^-\s*/, '')}</li>
                     ))}
                   </ul>
@@ -282,7 +282,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
         <div className="mb-6">
           <SectionHeader title="PROJECTS" />
           <div className="space-y-5">
-            {visibleProjects.map(proj => (
+            {visibleProjects.map((proj: any) => (
               <div key={proj.id} className="break-inside-avoid mb-4">
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className="font-bold">{proj.title}</div>
@@ -290,7 +290,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
                 <div className="text-blue-600 mb-1.5 italic"><a href={proj.link} target="_blank" rel="noopener noreferrer" className="hover:underline">{proj.link}</a></div>
                 {proj.description && (
                   <ul className="list-disc pl-5 space-y-1">
-                    {proj.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line, i) => (
+                    {proj.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line: any, i: any) => (
                       <li key={i} className="pl-1">{line.replace(/^-\s*/, '')}</li>
                     ))}
                   </ul>
@@ -305,7 +305,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
         <div className="mb-6">
           <SectionHeader title="CERTIFICATIONS" />
           <div className="space-y-4">
-            {visibleCerts.map(cert => (
+            {visibleCerts.map((cert: any) => (
               <div key={cert.id} className="break-inside-avoid mb-4">
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className="font-bold">{cert.title}</div>
@@ -321,7 +321,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
         <div className="mb-6">
           <SectionHeader title="PRESTASI" />
           <div className="space-y-3">
-            {visibleAwards.map(award => (
+            {visibleAwards.map((award: any) => (
               <div key={award.id} className="break-inside-avoid mb-4">
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className="font-bold">{award.title}</div>
@@ -339,7 +339,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
         <div className="mb-6">
           <SectionHeader title="ORGANIZATIONS" />
           <div className="space-y-4">
-            {visibleOrg.map(org => (
+            {visibleOrg.map((org: any) => (
               <div key={org.id} className="break-inside-avoid mb-4">
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className="font-bold">{org.role}</div>
@@ -357,7 +357,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
         <div className="mb-6">
           <SectionHeader title="EXTRACURRICULARS" />
           <div className="space-y-4">
-            {visibleExtracurriculars.map(extra => (
+            {visibleExtracurriculars.map((extra: any) => (
               <div key={extra.id} className={`break-inside-avoid mb-4 ${(extra as any).isDummy ? 'text-gray-400 opacity-70' : ''}`}>
                 <div className="flex justify-between items-baseline mb-0.5">
                   <div className={`font-bold ${(extra as any).isDummy ? 'text-gray-400' : 'text-black'}`}>{extra.title}</div>
@@ -374,7 +374,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
         <div className="mb-6">
           <SectionHeader title="HOBBIES" />
           <ul className="grid grid-cols-3 gap-x-4 gap-y-1 list-disc pl-5">
-            {visibleHobbies.map(hobby => (
+            {visibleHobbies.map((hobby: any) => (
               <li key={hobby.id} className={`pl-1 leading-snug break-words ${(hobby as any).isDummy ? 'text-gray-400 opacity-70' : 'text-black'}`}>
                 {hobby.name}
               </li>

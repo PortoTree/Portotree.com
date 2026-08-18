@@ -7,13 +7,25 @@ import { Navbar } from "@/components/layout/Navbar"; // Assume this exists
 import { Button } from "@/components/ui/button";
 import { Loader2, Eye, EyeOff, Download, ArrowLeft, Edit, Palette, Info } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useUI } from "@/components/ui/UIProvider";
 import { useRouter, useSearchParams } from "next/navigation";
 import { checkDownloadLimit, getUserSubscriptionStatus } from "@/app/actions/subscription";
 import { CV_TEMPLATES } from "@/lib/cvTemplates";
 
 export default function CVBuilderPage() {
+  return (
+    <Suspense fallback={
+      <div className="fixed inset-0 z-[9999] bg-gradient-to-br from-white to-slate-100 flex flex-col items-center justify-center">
+        <div className="text-slate-500 font-medium tracking-widest uppercase">Loading Resume Builder...</div>
+      </div>
+    }>
+      <CVBuilderContent />
+    </Suspense>
+  );
+}
+
+function CVBuilderContent() {
   const { data, isLoading, updateConfig, updatePortfolio, toggleVisibility } = useCvBuilderState();
   const [sidebarMode, setSidebarMode] = useState<'edit' | 'design'>('edit');
   const [showMobilePreview, setShowMobilePreview] = useState(false);
@@ -424,3 +436,4 @@ export default function CVBuilderPage() {
     </div>
   );
 }
+

@@ -41,13 +41,13 @@ export const CreativePro: React.FC<{ data: CVDataPayload, showPlaceholders?: boo
   const dateOfBirth = personal?.dateOfBirth || dummyPersonal.birthDate;
   
   const hasSkills = !!portfolio.skills;
-  const skillsList = hasSkills ? portfolio.skills.split(',').map(s => s.trim()).filter(Boolean) : ["Design Software", "Design Specialties", "Technical Skills", "Soft Skills"];
+  const skillsList = hasSkills ? (portfolio.skills || '').split(',').map((s: any) => s.trim()).filter(Boolean) : ["Design Software", "Design Specialties", "Technical Skills", "Soft Skills"];
   
   const hasLanguages = portfolio.languages && portfolio.languages.length > 0;
   const dummyLanguages = [
     { id: '1', name: 'English', proficiency: 'Native', isDummy: true },
     { id: '2', name: 'French', proficiency: 'Intermediate', isDummy: true }
-  ];
+  ] as any;
   const languagesList = hasLanguages ? portfolio.languages : dummyLanguages;
 
   const mapProficiencyToPercentage = (prof: string) => {
@@ -97,7 +97,7 @@ export const CreativePro: React.FC<{ data: CVDataPayload, showPlaceholders?: boo
       description: 'Assisted senior designers in creating logo designs, brand guidelines, and packaging for various clients.',
       isDummy: true
     }
-  ];
+  ] as any;
 
   const visibleEducation = education.length > 0 ? education : [
     {
@@ -109,7 +109,7 @@ export const CreativePro: React.FC<{ data: CVDataPayload, showPlaceholders?: boo
       description: 'Graduated: May 2016',
       isDummy: true
     }
-  ];
+  ] as any;
 
   const visibleCertifications = awards.length > 0 ? awards : [
     {
@@ -136,14 +136,14 @@ export const CreativePro: React.FC<{ data: CVDataPayload, showPlaceholders?: boo
       description: '',
       isDummy: true
     }
-  ];
+  ] as any;
 
   const visibleHobbies = hobbies.length > 0 ? hobbies : [
     { id: '1', name: 'Illustration & Digital Art', isDummy: true },
     { id: '2', name: 'Photography', isDummy: true },
     { id: '3', name: 'Typography Exploration', isDummy: true },
     { id: '4', name: 'Sustainability in Design', isDummy: true }
-  ];
+  ] as any;
 
   // Helper formatting functions
   const formatDateRange = (startM: string, startY: string, endM: string, endY: string, current: boolean) => {
@@ -192,7 +192,7 @@ export const CreativePro: React.FC<{ data: CVDataPayload, showPlaceholders?: boo
             <div className={`space-y-4 ${!hasSkills ? 'print:hidden' : ''}`}>
               <h2 className="text-[20px] font-medium border-b border-white/30 pb-2 mb-4 tracking-wide text-white">Skills</h2>
               <ul className="space-y-2.5">
-                {skillsList.map((skill, index) => (
+                {(skillsList || []).map((skill: any, index: any) => (
                   <li key={index} className="font-bold text-[11.5px] tracking-wide">{skill}</li>
                 ))}
               </ul>
@@ -204,7 +204,7 @@ export const CreativePro: React.FC<{ data: CVDataPayload, showPlaceholders?: boo
             <div className={`space-y-4 ${hobbies.length === 0 ? 'print:hidden' : ''}`}>
               <h2 className="text-[20px] font-medium border-b border-white/30 pb-2 mb-4 tracking-wide">Hoby</h2>
               <ul className="space-y-2.5">
-                {visibleHobbies.map((hobby, idx) => (
+                {visibleHobbies.map((hobby: any, idx: any) => (
                   <li key={idx} className={`font-bold tracking-wide ${(hobby as any).isDummy ? 'text-white/50 print:hidden' : ''}`}>
                     {hobby.name}
                   </li>
@@ -218,7 +218,7 @@ export const CreativePro: React.FC<{ data: CVDataPayload, showPlaceholders?: boo
             <div className={`space-y-4 ${!hasLanguages ? 'print:hidden' : ''}`}>
               <h2 className="text-[20px] font-medium border-b border-white/30 pb-2 mb-4 tracking-wide">Language</h2>
               <div className="flex flex-wrap gap-x-6 gap-y-6">
-                {languagesList.map((lang: any, idx: number) => {
+                {(languagesList || []).map((lang: any, idx: number) => {
                   const percentage = mapProficiencyToPercentage(lang.proficiency);
                   const radius = 20;
                   const circumference = 2 * Math.PI * radius;
@@ -291,7 +291,7 @@ export const CreativePro: React.FC<{ data: CVDataPayload, showPlaceholders?: boo
               </div>
 
               <div className="relative border-l-2 border-slate-400 ml-[88px] space-y-6">
-                {visibleExperiences.map((exp, idx) => (
+                {visibleExperiences.map((exp: any, idx: any) => (
                   <div key={idx} className={`relative pl-6 ${(exp as any).isDummy ? 'opacity-50 print:hidden' : ''}`}>
                     {/* Timeline dot */}
                     <div className="absolute -left-[7px] top-1 w-3 h-3 rounded-full bg-slate-600 border-[3px] border-white box-content"></div>
@@ -326,7 +326,7 @@ export const CreativePro: React.FC<{ data: CVDataPayload, showPlaceholders?: boo
               </div>
 
               <div className="space-y-5 ml-[95px]">
-                {visibleEducation.map((edu, idx) => (
+                {visibleEducation.map((edu: any, idx: any) => (
                   <div key={idx} className={`relative pl-5 ${(edu as any).isDummy ? 'opacity-50 print:hidden' : ''}`}>
                     <div className="absolute left-0 top-1.5 w-1.5 h-1.5 rounded-full bg-slate-700"></div>
                     <div className="font-bold text-[12px] text-[#0A1128] leading-snug">{edu.degree}</div>
@@ -352,7 +352,7 @@ export const CreativePro: React.FC<{ data: CVDataPayload, showPlaceholders?: boo
               </div>
 
               <div className="space-y-2 ml-[95px]">
-                {visibleCertifications.map((cert, idx) => (
+                {visibleCertifications.map((cert: any, idx: any) => (
                   <div key={idx} className={`pl-0 font-bold text-[11px] ${(cert as any).isDummy ? 'text-slate-400 print:hidden' : 'text-slate-800'}`}>
                     {cert.title} {cert.issuer && <span className="font-normal text-slate-600">- {cert.issuer}</span>}
                   </div>

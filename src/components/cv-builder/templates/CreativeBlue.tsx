@@ -60,7 +60,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
   const allContactDummy = contactDetails.length > 0 && contactDetails.every(d => d.isDummy);
 
   const hasSkills = !!portfolio.skills;
-  const skillsList = hasSkills ? portfolio.skills.split(',').map(s => s.trim()).filter(Boolean) : ["Microsoft Word", "Microsoft Excel", "Teknologi Informasi", "Photoshop"];
+  const skillsList = hasSkills ? (portfolio.skills || '').split(',').map((s: any) => s.trim()).filter(Boolean) : ["Microsoft Word", "Microsoft Excel", "Teknologi Informasi", "Photoshop"];
   
   const hasLanguages = portfolio.languages && portfolio.languages.length > 0;
   const languagesList = hasLanguages
@@ -108,7 +108,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
       description: 'Sebagai perusahaan konsultan bisnis FABA membantu bankir dan investasi perusahaan dalam memperkuat modal dan bisnis.',
       isDummy: true
     }
-  ];
+  ] as any;
 
   const visibleEducation = education.length > 0 ? education : [
     {
@@ -129,7 +129,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
       gpa: '3.52',
       isDummy: true
     }
-  ];
+  ] as any;
 
   const visibleCerts = awards.length > 0 ? awards : [
     {
@@ -146,7 +146,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
       year: '2013',
       isDummy: true
     }
-  ];
+  ] as any;
 
   return (
     <div className="w-full h-full bg-white text-slate-800 font-sans relative overflow-hidden" style={{ fontFamily: 'Georgia, serif' }}>
@@ -194,7 +194,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
               </div>
               
               <div className="px-6 flex flex-col gap-1.5 text-[8.5pt]">
-                {personalDetails.map((detail, idx) => (
+                {personalDetails.map((detail: any, idx: any) => (
                   <div key={idx} className={`flex gap-2 leading-snug ${detail.isDummy ? 'print:hidden' : ''}`}>
                     <span className="w-[85px] shrink-0 font-bold text-[#333]">{detail.label}</span>
                     <span className="shrink-0 text-[#333]">:</span>
@@ -214,7 +214,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
               </div>
               
               <div className="px-6 flex flex-col gap-1.5 text-[8.5pt]">
-                {contactDetails.map((detail, idx) => (
+                {contactDetails.map((detail: any, idx: any) => (
                   <div key={idx} className={`flex gap-2 leading-snug ${detail.isDummy ? 'print:hidden' : ''}`}>
                     <span className="w-[60px] shrink-0 font-bold text-[#333]">{detail.label}</span>
                     <span className="shrink-0 text-[#333]">:</span>
@@ -238,7 +238,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
                   <div className={`mb-4 ${!hasSkills ? 'print:hidden' : ''}`}>
                     <div className="font-bold text-[#333] mb-2">Komputerisasi</div>
                     <div className="flex flex-col gap-1.5">
-                      {skillsList.map((skill, idx) => (
+                      {(skillsList || []).map((skill: any, idx: any) => (
                         <div key={idx} className="flex justify-between items-center">
                           <span className={`${!hasSkills ? 'text-gray-400 opacity-70 grayscale' : 'text-[#333]'}`}>{skill}</span>
                         </div>
@@ -251,7 +251,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
                   <div className={`${!hasLanguages ? 'print:hidden' : ''}`}>
                     <div className="font-bold text-[#333] mb-2">Kecakapan</div>
                     <div className="flex flex-col gap-1.5">
-                      {languagesList.map((lang: any, idx) => (
+                      {(languagesList || []).map((lang: any, idx) => (
                         <div key={idx} className={`flex justify-between items-center ${lang.isDummy ? 'print:hidden' : ''}`}>
                           <span className={`${lang.isDummy ? 'text-gray-400 opacity-70 grayscale' : 'text-[#333]'}`}>{lang.name}</span>
                           <StarRating rating={mapProficiencyToStars(lang.proficiency)} />
@@ -344,7 +344,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
                 <div className="font-bold underline text-[9pt] mb-[-8px] text-[#333]">FORMAL</div>
                 {visibleEducation.map((edu: any) => (
                   <div key={edu.id} className={`text-[9pt] leading-relaxed ${edu.isDummy ? 'text-gray-400 opacity-70 grayscale print:hidden' : 'text-[#333]'}`}>
-                    <div className={`font-bold text-[10pt] ${edu.isDummy ? 'text-gray-400' : 'text-[#2b4f7a]'}`}>{edu.school || edu.institution}</div>
+                    <div className={`font-bold text-[10pt] ${edu.isDummy ? 'text-gray-400' : 'text-[#2b4f7a]'}`}>{edu.school || edu.school}</div>
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-1.5">
                         <span className="text-[12pt] mt-[-2px]">✓</span> Lulus sebagai {edu.degree}
@@ -519,7 +519,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
 const StarRating = ({ rating, max = 5 }: { rating: number, max?: number }) => {
   return (
     <div className="flex gap-0.5">
-      {Array.from({ length: max }).map((_, i) => (
+      {Array.from({ length: max }).map((_: any, i: any) => (
         <Star 
           key={i} 
           className={`w-[11px] h-[11px] ${i < rating ? 'fill-[#2b4f7a] text-[#2b4f7a]' : 'fill-transparent text-gray-300'}`} 

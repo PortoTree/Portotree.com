@@ -33,7 +33,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
   const dummyBio = "Professional and results-driven candidate with a strong background in delivering high-quality work and achieving goals. Skilled in communication, problem-solving, and teamwork. Seeking opportunities to contribute value and grow within a dynamic organization.";
   const bio = personal?.bio ? personal?.bio.replace(/<[^>]+>/g, '') : (renderDummy ? dummyBio : "");
 
-  let visibleExperience = experience?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  let visibleExperience = experience?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   if (visibleExperience.length === 0) {
     visibleExperience = [
       {
@@ -58,31 +58,31 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
         description: '• Assisted in the planning and execution of multiple IT infrastructure upgrades.\n• Maintained project documentation, risk logs, and issue tracking.\n• Facilitated daily stand-up meetings and sprint planning sessions.',
         isDummy: true
       }
-    ];
+    ] as any;
   }
-  const visibleInternship = internship?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleProjects = projects?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleOrganization = organization?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleCertifications = certifications?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleAwards = awards?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  let visibleEducation = education?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  const visibleInternship = internship?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleProjects = projects?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleOrganization = organization?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleCertifications = certifications?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleAwards = awards?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  let visibleEducation = education?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   if (visibleEducation.length === 0) {
     visibleEducation = [
       {
         id: 'edu-dummy-1',
         degree: 'Master of Business Administration (MBA)',
-        institution: 'State University',
+        school: 'State University',
         location: 'New York, NY',
         startYear: '2015', endYear: '2017',
         description: '',
         isDummy: true
       }
-    ];
+    ] as any;
   }
-  const visibleCourses = courses?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleLanguages = languages?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleExtracurriculars = extracurriculars?.filter(item => !config.hiddenItems.includes(item.id)) || [];
-  const visibleHobbies = hobbies?.filter(item => !config.hiddenItems.includes(item.id)) || [];
+  const visibleCourses = courses?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleLanguages = languages?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleExtracurriculars = extracurriculars?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  const visibleHobbies = hobbies?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   
   return (
     <div 
@@ -156,7 +156,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                 <h4 className="text-[10pt] uppercase tracking-wider mb-3 font-semibold">Professional</h4>
                 <ul className="flex flex-col gap-1.5 text-[9.5pt] text-gray-700">
                   {skills ? (
-                    skills.split(',').map((skill, i) => (
+                    skills.split(',').map((skill: any, i: any) => (
                       <li key={i} className="flex items-center gap-2">
                         <span className="text-gray-400 text-xs">•</span> {skill.trim()}
                       </li>
@@ -182,7 +182,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
               <div>
                 <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-4">Languages</h3>
                 <ul className="flex flex-col gap-1.5 text-[9.5pt] text-gray-700">
-                  {visibleLanguages.map(lang => (
+                  {visibleLanguages.map((lang: any) => (
                     <li key={lang.id} className="flex flex-col break-inside-avoid mb-2">
                       <div className="flex justify-between items-center mb-1">
                         <span className="font-medium text-gray-800">{lang.name}</span>
@@ -207,7 +207,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
               <div>
                 <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-4">Hobbies</h3>
                 <ul className="flex flex-col gap-1.5 text-[9.5pt] text-gray-700">
-                  {visibleHobbies.map(hobby => (
+                  {visibleHobbies.map((hobby: any) => (
                     <li key={hobby.id} className="flex items-center gap-2 break-inside-avoid">
                       <span className="text-gray-400 text-xs">•</span> {hobby.name}
                     </li>
@@ -224,10 +224,10 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                 <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-5">Education</h3>
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-4 space-y-5 py-1">
-                    {visibleEducation.map(edu => (
+                    {visibleEducation.map((edu: any) => (
                       <div key={edu.id} className={`relative break-inside-avoid mb-4 ${(edu as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}`}>
                         <div className={`absolute -left-[20.5px] top-1.5 w-2 h-2 rounded-full ${(edu as any).isDummy ? 'bg-gray-400' : 'bg-gray-600'}`} />
-                        <h4 className="font-bold uppercase text-[9.5pt] tracking-wider mb-0.5">{edu.school || edu.institution}</h4>
+                        <h4 className="font-bold uppercase text-[9.5pt] tracking-wider mb-0.5">{edu.school || edu.school}</h4>
                         <div className={`text-[9.5pt] mb-0.5 ${(edu as any).isDummy ? 'text-gray-400' : 'text-gray-700'}`}>{edu.degree}</div>
                         <div className={`text-[9pt] ${(edu as any).isDummy ? 'text-gray-400' : 'text-gray-500'}`}>{edu.startYear} - {edu.current ? 'Present' : edu.endYear}</div>
                       </div>
@@ -245,7 +245,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                 <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-5">Courses</h3>
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-4 space-y-4 py-1">
-                    {visibleCourses.map(course => (
+                    {visibleCourses.map((course: any) => (
                       <div key={course.id} className="relative break-inside-avoid mb-4">
                         <div className="absolute -left-[20.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[9.5pt] tracking-wider mb-0.5">{course.title}</h4>
@@ -266,7 +266,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                 <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-5">Extracurriculars</h3>
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-4 space-y-4 py-1">
-                    {visibleExtracurriculars.map(extra => (
+                    {visibleExtracurriculars.map((extra: any) => (
                       <div key={extra.id} className="relative break-inside-avoid mb-4">
                         <div className="absolute -left-[20.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[9.5pt] tracking-wider mb-0.5">{extra.title}</h4>
@@ -301,7 +301,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                 <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-5">Working Experience</h3>
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-5 space-y-6 py-1">
-                    {visibleExperience.map(exp => (
+                    {visibleExperience.map((exp: any) => (
                       <div key={exp.id} className={`relative break-inside-avoid mb-4 ${(exp as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}`}>
                         <div className={`absolute -left-[24.5px] top-1.5 w-2 h-2 rounded-full ${(exp as any).isDummy ? 'bg-gray-400' : 'bg-gray-600'}`} />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">{exp.role}</h4>
@@ -310,7 +310,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                         </div>
                         {exp.description && (
                           <ul className={`list-disc pl-4 space-y-1 text-[9.5pt] leading-relaxed ${(exp as any).isDummy ? 'text-gray-400' : 'text-gray-700'}`}>
-                            {exp.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line, i) => (
+                            {exp.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line: any, i: any) => (
                               <li key={i}>{line.replace(/^-/, '').trim()}</li>
                             ))}
                           </ul>
@@ -330,7 +330,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                 <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-5">Internship</h3>
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-5 space-y-6 py-1">
-                    {visibleInternship.map(intern => (
+                    {visibleInternship.map((intern: any) => (
                       <div key={intern.id} className="relative break-inside-avoid mb-4">
                         <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">{intern.role}</h4>
@@ -339,7 +339,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                         </div>
                         {intern.description && (
                           <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-700 leading-relaxed">
-                            {intern.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line, i) => (
+                            {intern.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line: any, i: any) => (
                               <li key={i}>{line.replace(/^-/, '').trim()}</li>
                             ))}
                           </ul>
@@ -359,7 +359,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                 <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-5">Projects</h3>
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-5 space-y-6 py-1">
-                    {visibleProjects.map(proj => (
+                    {visibleProjects.map((proj: any) => (
                       <div key={proj.id} className="relative break-inside-avoid mb-4">
                         <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">{proj.title}</h4>
@@ -368,7 +368,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                         </div>
                         {proj.description && (
                           <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-700 leading-relaxed">
-                            {proj.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line, i) => (
+                            {proj.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line: any, i: any) => (
                               <li key={i}>{line.replace(/^-/, '').trim()}</li>
                             ))}
                           </ul>
@@ -388,7 +388,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                 <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-5">Organizations</h3>
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-5 space-y-6 py-1">
-                    {visibleOrganization.map(org => (
+                    {visibleOrganization.map((org: any) => (
                       <div key={org.id} className="relative break-inside-avoid mb-4">
                         <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">{org.role}</h4>
@@ -397,7 +397,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                         </div>
                         {org.description && (
                           <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-700 leading-relaxed">
-                            {org.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line, i) => (
+                            {org.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line: any, i: any) => (
                               <li key={i}>{line.replace(/^-/, '').trim()}</li>
                             ))}
                           </ul>
@@ -417,7 +417,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                 <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-5">Awards</h3>
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-5 space-y-4 py-1">
-                    {visibleAwards.map(award => (
+                    {visibleAwards.map((award: any) => (
                       <div key={award.id} className="relative break-inside-avoid mb-4">
                         <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">{award.title}</h4>
@@ -439,7 +439,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
                 <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-5">Certifications</h3>
                 <div className="pl-1">
                   <div className="border-l-[1px] border-gray-300 pl-5 space-y-4 py-1">
-                    {visibleCertifications.map(cert => (
+                    {visibleCertifications.map((cert: any) => (
                       <div key={cert.id} className="relative break-inside-avoid mb-4">
                         <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
                         <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">{cert.title}</h4>
