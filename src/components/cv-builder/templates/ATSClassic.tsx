@@ -21,11 +21,11 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
     ? `${personal?.firstName || ''} ${personal?.lastName || ''}`.trim().toUpperCase()
     : personal?.name 
       ? personal?.name.toUpperCase()
-      : (renderDummy ? "JESSICA ANDERSON" : "");
+      : (renderDummy ? "YOUR NAME" : "");
       
   const dummyLocation = "San Francisco, USA";
   const dummyPhone = "+1 987 654 3210";
-  const dummyEmail = "jessica.anderson@email.com";
+  const dummyEmail = "your.name@email.com";
   
   const location = personal?.address || personal?.location || (renderDummy ? dummyLocation : "");
   const phone = personal?.phone || (renderDummy ? dummyPhone : "");

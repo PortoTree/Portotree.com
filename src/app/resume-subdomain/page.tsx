@@ -8,16 +8,60 @@ import { ArrowRight, FileText, CheckCircle2, ShieldCheck, Zap, Layout, Download,
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
+// Templates
+import { ATSClassic } from "@/components/cv-builder/templates/ATSClassic";
+import { ATSModern } from "@/components/cv-builder/templates/ATSModern";
+import { CreativeBlue } from "@/components/cv-builder/templates/CreativeBlue";
+import { CreativePro } from "@/components/cv-builder/templates/CreativePro";
+import { ProModern } from "@/components/cv-builder/templates/ProModern";
+
 const baseTemplates = [
-  { id: 1, title: "Harvard Standard", type: "ATS", badgeClass: "bg-slate-900", desc: "Desain Minimalist" },
-  { id: 2, title: "Corporate Pro", type: "Kreatif", badgeClass: "bg-blue-600", desc: "Desain Korporat" },
-  { id: 3, title: "Modern Visual", type: "Kreatif", badgeClass: "bg-blue-600", desc: "Desain Kreatif" },
-  { id: 4, title: "Clean ATS", type: "ATS", badgeClass: "bg-slate-900", desc: "Desain Modern Minimal" },
-  { id: 5, title: "Creative Studio", type: "Kreatif", badgeClass: "bg-blue-600", desc: "Desain Artistik" },
+  { id: 1, title: "ATS Classic", type: "ATS", badgeClass: "bg-slate-900", desc: "Desain Minimalist" },
+  { id: 2, title: "Pro Modern", type: "Kreatif", badgeClass: "bg-blue-600", desc: "Desain Korporat" },
+  { id: 3, title: "Creative Blue", type: "Kreatif", badgeClass: "bg-blue-600", desc: "Desain Kreatif" },
+  { id: 4, title: "ATS Modern", type: "ATS", badgeClass: "bg-slate-900", desc: "Desain Modern Minimal" },
+  { id: 5, title: "Creative Pro", type: "Kreatif", badgeClass: "bg-blue-600", desc: "Desain Artistik" },
 ];
 
 // Duplicate templates to create enough buffer for seamless infinite 3D scrolling
 const templates = [...baseTemplates, ...baseTemplates.map(t => ({...t, id: t.id + 10}))];
+
+const emptyData = {
+  portfolio: {
+    personal: null,
+    experience: [],
+    education: [],
+    skills: "",
+    hobbies: [],
+    languages: [],
+    certifications: [],
+    projects: [],
+    awards: [],
+    organization: [],
+    internship: [],
+    courses: [],
+    extracurriculars: []
+  },
+  config: {
+    templateId: 1,
+    color: '#000000',
+    primaryColor: '#000000',
+    font: 'inter',
+    hiddenItems: []
+  }
+} as any;
+
+const getTemplateRender = (title: string) => {
+  const props = { data: emptyData, showPlaceholders: true };
+  switch (title) {
+    case "ATS Classic": return <ATSClassic {...props} />;
+    case "Pro Modern": return <ProModern {...props} />;
+    case "Creative Blue": return <CreativeBlue {...props} />;
+    case "ATS Modern": return <ATSModern {...props} />;
+    case "Creative Pro": return <CreativePro {...props} />;
+    default: return null;
+  }
+};
 
 export default function ResumeSubdomain() {
   const [currentIndex, setCurrentIndex] = useState(0); // Can grow infinitely
@@ -193,18 +237,17 @@ export default function ResumeSubdomain() {
                 >
                   <div className="group rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-2xl h-full flex flex-col transition-all hover:border-amber-300">
                     <div className="relative aspect-[3/4] bg-slate-100 flex-1 overflow-hidden">
-                      <img 
-                        src="/cooming-soon-vertical.png" 
-                        alt={template.title} 
-                        className="absolute inset-0 w-full h-full object-cover" 
-                      />
+                      <div className="absolute inset-0 origin-top-left pointer-events-none select-none" style={{ width: '794px', height: '1122px', transform: 'scale(0.327)' }}>
+                        <div className="w-[210mm] h-[297mm] bg-white overflow-hidden [&_.text-gray-400]:!text-slate-800 [&_.opacity-70]:!opacity-100 [&_.grayscale]:!grayscale-0">
+                          {getTemplateRender(template.title)}
+                        </div>
+                      </div>
                       <span className={`absolute top-3 left-3 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider shadow-sm z-10 ${template.badgeClass}`}>
                         {template.type}
                       </span>
                     </div>
-                    <div className="p-4 mt-auto bg-white border-t border-slate-100">
-                      <h4 className="font-bold text-slate-900 mb-3">{template.title}</h4>
-                      <Button onClick={() => window.location.href = 'https://portotree.com/register'} className="w-full bg-slate-900 hover:bg-slate-800 text-white disabled:opacity-50" disabled>Gunakan Template</Button>
+                    <div className="p-4 mt-auto bg-white border-t border-slate-100 text-center">
+                      <h4 className="font-bold text-slate-900">{template.title}</h4>
                     </div>
                   </div>
                 </motion.div>
@@ -236,6 +279,14 @@ export default function ResumeSubdomain() {
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
             </button>
+          </div>
+
+          {/* Action Button */}
+          <div className="flex justify-center mt-12">
+            <Button onClick={() => window.location.href = 'https://portotree.com/resume/template'} className="h-14 px-8 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-base font-bold shadow-xl shadow-slate-900/20 transition-all hover:-translate-y-1">
+              Eksplor Semua Template
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Button>
           </div>
         </div>
       </section>

@@ -99,6 +99,18 @@ export default function ResumeDashboardPage() {
             </div>
           </div>
 
+        {/* CTA GANTI TEMPLATE */}
+        <div className="bg-gradient-to-r from-blue-900 to-slate-900 rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between shadow-lg border border-slate-800">
+          <div>
+            <h3 className="text-xl font-bold mb-1">Ingin Mengganti Desain CV?</h3>
+            <p className="text-slate-300 text-sm">Jelajahi galeri template kami dan temukan desain yang paling cocok untuk karir Anda.</p>
+          </div>
+          <a href="/personal/dashboard/resume/template" className="mt-4 sm:mt-0 whitespace-nowrap bg-white text-slate-900 font-bold py-3 px-6 rounded-xl hover:bg-slate-100 transition-colors shadow-md flex items-center gap-2">
+            Lihat Template
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+        </div>
+
         {/* ROW BAWAH: Progress Kiri, Info Kanan */}
         <div className="flex flex-col lg:flex-row gap-6 items-start">
           

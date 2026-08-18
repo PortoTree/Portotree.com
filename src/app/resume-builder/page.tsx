@@ -9,7 +9,7 @@ import { Loader2, Eye, EyeOff, Download, ArrowLeft, Edit, Palette, Info } from "
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useUI } from "@/components/ui/UIProvider";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { checkDownloadLimit, getUserSubscriptionStatus } from "@/app/actions/subscription";
 import { CV_TEMPLATES } from "@/lib/cvTemplates";
 
@@ -26,6 +26,9 @@ export default function CVBuilderPage() {
   const [showTemplateUpsell, setShowTemplateUpsell] = useState<{show: boolean, type: 'premium' | 'exclusive' | null, price?: number}>({show: false, type: null});
   const [userStatus, setUserStatus] = useState<{isPremium: boolean, purchasedTemplates: string[]}>({isPremium: false, purchasedTemplates: []});
 
+  const searchParams = useSearchParams();
+  const templateQuery = searchParams.get('template');
+
   useEffect(() => {
     const timer = setTimeout(() => setForcedLoading(false), 2000);
     
@@ -41,6 +44,15 @@ export default function CVBuilderPage() {
 
     return () => clearTimeout(timer);
   }, []);
+
+  // Handle template selection from URL query
+  useEffect(() => {
+    if (data && templateQuery && data.config.templateId !== templateQuery) {
+      updateConfig({ templateId: templateQuery });
+      // Clean up URL after applying template
+      router.replace('/resume-builder', { scroll: false });
+    }
+  }, [data?.config.templateId, templateQuery, router]);
 
   // Basic print function
   const handlePrint = async () => {
