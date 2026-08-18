@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getSubdomainUrl } from '@/lib/url';
+import { getSubdomainUrl, getMainUrl } from '@/lib/url';
 
 export function Footer() {
   return (
@@ -12,10 +12,10 @@ export function Footer() {
       <div className="relative w-full max-w-7xl mx-auto px-6 md:px-8 z-10">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2">
-            <Link href="/" className="inline-flex items-center gap-3 mb-4 hover:opacity-90 transition-opacity">
+            <a href={getMainUrl('/')} className="inline-flex items-center gap-3 mb-4 hover:opacity-90 transition-opacity">
               <img src="/logo-portotree-2.png" alt="PortoTree Logo" className="h-8 w-auto object-contain" />
               <span className="font-bold tracking-tight text-xl text-white">PortoTree</span>
-            </Link>
+            </a>
             <p className="text-green-50 text-sm max-w-xs mb-6">
               Bangun dan bagikan identitas profesional Anda dalam hitungan menit. Portofolio, resume, dan tautan dinamis di satu tempat.
             </p>
@@ -40,8 +40,8 @@ export function Footer() {
           <div>
             <h4 className="font-semibold text-white mb-4">Legal</h4>
             <ul className="space-y-2 text-sm text-green-100">
-              <li><Link href="/privacy" className="hover:text-white transition-colors">Kebijakan Privasi</Link></li>
-              <li><Link href="/terms" className="hover:text-white transition-colors">Ketentuan Layanan</Link></li>
+              <li><a href={getMainUrl('/privacy-policy')} className="hover:text-white transition-colors">Kebijakan Privasi</a></li>
+              <li><a href={getMainUrl('/terms-and-conditions')} className="hover:text-white transition-colors">Ketentuan Layanan</a></li>
             </ul>
           </div>
         </div>
