@@ -403,7 +403,7 @@ export default function CVBuilderPage() {
 
       {/* Loading Overlay saat Cek Limit */}
       {isCheckingLimit && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/80 backdrop-blur-sm print:hidden">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/95 backdrop-blur-md print:hidden">
           <div className="flex flex-col items-center gap-3">
             <img src="/loading-gif.gif" alt="Loading..." className="w-48 h-48 md:w-64 md:h-64 object-contain opacity-90" />
           </div>

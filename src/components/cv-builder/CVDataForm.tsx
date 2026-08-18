@@ -71,7 +71,7 @@ const AccordionSection = ({
 };
 
 export function CVDataForm({ data, onChange, isCVMode = false, activeTemplateId }: Props) {
-  const currentTemplateId = activeTemplateId || data?.config?.templateId;
+  const currentTemplateId = activeTemplateId || '';
   const { showConfirm } = useUI();
   const searchParams = useSearchParams();
   const [openSection, setOpenSection] = React.useState<string>('');
@@ -670,9 +670,15 @@ export function CVDataForm({ data, onChange, isCVMode = false, activeTemplateId 
             </>
           )}
 
-          <div className="space-y-2">
-            <Label className="text-sm text-slate-700">Link URL Portofolio <span className="text-slate-400 font-normal text-xs">(Opsional)</span></Label>
-            <Input value={data.personal?.portfolioUrl || ''} onChange={(e) => handleChange('personal', 'portfolioUrl', e.target.value)} placeholder="portotree.com/p/username" className="h-11" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label className="text-sm text-slate-700">Tanggal Lahir <span className="text-slate-400 font-normal text-xs">(Opsional)</span></Label>
+              <Input type="date" value={data.personal?.dateOfBirth || ''} onChange={(e) => handleChange('personal', 'dateOfBirth', e.target.value)} className="h-11" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm text-slate-700">Link URL Portofolio <span className="text-slate-400 font-normal text-xs">(Opsional)</span></Label>
+              <Input value={data.personal?.portfolioUrl || ''} onChange={(e) => handleChange('personal', 'portfolioUrl', e.target.value)} placeholder="portotree.com/p/username" className="h-11" />
+            </div>
           </div>
 
           {!isCVMode && (

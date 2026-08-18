@@ -3,6 +3,7 @@ import { ATSClassic } from '@/components/cv-builder/templates/ATSClassic';
 import { ATSModern } from '@/components/cv-builder/templates/ATSModern';
 import { ProModern } from '@/components/cv-builder/templates/ProModern';
 import { CreativeBlue } from '@/components/cv-builder/templates/CreativeBlue';
+import { CreativePro } from '@/components/cv-builder/templates/CreativePro';
 
 export type TemplateTier = 'free' | 'premium' | 'exclusive';
 
@@ -50,14 +51,14 @@ export const CV_TEMPLATES: CVTemplate[] = [
     component: CreativeBlue,
   },
   // Template masa depan
-  // {
-  //   id: "creative-pro",
-  //   name: "Creative Pro",
-  //   description: "Template kreatif untuk desainer atau pekerja kreatif dengan layout 2 kolom.",
-  //   thumbnailUrl: "/templates/creative-pro.png",
-  //   tier: "premium",
-  //   component: CreativeProTemplate,
-  // },
+  {
+    id: "creative-pro",
+    name: "Creative Pro",
+    description: "Template kreatif untuk desainer atau pekerja kreatif dengan layout 2 kolom.",
+    thumbnailUrl: "/placeholder-potret.png",
+    tier: "premium",
+    component: CreativePro,
+  },
   // {
   //   id: "executive-suite",
   //   name: "Executive Suite",

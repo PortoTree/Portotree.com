@@ -17,7 +17,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
     hobbies = []
   } = portfolio || {};
 
-  const isDummy = !personal?.fullName;
+  const isDummy = !personal?.name;
   const renderDummy = showPlaceholders;
 
   // Helpers
@@ -34,7 +34,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
     website: "portotree.com/p/username"
   };
 
-  const name = personal?.fullName || dummyPersonal.fullName;
+  const name = personal?.name || dummyPersonal.fullName;
   const email = personal?.email || dummyPersonal.email;
   const phone = personal?.phone || dummyPersonal.phone;
   const location = personal?.address || personal?.location || dummyPersonal.location;
@@ -71,13 +71,13 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
       ];
 
   const mapProficiencyToStars = (prof: string) => {
-    const p = prof.toLowerCase();
-    if (p.includes('native') || p.includes('penutur asli')) return 5;
-    if (p.includes('fluent') || p.includes('fasih')) return 4;
-    if (p.includes('advanced') || p.includes('lanjut')) return 3;
-    if (p.includes('intermediate') || p.includes('menengah')) return 2;
-    if (p.includes('beginner') || p.includes('basic') || p.includes('pemula')) return 1;
-    return 3;
+    const p = prof?.toLowerCase() || '';
+    if (p.includes('native') || p.includes('bilingual') || p.includes('penutur asli')) return 5;
+    if (p.includes('fluent') || p.includes('fasih')) return 4.5;
+    if (p.includes('advanced') || p.includes('lanjut')) return 4;
+    if (p.includes('intermediate') || p.includes('menengah')) return 3;
+    if (p.includes('beginner') || p.includes('basic') || p.includes('pemula')) return 2;
+    return 3.5;
   };
 
   const visibleExperiences = experience.length > 0 ? experience : [
@@ -163,8 +163,8 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
         <div className="w-[38%] bg-[#f0f2f5] h-full flex flex-col pt-8 pb-8 z-0 border-r border-gray-200 print:!bg-[#f0f2f5]">
           
           {/* Header Name (Ribbon Left) */}
-          {(personal?.fullName || renderDummy) && (
-            <div className={`relative bg-[#558ed5] text-white py-2 px-6 ml-[-16px] mb-6 mr-6 flex items-center shadow-sm print:!bg-[#558ed5] ${!personal?.fullName ? 'print:hidden' : ''}`}>
+          {(personal?.name || renderDummy) && (
+            <div className={`relative bg-[#558ed5] text-white py-2 px-6 ml-[-16px] mb-6 mr-6 flex items-center shadow-sm print:!bg-[#558ed5] ${!personal?.name ? 'print:hidden' : ''}`}>
               <h1 className="text-[14pt] font-bold tracking-wider uppercase leading-tight w-full text-center">
                 {name}
               </h1>
