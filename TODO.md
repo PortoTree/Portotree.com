@@ -151,3 +151,12 @@
 - **File Terdampak:**
   - C:\PortoTree\src\components\cv-builder\templates\*.tsx
   - C:\PortoTree\src\app\resume-builder\page.tsx
+
+
+## Kategori: Frontend (Fix Template Selection Loop)
+- **Status:** Selesai
+- **Perubahan:**
+  - Memperbaiki bug di /resume-builder/page.tsx dimana mengubah template lewat sidebar akan di-override secara paksa oleh searchParams URL (infinite loop URL parameter priority).
+  - Menambahkan *state* hasAppliedTemplate untuk melacak apakah URL query sudah diaplikasikan satu kali di awal render.
+- **File Terdampak:**
+  - C:\PortoTree\src\app\resume-builder\page.tsx

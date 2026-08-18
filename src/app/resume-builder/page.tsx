@@ -58,13 +58,18 @@ function CVBuilderContent() {
   }, []);
 
   // Handle template selection from URL query
+  const [hasAppliedTemplate, setHasAppliedTemplate] = useState(false);
+  
   useEffect(() => {
-    if (data && templateQuery && data.config.templateId !== templateQuery) {
-      updateConfig({ templateId: templateQuery });
+    if (data && templateQuery && !hasAppliedTemplate) {
+      if (data.config.templateId !== templateQuery) {
+        updateConfig({ templateId: templateQuery });
+      }
+      setHasAppliedTemplate(true);
       // Clean up URL after applying template
       router.replace('/resume-builder', { scroll: false });
     }
-  }, [data?.config.templateId, templateQuery, router]);
+  }, [data, templateQuery, hasAppliedTemplate, router]);
 
   // Basic print function
   const handlePrint = async () => {
