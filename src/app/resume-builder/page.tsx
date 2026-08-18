@@ -10,7 +10,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useUI } from "@/components/ui/UIProvider";
 import { useRouter } from "next/navigation";
-import { checkDownloadLimit } from "@/app/actions/subscription";
+import { checkDownloadLimit, getUserSubscriptionStatus } from "@/app/actions/subscription";
+import { CV_TEMPLATES } from "@/lib/cvTemplates";
 
 export default function CVBuilderPage() {
   const { data, isLoading, updateConfig, updatePortfolio, toggleVisibility } = useCvBuilderState();
@@ -22,14 +23,40 @@ export default function CVBuilderPage() {
   const router = useRouter();
   const [isCheckingLimit, setIsCheckingLimit] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showTemplateUpsell, setShowTemplateUpsell] = useState<{show: boolean, type: 'premium' | 'exclusive' | null, price?: number}>({show: false, type: null});
+  const [userStatus, setUserStatus] = useState<{isPremium: boolean, purchasedTemplates: string[]}>({isPremium: false, purchasedTemplates: []});
 
   useEffect(() => {
     const timer = setTimeout(() => setForcedLoading(false), 2000);
+    
+    // Fetch user status for template validation
+    getUserSubscriptionStatus().then(res => {
+      if (res.success) {
+        setUserStatus({
+          isPremium: res.isPremium || false,
+          purchasedTemplates: res.purchasedTemplates || []
+        });
+      }
+    });
+
     return () => clearTimeout(timer);
   }, []);
 
   // Basic print function
   const handlePrint = async () => {
+    // 1. Template Tier Check
+    const activeTemplate = CV_TEMPLATES.find(t => t.id === data?.config.templateId) || CV_TEMPLATES[0];
+    
+    if (activeTemplate.tier === 'premium' && !userStatus.isPremium) {
+      setShowTemplateUpsell({ show: true, type: 'premium' });
+      return;
+    }
+    
+    if (activeTemplate.tier === 'exclusive' && !userStatus.purchasedTemplates.includes(activeTemplate.id)) {
+      setShowTemplateUpsell({ show: true, type: 'exclusive', price: activeTemplate.price });
+      return;
+    }
+
     setIsCheckingLimit(true);
     const limitCheck = await checkDownloadLimit('cv');
     setIsCheckingLimit(false);
@@ -173,29 +200,64 @@ export default function CVBuilderPage() {
                 <div className="space-y-6">
                   
                   <div>
-                    <label className="text-sm font-medium mb-3 block">Pilih Template ATS</label>
+                    <label className="text-sm font-medium mb-3 block">Template ATS (Gratis)</label>
+                    <div className="grid grid-cols-2 gap-3 mb-6">
+                      {CV_TEMPLATES.filter(t => t.tier === 'free').map((tpl) => (
+                        <button
+                          key={tpl.id}
+                          onClick={() => updateConfig({ templateId: tpl.id })}
+                          className={`flex flex-col items-center p-3 border rounded-xl transition-all relative ${config.templateId === tpl.id ? 'border-blue-600 bg-blue-50 ring-1 ring-blue-600' : 'border-gray-200 hover:border-gray-300 bg-white'}`}
+                        >
+                          <div className="w-full aspect-[1/1.4] bg-gray-100 rounded mb-2 border shadow-sm overflow-hidden relative">
+                            <svg viewBox="0 0 794 1123" className="w-full h-full pointer-events-none">
+                              <foreignObject x="0" y="0" width="794" height="1123">
+                                <div className="w-[794px] h-[1123px] bg-white text-left">
+                                  <tpl.component data={{ portfolio, config: { ...config, templateId: tpl.id } }} />
+                                </div>
+                              </foreignObject>
+                            </svg>
+                          </div>
+                          <div className="text-xs font-semibold text-center leading-tight mt-1">{tpl.name}</div>
+                          
+                          {/* Badge Tier */}
+                          <div className="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">Free</div>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-3 mb-4 mt-6">
+                      <div className="h-px bg-gray-200 flex-1"></div>
+                      <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Pro Templates</span>
+                      <div className="h-px bg-gray-200 flex-1"></div>
+                    </div>
+
                     <div className="grid grid-cols-2 gap-3">
-                      <button
-                        onClick={() => updateConfig({ templateId: 'ats-modern' })}
-                        className={`flex flex-col items-center p-3 border rounded-xl transition-all relative ${config.templateId === 'ats-modern' ? 'border-blue-600 bg-blue-50 ring-1 ring-blue-600' : 'border-gray-200 hover:border-gray-300 bg-white'}`}
-                      >
-                        <div className="w-full aspect-[1/1.4] bg-gray-100 rounded mb-2 border shadow-sm overflow-hidden">
-                          <img src="/resume-modern.jpg" alt="Modern Template" className="w-full h-full object-cover" />
-                        </div>
-                        <div className="text-xs font-semibold text-center leading-tight mt-1">Modern<br/><span className="text-[10px] font-normal text-gray-500">(2 Kolom)</span></div>
-                        <div className="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">Free</div>
-                      </button>
-                      
-                      <button
-                        onClick={() => updateConfig({ templateId: 'ats-classic' })}
-                        className={`flex flex-col items-center p-3 border rounded-xl transition-all relative ${config.templateId === 'ats-classic' ? 'border-blue-600 bg-blue-50 ring-1 ring-blue-600' : 'border-gray-200 hover:border-gray-300 bg-white'}`}
-                      >
-                        <div className="w-full aspect-[1/1.4] bg-gray-100 rounded mb-2 border shadow-sm overflow-hidden">
-                          <img src="/resume-clasic.jpg" alt="Classic Template" className="w-full h-full object-cover" />
-                        </div>
-                        <div className="text-xs font-semibold text-center leading-tight mt-1">Klasik<br/><span className="text-[10px] font-normal text-gray-500">(1 Kolom)</span></div>
-                        <div className="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">Free</div>
-                      </button>
+                      {CV_TEMPLATES.filter(t => t.tier !== 'free').map((tpl) => (
+                        <button
+                          key={tpl.id}
+                          onClick={() => updateConfig({ templateId: tpl.id })}
+                          className={`flex flex-col items-center p-3 border rounded-xl transition-all relative ${config.templateId === tpl.id ? 'border-blue-600 bg-blue-50 ring-1 ring-blue-600' : 'border-gray-200 hover:border-gray-300 bg-white'}`}
+                        >
+                          <div className="w-full aspect-[1/1.4] bg-gray-100 rounded mb-2 border shadow-sm overflow-hidden relative">
+                            <svg viewBox="0 0 794 1123" className="w-full h-full pointer-events-none">
+                              <foreignObject x="0" y="0" width="794" height="1123">
+                                <div className="w-[794px] h-[1123px] bg-white text-left">
+                                  <tpl.component data={{ portfolio, config: { ...config, templateId: tpl.id } }} />
+                                </div>
+                              </foreignObject>
+                            </svg>
+                          </div>
+                          <div className="text-xs font-semibold text-center leading-tight mt-1">{tpl.name}</div>
+                          
+                          {/* Badge Tier */}
+                          {tpl.tier === 'premium' && (
+                            <div className="absolute -top-2 -right-2 bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">Premium</div>
+                          )}
+                          {tpl.tier === 'exclusive' && (
+                            <div className="absolute -top-2 -right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">Rp {(tpl.price || 0).toLocaleString('id-ID')}</div>
+                          )}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -212,7 +274,7 @@ export default function CVBuilderPage() {
                 <p className="text-xs text-gray-500 mt-1">Data yang diisi di sini akan tersinkronisasi otomatis dengan Profil Portofolio Anda.</p>
               </div>
               <div className="flex-1 overflow-hidden flex flex-col">
-                <CVDataForm data={portfolio} onChange={updatePortfolio} isCVMode={true} />
+                <CVDataForm data={data?.portfolio || {}} onChange={updatePortfolio} isCVMode={true} activeTemplateId={data?.config?.templateId} />
               </div>
             </div>
           )}
@@ -222,7 +284,7 @@ export default function CVBuilderPage() {
         {/* Right Area - Live Preview */}
         <main className={`flex-1 overflow-y-auto custom-scrollbar relative bg-gray-200 print:bg-white print:overflow-visible print:h-auto h-full ${!showMobilePreview ? 'hidden md:block' : 'block'}`}>
           {/* Zoom controls could go here */}
-          <CVViewer data={data} />
+          <CVViewer data={data} isPremium={userStatus.isPremium} />
         </main>
         
         {/* FLOATING MOBILE PREVIEW BUTTON */}
@@ -287,6 +349,52 @@ export default function CVBuilderPage() {
                 className="w-full py-3 px-4 bg-white text-slate-500 font-medium rounded-xl hover:bg-slate-50 transition-all active:scale-95 border border-slate-200"
               >
                 Nanti Dulu
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Template Upsell Modal */}
+      {showTemplateUpsell.show && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 p-4 animate-in fade-in duration-200 print:hidden">
+          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 p-6 flex flex-col items-center text-center">
+            <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${showTemplateUpsell.type === 'premium' ? 'bg-amber-100 text-amber-500' : 'bg-purple-100 text-purple-600'}`}>
+              <Palette className="w-8 h-8" />
+            </div>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Template Terkunci</h3>
+            
+            {showTemplateUpsell.type === 'premium' ? (
+              <p className="text-slate-600 mb-6 leading-relaxed">
+                Anda sedang menggunakan <span className="font-semibold text-slate-800">Template Premium</span>. Untuk mengunduh CV dengan desain ini, silakan upgrade ke Paket Premium.
+              </p>
+            ) : (
+              <p className="text-slate-600 mb-6 leading-relaxed">
+                Anda sedang menggunakan <span className="font-semibold text-slate-800">Template Exclusive</span>. Template ini dapat dibeli secara terpisah seharga <span className="font-bold text-slate-900">Rp {(showTemplateUpsell.price || 0).toLocaleString('id-ID')}</span>.
+              </p>
+            )}
+            
+            <div className="flex flex-col gap-3 w-full">
+              <button 
+                onClick={() => {
+                  if (showTemplateUpsell.type === 'premium') {
+                    router.push('/personal/dashboard/langganan');
+                  } else {
+                    // Logic for exclusive template purchase (WhatsApp redirect)
+                    const activeTpl = CV_TEMPLATES.find(t => t.id === data?.config.templateId);
+                    const msg = `Halo admin, saya ingin membeli Template CV Exclusive: ${activeTpl?.name} seharga Rp ${(activeTpl?.price || 0).toLocaleString('id-ID')}`;
+                    window.open(`https://wa.me/6283132987065?text=${encodeURIComponent(msg)}`, '_blank');
+                  }
+                }}
+                className={`w-full py-3 px-4 font-bold rounded-xl text-white transition-all active:scale-95 flex items-center justify-center gap-2 ${showTemplateUpsell.type === 'premium' ? 'bg-amber-500 hover:bg-amber-600 shadow-md shadow-amber-200' : 'bg-purple-600 hover:bg-purple-700 shadow-md shadow-purple-200'}`}
+              >
+                {showTemplateUpsell.type === 'premium' ? 'Upgrade ke Premium' : 'Beli Template Sekarang'}
+              </button>
+              <button 
+                onClick={() => setShowTemplateUpsell({show: false, type: null})}
+                className="w-full py-3 px-4 bg-white text-slate-500 font-medium rounded-xl hover:bg-slate-50 transition-all active:scale-95 border border-slate-200"
+              >
+                Kembali Edit
               </button>
             </div>
           </div>

@@ -1,23 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CVDataPayload } from '@/lib/cvData';
-import { ATSClassic } from './templates/ATSClassic';
-import { ATSModern } from './templates/ATSModern';
+import { getTemplateById } from '@/lib/cvTemplates';
 import { usePagination } from './usePagination';
-import { ZoomIn, ZoomOut, Maximize, XCircle } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize, XCircle, Star, Eye, EyeOff } from 'lucide-react';
 import { useUI } from '@/components/ui/UIProvider';
+import { useRouter } from 'next/navigation';
 
 interface CVViewerProps {
   data: CVDataPayload;
   forceScale?: number;
   hideZoomControls?: boolean;
+  isPremium?: boolean;
 }
 
-export function CVViewer({ data, forceScale, hideZoomControls }: CVViewerProps) {
+export function CVViewer({ data, forceScale, hideZoomControls, isPremium }: CVViewerProps) {
   const { pages } = usePagination([data]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [defaultScale, setDefaultScale] = useState(1);
+  const [showPlaceholders, setShowPlaceholders] = useState(true);
   const { showToast } = useUI();
+  const router = useRouter();
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
 
   const calculateDefaultScale = () => {
     if (forceScale !== undefined) return forceScale;
@@ -53,11 +57,13 @@ export function CVViewer({ data, forceScale, hideZoomControls }: CVViewerProps) 
   const handleResetZoom = () => setScale(defaultScale);
   
   const renderTemplate = () => {
-    return data.config.templateId === 'ats-classic' ? (
-      <ATSClassic data={data} />
-    ) : (
-      <ATSModern data={data} />
-    );
+    const template = getTemplateById(data.config.templateId);
+    const TemplateComponent = template?.component;
+    if (TemplateComponent) {
+      // @ts-ignore - All templates support showPlaceholders
+      return <TemplateComponent data={data} showPlaceholders={showPlaceholders} />;
+    }
+    return <div>Template not found</div>;
   };
 
   return (
@@ -66,6 +72,10 @@ export function CVViewer({ data, forceScale, hideZoomControls }: CVViewerProps) 
       {/* Zoom Controls */}
       {!hideZoomControls && (
         <div className="fixed bottom-[100px] right-6 md:bottom-8 md:right-8 z-40 bg-white/80 backdrop-blur-md shadow-xl rounded-full p-1.5 flex flex-col items-center gap-2 print:hidden border border-gray-200/50">
+          <button onClick={() => setShowPlaceholders(p => !p)} className={`p-2 rounded-full hover:bg-gray-100/80 transition-colors bg-transparent ${showPlaceholders ? 'text-[#558ed5]' : 'text-gray-400'}`} title={showPlaceholders ? 'Sembunyikan Placeholder' : 'Tampilkan Placeholder'}>
+            {showPlaceholders ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
+          </button>
+          <div className="w-4 h-px bg-gray-300/60 my-0.5"></div>
           <button onClick={handleZoomIn} className="p-2 rounded-full hover:bg-gray-100/80 text-gray-700 transition-colors bg-transparent">
             <ZoomIn className="w-5 h-5" />
           </button>
@@ -130,24 +140,73 @@ export function CVViewer({ data, forceScale, hideZoomControls }: CVViewerProps) 
                   {renderTemplate()}
                 </div>
 
-                {/* Subtle Watermark with Premium Upsell */}
-                <div className="absolute bottom-3 right-6 flex items-center gap-1.5 z-10">
-                  <button 
-                    onClick={() => showToast("Upgrade ke Premium untuk menghilangkan watermark ini!", "info")}
-                    className="print:hidden text-red-500 hover:text-red-600 transition-colors bg-white/50 rounded-full backdrop-blur-sm pointer-events-auto"
-                    title="Hilangkan Watermark"
-                  >
-                    <XCircle className="w-3.5 h-3.5" />
-                  </button>
-                  <span className="text-[8pt] text-gray-400/60 font-medium pointer-events-none tracking-wide print:text-gray-400">
-                    Made with PortoTree.com
-                  </span>
+                {/* LARGE PREVIEW WATERMARK */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 print:hidden overflow-hidden">
+                  <div className="text-[120px] font-black text-gray-300/30 transform -rotate-45 select-none tracking-widest uppercase">
+                    Preview
+                  </div>
                 </div>
+
+                {/* Subtle Watermark with Premium Upsell */}
+                {!isPremium && (
+                  <div className="absolute bottom-3 right-6 flex items-center gap-1.5 z-10">
+                    <button 
+                      onClick={() => setShowPremiumModal(true)}
+                      className="print:hidden text-red-500 hover:text-red-600 transition-colors bg-white/50 rounded-full backdrop-blur-sm pointer-events-auto"
+                      title="Hilangkan Watermark"
+                    >
+                      <XCircle className="w-3.5 h-3.5" />
+                    </button>
+                    <span className="text-[8pt] text-gray-400/60 font-medium pointer-events-none tracking-wide print:text-gray-400">
+                      Made with PortoTree.com
+                    </span>
+                  </div>
+                )}
               </div>
             ))}
           </div>
         </div>
       </div>
+      
+      {/* Premium Upgrade Modal */}
+      {showPremiumModal && (
+        <div className="fixed inset-0 z-[9999] bg-black/40 flex items-center justify-center p-4 print:hidden">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <button 
+              onClick={() => setShowPremiumModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <XCircle className="w-6 h-6" />
+            </button>
+            
+            <div className="text-center mb-6 mt-4">
+              <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Star className="w-8 h-8 fill-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Upgrade ke Premium</h3>
+              <p className="text-gray-600 text-sm">
+                Dapatkan akses tanpa batas untuk menghapus watermark, mencoba semua template eksklusif, dan menggunakan berbagai fitur pro lainnya.
+              </p>
+            </div>
+            
+            <div className="flex flex-col gap-3">
+              <button 
+                onClick={() => router.push('/personal/dashboard/langganan')}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg active:scale-[0.98]"
+              >
+                Lihat Paket Langganan
+              </button>
+              <button 
+                onClick={() => setShowPremiumModal(false)}
+                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-xl transition-colors"
+              >
+                Nanti Saja
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <style dangerouslySetInnerHTML={{__html: `
         /* Mencegah mobile browser memperbesar teks secara otomatis (Font Boosting / Text Autosizing) */
         .cv-page, .cv-instance, #cv-content-measurer {
@@ -155,6 +214,10 @@ export function CVViewer({ data, forceScale, hideZoomControls }: CVViewerProps) 
           text-size-adjust: 100%;
         }
         @media print {
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
           @page {
             size: A4 portrait;
             margin: 0;

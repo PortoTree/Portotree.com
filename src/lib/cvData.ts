@@ -15,6 +15,7 @@ export interface CVPersonalData {
   dateOfBirth?: string;
   gender?: string;
   nationality?: string;
+  maritalStatus?: string;
   address?: string;
   portfolioUrl?: string;
 }

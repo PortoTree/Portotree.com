@@ -64,3 +64,39 @@ export async function checkDownloadLimit(type: 'cv' | 'surat') {
     return { success: false, error: error.message };
   }
 }
+
+export async function getUserSubscriptionStatus() {
+  try {
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get("session");
+    
+    if (!sessionCookie) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    const decoded = await adminAuth.verifySessionCookie(sessionCookie.value, true);
+    const userId = decoded.uid;
+
+    const userRef = adminDb.collection("users").doc(userId);
+    const userDoc = await userRef.get();
+
+    if (!userDoc.exists) {
+      return { success: true, isPremium: false, purchasedTemplates: [] };
+    }
+
+    const userData = userDoc.data() as any;
+    const now = Date.now();
+    let isPremium = false;
+
+    if (userData.isPremium && (!userData.premiumUntil || userData.premiumUntil > now)) {
+      isPremium = true;
+    }
+
+    const purchasedTemplates = Array.isArray(userData.purchasedTemplates) ? userData.purchasedTemplates : [];
+
+    return { success: true, isPremium, purchasedTemplates };
+  } catch (error: any) {
+    console.error("Error getting user subscription status:", error);
+    return { success: false, error: error.message };
+  }
+}

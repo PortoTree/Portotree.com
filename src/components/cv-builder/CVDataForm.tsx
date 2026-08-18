@@ -32,6 +32,7 @@ interface Props {
   data: CVPortfolioData;
   onChange: (newData: CVPortfolioData) => void;
   isCVMode?: boolean;
+  activeTemplateId?: string;
 }
 
 const AccordionSection = ({ 
@@ -69,7 +70,8 @@ const AccordionSection = ({
   );
 };
 
-export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
+export function CVDataForm({ data, onChange, isCVMode = false, activeTemplateId }: Props) {
+  const currentTemplateId = activeTemplateId || data?.config?.templateId;
   const { showConfirm } = useUI();
   const searchParams = useSearchParams();
   const [openSection, setOpenSection] = React.useState<string>('');
@@ -550,9 +552,9 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
           id="personal"
           title="Informasi Pribadi"
           icon={User}
-          hasError={!data.personal?.name || !data.personal?.headline || !data.personal?.bio || (!isCVMode && !data.personal?.photoUrl) || !data.personal?.email || !data.personal?.phone || !data.personal?.address}
+          hasError={!data.personal?.name || !data.personal?.headline || !data.personal?.bio || (!(currentTemplateId?.startsWith('ats-')) && !data.personal?.photoUrl) || !data.personal?.email || !data.personal?.phone || !data.personal?.address || (currentTemplateId === 'creative-blue' && (!data.personal?.gender || !data.personal?.nationality))}
         >
-          {!isCVMode && (
+          {(!currentTemplateId || !currentTemplateId.startsWith('ats-')) && (
             <div className="space-y-2">
               <Label className="text-sm text-slate-700">Foto Profil <span className="text-red-500">*</span></Label>
               <div className="border border-slate-200 rounded-xl p-3 flex flex-col sm:flex-row items-center gap-4">
@@ -575,7 +577,7 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
                         </Button>
                       }
                     />
-                    <Button size="sm" variant="outline" onClick={() => handleChange('personal', 'photoUrl', '/placeholder-person-4x4.png')} className="text-red-500 border-red-200 bg-red-50 hover:bg-red-100 gap-1.5 font-medium">
+                    <Button size="sm" variant="outline" onClick={() => handleChange('personal', 'photoUrl', '')} className="text-red-500 border-red-200 bg-red-50 hover:bg-red-100 gap-1.5 font-medium">
                       <Trash2 size={14} /> Hapus
                     </Button>
                   </div>
@@ -632,6 +634,41 @@ export function CVDataForm({ data, onChange, isCVMode = false }: Props) {
             <Label className="text-sm text-slate-700">Alamat Lengkap <span className="text-red-500">*</span></Label>
             <Input value={data.personal?.address || ''} onChange={(e) => handleChange('personal', 'address', e.target.value)} placeholder="Jl. Sudirman No. 1, Jakarta Selatan" className={`h-11 ${!data.personal?.address ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
           </div>
+
+          {currentTemplateId === 'creative-blue' && (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm text-slate-700">Jenis Kelamin <span className="text-red-500">*</span></Label>
+                  <select
+                    className={`w-full h-11 px-3 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 text-sm bg-white ${!data.personal?.gender ? 'border-red-500 focus-visible:ring-red-500' : 'border-slate-300'}`}
+                    value={data.personal?.gender || ''}
+                    onChange={(e) => handleChange('personal', 'gender', e.target.value)}
+                  >
+                    <option value="">Pilih</option>
+                    <option value="Laki-laki">Laki-laki</option>
+                    <option value="Perempuan">Perempuan</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm text-slate-700">Kebangsaan <span className="text-red-500">*</span></Label>
+                  <Input value={data.personal?.nationality || ''} onChange={(e) => handleChange('personal', 'nationality', e.target.value)} placeholder="Indonesia" className={`h-11 ${!data.personal?.nationality ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm text-slate-700">Status <span className="text-slate-400 font-normal text-xs">(Opsional)</span></Label>
+                  <select
+                    className="w-full h-11 px-3 border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 text-sm bg-white"
+                    value={data.personal?.maritalStatus || ''}
+                    onChange={(e) => handleChange('personal', 'maritalStatus', e.target.value)}
+                  >
+                    <option value="">Pilih</option>
+                    <option value="Belum Menikah">Belum Menikah</option>
+                    <option value="Menikah">Menikah</option>
+                  </select>
+                </div>
+              </div>
+            </>
+          )}
 
           <div className="space-y-2">
             <Label className="text-sm text-slate-700">Link URL Portofolio <span className="text-slate-400 font-normal text-xs">(Opsional)</span></Label>

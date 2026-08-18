@@ -49,10 +49,10 @@ export default function LanggananPage() {
   ];
 
   const features = [
+    "Akses & Download Semua Template CV Premium",
     "Unlimited Download CV / Resume",
     "Unlimited Download Semua Jenis Surat",
     "Tanpa Watermark 'Made with PortoTree'",
-    "Akses Prioritas ke Template Baru",
     "Unlock Semua Kustomisasi Premium",
     "Dukungan Pelanggan (Customer Support)"
   ];
