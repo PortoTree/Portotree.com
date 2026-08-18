@@ -146,7 +146,7 @@ export default function CVBuilderPage() {
         </div>
         <div className="flex items-center gap-2 md:gap-4">
           {/* Mobile Navigation Toggles */}
-          <div className="flex md:hidden items-center bg-slate-100 p-1 rounded-xl">
+          <div className={`md:hidden items-center bg-slate-100 p-1 rounded-xl ${showMobilePreview ? 'hidden' : 'flex'}`}>
             <button 
               onClick={() => setSidebarMode('edit')} 
               className={`p-2 rounded-lg transition-all ${sidebarMode === 'edit' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500'}`}

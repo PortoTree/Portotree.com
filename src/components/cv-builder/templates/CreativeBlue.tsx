@@ -22,7 +22,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
 
   // Helpers
   const dummyPersonal = {
-    fullName: "Melvin Larendra",
+    fullName: "Your name",
     role: "Staff Management",
     email: "melvin123@gmail.com",
     phone: "0812 3456 7890",
@@ -31,7 +31,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
     birthDate: "1994-11-15",
     birthPlace: "Bandung",
     gender: "Laki-laki",
-    website: "www.helpshared.com"
+    website: "portotree.com/p/username"
   };
 
   const name = personal?.fullName || dummyPersonal.fullName;
