@@ -10,7 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Save, ArrowLeft, Loader2, Image as ImageIcon, Trash2 } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { Save, ArrowLeft, Loader2, Image as ImageIcon, Trash2, Plus } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import Image from "next/image";
@@ -18,6 +19,7 @@ import Image from "next/image";
 export default function CreateBlogPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [newCategory, setNewCategory] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -107,22 +109,64 @@ export default function CreateBlogPage() {
 
             <div className="space-y-2">
               <Label htmlFor="category" className="text-slate-700 font-bold">Kategori</Label>
-              <Select 
-                value={formData.category} 
-                onValueChange={(value) => setFormData(prev => ({ ...prev, category: value || "Karier" }))}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Pilih Kategori" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Karier">Karier</SelectItem>
-                  <SelectItem value="Tips & Trik">Tips & Trik</SelectItem>
-                  <SelectItem value="Edukasi">Edukasi</SelectItem>
-                  <SelectItem value="Info & Berita">Info & Berita</SelectItem>
-                  <SelectItem value="Dokumen (CV/Surat)">Dokumen (CV/Surat)</SelectItem>
-                  <SelectItem value="Portofolio">Portofolio</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex gap-2 items-center">
+                <Select 
+                  value={formData.category} 
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, category: value || "Karier" }))}
+                >
+                  <SelectTrigger className="flex-1">
+                    <SelectValue placeholder="Pilih Kategori" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Karier">Karier</SelectItem>
+                    <SelectItem value="Tips & Trik">Tips & Trik</SelectItem>
+                    <SelectItem value="Edukasi">Edukasi</SelectItem>
+                    <SelectItem value="Info & Berita">Info & Berita</SelectItem>
+                    <SelectItem value="Dokumen (CV/Surat)">Dokumen (CV/Surat)</SelectItem>
+                    <SelectItem value="Portofolio">Portofolio</SelectItem>
+                    {/* Render existing custom category if selected */}
+                    {![
+                      "Karier", "Tips & Trik", "Edukasi", "Info & Berita", "Dokumen (CV/Surat)", "Portofolio"
+                    ].includes(formData.category) && formData.category && (
+                      <SelectItem value={formData.category}>{formData.category}</SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
+
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" type="button" className="shrink-0 px-3" onClick={() => setNewCategory(formData.category)} title="Custom Kategori">
+                      <Plus className="w-4 h-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Kategori Kustom</DialogTitle>
+                    </DialogHeader>
+                    <div className="py-4 space-y-4">
+                      <div className="space-y-2">
+                        <Label>Nama Kategori</Label>
+                        <Input 
+                          placeholder="Masukkan nama kategori baru..."
+                          value={newCategory}
+                          onChange={(e) => setNewCategory(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button type="button" onClick={() => {
+                          if (newCategory.trim()) {
+                            setFormData(prev => ({ ...prev, category: newCategory.trim() }));
+                          }
+                        }}>
+                          Gunakan Kategori Ini
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
             
             <div className="space-y-2">

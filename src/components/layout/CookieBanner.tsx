@@ -11,8 +11,9 @@ export function CookieBanner() {
   useEffect(() => {
     // Delay slightly to not interrupt immediate page load paints
     const timer = setTimeout(() => {
-      const hasConsent = document.cookie.split(';').some((item) => item.trim().startsWith('portotree_cookie_consent='));
-      if (!hasConsent) {
+      const hasCookie = document.cookie.split(';').some((item) => item.trim().startsWith('portotree_cookie_consent='));
+      const hasLocal = localStorage.getItem('portotree_cookie_consent');
+      if (!hasCookie && !hasLocal) {
         setShow(true);
       }
     }, 1500);
@@ -23,21 +24,28 @@ export function CookieBanner() {
   const getCookieDomain = () => {
     if (typeof window === 'undefined') return '';
     const hostname = window.location.hostname;
-    if (hostname === 'localhost' || hostname === '127.0.0.1') return hostname;
+    // Do not set domain explicitly for localhost/IPs to avoid browser rejection
+    if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes(':') || /^[0-9.]+$/.test(hostname)) {
+      return '';
+    }
     
     // Convert 'resume.portotree.com' or 'portotree.com' to '.portotree.com'
     const parts = hostname.split('.');
     if (parts.length >= 2) {
       return `.${parts.slice(-2).join('.')}`;
     }
-    return hostname;
+    return '';
   };
 
   const acceptCookies = () => {
     // Set cookie that lasts for 1 year, accessible across all subdomains
     const d = new Date();
     d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
-    document.cookie = `portotree_cookie_consent=accepted; expires=${d.toUTCString()}; path=/; domain=${getCookieDomain()}; SameSite=Lax`;
+    const domainPart = getCookieDomain() ? ` domain=${getCookieDomain()};` : '';
+    document.cookie = `portotree_cookie_consent=accepted; expires=${d.toUTCString()}; path=/;${domainPart} SameSite=Lax`;
+    
+    // Fallback for browsers that block cookies
+    localStorage.setItem("portotree_cookie_consent", "accepted");
     setShow(false);
   };
 

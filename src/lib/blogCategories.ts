@@ -29,5 +29,18 @@ export function labelToSlug(label: string): string {
 
 /** Konversi URL slug → entry kategori (atau null jika tidak ditemukan) */
 export function slugToCategory(slug: string) {
-  return MASTER_CATEGORIES.find((c) => c.slug === slug) || null;
+  const found = MASTER_CATEGORIES.find((c) => c.slug === slug);
+  if (found) return found;
+
+  // Fallback for custom dynamic categories
+  const titleLabel = slug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+    
+  return {
+    slug,
+    label: titleLabel,
+    description: "Kumpulan artikel pilihan seputar " + titleLabel
+  };
 }

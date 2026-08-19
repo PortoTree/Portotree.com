@@ -201,12 +201,28 @@ export async function getPublishedCategories(): Promise<{
       if (cat) dbLabels.add(cat.trim());
     });
 
-    // Filter master list to only those present in DB (preserves order)
-    const categories = MASTER_CATEGORIES.filter((c) =>
-      Array.from(dbLabels).some(
-        (label) => label.toLowerCase() === c.label.toLowerCase()
-      )
-    );
+    const categories: { slug: string; label: string; description: string }[] = [];
+    
+    // 1. Add standard categories that exist in DB (preserves master order)
+    MASTER_CATEGORIES.forEach((mc) => {
+      if (Array.from(dbLabels).some(label => label.toLowerCase() === mc.label.toLowerCase())) {
+        categories.push(mc);
+      }
+    });
+
+    // 2. Add custom categories that are not in MASTER_CATEGORIES
+    const { labelToSlug } = await import("@/lib/blogCategories");
+    
+    Array.from(dbLabels).forEach((label) => {
+      const isMaster = MASTER_CATEGORIES.some(mc => mc.label.toLowerCase() === label.toLowerCase());
+      if (!isMaster) {
+        categories.push({
+          slug: labelToSlug(label),
+          label: label,
+          description: "Artikel pilihan terkait " + label
+        });
+      }
+    });
 
     console.log("[getPublishedCategories] categories found:", categories.map(c => c.slug));
     return { success: true, data: categories };
