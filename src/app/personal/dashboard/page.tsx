@@ -1,107 +1,272 @@
 "use client";
 
-import useSWR from "swr";
-import { Eye, MousePointerClick, TrendingUp, Globe, Info } from "lucide-react";
-import TrafficChart from "@/components/dashboard/TrafficChart";
-import { getDashboardAnalytics } from "@/app/actions/analytics";
+import dynamic from "next/dynamic";
+import { useState, useEffect, useRef } from "react";
+import { FileText, Mail, Globe, ArrowRight, Sparkles, BookOpen, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { getPublishedBlogs } from "@/app/actions/blog";
+import Image from "next/image";
 
-const fetcher = async () => {
-  const res = await getDashboardAnalytics();
-  if (res.success && res.data) return res.data;
-  throw new Error(res.error || "Failed to fetch analytics");
-};
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
-const InfoTooltip = ({ text }: { text: string }) => (
-  <div className="relative group flex items-center">
-    <button className="text-slate-400 hover:text-emerald-600 focus:outline-none focus:text-emerald-600 transition-colors">
-      <Info className="w-4 h-4" />
-    </button>
-    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-52 p-2.5 bg-slate-800 text-white text-xs leading-relaxed rounded-lg shadow-xl z-10 text-center font-normal opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200">
-      {text}
-      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-800 rotate-45"></div>
-    </div>
-  </div>
-);
+export default function DashboardMainPage() {
+  const [activeStep, setActiveStep] = useState<number>(0);
+  const [animationData, setAnimationData] = useState<any>(null);
+  const [recentArticles, setRecentArticles] = useState<any[]>([]);
+  const lottieRef = useRef<any>(null);
 
-export default function DashboardPage() {
-  const { data, isLoading } = useSWR("dashboard-analytics", fetcher, {
-    revalidateOnFocus: false,
-    dedupingInterval: 300000, // 5 minutes cache
-  });
+  useEffect(() => {
+    fetch('/tree.json')
+      .then(res => res.json())
+      .then(data => setAnimationData(data))
+      .catch(err => console.error("Failed to load Lottie animation", err));
+      
+    async function fetchArticles() {
+      try {
+        const res = await getPublishedBlogs();
+        if (res.success && res.data) {
+          setRecentArticles(res.data.slice(0, 4));
+        }
+      } catch (error) {
+        console.error("Gagal memuat artikel", error);
+      }
+    }
+    fetchArticles();
+  }, []);
 
-  const views = data?.totalViews || 0;
-  const clicks = data?.totalClicks || 0;
-  const visitors = data?.uniqueVisitors || 0;
-  const chartData = data?.chartData || [];
+  const handleEnterFrame = (e: any) => {
+    const frame = e.currentTime;
+    
+    // 3s = frame 180 (Step 1)
+    // 4.3s = frame 258 (Step 2)
+    // 6.3s = frame 378 (Step 3)
+    // 8.3s = frame 498 (Step 4 - Float!)
+    
+    if (frame < 180) {
+      if (activeStep !== 0) setActiveStep(0);
+    } else if (frame >= 180 && frame < 258) {
+      if (activeStep !== 1) setActiveStep(1);
+    } else if (frame >= 258 && frame < 378) {
+      if (activeStep !== 2) setActiveStep(2);
+    } else if (frame >= 378 && frame < 498) {
+      if (activeStep !== 3) setActiveStep(3);
+    } else if (frame >= 498) {
+      if (activeStep !== 4) setActiveStep(4);
+    }
+
+    // Stop and pause the animation precisely at 8.30 seconds (frame 498)
+    if (frame >= 498 && lottieRef.current) {
+      lottieRef.current.pause();
+    }
+  };
+
   return (
-    <div className="p-6 md:p-10 max-w-5xl mx-auto space-y-10">
-      {/* HEADER */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Selamat datang kembali!</h1>
-          <p className="text-slate-500 mt-1">Berikut ringkasan portofolio Anda hari ini.</p>
+    <div className="p-4 md:p-6 max-w-[1400px] mx-auto min-h-[85vh] flex flex-col lg:flex-row gap-6">
+      <style>{`
+        @keyframes float-gentle {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          25% { transform: translateY(-4px) rotate(1deg); }
+          75% { transform: translateY(4px) rotate(-1deg); }
+        }
+        .anim-float {
+          animation: float-gentle 6s ease-in-out infinite;
+        }
+        .anim-float-delay-1 {
+          animation: float-gentle 6s ease-in-out infinite;
+          animation-delay: -2s;
+        }
+        .anim-float-delay-2 {
+          animation: float-gentle 6s ease-in-out infinite;
+          animation-delay: -4s;
+        }
+      `}</style>
+      
+      {/* LEFT COLUMN: Lottie & Instructions */}
+      <div className="relative w-full lg:flex-1 h-[600px] md:h-[700px] flex items-center justify-center md:bg-white md:rounded-3xl md:shadow-sm md:border md:border-slate-200 md:overflow-hidden">
+        
+        {/* Lottie Animation (Center) */}
+        <div className="w-full max-w-[320px] md:max-w-sm absolute inset-0 m-auto flex items-center justify-center z-0 opacity-90">
+          {animationData && (
+            <Lottie 
+              lottieRef={lottieRef}
+              animationData={animationData} 
+              loop={true} 
+              onEnterFrame={handleEnterFrame}
+            />
+          )}
+        </div>
+
+        {/* Step 3: Kiri Atas (Top Left) */}
+        <div className={`transition-all duration-1000 absolute top-16 left-4 md:top-20 md:left-12 lg:left-16 max-w-[200px] md:max-w-[260px] z-10 ${activeStep >= 3 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95 pointer-events-none'}`}>
+          <Link 
+            href="/personal/dashboard/portofolio"
+            className={`block bg-emerald-50/95 backdrop-blur-sm border border-emerald-200 p-2.5 md:p-4 rounded-xl md:rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all ${activeStep >= 3 ? 'anim-float-delay-2' : ''}`}
+          >
+            <div className="flex flex-row md:flex-col items-center md:items-start gap-2.5 md:gap-0">
+              <div className="shrink-0 w-8 h-8 md:w-8 md:h-8 bg-emerald-500 rounded-lg flex items-center justify-center md:mb-2 text-white shadow-inner">
+                <Globe className="w-4 h-4" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-[11px] md:text-base font-bold text-slate-800 md:mb-1 leading-tight">3. Publikasi Portofolio</h2>
+                <p className="text-[10px] md:text-xs text-slate-600 md:mb-3 leading-relaxed mt-0.5 md:mt-0">
+                  Publikasikan karya dan proyek terbaik Anda secara Online.
+                </p>
+              </div>
+            </div>
+            <span className="hidden md:inline-flex mt-2.5 md:mt-0 items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-1.5 px-3 rounded-lg transition-colors shadow-sm text-xs">
+              Buat Portofolio
+              <ArrowRight className="w-3 h-3" />
+            </span>
+          </Link>
+        </div>
+
+        {/* Step 2: Kanan Tengah/Atas (Right Side, Middle) */}
+        <div className={`transition-all duration-1000 absolute top-[40%] md:top-[35%] right-2 md:right-8 max-w-[200px] md:max-w-[260px] z-10 ${activeStep >= 2 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95 pointer-events-none'}`}>
+          <Link 
+            href="/personal/dashboard/surat-generator"
+            className={`block bg-blue-50/95 backdrop-blur-sm border border-blue-200 p-2.5 md:p-4 rounded-xl md:rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all ${activeStep >= 2 ? 'anim-float-delay-1' : ''}`}
+          >
+            <div className="flex flex-row md:flex-col items-center md:items-start gap-2.5 md:gap-0">
+              <div className="shrink-0 w-8 h-8 md:w-8 md:h-8 bg-blue-600 rounded-lg flex items-center justify-center md:mb-2 text-white shadow-inner">
+                <Mail className="w-4 h-4" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-[11px] md:text-base font-bold text-slate-800 md:mb-1 leading-tight">2. Tulis Surat Lamaran</h2>
+                <p className="text-[10px] md:text-xs text-slate-600 md:mb-3 leading-relaxed mt-0.5 md:mt-0">
+                  Buat Cover Letter meyakinkan untuk perekrut.
+                </p>
+              </div>
+            </div>
+            <span className="hidden md:inline-flex mt-2.5 md:mt-0 items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold py-1.5 px-3 rounded-lg transition-colors shadow-sm text-xs">
+              Buat Surat Lamaran
+              <ArrowRight className="w-3 h-3" />
+            </span>
+          </Link>
+        </div>
+
+        {/* Step 1: Kiri Bawah (Bottom Left) */}
+        <div className={`transition-all duration-1000 absolute bottom-[22%] left-6 md:bottom-[15%] md:left-12 lg:left-24 max-w-[200px] md:max-w-[260px] z-10 ${activeStep >= 1 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95 pointer-events-none'}`}>
+          <Link 
+            href="/personal/dashboard/resume"
+            className={`block bg-amber-50/95 backdrop-blur-sm border border-amber-200 p-2.5 md:p-4 rounded-xl md:rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all ${activeStep >= 1 ? 'anim-float' : ''}`}
+          >
+            <div className="flex flex-row md:flex-col items-center md:items-start gap-2.5 md:gap-0">
+              <div className="shrink-0 w-8 h-8 md:w-8 md:h-8 bg-amber-500 rounded-lg flex items-center justify-center md:mb-2 text-white shadow-inner">
+                <FileText className="w-4 h-4" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-[11px] md:text-base font-bold text-slate-800 md:mb-1 leading-tight">1. Buat CV Profesional</h2>
+                <p className="text-[10px] md:text-xs text-slate-600 md:mb-3 leading-relaxed mt-0.5 md:mt-0">
+                  Persiapkan CV menarik dari template standar industri.
+                </p>
+              </div>
+            </div>
+            <span className="hidden md:inline-flex mt-2.5 md:mt-0 items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold py-1.5 px-3 rounded-lg transition-colors shadow-sm text-xs">
+              Buat CV Sekarang
+              <ArrowRight className="w-3 h-3" />
+            </span>
+          </Link>
+        </div>
+
+        {/* Welcome Text (Only visible before Step 1) */}
+        <div className={`transition-all duration-700 absolute top-8 inset-x-0 mx-auto text-center pointer-events-none z-10 ${activeStep === 0 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-8 scale-95'}`}>
+            <h1 className="text-2xl md:text-4xl font-extrabold text-slate-800 mb-2 drop-shadow-sm">
+              Mulai Perjalanan Karir Anda
+            </h1>
+            <p className="text-slate-500 text-sm md:text-base max-w-sm md:max-w-md mx-auto">
+              Ikuti langkah-langkah di layar ini untuk membangun profil.
+            </p>
         </div>
       </div>
 
-      {/* METRICS */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-slate-600">Total Dilihat</h3>
-              <InfoTooltip text="Dihitung setiap kali seseorang membuka atau memuat halaman portofolio publik Anda." />
-            </div>
-            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
-              <Eye className="w-5 h-5" />
-            </div>
+      {/* RIGHT COLUMN: Updates & Articles */}
+      <div className="w-full lg:w-[320px] xl:w-[380px] flex flex-col gap-6 shrink-0 lg:h-[700px]">
+        
+        {/* Block 1: Feature Updates */}
+        <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-3xl p-6 shadow-md border border-slate-800 text-white relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <Sparkles className="w-24 h-24" />
           </div>
-          <div className="text-3xl font-bold tracking-tight text-slate-800">
-            {isLoading ? "..." : views.toLocaleString('id-ID')}
-          </div>
-          <div className="text-sm text-slate-500 font-medium mt-2">
-            Keseluruhan
+          <div className="relative z-10">
+            <div className="inline-flex items-center gap-1.5 bg-indigo-500/30 text-indigo-200 px-3 py-1 rounded-full text-xs font-bold mb-4 border border-indigo-500/30">
+              <Sparkles className="w-3.5 h-3.5" /> Fitur Baru
+            </div>
+            <h3 className="text-xl font-bold mb-2">Pembaruan Sistem v2.0</h3>
+            <p className="text-slate-300 text-sm leading-relaxed mb-4">
+              Kami sedang menyiapkan fitur analitik canggih untuk melacak performa CV dan Portofolio Anda secara Real-Time. Nantikan segera!
+            </p>
+            <button className="text-sm font-semibold text-indigo-300 hover:text-white transition-colors flex items-center gap-1">
+              Pelajari Selengkapnya <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
+        {/* Block 2: Recent Articles */}
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex-1 flex flex-col min-h-0">
+          <div className="flex items-center justify-between mb-5 shrink-0">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-slate-600">Klik Tautan</h3>
-              <InfoTooltip text="Jumlah total pengunjung yang mengklik tombol atau tautan eksternal (email, sosmed, dll) di portofolio Anda." />
+              <BookOpen className="w-5 h-5 text-emerald-600" />
+              <h3 className="font-bold text-slate-800">Artikel Terbaru</h3>
             </div>
-            <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-600">
-              <MousePointerClick className="w-5 h-5" />
-            </div>
+            <Link href="/blog" className="text-xs font-semibold text-slate-500 hover:text-emerald-600 transition-colors">
+              Lihat Semua
+            </Link>
           </div>
-          <div className="text-3xl font-bold tracking-tight text-slate-800">
-            {isLoading ? "..." : clicks.toLocaleString('id-ID')}
+
+          <div className="flex flex-col gap-2 flex-1 overflow-y-auto overflow-x-hidden min-h-0 pr-2">
+            {recentArticles.length > 0 ? (
+              recentArticles.map((article) => (
+                <Link 
+                  key={article.id} 
+                  href={`/blog/${article.slug}`}
+                  className="group flex gap-4 items-center p-2 rounded-xl hover:bg-slate-50 transition-colors"
+                >
+                  <div className="w-16 h-16 rounded-lg bg-emerald-50 overflow-hidden shrink-0 relative border border-slate-200">
+                    {article.thumbnailUrl ? (
+                      <Image 
+                        src={article.thumbnailUrl} 
+                        alt={article.title} 
+                        fill 
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        sizes="64px"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-emerald-500">
+                        <FileText className="w-6 h-6" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-bold text-slate-800 line-clamp-2 group-hover:text-emerald-600 transition-colors mb-1">
+                      {article.title}
+                    </h4>
+                    <p className="text-[11px] text-slate-500 flex items-center gap-1">
+                      {new Date(article.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </p>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <div className="flex-1 flex flex-col items-center justify-center text-center py-6 text-slate-400">
+                <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mb-3">
+                  <FileText className="w-5 h-5 opacity-50" />
+                </div>
+                <p className="text-sm">Belum ada artikel terbaru.</p>
+              </div>
+            )}
           </div>
-          <div className="text-sm text-slate-500 font-medium mt-2">
-            Keseluruhan
-          </div>
+          
+          {recentArticles.length > 0 && (
+            <Link 
+              href="/blog" 
+              className="mt-5 w-full py-2.5 shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-600 text-sm font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+            >
+              Jelajahi Blog <ChevronRight className="w-4 h-4" />
+            </Link>
+          )}
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-slate-600">Pengunjung Unik</h3>
-              <InfoTooltip text="Jumlah orang berbeda yang mengunjungi portofolio Anda. Jika 1 orang melihat 5 kali, hanya dihitung 1 pengunjung unik." />
-            </div>
-            <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600">
-              <Globe className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="text-3xl font-bold tracking-tight text-slate-800">
-            {isLoading ? "..." : visitors.toLocaleString('id-ID')}
-          </div>
-          <div className="text-sm text-slate-500 font-medium mt-2">
-            Keseluruhan
-          </div>
-        </div>
       </div>
-
-      {/* TRAFFIC CHART */}
-      <TrafficChart data={chartData} isLoading={isLoading} />
     </div>
   );
 }

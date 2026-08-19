@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Settings, User, Globe, FileText, CreditCard, Briefcase, Mail, Info } from "lucide-react";
+import { Home, BarChart2, Settings, User, Globe, FileText, CreditCard, Briefcase, Mail, Info } from "lucide-react";
 
 const navItems = [
-  { href: "/personal/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
+  { href: "/personal/dashboard", label: "Dashboard", icon: Home, exact: true },
+  { href: "/personal/dashboard/statistik", label: "Statistik", icon: BarChart2, exact: true },
   // { href: "/personal/dashboard/portofind", label: "Portofind", icon: Briefcase, badge: "Progress" },
   { href: "/personal/dashboard/portofolio", label: "Portofolio", icon: Globe },
   { href: "/personal/dashboard/resume", label: "CV Builder", icon: FileText },
