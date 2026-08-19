@@ -7,11 +7,67 @@ import { CVDataPayload, defaultCVConfig } from "@/lib/cvData";
 import { defaultPortfolioData } from "@/lib/portfolioData";
 import { CVViewer } from "@/components/cv-builder/CVViewer";
 import ProgressResume from "@/components/dashboard/ProgressResume";
+import { createPortal } from "react-dom";
+import { useUI } from "@/components/ui/UIProvider";
+import { useRouter } from "next/navigation";
+import { checkDownloadLimit } from "@/app/actions/subscription";
 
 export default function ResumeDashboardPage() {
   const [data, setData] = useState<CVDataPayload | null>(null);
   const [updatedAt, setUpdatedAt] = useState<string>("-");
   const [createdAt, setCreatedAt] = useState<string>("-");
+  
+  const { showConfirm, showToast } = useUI();
+  const router = useRouter();
+  const [isPrinting, setIsPrinting] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+
+  const handleDownload = async () => {
+    if (!data) return;
+    
+    const limitCheck = await checkDownloadLimit('cv');
+    
+    if (!limitCheck.success) {
+      if (limitCheck.limitReached) {
+        setShowPaywall(true);
+      } else {
+        if (showToast) showToast("Terjadi kesalahan sistem, silakan coba lagi", "error");
+      }
+      return;
+    }
+
+    if (window.innerWidth >= 768) {
+      if (showConfirm) {
+        showConfirm({
+          title: "Perhatian Sebelum Cetak",
+          message: "Jika layar cetak (Preview PDF) terlihat kosong atau terpotong, pastikan Anda mengubah pengaturan 'Margins' menjadi 'None' (Tidak Ada) pada menu pengaturan Print.",
+          variant: "primary",
+          confirmText: "Mengerti & Cetak",
+          cancelText: "Batal",
+          onConfirm: () => {
+            setIsPrinting(true);
+            setTimeout(() => {
+              window.print();
+              setTimeout(() => setIsPrinting(false), 500);
+            }, 500);
+          }
+        });
+      } else {
+        // Fallback
+        setIsPrinting(true);
+        setTimeout(() => {
+          window.print();
+          setTimeout(() => setIsPrinting(false), 500);
+        }, 500);
+      }
+    } else {
+      setIsPrinting(true);
+      setTimeout(() => {
+        window.print();
+        setTimeout(() => setIsPrinting(false), 500);
+      }, 500);
+    }
+  };
 
   useEffect(() => {
     async function loadData() {
@@ -89,13 +145,13 @@ export default function ResumeDashboardPage() {
                   <Edit3 className="w-4 h-4" />
                   Edit Resume
                 </a>
-                <a
-                  href="/resume-builder"
+                <button
+                  onClick={handleDownload}
                   className="flex items-center justify-center gap-2 py-2 px-6 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 transition-colors text-sm shadow-sm"
                 >
                   <Download className="w-4 h-4" />
                   Download PDF
-                </a>
+                </button>
             </div>
           </div>
 
@@ -145,6 +201,98 @@ export default function ResumeDashboardPage() {
         </div>
       </div>
       </div>
+
+      {/* Paywall Modal */}
+      {showPaywall && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 p-6 flex flex-col items-center text-center">
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+              <Download className="w-8 h-8 text-red-600" />
+            </div>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Limit Unduh Gratis Habis!</h3>
+            <p className="text-slate-600 mb-6 leading-relaxed">
+              Anda telah menggunakan jatah 1x unduh gratis untuk Resume/CV. Dapatkan akses cetak <span className="font-semibold text-slate-800">sepuasnya tanpa batas dan tanpa watermark</span> dengan berlangganan Paket Premium.
+            </p>
+            
+            <div className="flex flex-col gap-3 w-full">
+              <button 
+                onClick={() => router.push('/personal/dashboard/langganan')}
+                className="w-full py-3 px-4 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all active:scale-95 shadow-md shadow-emerald-200 flex items-center justify-center gap-2"
+              >
+                Lihat Paket Premium
+              </button>
+              <button 
+                onClick={() => setShowPaywall(false)}
+                className="w-full py-3 px-4 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition-all active:scale-95"
+              >
+                Nanti Saja
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden Print Container */}
+      {isPrinting && typeof window !== 'undefined' && data && createPortal(
+        <div className="print-container-wrapper bg-white">
+          <style dangerouslySetInnerHTML={{__html: `
+            @media print {
+              body > :not(.print-container-wrapper) {
+                display: none !important;
+              }
+              html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                overflow: visible !important;
+              }
+              .print-container-wrapper {
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                position: static !important;
+              }
+              #cv-print-container {
+                transform: none !important;
+                position: relative !important;
+                left: auto !important;
+                top: auto !important;
+                margin: 0 auto !important;
+                width: 210mm !important;
+                min-width: 210mm !important;
+              }
+              .cv-page {
+                box-shadow: none !important;
+                margin: 0 !important;
+                page-break-after: always;
+                break-after: page;
+              }
+              .cv-page:last-child {
+                page-break-after: auto;
+                break-after: auto;
+              }
+            }
+            @media screen {
+              .print-container-wrapper {
+                opacity: 0;
+                position: fixed;
+                pointer-events: none;
+                top: -9999px;
+                left: -9999px;
+                z-index: -9999;
+                width: 10px;
+                height: 10px;
+                overflow: hidden;
+              }
+            }
+          `}} />
+          <div className="bg-white">
+            <CVViewer data={data} forceScale={1} hideZoomControls={true} />
+          </div>
+        </div>,
+        document.body
+      )}
+
     </div>
   );
 }
