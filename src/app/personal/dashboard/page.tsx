@@ -6,6 +6,7 @@ import { FileText, Mail, Globe, ArrowRight, Sparkles, BookOpen, ChevronRight } f
 import Link from "next/link";
 import { getPublishedBlogs } from "@/app/actions/blog";
 import Image from "next/image";
+import AnnouncementCarousel from "@/components/dashboard/AnnouncementCarousel";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
@@ -182,24 +183,8 @@ export default function DashboardMainPage() {
       {/* RIGHT COLUMN: Updates & Articles */}
       <div className="w-full lg:w-[320px] xl:w-[380px] flex flex-col gap-6 shrink-0 lg:h-[700px]">
         
-        {/* Block 1: Feature Updates */}
-        <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-3xl p-6 shadow-md border border-slate-800 text-white relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Sparkles className="w-24 h-24" />
-          </div>
-          <div className="relative z-10">
-            <div className="inline-flex items-center gap-1.5 bg-indigo-500/30 text-indigo-200 px-3 py-1 rounded-full text-xs font-bold mb-4 border border-indigo-500/30">
-              <Sparkles className="w-3.5 h-3.5" /> Fitur Baru
-            </div>
-            <h3 className="text-xl font-bold mb-2">Pembaruan Sistem v2.0</h3>
-            <p className="text-slate-300 text-sm leading-relaxed mb-4">
-              Kami sedang menyiapkan fitur analitik canggih untuk melacak performa CV dan Portofolio Anda secara Real-Time. Nantikan segera!
-            </p>
-            <button className="text-sm font-semibold text-indigo-300 hover:text-white transition-colors flex items-center gap-1">
-              Pelajari Selengkapnya <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+        {/* Block 1: Announcement Carousel */}
+        <AnnouncementCarousel />
 
         {/* Block 2: Recent Articles */}
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex-1 flex flex-col min-h-0">

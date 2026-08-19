@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, FileText, Settings, ArrowLeft, Users } from "lucide-react";
+import { LayoutDashboard, FileText, Settings, ArrowLeft, Users, Megaphone } from "lucide-react";
 
 export function AdminSidebar() {
   const pathname = usePathname();
@@ -11,6 +11,7 @@ export function AdminSidebar() {
     { href: "/", label: "Dashboard", icon: LayoutDashboard },
     { href: "/users", label: "Users", icon: Users },
     { href: "/blogs", label: "Manajemen Blog", icon: FileText },
+    { href: "/announcements", label: "Broadcast Info", icon: Megaphone },
     { href: "/settings", label: "Pengaturan", icon: Settings },
   ];
 
