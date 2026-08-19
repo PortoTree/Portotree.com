@@ -398,13 +398,9 @@ export function Navbar() {
                   <Info className="w-4 h-4" />
                   Tentang kami
                 </Link>
-                <Link href={getMainUrl('/privacy-policy')} className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4" />
-                  Kebijakan Privasi
-                </Link>
-                <Link href={getMainUrl('/terms-and-conditions')} className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
-                  <FileSignature className="w-4 h-4" />
-                  Ketentuan Layanan
+                <Link href={getMainUrl('/contact')} className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 flex items-center gap-1.5">
+                  <Phone className="w-4 h-4" />
+                  Kontak
                 </Link>
               </nav>
             )}
@@ -564,8 +560,11 @@ export function Navbar() {
                             <a href={getSubdomainUrl('portofolio')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
                               <Layout className="w-4 h-4" /> Buat Portofolio
                             </a>
-                            <a href={getSubdomainUrl('resume')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 hover:text-green-600 flex items-center gap-3 text-sm">
+                            <a href={getSubdomainUrl('resume')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 border-b border-slate-100 hover:text-green-600 flex items-center gap-3 text-sm">
                               <FileText className="w-4 h-4" /> Buat CV
+                            </a>
+                            <a href={getSubdomainUrl('surat')} onClick={() => setIsMobileMenuOpen(false)} className="py-3 hover:text-green-600 flex items-center gap-3 text-sm">
+                              <FileSignature className="w-4 h-4" /> Buat Surat
                             </a>
                           </motion.div>
                         )}
@@ -574,6 +573,9 @@ export function Navbar() {
                     {renderMobileBlogAccordion()}
                     <Link href={getMainUrl('/about')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
                       <Info className="w-5 h-5" /> Tentang
+                    </Link>
+                    <Link href={getMainUrl('/contact')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
+                      <Phone className="w-5 h-5" /> Kontak
                     </Link>
                     <Link href={getMainUrl('/privacy-policy')} onClick={() => setIsMobileMenuOpen(false)} className="py-4 border-b border-slate-100 hover:text-green-600 flex items-center gap-3">
                       <ShieldCheck className="w-5 h-5" /> Kebijakan Privasi

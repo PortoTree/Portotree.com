@@ -152,6 +152,33 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
     setLinkText('');
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.ctrlKey || e.metaKey) {
+      // Shortcuts for formatting block (Headings & Paragraph)
+      if (e.altKey && e.key >= '0' && e.key <= '6') {
+        e.preventDefault();
+        const blockType = e.key === '0' ? 'p' : `h${e.key}`;
+        exec('formatBlock', blockType);
+        return;
+      }
+
+      switch (e.key.toLowerCase()) {
+        case 'b':
+          e.preventDefault();
+          if (hasSelection) exec('bold');
+          break;
+        case 'i':
+          e.preventDefault();
+          if (hasSelection) exec('italic');
+          break;
+        case 'k':
+          e.preventDefault();
+          if (hasSelection) handleOpenLinkModal();
+          break;
+      }
+    }
+  };
+
   return (
     <div className={`border border-slate-300 rounded-xl focus-within:ring-1 focus-within:ring-emerald-600 focus-within:border-emerald-600 transition-shadow bg-white relative ${className}`}>
       <style>{`
@@ -163,16 +190,35 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
         }
       `}</style>
       <div className="flex items-center gap-1 border-b border-slate-200 p-2 text-slate-500 bg-slate-50/90 backdrop-blur flex-wrap sticky top-0 z-20 rounded-t-xl">
-        <button type="button" disabled={!hasSelection} onClick={() => exec('bold')} className="p-1.5 hover:bg-slate-200 disabled:hover:bg-transparent rounded transition-colors text-slate-600 disabled:text-slate-300 disabled:cursor-not-allowed" title="Bold">
+        <div className="relative" title="Pilih Ukuran Teks (Shortcut: Ctrl + Alt + 1-6)">
+          <select
+            className="text-sm bg-transparent text-slate-600 hover:bg-slate-200 rounded px-2 py-1 outline-none cursor-pointer font-medium appearance-none pr-6"
+            onChange={(e) => exec('formatBlock', e.target.value)}
+            defaultValue="p"
+          >
+            <option value="p">Normal Text</option>
+            <option value="h1">Heading 1</option>
+            <option value="h2">Heading 2</option>
+            <option value="h3">Heading 3</option>
+            <option value="h4">Heading 4</option>
+            <option value="h5">Heading 5</option>
+            <option value="h6">Heading 6</option>
+          </select>
+          <ChevronDown size={14} className="absolute right-1.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none opacity-50" />
+        </div>
+        
+        <div className="w-[1px] h-4 bg-slate-300 mx-1"></div>
+
+        <button type="button" disabled={!hasSelection} onClick={() => exec('bold')} className="p-1.5 hover:bg-slate-200 disabled:hover:bg-transparent rounded transition-colors text-slate-600 disabled:text-slate-300 disabled:cursor-not-allowed" title="Bold (Ctrl+B)">
           <Bold size={16} />
         </button>
-        <button type="button" disabled={!hasSelection} onClick={() => exec('italic')} className="p-1.5 hover:bg-slate-200 disabled:hover:bg-transparent rounded transition-colors text-slate-600 disabled:text-slate-300 disabled:cursor-not-allowed" title="Italic">
+        <button type="button" disabled={!hasSelection} onClick={() => exec('italic')} className="p-1.5 hover:bg-slate-200 disabled:hover:bg-transparent rounded transition-colors text-slate-600 disabled:text-slate-300 disabled:cursor-not-allowed" title="Italic (Ctrl+I)">
           <Italic size={16} />
         </button>
         
         <div className="w-[1px] h-4 bg-slate-300 mx-1"></div>
         
-        <button type="button" disabled={!hasSelection} onClick={handleOpenLinkModal} className="p-1.5 hover:bg-slate-200 disabled:hover:bg-transparent rounded transition-colors text-slate-600 disabled:text-slate-300 disabled:cursor-not-allowed" title="Link">
+        <button type="button" disabled={!hasSelection} onClick={handleOpenLinkModal} className="p-1.5 hover:bg-slate-200 disabled:hover:bg-transparent rounded transition-colors text-slate-600 disabled:text-slate-300 disabled:cursor-not-allowed" title="Link (Ctrl+K)">
           <LinkIcon size={16} />
         </button>
         
@@ -221,7 +267,8 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
         onInput={handleInput}
         onBlur={handleInput}
         onPaste={handlePaste}
-        className="rich-text-editor p-3 min-h-[120px] outline-none text-slate-700 [&_b]:font-bold [&_i]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_a]:text-emerald-600 [&_a]:underline"
+        onKeyDown={handleKeyDown}
+        className="rich-text-editor p-3 min-h-[120px] outline-none text-slate-700 [&_b]:font-bold [&_i]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_a]:text-emerald-600 [&_a]:underline [&_h1]:text-3xl [&_h1]:font-extrabold [&_h1]:my-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:my-3 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:my-2 [&_h4]:text-lg [&_h4]:font-bold [&_h4]:my-2 [&_h5]:text-base [&_h5]:font-bold [&_h5]:my-1.5 [&_h6]:text-sm [&_h6]:font-bold [&_h6]:my-1"
         data-placeholder={placeholder}
       />
       
@@ -238,6 +285,12 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
                   type="text" 
                   value={linkText}
                   onChange={(e) => setLinkText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAddLink();
+                    }
+                  }}
                   className="w-full border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg px-3 py-2 outline-none text-slate-700 text-sm"
                 />
               </div>
@@ -247,6 +300,12 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
                   type="url" 
                   value={linkUrl}
                   onChange={(e) => setLinkUrl(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAddLink();
+                    }
+                  }}
                   className="w-full border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg px-3 py-2 outline-none text-slate-700 text-sm"
                 />
               </div>

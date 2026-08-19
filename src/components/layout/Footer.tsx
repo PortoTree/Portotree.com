@@ -35,6 +35,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-green-100">
               <li><Link href="https://www.portotree.com/about" target="_blank" className="hover:text-white transition-colors">Tentang kami</Link></li>
               <li><Link href="https://www.portotree.com/blog" target="_blank" className="hover:text-white transition-colors">Blog</Link></li>
+              <li><a href={getMainUrl('/contact')} className="hover:text-white transition-colors">Kontak Kami</a></li>
             </ul>
           </div>
           <div>

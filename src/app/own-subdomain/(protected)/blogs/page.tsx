@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Plus, Search, FileText, Eye, Mail } from "lucide-react";
 import { adminDb } from "@/lib/firebase/server";
 import { BroadcastButton } from "@/components/admin/BroadcastButton";
+import { SubscriberListModal } from "@/components/admin/SubscriberListModal";
 
 export default async function AdminBlogsPage() {
   const blogsResult = await getAdminBlogs();
@@ -12,10 +13,20 @@ export default async function AdminBlogsPage() {
   const draftCount = blogs.filter(b => b.status === 'draft').length;
 
   const subDocs = await adminDb.collection('subscribers').get();
-  const subscribers = subDocs.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data()
-  })) as any[];
+  const subscribers = subDocs.docs.map(doc => {
+    const data = doc.data();
+    // Serialize Firestore Timestamps to ISO strings to pass to Client Component safely
+    if (data.createdAt && typeof data.createdAt.toDate === 'function') {
+      data.createdAt = data.createdAt.toDate().toISOString();
+    }
+    if (data.subscribedAt && typeof data.subscribedAt.toDate === 'function') {
+      data.subscribedAt = data.subscribedAt.toDate().toISOString();
+    }
+    return {
+      id: doc.id,
+      ...data
+    };
+  }) as any[];
   const subscribersCount = subscribers.length;
 
   return (
@@ -59,16 +70,17 @@ export default async function AdminBlogsPage() {
               <div className="text-sm font-medium text-slate-500">Total Subscriber</div>
               <div className="text-3xl font-black text-slate-900 mt-1">{subscribersCount}</div>
               <div className="text-xs text-slate-400 mt-2">Berlangganan dari Blog</div>
+              <SubscriberListModal subscribers={subscribers} />
             </div>
           </div>
           <BroadcastButton />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div>
         
-        {/* Left Side (60%) - Article List */}
-        <div className="lg:col-span-3">
+        {/* Article List */}
+        <div>
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="relative w-full max-w-sm">
@@ -92,16 +104,17 @@ export default async function AdminBlogsPage() {
           <table className="w-full text-left border-collapse table-fixed">
             <thead>
               <tr className="bg-slate-50/50 border-b border-slate-100">
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-[40%] md:w-[45%]">Judul Artikel</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-[35%] md:w-[20%]">Status</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-[40%] md:w-[35%]">Judul Artikel</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider hidden sm:table-cell w-[20%] md:w-[15%]">Kategori</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-[30%] md:w-[15%]">Status</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider hidden md:table-cell w-[20%]">Tanggal Pembuatan</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right w-[25%] md:w-[15%]">Aksi</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right w-[30%] md:w-[15%]">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {blogs.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
                     <div className="flex flex-col items-center justify-center gap-3">
                       <div className="p-4 bg-slate-50 rounded-full">
                         <FileText className="w-8 h-8 text-slate-300" />
@@ -120,6 +133,11 @@ export default async function AdminBlogsPage() {
                       <div className="text-sm text-slate-500 truncate w-full" title={blog.slug}>
                         {blog.slug}
                       </div>
+                    </td>
+                    <td className="px-6 py-4 hidden sm:table-cell">
+                      <span className="inline-flex items-center px-2.5 py-1 text-xs font-medium bg-slate-100 text-slate-600 rounded-md truncate max-w-[120px]">
+                        {blog.category || 'Uncategorized'}
+                      </span>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center px-2.5 py-1 text-xs font-bold uppercase tracking-wider rounded-md ${blog.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
@@ -146,34 +164,6 @@ export default async function AdminBlogsPage() {
       </div>
     </div>
 
-    {/* Right Side (40%) - Subscriber List */}
-    <div className="lg:col-span-2">
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center gap-3">
-          <Mail className="w-5 h-5 text-purple-500" />
-          <h2 className="text-sm font-bold text-slate-900">Daftar Subscriber</h2>
-        </div>
-        <div className="divide-y divide-slate-100 max-h-[500px] overflow-y-auto">
-          {subscribers.length === 0 ? (
-            <div className="p-8 text-center text-slate-500">
-              <p className="text-sm">Belum ada subscriber.</p>
-            </div>
-          ) : (
-            subscribers.map((sub, idx) => (
-              <div key={sub.id || idx} className="p-4 flex flex-col hover:bg-slate-50/50 transition-colors">
-                <div className="font-medium text-slate-900 truncate">{sub.email}</div>
-                {sub.subscribedAt && (
-                  <div className="text-xs text-slate-400 mt-1">
-                    {new Date(sub.subscribedAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' })}
-                  </div>
-                )}
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-    </div>
-    
   </div>
     </div>
   );

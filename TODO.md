@@ -190,3 +190,98 @@
   - Sekarang konten akan dirender dengan ukuran *default* (`prose`) yang jauh lebih standar dan nyaman untuk dibaca (sekitar 16px).
 - **File Terdampak:**
   - `C:\PortoTree\src\app\blog\[slug]\page.tsx`
+
+## Kategori: Frontend (RichTextEditor Shortcuts)
+- **Status:** Selesai
+- **Perubahan:**
+  - Menambahkan dukungan keyboard shortcuts (jalan pintas) pada komponen `RichTextEditor` agar pengguna bisa memformat teks secara cepat.
+  - Menambahkan penanganan khusus via `onKeyDown` untuk mencegat *shortcut*:
+    - **Ctrl+B** / **Cmd+B**: Untuk *Bold* (Tebal)
+    - **Ctrl+I** / **Cmd+I**: Untuk *Italic* (Miring)
+    - **Ctrl+K** / **Cmd+K**: Untuk membuka popup penambahan *Link* (Tautan)
+  - Memperbarui teks *title/tooltip* tombol di *toolbar* agar ikut menampilkan info *shortcut* (misal: "Bold (Ctrl+B)").
+  - **[UPDATE]** Menambahkan dukungan tombol **Enter** (`onKeyDown`) pada input *Teks Link* maupun *URL* di dalam form *modal Link*, sehingga form tautan kini dapat di-*submit* tanpa perlu mengklik tombol hijau "Tambah Link" secara manual.
+  - **[BUGFIX]** Menambahkan `e.preventDefault()` saat tombol Enter ditekan pada modal link. Hal ini memperbaiki masalah di mana event "Enter" yang diteruskan ke browser menyebabkan teks seleksi (yang sedang difokuskan di background) tergantikan oleh spasi baris baru, yang menyebabkan seolah-olah teks menghilang saat link ditambahkan.
+- **File Terdampak:**
+  - `C:\PortoTree\src\components\ui\RichTextEditor.tsx`
+
+## Kategori: Frontend (Subscriber Modal & Layout)
+- **Status:** Selesai
+- **Perubahan:**
+  - Memisahkan komponen UI "Daftar Subscriber" dari halaman utama Admin Blogs menjadi bentuk *Modal* mandiri untuk menghemat ruang *layout*.
+  - Menghapus kolom pembagian layout `grid-cols-5` (60/40) di bagian bawah. Sekarang tabel Artikel menguasai layar secara utuh (*full width*).
+  - Menambahkan tombol kecil "Lihat Daftar" di dalam kartu ringkasan "Total Subscriber" yang jika ditekan akan memicu modal (popup) daftar *subscribers* tersebut.
+  - **[UPDATE DESIGN]** Menghapus efek `backdrop-blur` pada latar belakang modal karena dirasa mengganggu. Menambahkan properti `min-w` dan `min-h` agar ukuran jendela modal tidak kekecilan.
+  - **[UPDATE DESIGN]** Merombak tampilan daftar *subscriber* dari yang sebelumnya hanya tumpukan garis ke bawah (list baris), menjadi wujud lencana/label bergaya kapsul berjejer (*flex-wrap*), lengkap beserta tanggal *subscribe*-nya di sebelahnya.
+- **File Terdampak:**
+  - `C:\PortoTree\src\components\admin\SubscriberListModal.tsx` [NEW/MODIFIED]
+  - `C:\PortoTree\src\app\own-subdomain\(protected)\blogs\page.tsx`
+
+## Kategori: Frontend (Firestore Data Serialization Bugfix)
+- **Status:** Selesai
+- **Perubahan:**
+  - Memperbaiki *Runtime Error: Only plain objects can be passed to Client Components...* yang terjadi karena properti `createdAt` dan `subscribedAt` masih berbentuk objek `Firestore Timestamp` bawaan Firebase.
+  - Next.js (RSC) tidak mengizinkan pemindahan objek non-standar (_non-plain objects_) seperti *class/methods* melintasi batas Server Component ke Client Component.
+  - Memperbaiki `page.tsx` dengan memodifikasi pemetaan data (map) dari Firestore. Memanggil `toDate().toISOString()` untuk men-serialisasi objek Timestamp menjadi string format ISO statis sebelum mengumpankannya (sebagai `props`) ke dalam komponen client `<SubscriberListModal>`.
+- **File Terdampak:**
+  - `C:\PortoTree\src\app\own-subdomain\(protected)\blogs\page.tsx`
+
+## Kategori: Frontend (Blog Table Category)
+- **Status:** Selesai
+- **Perubahan:**
+  - Menambahkan kolom informasi **Kategori** pada tabel daftar artikel blog di dashboard admin.
+  - Menyesuaikan pembagian lebar kolom (lebar persentase CSS Tailwind) agar tidak berdesakan, dan menyembunyikannya secara responsif di layar yang sangat kecil (`sm` ke bawah) agar tabel tetap rapi.
+  - Memasukkan fallback *'Uncategorized'* jika artikel tersebut tidak memiliki data kategori.
+- **File Terdampak:**
+  - `C:\PortoTree\src\app\own-subdomain\(protected)\blogs\page.tsx`
+
+## Kategori: Frontend (RichTextEditor Heading Feature)
+- **Status:** Selesai
+- **Perubahan:**
+  - Menambahkan menu *dropdown* pilihan ukuran teks (Heading 1 sampai Heading 6, dan teks Normal) pada *toolbar* komponen `RichTextEditor.tsx`.
+  - Mengonfigurasi `execCommand('formatBlock')` untuk memformat blok teks sesuai pilihan dari menu dropdown.
+  - Memasukkan aturan spesifik Tailwind (mulai dari `[&_h1]` sampai dengan `[&_h6]`) secara dinamis ke dalam properti kelas di dalam area ketikan (editor div) agar ukuran huruf dari format Heading yang dipilih merender ukurannya secara visual (*WYSIWYG*) sewaktu mengetik konten.
+  - **[UPDATE SHORTCUT]** Menambahkan dukungan kombinasi tombol keyboard (jalan pintas) untuk memformat paragraf. Menggunakan `Ctrl+Alt+1` hingga `Ctrl+Alt+6` untuk Heading 1-6, dan `Ctrl+Alt+0` untuk mengembalikan ke paragraf normal (teks biasa).
+- **File Terdampak:**
+  - `C:\PortoTree\src\components\ui\RichTextEditor.tsx`
+
+## Kategori: Frontend (AdSense Privacy Compliance)
+- **Status:** Selesai
+- **Perubahan:**
+  - Memperbarui halaman Kebijakan Privasi statis dengan menyisipkan seksi baru: "Iklan Pihak Ketiga & Cookie".
+  - Menambahkan deklarasi *compliance* wajib dari Google AdSense terkait penggunaan *cookies* pelacakan (iklan hasil personalisasi) dan mencantumkan tautan penyisihan (*opt-out*) ke Setelan Iklan Google. Hal ini diwajibkan untuk lolos *review* monetisasi.
+- **File Terdampak:**
+  - `C:\PortoTree\src\app\privacy-policy\page.tsx`
+
+## Kategori: Frontend (Contact Page Creation)
+- **Status:** Selesai
+- **Perubahan:**
+  - Membuat halaman `/contact` statis baru menggunakan komponen `Navbar` dan `Footer` bawaan.
+  - Halaman ini dilengkapi dengan Formulir Kontak (Nama, Email, Topik, Pesan) dengan desain modern berbasis Tailwind CSS, serta informasi alamat email dukungan (`csportotree@gmail.com` & `teamportotree@gmail.com`). Bagian "Lokasi" telah dihapus sesuai arahan.
+  - **[UPDATE KOMUNITAS]** Menambahkan dua blok kontak khusus WhatsApp yang menampilkan "Saluran WhatsApp" dan "Grup Komunitas" lengkap dengan tombol link *invite* resmi yang dibalut dengan warna hijau khas WhatsApp (`#25D366`). *Copywriting* deskripsi pada Saluran WhatsApp telah diperbarui menjadi lebih rinci.
+  - **[UPDATE UI & BUGFIX]** Menjadikan panel Contact Form melayang (*sticky*) saat pengguna men-scroll halaman ke bawah di layar berukuran besar (*desktop*). Mengatasi masalah CSS di mana *sticky* tidak bekerja akibat `overflow-x-hidden` di *wrapper* utama (diganti menjadi `overflow-x-clip`) dan menambahkan `lg:items-start` pada *grid container* agar elemen bisa "meluncur" di jalurnya.
+  - **[UPDATE TIPOGRAFI MOBILE]** Mengoptimalkan ukuran *font* (`text-sm`, `text-base`), *margin*, dan *padding* di seluruh elemen (Hero, Title, Subtitle, Info Card, dan Form Container) khusus untuk *viewport* berukuran kecil (*mobile*) agar terlihat proporsional dan tidak kebesaran.
+  - Halaman ini bertujuan melengkapi syarat E-E-A-T dari Google AdSense yang mewajibkan penyedia situs web untuk mencantumkan profil pengelolaan web yang bisa dihubungi manusia sungguhan.
+- **File Terdampak:**
+  - `C:\PortoTree\src\app\contact\page.tsx`
+  - `C:\PortoTree\src\components\contact\ContactForm.tsx` [NEW]
+  - `C:\PortoTree\src\app\actions\contact.ts` [NEW]
+
+## Kategori: Backend (Resend Contact Form Integration)
+- **Status:** Selesai
+- **Perubahan:**
+  - Mengonfigurasi `resend.emails.send` untuk menyalurkan seluruh masukan pengguna langsung ke alamat `csportotree@gmail.com` lengkap beserta detail *replyTo*, *subject* yang dinamis, dan *HTML body* yang di-format secara profesional.
+  - Memisahkan elemen *form* statis menjadi *Client Component* mandiri (`ContactForm.tsx`) guna mengontrol *state loading*, menampilkan status "Pesan Terkirim!" (UI *Success*), dan peringatan *error*.
+  - **[UPDATE FOOTER & HEADER]** Menyematkan tautan (link) permanen menuju halaman `/contact` pada menu navigasi Footer (di bawah "Perusahaan"). Pada Header Navigation versi *desktop*, tautan Kebijakan Privasi dan Ketentuan Layanan dihapus agar lebih bersih (menyisakan Produk, Blog, Tentang Kami, dan Kontak), namun tautan hukum tersebut tetap dipertahankan di *mobile menu*.
+  - **[BUGFIX MOBILE MENU]** Menambahkan tautan "Buat Surat" (Surat Generator) yang sebelumnya tertinggal/hilang di dalam *dropdown* Produk versi *mobile*.
+- **File Terdampak:** 
+  - `C:\PortoTree\src\components\layout\Footer.tsx`
+  - `C:\PortoTree\src\components\layout\Navbar.tsx` [MODIFIED]
+
+## Kategori: Frontend (Contact Form Bugfix)
+- **Status:** Selesai
+- **Perubahan:**
+  - Memperbaiki *Runtime Error: Event handlers cannot be passed to Client Component props* yang terjadi karena penempatan fungsi `onSubmit={(e) => ...}` di dalam file *Server Component* (`page.tsx`).
+  - Menghapus fungsi *event handler* bawaan pada formulir statis. Karena halaman ini mengekspor obyek `metadata` (SEO), halaman tidak boleh diubah menjadi `"use client"`. Formulir dibiarkan statis untuk saat ini.
+- **File Terdampak:**
+  - `C:\PortoTree\src\app\contact\page.tsx`
