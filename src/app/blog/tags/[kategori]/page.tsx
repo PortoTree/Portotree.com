@@ -61,6 +61,12 @@ export default async function CategoryPage({
     return blogSlug === activeSlug;
   });
 
+  // Pagination Logic
+  const itemsPerPage = 6;
+  const currentPage = typeof resolvedSearchParams.page === 'string' ? parseInt(resolvedSearchParams.page, 10) || 1 : 1;
+  const totalPages = Math.ceil(blogs.length / itemsPerPage);
+  const paginatedBlogs = blogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("id-ID", {
       day: "numeric",
@@ -159,7 +165,7 @@ export default async function CategoryPage({
                   </div>
                 ) : (
                   <div className="grid gap-4 lg:gap-6 lg:grid-cols-1">
-                    {blogs.map((blog) => (
+                    {paginatedBlogs.map((blog) => (
                     <div key={blog.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-[#e9ecef] hover:shadow-xl transition-all duration-300 group">
                       <div className="flex flex-col md:flex-row h-full">
                         <div className="w-full md:w-80 h-56 md:h-auto flex-shrink-0 relative overflow-hidden bg-[#e9ecef]">
@@ -219,6 +225,58 @@ export default async function CategoryPage({
                       </div>
                     </div>
                   ))}
+                  
+                  {/* PAGINATION UI */}
+                  {totalPages > 1 && (
+                    <div className="flex justify-center items-center gap-2 mt-10">
+                      {currentPage > 1 && (
+                        <Link 
+                          href={`/blog/tags/${activeSlug}?page=${currentPage - 1}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
+                          className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+                        >
+                          Sebelumnya
+                        </Link>
+                      )}
+                      
+                      <div className="flex items-center gap-1 mx-2">
+                        {Array.from({ length: totalPages }).map((_, i) => {
+                          const pageNum = i + 1;
+                          const isActive = pageNum === currentPage;
+                          
+                          if (
+                            totalPages > 5 && 
+                            pageNum !== 1 && 
+                            pageNum !== totalPages && 
+                            (pageNum < currentPage - 1 || pageNum > currentPage + 1)
+                          ) {
+                            if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
+                              return <span key={pageNum} className="text-slate-400 px-1">...</span>;
+                            }
+                            return null;
+                          }
+                          
+                          return (
+                            <Link
+                              key={pageNum}
+                              href={`/blog/tags/${activeSlug}?page=${pageNum}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
+                              className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}
+                            >
+                              {pageNum}
+                            </Link>
+                          );
+                        })}
+                      </div>
+
+                      {currentPage < totalPages && (
+                        <Link 
+                          href={`/blog/tags/${activeSlug}?page=${currentPage + 1}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
+                          className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+                        >
+                          Selanjutnya
+                        </Link>
+                      )}
+                    </div>
+                  )}
                 </div>
                 )}
               </div>

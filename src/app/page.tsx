@@ -93,14 +93,14 @@ export default function Home() {
                 
                 <h1 className="text-[2.5rem] leading-[1.15] sm:text-5xl lg:text-[3.25rem] xl:text-6xl font-extrabold tracking-tight mb-5 lg:mb-6 flex flex-col">
                   <span className="lg:whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600">Satu platform untuk</span>
-                  <span className="py-1 md:py-2 flex items-center min-h-[1.2em]">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500 pb-2">
-                      {displayText}
+                  <span className="py-1 md:py-2 flex items-center min-h-[1.5em]">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500 pb-2 min-w-[20px]">
+                      {displayText || '\u200B'}
                     </span>
                     <motion.span 
                       animate={{ opacity: [1, 0] }} 
                       transition={{ repeat: Infinity, duration: 0.8 }}
-                      className="inline-block w-1 md:w-1.5 h-[1em] bg-orange-500 ml-1.5 md:ml-2 mb-2"
+                      className="inline-block w-1 md:w-1.5 h-[1em] bg-orange-500 ml-1 md:ml-2 mb-2"
                     />
                   </span>
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600">Digital anda</span>
@@ -208,15 +208,15 @@ export default function Home() {
               {/* Product 2: CV Builder */}
               <a href={getSubdomainUrl('resume')} className="group block h-full">
                 <div className="h-full bg-white rounded-3xl p-8 border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden flex flex-col">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
-                  <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+                  <div className="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mb-6">
                     <FileText className="w-7 h-7" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">CV Builder</h3>
                   <p className="text-gray-600 mb-6 leading-relaxed flex-grow text-sm">
                     Buat CV / Resume standar ATS (Applicant Tracking System) yang profesional dalam hitungan menit untuk meningkatkan peluang lolos HRD.
                   </p>
-                  <div className="flex items-center text-blue-600 font-bold text-sm mt-auto">
+                  <div className="flex items-center text-amber-600 font-bold text-sm mt-auto">
                     Buat CV Sekarang <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
@@ -225,15 +225,15 @@ export default function Home() {
               {/* Product 3: Surat Generator */}
               <a href={getSubdomainUrl('surat')} className="group block h-full">
                 <div className="h-full bg-white rounded-3xl p-8 border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden flex flex-col">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
-                  <div className="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mb-6">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+                  <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
                     <Mail className="w-7 h-7" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">Surat Generator</h3>
                   <p className="text-gray-600 mb-6 leading-relaxed flex-grow text-sm">
-                    Buat berbagai macam surat profesional secara otomatis dengan bantuan AI. Mulai dari surat lamaran kerja (Cover Letter) hingga surat pengunduran diri.
+                    Buat berbagai macam surat profesional secara otomatis. Mulai dari surat lamaran kerja (Cover Letter) hingga surat pengunduran diri.
                   </p>
-                  <div className="flex items-center text-amber-600 font-bold text-sm mt-auto">
+                  <div className="flex items-center text-blue-600 font-bold text-sm mt-auto">
                     Buat Surat <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
