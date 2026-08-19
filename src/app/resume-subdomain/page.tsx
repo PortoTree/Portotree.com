@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, FileText, CheckCircle2, ShieldCheck, Zap, Layout, Download, Type, Heading, Target, Globe2, Briefcase, GraduationCap, Paintbrush, FileSearch, Rocket } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { ActionCTA } from "@/components/layout/ActionCTA";
 
 // Templates
 import { ATSClassic } from "@/components/cv-builder/templates/ATSClassic";
@@ -692,6 +693,8 @@ export default function ResumeSubdomain() {
           </div>
         </div>
       </section>
+      
+      <ActionCTA />
 
       <Footer />
     </div>

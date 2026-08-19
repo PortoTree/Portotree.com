@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, FileText, CheckCircle2, ShieldCheck, Zap, Users, Heart, Clock, Award } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { ActionCTA } from "@/components/layout/ActionCTA";
 
 const populerTemplates = [
   { id: 1, title: "Surat Lamaran Pekerjaan", type: "Kerja", icon: <FileText className="w-7 h-7" />, color: "bg-emerald-50 text-emerald-600", desc: "Buat surat lamaran kerja yang rapi, formal, dan sesuai standar HR. Praktis, langsung siap kirim.", slug: "lamaran-pekerjaan" },
@@ -41,7 +42,7 @@ export default function SuratSubdomain() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto"
+            className="flex flex-col items-start md:items-center justify-start md:justify-center text-left md:text-center max-w-3xl md:max-w-4xl mx-auto"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border border-emerald-100 text-sm font-medium text-emerald-600 mb-6">
               <FileText className="w-4 h-4" />
@@ -150,6 +151,8 @@ export default function SuratSubdomain() {
           </div>
         </div>
       </section>
+
+      <ActionCTA />
 
       <Footer />
     </div>
