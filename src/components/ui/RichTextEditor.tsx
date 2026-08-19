@@ -112,7 +112,7 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
              }
           } else if (targetToWrap) {
              // Bungkus elemen tersebut
-             newEl.innerHTML = targetToWrap.innerHTML;
+             newEl.innerHTML = (targetToWrap as HTMLElement).innerHTML || targetToWrap.textContent || '';
              targetToWrap.parentNode?.replaceChild(newEl, targetToWrap);
           }
         }
