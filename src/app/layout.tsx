@@ -5,6 +5,7 @@ import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { UIProvider } from "@/components/ui/UIProvider";
+import { CookieBanner } from "@/components/layout/CookieBanner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,6 +51,8 @@ export default function RootLayout({
           {children}
           {/* Sonner Toaster */}
           <Toaster position="top-center" style={{ zIndex: 99999 }} />
+          {/* Global Cookie Consent Banner */}
+          <CookieBanner />
         </UIProvider>
       </body>
     </html>

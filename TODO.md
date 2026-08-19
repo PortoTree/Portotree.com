@@ -274,9 +274,26 @@
   - Memisahkan elemen *form* statis menjadi *Client Component* mandiri (`ContactForm.tsx`) guna mengontrol *state loading*, menampilkan status "Pesan Terkirim!" (UI *Success*), dan peringatan *error*.
   - **[UPDATE FOOTER & HEADER]** Menyematkan tautan (link) permanen menuju halaman `/contact` pada menu navigasi Footer (di bawah "Perusahaan"). Pada Header Navigation versi *desktop*, tautan Kebijakan Privasi dan Ketentuan Layanan dihapus agar lebih bersih (menyisakan Produk, Blog, Tentang Kami, dan Kontak), namun tautan hukum tersebut tetap dipertahankan di *mobile menu*.
   - **[BUGFIX MOBILE MENU]** Menambahkan tautan "Buat Surat" (Surat Generator) yang sebelumnya tertinggal/hilang di dalam *dropdown* Produk versi *mobile*.
+  - **[BUGFIX MOBILE MENU]** Menambahkan tautan "Buat Surat" (Surat Generator) yang sebelumnya tertinggal/hilang di dalam *dropdown* Produk versi *mobile*.
 - **File Terdampak:** 
   - `C:\PortoTree\src\components\layout\Footer.tsx`
   - `C:\PortoTree\src\components\layout\Navbar.tsx` [MODIFIED]
+
+## Kategori: Frontend (AdSense Compliance - Disclaimer)
+- **Status:** Selesai
+- **Perubahan:**
+  - Membuat statis *page* baru `/disclaimer` dengan desain UI modern yang koheren dengan halaman *Privacy Policy*.
+  - Menulis 6 pasal sanggahan hukum (Persetujuan, Fitur Generator Dokumen, Jaminan Karir, Tautan Eksternal, Iklan AdSense, dan Pembaruan) secara detail untuk melindungi PortoTree dari tuntutan hukum *user*.
+  - Menyematkan tautan *Disclaimer* tersebut ke dalam Footer di bawah kategori **Legal** menggunakan utilitas `getMainUrl()` agar tautan tetap kokoh menuju domain induk saat sedang berada di *subdomain*.
+  - **[BUGFIX TEXT]** Memperbaiki kesalahan *rendering* format teks Markdown (seperti `*cookies*` dan `*hyperlink*`) di dalam *React JSX* dengan menggantinya menjadi *tag* HTML `<i>` (italic) agar tampil rapi.
+  - **[NEW FEATURE: COOKIE BANNER]** Membuat komponen *Client* `CookieBanner.tsx` beranimasi halus (menggunakan *Framer Motion*) yang berfungsi meminta izin privasi penggunaan *cookies* kepada pengunjung. Komponen ini diinjeksi ke dalam global `layout.tsx` sehingga aktif di seluruh rute dan *subdomain*. Jika pengguna menekan tombol "Saya Mengerti", preferensinya akan direkam ke *Local Storage* agar *banner* tidak terus muncul.
+  - **[DESIGN TWEAK & BUGFIX]** Mengubah tata letak (*layout*) *Cookie Banner* di versi *desktop* menjadi *full horizontal bar* yang benar-benar menempel ke batas bawah layar (*flush*), tanpa batas sisi (*edge-to-edge background*), namun menahan teks kontennya tetap terpusat seragam (*max-w-7xl*). Ukuran font juga diperbesar (*md:text-base*). Susunan letak tombol diturunkan posisinya dan disejajarkan ke tengah (*justify-center*) dengan urutan tombol ditukar (kiri: Kebijakan Privasi, kanan: Saya Mengerti). Tautan "Kebijakan Privasi" diubah visualnya menjadi tombol *outline* (bergaris) agar seimbang.
+  - **[MOBILE UI BUGFIX]** Memperbaiki isu tombol terdorong (terpotong) pada layar *mobile*. Kelas `flex-wrap` dan `whitespace-nowrap` yang kaku dihapus, diganti dengan fondasi `flex-row flex-1` absolut diiringi pengecilan gap (`gap-2`) dan ruang spasi (`px-2`). Teks diizinkan untuk membungkus (*wrap / leading-tight*) secara alami ke bawah bila sangat sempit. Ini memaksa tombol untuk selalu bertahan di formasi 2 kolom sejajar (kiri-kanan) di ukuran layar sedini apapun tanpa meluber ke luar batas.
+- **File Terdampak:**
+  - `C:\PortoTree\src\app\disclaimer\page.tsx` [NEW]
+  - `C:\PortoTree\src\components\layout\Footer.tsx` [MODIFIED]
+  - `C:\PortoTree\src\components\layout\CookieBanner.tsx` [MODIFIED]
+  - `C:\PortoTree\src\app\layout.tsx` [MODIFIED]
 
 ## Kategori: Frontend (Contact Form Bugfix)
 - **Status:** Selesai

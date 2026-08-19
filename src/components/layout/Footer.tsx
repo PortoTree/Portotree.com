@@ -43,6 +43,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-green-100">
               <li><a href={getMainUrl('/privacy-policy')} className="hover:text-white transition-colors">Kebijakan Privasi</a></li>
               <li><a href={getMainUrl('/terms-and-conditions')} className="hover:text-white transition-colors">Ketentuan Layanan</a></li>
+              <li><a href={getMainUrl('/disclaimer')} className="hover:text-white transition-colors">Disclaimer</a></li>
             </ul>
           </div>
         </div>
