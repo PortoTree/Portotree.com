@@ -107,7 +107,9 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
           if (targetToWrap === editorRef.current) {
              // Berarti raw text di dalam root editor
              newEl.textContent = rawNode.textContent;
-             editorRef.current.replaceChild(newEl, rawNode);
+             if (editorRef.current) {
+               editorRef.current.replaceChild(newEl, rawNode);
+             }
           } else if (targetToWrap) {
              // Bungkus elemen tersebut
              newEl.innerHTML = targetToWrap.innerHTML;
