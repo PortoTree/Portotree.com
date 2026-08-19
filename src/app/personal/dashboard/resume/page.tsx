@@ -60,7 +60,7 @@ export default function ResumeDashboardPage() {
     <div className="p-6 md:p-8 max-w-6xl mx-auto">
       <div className="mb-6 md:mb-8">
         <h1 className="text-2xl md:text-3xl font-extrabold text-slate-800 mb-1.5 md:mb-2">Resume / CV</h1>
-        <p className="text-sm md:text-base text-slate-500">Kelola resume berstandar ATS Anda.</p>
+        <p className="text-sm md:text-base text-slate-500">Kelola resume professional anda.</p>
       </div>
 
       <div className="space-y-6">
