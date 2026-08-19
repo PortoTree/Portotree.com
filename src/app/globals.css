@@ -260,3 +260,43 @@ html {
 .blog-content a:hover * {
   color: #1d4ed8 !important;
 }
+
+/* 
+ * EXPLICIT OVERRIDES FOR BLOG CONTENT AND EDITOR 
+ * To guarantee Headings are sized correctly regardless of Tailwind typography quirks
+ */
+.blog-content h1, .rich-text-editor h1 {
+  font-size: 2.25rem !important;
+  line-height: 2.5rem !important;
+  font-weight: 800 !important;
+  margin-top: 2rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.blog-content h2, .rich-text-editor h2 {
+  font-size: 1.875rem !important;
+  line-height: 2.25rem !important;
+  font-weight: 700 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.blog-content h3, .rich-text-editor h3 {
+  font-size: 1.5rem !important;
+  line-height: 2rem !important;
+  font-weight: 700 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.blog-content p, .rich-text-editor p {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+  line-height: 1.75 !important;
+}
+
+/* Ensure no massive spacing if double paragraphs exist */
+.blog-content p:empty, .rich-text-editor p:empty {
+  display: none !important;
+}
+

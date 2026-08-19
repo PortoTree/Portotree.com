@@ -94,8 +94,15 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               prose-blockquote:border-l-emerald-500 prose-blockquote:bg-emerald-50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-xl prose-blockquote:not-italic
               prose-li:marker:text-emerald-500
               prose-a:text-blue-600 prose-a:underline prose-a:decoration-blue-600/30 prose-a:underline-offset-4 prose-a:font-bold hover:prose-a:text-blue-800 hover:prose-a:decoration-blue-800"
-            dangerouslySetInnerHTML={{ __html: blog.content }}
-          />
+          >
+            <style>{`
+              .blog-content h1 { font-size: 2.25rem !important; line-height: 2.5rem !important; font-weight: 800 !important; margin-top: 2rem !important; margin-bottom: 1rem !important; }
+              .blog-content h2 { font-size: 1.875rem !important; line-height: 2.25rem !important; font-weight: 700 !important; margin-top: 1.5rem !important; margin-bottom: 0.75rem !important; }
+              .blog-content h3 { font-size: 1.5rem !important; line-height: 2rem !important; font-weight: 700 !important; margin-top: 1.5rem !important; margin-bottom: 0.5rem !important; }
+              .blog-content p { margin-top: 1rem !important; margin-bottom: 1rem !important; line-height: 1.75 !important; }
+            `}</style>
+            <div dangerouslySetInnerHTML={{ __html: blog.content }} />
+          </article>
           
           <div className="mt-16 pt-8 border-t border-slate-100 flex flex-col items-center gap-4">
             <p className="text-slate-500 font-medium text-center">Terima kasih telah membaca.</p>

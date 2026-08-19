@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { getBlogById, updateBlog, deleteBlog } from "@/app/actions/blog";
 import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { ImageUpload } from "@/components/ui/ImageUpload";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -138,7 +138,7 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-20">
+    <div className="max-w-[1600px] mx-auto space-y-6 pb-20">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-4">
           <Link href="/blogs" className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
@@ -165,8 +165,8 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 space-y-6">
+      <div className="flex flex-col xl:flex-row gap-6 items-start">
+        <div className="flex-1 w-full space-y-6 min-w-0">
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div className="space-y-2">
               <Label htmlFor="title" className="text-slate-700 font-bold">Judul Artikel</Label>
@@ -206,10 +206,12 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
                 </Select>
 
                 <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" type="button" className="shrink-0 px-3" onClick={() => setNewCategory(formData.category)} title="Custom Kategori">
-                      <Plus className="w-4 h-4" />
-                    </Button>
+                  <DialogTrigger 
+                    className={buttonVariants({ variant: "outline", className: "shrink-0 px-3" })}
+                    onClick={() => setNewCategory(formData.category)} 
+                    title="Custom Kategori"
+                  >
+                    <Plus className="w-4 h-4" />
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
@@ -226,14 +228,15 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
                       </div>
                     </div>
                     <DialogFooter>
-                      <DialogClose asChild>
-                        <Button type="button" onClick={() => {
+                      <DialogClose 
+                        className={buttonVariants({ variant: "default" })}
+                        onClick={() => {
                           if (newCategory.trim()) {
                             setFormData(prev => ({ ...prev, category: newCategory.trim() }));
                           }
-                        }}>
-                          Gunakan Kategori Ini
-                        </Button>
+                        }}
+                      >
+                        Gunakan Kategori Ini
                       </DialogClose>
                     </DialogFooter>
                   </DialogContent>
@@ -253,7 +256,7 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="w-full xl:w-[380px] shrink-0 space-y-6">
           {/* Actions Sidebar */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div className="space-y-4">

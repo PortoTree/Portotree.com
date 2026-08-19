@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Bold, Italic, Link as LinkIcon, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronDown, RotateCcw } from 'lucide-react';
+import { Bold, Italic, Link as LinkIcon, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronDown, RotateCcw, Table as TableIcon, Search, X, ChevronUp } from 'lucide-react';
 
 interface RichTextEditorProps {
   value: string;
@@ -17,9 +17,13 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
   const [linkUrl, setLinkUrl] = useState('');
   const [linkText, setLinkText] = useState('');
   const [savedSelection, setSavedSelection] = useState<Range | null>(null);
+  const selectionRef = useRef<Range | null>(null);
 
   const [hasSelection, setHasSelection] = useState(false);
   const [hasFormatting, setHasFormatting] = useState(false);
+  
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Sync value when changed externally (e.g. opening different items or resetting form)
   useEffect(() => {
@@ -51,12 +55,71 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
   }, []);
 
   const exec = (command: string, val: string | undefined = undefined) => {
-    document.execCommand(command, false, val);
+    editorRef.current?.focus();
+    
+    let success = document.execCommand(command, false, val);
+    
+    if (!success && command === 'formatBlock' && val) {
+      success = document.execCommand('formatBlock', false, `<${val.toUpperCase()}>`);
+      if (!success) {
+        success = document.execCommand('formatBlock', false, val.toUpperCase());
+      }
+    }
+
+    // MANUAL FALLBACK: Jika formatBlock masih gagal atau browser aneh
+    if (command === 'formatBlock' && val) {
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        let node = selection.anchorNode;
+        let blockFound = false;
+        
+        // Cari blok terdekat
+        while (node && node !== editorRef.current) {
+          if (node.nodeType === 1) { // Element Node
+            const el = node as HTMLElement;
+            const tag = el.tagName.toLowerCase();
+            // Jika elemen adalah block
+            if (['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div'].includes(tag)) {
+              blockFound = true;
+              if (tag !== val.toLowerCase()) {
+                const newEl = document.createElement(val);
+                newEl.innerHTML = el.innerHTML;
+                el.parentNode?.replaceChild(newEl, el);
+                
+                const newRange = document.createRange();
+                newRange.selectNodeContents(newEl);
+                selection.removeAllRanges();
+                selection.addRange(newRange);
+              }
+              break;
+            }
+          }
+          node = node.parentNode;
+        }
+
+        // Jika tidak ada block sama sekali (misal raw text), bungkus text node tersebut!
+        if (!blockFound && selection.anchorNode) {
+          const rawNode = selection.anchorNode;
+          const newEl = document.createElement(val);
+          // Kalau dia text node, kita ambil parent element (misal <b> atau langsung editor)
+          const targetToWrap = rawNode.nodeType === 3 ? rawNode.parentElement : rawNode;
+          
+          if (targetToWrap === editorRef.current) {
+             // Berarti raw text di dalam root editor
+             newEl.textContent = rawNode.textContent;
+             editorRef.current.replaceChild(newEl, rawNode);
+          } else if (targetToWrap) {
+             // Bungkus elemen tersebut
+             newEl.innerHTML = targetToWrap.innerHTML;
+             targetToWrap.parentNode?.replaceChild(newEl, targetToWrap);
+          }
+        }
+      }
+    }
+
     if (editorRef.current) {
       onChange(editorRef.current.innerHTML);
     }
-    // Maintain focus
-    editorRef.current?.focus();
   };
 
   const handleInput = () => {
@@ -69,9 +132,110 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    // Strip HTML formatting on paste to prevent weird backgrounds/styles
+    
     const text = e.clipboardData.getData('text/plain');
-    document.execCommand('insertText', false, text);
+    
+    // Auto-Format AI/Markdown to HTML
+    let html = text;
+
+    // Escape basic HTML to prevent XSS
+    html = html.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+    // Headings
+    html = html.replace(/^\s*###\s+(.*$)/gim, '<h3>$1</h3>');
+    html = html.replace(/^\s*##\s+(.*$)/gim, '<h2>$1</h2>');
+    html = html.replace(/^\s*#\s+(.*$)/gim, '<h1>$1</h1>');
+
+    // LaTeX / Symbols
+    html = html.replace(/\$\s*\\rightarrow\s*\$/g, '→');
+    html = html.replace(/\$\s*\\leftarrow\s*\$/g, '←');
+    html = html.replace(/\$\s*\\leftrightarrow\s*\$/g, '↔');
+    html = html.replace(/\\rightarrow/g, '→');
+    html = html.replace(/\\leftarrow/g, '←');
+
+    // Bold & Italic
+    html = html.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+    html = html.replace(/\*(.*?)\*/g, '<i>$1</i>');
+    html = html.replace(/__(.*?)__/g, '<b>$1</b>');
+    html = html.replace(/_(.*?)_/g, '<i>$1</i>');
+
+    // Code inline
+    html = html.replace(/`(.*?)`/g, '<code class="bg-slate-100 px-1 rounded text-sm text-pink-600">$1</code>');
+
+    // Links
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-emerald-600 underline">$1</a>');
+
+    // Parse line by line for Lists and Tables
+    const lines = html.split('\n');
+    let inTable = false;
+    let listType: 'ul' | 'ol' | null = null;
+    const result = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+
+      // Table parsing
+      if (line.startsWith('|') && line.endsWith('|')) {
+        if (listType) { result.push(`</${listType}>`); listType = null; }
+        
+        if (!inTable) {
+          result.push('<table class="w-full border-collapse border border-slate-300 my-4"><tbody>');
+          inTable = true;
+        }
+        // Skip separator row
+        if (line.match(/^\|[\s-:]+\|/)) continue;
+        
+        const cells = line.split('|').slice(1, -1).map(c => c.trim());
+        const cellHtml = cells.map(c => `<td class="border border-slate-300 p-2">${c}</td>`).join('');
+        result.push(`<tr>${cellHtml}</tr>`);
+        continue;
+      } else if (inTable) {
+        result.push('</tbody></table>');
+        inTable = false;
+      }
+
+      // Unordered list
+      if (line.match(/^[-*]\s+(.*)/)) {
+        if (listType !== 'ul') {
+          if (listType) result.push(`</${listType}>`);
+          result.push('<ul class="list-disc pl-5 my-2">');
+          listType = 'ul';
+        }
+        const textStr = line.replace(/^[-*]\s+(.*)/, '$1');
+        result.push(`<li>${textStr}</li>`);
+        continue;
+      } 
+      // Ordered list
+      else if (line.match(/^\d+\.\s+(.*)/)) {
+        if (listType !== 'ol') {
+          if (listType) result.push(`</${listType}>`);
+          result.push('<ol class="list-decimal pl-5 my-2">');
+          listType = 'ol';
+        }
+        const textStr = line.replace(/^\d+\.\s+(.*)/, '$1');
+        result.push(`<li>${textStr}</li>`);
+        continue;
+      }
+      else if (listType) {
+        result.push(`</${listType}>`);
+        listType = null;
+      }
+
+      // Paragraphs
+      if (line === '') {
+        continue;
+      } else if (!line.startsWith('<h') && !line.startsWith('<t') && !line.startsWith('<u') && !line.startsWith('<o')) {
+        result.push(`<p>${line}</p>`);
+      } else {
+        result.push(line);
+      }
+    }
+
+    if (inTable) result.push('</tbody></table>');
+    if (listType) result.push(`</${listType}>`);
+
+    const finalHtml = result.join('');
+    document.execCommand('insertHTML', false, finalHtml);
   };
 
   const checkFormatting = (html: string) => {
@@ -152,7 +316,60 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
     setLinkText('');
   };
 
+  const handleSearch = (backward = false) => {
+    if (!searchQuery) return;
+    window.find(searchQuery, false, backward, true, false, false, false);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    // Auto-Format / Text Replacement (e.g., -> becomes →, $\rightarrow$ becomes →)
+    if (e.key === ' ' || e.key === 'Enter') {
+      const selection = window.getSelection();
+      if (selection && selection.focusNode && selection.focusNode.nodeType === Node.TEXT_NODE) {
+        const node = selection.focusNode;
+        const offset = selection.focusOffset;
+        const text = node.textContent || '';
+        const textBefore = text.slice(0, offset);
+        
+        const replacements: Record<string, string> = {
+          '$\\rightarrow$': '→',
+          '->': '→',
+          '<-': '←',
+          '<->': '↔',
+          '=>': '⇒',
+          '$\\leftarrow$': '←',
+          '$\\leftrightarrow$': '↔',
+        };
+        
+        for (const [key, value] of Object.entries(replacements)) {
+          if (textBefore.endsWith(key)) {
+            e.preventDefault(); // Mencegah spasi/enter default
+            
+            // Ubah text di dalam text node langsung
+            node.textContent = textBefore.slice(0, -key.length) + value + text.slice(offset);
+            
+            // Perbaiki posisi kursor tepat setelah karakter yang diganti
+            const newOffset = offset - key.length + value.length;
+            const range = document.createRange();
+            range.setStart(node, newOffset);
+            range.setEnd(node, newOffset);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            // Lalu masukkan karakter pemicunya (spasi atau enter)
+            if (e.key === ' ') {
+              document.execCommand('insertText', false, ' ');
+            } else if (e.key === 'Enter') {
+              document.execCommand('insertParagraph', false);
+            }
+            
+            if (editorRef.current) onChange(editorRef.current.innerHTML);
+            return; // Hentikan eksekusi setelah melakukan auto-format
+          }
+        }
+      }
+    }
+
     if (e.ctrlKey || e.metaKey) {
       // Shortcuts for formatting block (Headings & Paragraph)
       if (e.altKey && e.key >= '0' && e.key <= '6') {
@@ -175,6 +392,10 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
           e.preventDefault();
           if (hasSelection) handleOpenLinkModal();
           break;
+        case 'f':
+          e.preventDefault();
+          setShowSearch(true);
+          break;
       }
     }
   };
@@ -182,6 +403,10 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
   return (
     <div className={`border border-slate-300 rounded-xl focus-within:ring-1 focus-within:ring-emerald-600 focus-within:border-emerald-600 transition-shadow bg-white relative ${className}`}>
       <style>{`
+        .rich-text-editor h1 { font-size: 2.25rem !important; line-height: 2.5rem !important; font-weight: 800 !important; margin-top: 2rem !important; margin-bottom: 1rem !important; }
+        .rich-text-editor h2 { font-size: 1.875rem !important; line-height: 2.25rem !important; font-weight: 700 !important; margin-top: 1.5rem !important; margin-bottom: 0.75rem !important; }
+        .rich-text-editor h3 { font-size: 1.5rem !important; line-height: 2rem !important; font-weight: 700 !important; margin-top: 1.5rem !important; margin-bottom: 0.5rem !important; }
+        .rich-text-editor p { margin-top: 1rem !important; margin-bottom: 1rem !important; line-height: 1.75 !important; }
         .rich-text-editor:empty::before {
           content: attr(data-placeholder);
           color: #94a3b8;
@@ -190,21 +415,11 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
         }
       `}</style>
       <div className="flex items-center gap-1 border-b border-slate-200 p-2 text-slate-500 bg-slate-50/90 backdrop-blur flex-wrap sticky top-0 z-20 rounded-t-xl">
-        <div className="relative" title="Pilih Ukuran Teks (Shortcut: Ctrl + Alt + 1-6)">
-          <select
-            className="text-sm bg-transparent text-slate-600 hover:bg-slate-200 rounded px-2 py-1 outline-none cursor-pointer font-medium appearance-none pr-6"
-            onChange={(e) => exec('formatBlock', e.target.value)}
-            defaultValue="p"
-          >
-            <option value="p">Normal Text</option>
-            <option value="h1">Heading 1</option>
-            <option value="h2">Heading 2</option>
-            <option value="h3">Heading 3</option>
-            <option value="h4">Heading 4</option>
-            <option value="h5">Heading 5</option>
-            <option value="h6">Heading 6</option>
-          </select>
-          <ChevronDown size={14} className="absolute right-1.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none opacity-50" />
+        <div className="flex items-center gap-1 border-r border-slate-300 pr-2">
+          <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => exec('formatBlock', 'h1')} className="px-2 py-1 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded transition-colors" title="Heading 1">H1</button>
+          <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => exec('formatBlock', 'h2')} className="px-2 py-1 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded transition-colors" title="Heading 2">H2</button>
+          <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => exec('formatBlock', 'h3')} className="px-2 py-1 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded transition-colors" title="Heading 3">H3</button>
+          <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => exec('formatBlock', 'p')} className="px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-200 rounded transition-colors" title="Normal Text (Paragraph)">P</button>
         </div>
         
         <div className="w-[1px] h-4 bg-slate-300 mx-1"></div>
@@ -260,7 +475,70 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
         <button type="button" disabled={!hasFormatting} onClick={handleReset} className="p-1.5 hover:bg-slate-200 disabled:hover:bg-transparent rounded transition-colors text-slate-600 disabled:text-slate-300 disabled:cursor-not-allowed" title="Reset Format">
           <RotateCcw size={16} />
         </button>
+        
+        <div className="w-[1px] h-4 bg-slate-300 mx-1"></div>
+
+        <button 
+          type="button" 
+          onClick={() => {
+            const tableHTML = `<table class="w-full border-collapse border border-slate-300 my-4"><tbody><tr><td class="border border-slate-300 p-2">Kolom 1</td><td class="border border-slate-300 p-2">Kolom 2</td></tr><tr><td class="border border-slate-300 p-2">Data 1</td><td class="border border-slate-300 p-2">Data 2</td></tr></tbody></table><p><br></p>`;
+            exec('insertHTML', tableHTML);
+          }} 
+          className="p-1.5 hover:bg-slate-200 rounded transition-colors text-slate-600" 
+          title="Sisipkan Tabel"
+        >
+          <TableIcon size={16} />
+        </button>
+
+        <button 
+          type="button" 
+          onClick={() => setShowSearch(!showSearch)} 
+          className={`p-1.5 rounded transition-colors text-slate-600 ml-auto ${showSearch ? 'bg-emerald-100 text-emerald-700' : 'hover:bg-slate-200'}`} 
+          title="Cari (Ctrl+F)"
+        >
+          <Search size={16} />
+        </button>
       </div>
+
+      {/* Search Bar UI */}
+      {showSearch && (
+        <div className="flex items-center gap-2 p-2 border-b border-slate-200 bg-emerald-50/50 text-sm animate-in fade-in slide-in-from-top-2">
+          <Search className="w-4 h-4 text-emerald-600 ml-1" />
+          <input 
+            autoFocus
+            type="text" 
+            placeholder="Ketik untuk mencari kata..." 
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              // Opsional: auto cari saat ngetik bisa pakai debounce, tapi manual tekan enter lebih aman di contenteditable
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSearch(e.shiftKey);
+              }
+              if (e.key === 'Escape') {
+                setShowSearch(false);
+              }
+            }}
+            className="flex-1 bg-transparent outline-none text-slate-700 placeholder:text-slate-400 font-medium px-2"
+          />
+          <div className="flex items-center gap-1 mr-1">
+            <button type="button" onClick={() => handleSearch(true)} className="p-1.5 hover:bg-white hover:shadow-sm rounded text-slate-600 transition-all" title="Cari Sebelumnya (Shift+Enter)">
+              <ChevronUp size={16} />
+            </button>
+            <button type="button" onClick={() => handleSearch(false)} className="p-1.5 hover:bg-white hover:shadow-sm rounded text-slate-600 transition-all" title="Cari Selanjutnya (Enter)">
+              <ChevronDown size={16} />
+            </button>
+            <div className="w-[1px] h-4 bg-slate-300 mx-1"></div>
+            <button type="button" onClick={() => setShowSearch(false)} className="p-1.5 hover:bg-red-100 hover:text-red-600 rounded text-slate-500 transition-colors" title="Tutup Pencarian (Esc)">
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+      )}
+
       <div 
         ref={editorRef}
         contentEditable
@@ -268,7 +546,14 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
         onBlur={handleInput}
         onPaste={handlePaste}
         onKeyDown={handleKeyDown}
-        className="rich-text-editor p-3 min-h-[120px] outline-none text-slate-700 [&_b]:font-bold [&_i]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_a]:text-emerald-600 [&_a]:underline [&_h1]:text-3xl [&_h1]:font-extrabold [&_h1]:my-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:my-3 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:my-2 [&_h4]:text-lg [&_h4]:font-bold [&_h4]:my-2 [&_h5]:text-base [&_h5]:font-bold [&_h5]:my-1.5 [&_h6]:text-sm [&_h6]:font-bold [&_h6]:my-1"
+        className="rich-text-editor prose prose-slate max-w-none p-4 min-h-[120px] outline-none
+          prose-headings:font-extrabold prose-headings:tracking-tight prose-headings:text-slate-900
+          prose-p:leading-relaxed prose-p:text-slate-600
+          prose-li:text-slate-600
+          prose-img:rounded-2xl prose-img:shadow-lg
+          prose-blockquote:border-l-emerald-500 prose-blockquote:bg-emerald-50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-xl prose-blockquote:not-italic
+          prose-li:marker:text-emerald-500
+          prose-a:text-emerald-600 prose-a:underline prose-a:decoration-emerald-600/30 prose-a:underline-offset-4 prose-a:font-bold hover:prose-a:text-emerald-800 hover:prose-a:decoration-emerald-800"
         data-placeholder={placeholder}
       />
       
