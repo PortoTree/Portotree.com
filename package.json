@@ -25,6 +25,7 @@
     "@radix-ui/react-accordion": "^1.2.16",
     "@supabase/ssr": "^0.12.1",
     "@supabase/supabase-js": "^2.110.4",
+    "@tailwindcss/typography": "^0.5.20",
     "@tiptap/react": "^3.29.2",
     "@tiptap/starter-kit": "^3.29.2",
     "class-variance-authority": "^0.7.1",

@@ -234,7 +234,10 @@ function CVBuilderContent() {
                       {CV_TEMPLATES.filter(t => t.tier === 'free').map((tpl) => (
                         <button
                           key={tpl.id}
-                          onClick={() => updateConfig({ templateId: tpl.id })}
+                          onClick={() => {
+                            updateConfig({ templateId: tpl.id });
+                            router.replace(`/resume-builder?template=${tpl.id}`, { scroll: false });
+                          }}
                           className={`flex flex-col items-center p-3 border rounded-xl transition-all relative ${config.templateId === tpl.id ? 'border-blue-600 bg-blue-50 ring-1 ring-blue-600' : 'border-gray-200 hover:border-gray-300 bg-white'}`}
                         >
                           <div className="w-full aspect-[1/1.4] bg-gray-100 rounded mb-2 border shadow-sm overflow-hidden relative">
@@ -264,7 +267,10 @@ function CVBuilderContent() {
                       {CV_TEMPLATES.filter(t => t.tier !== 'free').map((tpl) => (
                         <button
                           key={tpl.id}
-                          onClick={() => updateConfig({ templateId: tpl.id })}
+                          onClick={() => {
+                            updateConfig({ templateId: tpl.id });
+                            router.replace(`/resume-builder?template=${tpl.id}`, { scroll: false });
+                          }}
                           className={`flex flex-col items-center p-3 border rounded-xl transition-all relative ${config.templateId === tpl.id ? 'border-blue-600 bg-blue-50 ring-1 ring-blue-600' : 'border-gray-200 hover:border-gray-300 bg-white'}`}
                         >
                           <div className="w-full aspect-[1/1.4] bg-gray-100 rounded mb-2 border shadow-sm overflow-hidden relative">

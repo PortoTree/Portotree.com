@@ -153,7 +153,7 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
   };
 
   return (
-    <div className={`border border-slate-300 rounded-xl overflow-hidden focus-within:ring-1 focus-within:ring-emerald-600 focus-within:border-emerald-600 transition-shadow bg-white relative ${className}`}>
+    <div className={`border border-slate-300 rounded-xl focus-within:ring-1 focus-within:ring-emerald-600 focus-within:border-emerald-600 transition-shadow bg-white relative ${className}`}>
       <style>{`
         .rich-text-editor:empty::before {
           content: attr(data-placeholder);
@@ -162,7 +162,7 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
           display: block;
         }
       `}</style>
-      <div className="flex items-center gap-1 border-b border-slate-200 p-2 text-slate-500 bg-slate-50/50 flex-wrap">
+      <div className="flex items-center gap-1 border-b border-slate-200 p-2 text-slate-500 bg-slate-50/90 backdrop-blur flex-wrap sticky top-0 z-20 rounded-t-xl">
         <button type="button" disabled={!hasSelection} onClick={() => exec('bold')} className="p-1.5 hover:bg-slate-200 disabled:hover:bg-transparent rounded transition-colors text-slate-600 disabled:text-slate-300 disabled:cursor-not-allowed" title="Bold">
           <Bold size={16} />
         </button>

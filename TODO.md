@@ -160,3 +160,33 @@
   - Menambahkan *state* hasAppliedTemplate untuk melacak apakah URL query sudah diaplikasikan satu kali di awal render.
 - **File Terdampak:**
   - C:\PortoTree\src\app\resume-builder\page.tsx
+-   f i x :   p e r b a i k a n   s t y l i n g   l i n k   d i   h a l a m a n   d e t a i l   b l o g   a g a r   w a r n a   t e k s   l i n k   m e n j a d i   h i j a u   d a n   u n d e r l i n e  
+ ## Kategori: Frontend (Blog Detail Styling)
+
+## Kategori: Frontend (Blog Detail Styling)
+- **Status:** Selesai
+- **Perubahan:** 
+  - Mengganti styling inline dengan arbitrary variants Tailwind CSS v4 untuk mengatasi masalah typography link di halaman detail blog yang tidak berjalan di browser.
+  - Mempertegas aturan styling link di dalam `globals.css` menggunakan kode warna Hex absolut `#059669` dengan spesifisitas `!important` untuk warna, *underline*, dan efek *hover* yang dijamin menimpa semua default bawaan.
+- **File Terdampak:**
+  - `C:\PortoTree\src\app\blog\[slug]\page.tsx`
+  - `C:\PortoTree\src\app\globals.css`
+
+## Kategori: Frontend (Blog Link Visibility)
+- **Status:** Selesai
+- **Perubahan:**
+  - Mengubah styling warna teks link di dalam konten artikel `/blog/{slug}` dari warna hijau (emerald) menjadi biru (`#2563eb` atau `blue-600`) dengan underline biru.
+  - Perubahan ini mengatasi keluhan visibilitas visual dimana pengguna merasa tautan sebelumnya menyatu dengan teks biasa dan sulit dikenali sebagai link yang dapat diklik.
+  - Pembaruan dilakukan pada deklarasi Tailwind `prose-a` di `page.tsx` dan `!important` rule di `globals.css`.
+- **File Terdampak:**
+  - `C:\PortoTree\src\app\blog\[slug]\page.tsx`
+  - `C:\PortoTree\src\app\globals.css`
+  
+## Kategori: Frontend (Blog Typography Size)
+- **Status:** Selesai
+- **Perubahan:**
+  - Mengurangi ukuran *font base* artikel blog yang sebelumnya dikeluhkan terlalu besar.
+  - Menghapus _utility classes_ Tailwind `@tailwindcss/typography` yaitu `md:prose-lg` dan `lg:prose-xl` dari elemen pembungkus artikel.
+  - Sekarang konten akan dirender dengan ukuran *default* (`prose`) yang jauh lebih standar dan nyaman untuk dibaca (sekitar 16px).
+- **File Terdampak:**
+  - `C:\PortoTree\src\app\blog\[slug]\page.tsx`

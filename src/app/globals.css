@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 html {
   scroll-behavior: smooth;
@@ -245,4 +246,17 @@ html {
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+/* Base styling for blog content links as fallback */
+.blog-content a, 
+.blog-content a * {
+  color: #2563eb !important;
+  text-decoration: underline !important;
+  text-decoration-color: #2563eb !important;
+}
+
+.blog-content a:hover,
+.blog-content a:hover * {
+  color: #1d4ed8 !important;
 }

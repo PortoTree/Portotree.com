@@ -86,12 +86,14 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         {/* Content */}
         <div className="max-w-3xl mx-auto px-6">
           <article 
-            className="prose prose-slate md:prose-lg lg:prose-xl mx-auto
+            className="prose prose-slate mx-auto blog-content
               prose-headings:font-extrabold prose-headings:tracking-tight prose-headings:text-slate-900
-              prose-a:text-emerald-600 hover:prose-a:text-emerald-700
+              prose-p:leading-relaxed prose-p:text-slate-600
+              prose-li:text-slate-600
               prose-img:rounded-2xl prose-img:shadow-lg
               prose-blockquote:border-l-emerald-500 prose-blockquote:bg-emerald-50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-xl prose-blockquote:not-italic
-              prose-li:marker:text-emerald-500"
+              prose-li:marker:text-emerald-500
+              prose-a:text-blue-600 prose-a:underline prose-a:decoration-blue-600/30 prose-a:underline-offset-4 prose-a:font-bold hover:prose-a:text-blue-800 hover:prose-a:decoration-blue-800"
             dangerouslySetInnerHTML={{ __html: blog.content }}
           />
           
