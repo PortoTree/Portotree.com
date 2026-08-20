@@ -35,21 +35,18 @@ export async function checkDownloadLimit(type: 'cv' | 'surat') {
 
     // Check if premium
     const now = Date.now();
-    if (userData.isPremium && (!userData.premiumUntil || userData.premiumUntil > now)) {
-      // If they are lifetime (no premiumUntil) or valid until future
-      return { success: true, isPremium: true };
-    }
+    const isPremium = userData.isPremium && (!userData.premiumUntil || userData.premiumUntil > now);
 
-    // Free tier logic
+    // Download logic
     if (type === 'cv') {
-      if (userData.freeResumeCount >= 1) {
+      if (!isPremium && userData.freeResumeCount >= 1) {
         return { success: false, limitReached: true, error: "Limit resume download tercapai" };
       }
       await userRef.update({
         freeResumeCount: FieldValue.increment(1)
       });
     } else if (type === 'surat') {
-      if (userData.freeSuratCount >= 1) {
+      if (!isPremium && userData.freeSuratCount >= 1) {
         return { success: false, limitReached: true, error: "Limit surat download tercapai" };
       }
       await userRef.update({
@@ -57,7 +54,7 @@ export async function checkDownloadLimit(type: 'cv' | 'surat') {
       });
     }
 
-    return { success: true, isPremium: false };
+    return { success: true, isPremium };
 
   } catch (error: any) {
     console.error("Error checking download limit:", error);

@@ -191,16 +191,16 @@ export function UsersTable({ initialUsers }: { initialUsers: any[] }) {
                     )}
                     
                     {user.freeResumeCount > 0 && (
-                      <div className="flex flex-col items-center gap-1" title="Pernah Membuat CV">
+                      <div className="flex flex-col items-center gap-1" title={user.isPremium ? "Total Download CV (Premium)" : "Kuota Gratis CV"}>
                         <FileText className="w-5 h-5 text-indigo-500" />
-                        <span className="text-[10px] font-medium text-slate-500">{user.freeResumeCount}/1</span>
+                        <span className="text-[10px] font-medium text-slate-500">{user.freeResumeCount}/{user.isPremium ? '∞' : '1'}</span>
                       </div>
                     )}
 
                     {user.freeSuratCount > 0 && (
-                      <div className="flex flex-col items-center gap-1" title="Pernah Membuat Surat">
+                      <div className="flex flex-col items-center gap-1" title={user.isPremium ? "Total Download Surat (Premium)" : "Kuota Gratis Surat"}>
                         <Mail className="w-5 h-5 text-amber-500" />
-                        <span className="text-[10px] font-medium text-slate-500">{user.freeSuratCount}/1</span>
+                        <span className="text-[10px] font-medium text-slate-500">{user.freeSuratCount}/{user.isPremium ? '∞' : '1'}</span>
                       </div>
                     )}
                     

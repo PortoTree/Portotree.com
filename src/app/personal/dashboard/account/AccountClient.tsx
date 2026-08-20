@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { User, Mail, ShieldAlert, CheckCircle2, Clock, Crown, KeyRound, ExternalLink, FileText, Pencil, Globe } from "lucide-react";
+import { User, Mail, ShieldAlert, CheckCircle2, Clock, Crown, KeyRound, ExternalLink, FileText, Pencil, Globe, Camera } from "lucide-react";
 import { useUI } from "@/components/ui/UIProvider";
 import { sendPasswordReset } from "@/app/actions/auth";
+import { updateProfileData } from "@/app/actions/profile";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ProfilePersonalForm, ProfileEducationForm, ProfileExperienceForm } from "./ProfileForms";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 
 export default function AccountClient({ user, stats, portfolioData }: { user: any, stats: any, portfolioData?: any }) {
   const { showToast, showConfirm } = useUI();
@@ -79,6 +81,23 @@ export default function AccountClient({ user, stats, portfolioData }: { user: an
     joinedDateStr = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
   }
 
+  const handlePhotoUpload = async (url: string) => {
+    const updatedPersonal = { ...localData?.personal, photoUrl: url };
+    setLocalData({ ...localData, personal: updatedPersonal });
+    
+    try {
+      const res = await updateProfileData('personal', updatedPersonal);
+      if (res.success) {
+        showToast("Foto profil berhasil diperbarui!", "success");
+        router.refresh();
+      } else {
+        showToast(res.error || "Gagal memperbarui foto", "error");
+      }
+    } catch (error) {
+      showToast("Terjadi kesalahan sistem", "error");
+    }
+  };
+
   return (
     <div className="w-full max-w-5xl mx-auto py-6 md:py-8 px-4 md:px-6 lg:px-8 pb-10 animate-fade-in-up">
       {/* Header Section */}
@@ -96,17 +115,26 @@ export default function AccountClient({ user, stats, portfolioData }: { user: an
             <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-r from-emerald-500 to-teal-500 opacity-10"></div>
             
             <div className="flex flex-col items-center text-center relative z-10 pt-4">
-              <div className="w-24 h-24 rounded-full bg-white shadow-md border-4 border-white flex items-center justify-center mb-4 overflow-hidden">
-                {user.picture ? (
-                  <img src={user.picture} alt="Avatar" className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center">
-                    <span className="text-3xl font-bold text-emerald-700">
-                      {(user.name || user.email || 'U').charAt(0).toUpperCase()}
-                    </span>
+              
+              <ImageUpload 
+                onUploadSuccess={handlePhotoUpload} 
+                customTrigger={
+                  <div className="relative w-24 h-24 rounded-full bg-white shadow-md border-4 border-white mb-4 overflow-hidden group cursor-pointer">
+                    {localData?.personal?.photoUrl || user.picture ? (
+                      <img src={localData?.personal?.photoUrl || user.picture} alt="Avatar" className="w-full h-full object-cover group-hover:opacity-75 transition-opacity" />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center group-hover:opacity-75 transition-opacity">
+                        <span className="text-3xl font-bold text-emerald-700">
+                          {(localData?.personal?.fullName || user.name || user.email || 'U').charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
+                      <Camera className="w-6 h-6 text-white" />
+                    </div>
                   </div>
-                )}
-              </div>
+                }
+              />
               
               <h2 className="text-xl font-bold text-slate-800 truncate w-full px-2">
                 {localData?.personal?.fullName || localData?.personal?.name || suratFallback.fullName || user.name || "Tanpa Nama"}
