@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown, LogOut, User } from "lucide-react";
+import Image from "next/image";
 import useSWR from "swr";
 import { getMyPortfolio } from "@/app/actions/portfolio";
 import { auth } from "@/lib/firebase/client";
@@ -65,10 +66,10 @@ export default function UserProfileDropdown({
       <div className="relative" ref={dropdownRef}>
         <button 
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-teal-400 text-white shadow-inner overflow-hidden focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all hover:opacity-90"
+          className="relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-teal-400 text-white shadow-inner overflow-hidden focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all hover:opacity-90"
         >
           {photoUrl ? (
-            <img src={photoUrl} alt="Profile" className="w-full h-full object-cover" />
+            <Image src={photoUrl} alt="Profile" fill sizes="40px" className="object-cover" />
           ) : (
             <User className="w-5 h-5" />
           )}
@@ -101,9 +102,9 @@ export default function UserProfileDropdown({
         className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors text-left"
       >
         <div className="flex items-center gap-3 overflow-hidden">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-teal-400 flex items-center justify-center text-white shrink-0 shadow-inner overflow-hidden">
+          <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-teal-400 flex items-center justify-center text-white shrink-0 shadow-inner overflow-hidden">
             {photoUrl ? (
-              <img src={photoUrl} alt="Profile" className="w-full h-full object-cover" />
+              <Image src={photoUrl} alt="Profile" fill sizes="40px" className="object-cover" />
             ) : (
               <User className="w-5 h-5 shrink-0" />
             )}

@@ -2,13 +2,16 @@
 import React, { useEffect } from "react";
 import { useUI } from "@/components/ui/UIProvider";
 import { useSearchParams } from "next/navigation";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { PortfolioData } from "@/lib/portfolioData";
 import { Input } from "@/components/ui/input";
 import { auth } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Trash2, ChevronDown, User, GraduationCap, Briefcase, Share2, Wrench, Users, FolderGit2, UploadCloud, Crop, ImageIcon, Bold, Italic, List, Link as LinkIcon, AlignLeft, ChevronLeft, ChevronRight, Sparkles, MapPin, Award, Trophy, Building2 } from "lucide-react";
+import { Plus, Trash2, ChevronDown, GripVertical, User, GraduationCap, Briefcase, Share2, Wrench, Users, FolderGit2, UploadCloud, Crop, ImageIcon, Bold, Italic, List, Link as LinkIcon, AlignLeft, ChevronLeft, ChevronRight, Sparkles, MapPin, Award, Trophy, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/ui/ImageUpload";
 import { RichTextEditor } from "@/components/ui/RichTextEditor";
@@ -29,36 +32,58 @@ interface Props {
 }
 
 const AccordionSection = ({ 
-  id, title, icon: Icon, badgeCount, hasError, children, openSection, toggleSection 
+  id, title, icon: Icon, badgeCount, hasError, children, openSection, toggleSection, dragHandleProps, dragListeners 
 }: { 
-  id: string, title: string, icon: any, badgeCount?: number, hasError?: boolean, children: React.ReactNode, openSection: string, toggleSection: (id: string) => void
+  id: string, title: string, icon: any, badgeCount?: number, hasError?: boolean, children: React.ReactNode, openSection: string, toggleSection: (id: string) => void, dragHandleProps?: any, dragListeners?: any
 }) => {
   const isActive = openSection === id;
   return (
     <div className={`border rounded-2xl overflow-hidden shadow-sm transition-colors ${isActive ? 'border-emerald-600 bg-white' : 'border-slate-200 bg-white'}`}>
-      <button 
-        className={`w-full flex items-center justify-between px-4 py-4 transition-colors ${isActive ? 'bg-emerald-600 text-white' : 'bg-white hover:bg-slate-50 text-slate-700'}`}
-        onClick={() => toggleSection(id)}
-      >
-        <div className="flex items-center gap-3">
+      <div className={`w-full flex items-center justify-between px-4 py-4 transition-colors ${isActive ? 'bg-emerald-600 text-white' : 'bg-white hover:bg-slate-50 text-slate-700'}`}>
+        <div className="flex items-center gap-3 flex-1 cursor-pointer" onClick={() => toggleSection(id)}>
           <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-emerald-600'}`} />
-          <span className={`font-medium text-[15px] ${isActive ? 'text-white' : 'text-slate-700'}`}>{title}</span>
-          {hasError && <span className={`text-xs ${isActive ? 'text-white' : 'text-red-500'}`}>*</span>}
+          <span className={`font-medium text-[15px] ${isActive ? 'text-white' : 'text-slate-700'}`}>
+            {title}
+          </span>
+          {hasError && (
+            <span className="flex w-2 h-2 rounded-full bg-red-500"></span>
+          )}
         </div>
         <div className="flex items-center gap-3">
-          {badgeCount !== undefined && (
-            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${isActive ? 'bg-white/20 text-white' : 'bg-red-50 text-red-500'}`}>
-              {badgeCount} items
+          {(badgeCount && badgeCount > 0) ? (
+            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'}`}>
+              {badgeCount}
             </span>
+          ) : null}
+          <ChevronDown className={`w-5 h-5 transition-transform duration-200 cursor-pointer ${isActive ? 'rotate-180 text-white' : 'text-slate-400'}`} onClick={() => toggleSection(id)} />
+          {dragHandleProps && (
+            <div {...dragHandleProps} {...dragListeners} className="cursor-grab active:cursor-grabbing p-1 hover:bg-black/10 rounded ml-2 touch-none" onClick={(e) => e.stopPropagation()}>
+              <GripVertical className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+            </div>
           )}
-          <ChevronDown className={`w-4 h-4 transition-transform ${isActive ? 'rotate-180 text-white' : 'text-slate-400'}`} />
         </div>
-      </button>
-      {isActive && (
-        <div className="p-5 space-y-5 bg-white">
-          {children}
+      </div>
+      <div 
+        className={`transition-all duration-300 ease-in-out ${isActive ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+        style={{ display: 'grid' }}
+      >
+        <div className="overflow-hidden">
+          <div className="p-4 md:p-6 bg-white border-t border-slate-100">
+            {children}
+          </div>
         </div>
-      )}
+      </div>
+    </div>
+  );
+};
+
+
+const SortableAccordionItem = ({ id, ...props }: any) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+  const style = { transform: CSS.Transform.toString(transform), transition, zIndex: isDragging ? 10 : 1, position: isDragging ? 'relative' : 'static' };
+  return (
+    <div ref={setNodeRef} style={style}>
+      <AccordionSection id={id} dragHandleProps={attributes} dragListeners={listeners} {...props} />
     </div>
   );
 };
@@ -123,6 +148,23 @@ export function PortfolioDataForm({ data, onChange }: Props) {
 
   const [serviceModalOpen, setServiceModalOpen] = React.useState(false);
   const [editingServiceId, setEditingServiceId] = React.useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = addedSections.indexOf(active.id as string);
+      const newIndex = addedSections.indexOf(over.id as string);
+      const newSections = arrayMove(addedSections, oldIndex, newIndex);
+      setAddedSections(newSections);
+      onChange({ ...data, activeSections: newSections });
+    }
+  };
 
   const handleChange = (section: keyof PortfolioData, field: string, value: any) => {
     if (section === 'skills') {
@@ -496,9 +538,66 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             </div>
         </AccordionSection>
 
-        {/* EDUCATION */}
-        {addedSections.includes('education') && (
+        {/* SOCIAL LINKS */}
         <AccordionSection
+          openSection={openSection}
+          toggleSection={toggleSection}
+          id="social"
+          title="Media Sosial"
+          icon={Share2}
+          badgeCount={data.social?.length ?? 0}
+        >
+          {(data.social || []).map((soc, index) => (
+            <div key={soc.id} className="group flex items-center justify-between p-3 border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
+              <div className="flex-1 min-w-0 pr-4">
+                <h4 className="font-semibold text-slate-800 text-sm truncate">{soc.platform}</h4>
+                <p className="text-xs text-slate-500 truncate">{soc.username}</p>
+              </div>
+              <div className="flex items-center gap-1">
+                <button 
+                  onClick={() => handleEditSocial(soc.id)} 
+                  className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors"
+                  title="Edit"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                </button>
+                <button 
+                  onClick={() => handleDeleteSocial(index)} 
+                  className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                  title="Hapus"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            </div>
+          ))}
+          <div className="pt-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="w-full flex gap-2 h-11 border-dashed border-2 text-emerald-600 border-emerald-200 bg-emerald-50/50 hover:bg-emerald-50 font-medium"
+              onClick={() => { setEditingSocId(null); setSocModalOpen(true); }}
+            >
+              <Plus size={16} /> Tambah Media Sosial
+            </Button>
+          </div>
+          
+          <SocialModal 
+            isOpen={socModalOpen}
+            onClose={() => setSocModalOpen(false)}
+            onSave={handleSaveSocial}
+            initialData={editingSocId ? data.social?.find(s => s.id === editingSocId) : null}
+          />
+        </AccordionSection>
+
+
+
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={addedSections.filter(s => s !== 'social')} strategy={verticalListSortingStrategy}>
+            {addedSections.filter(s => s !== 'social').map(sectionId => {
+              /* EDUCATION */
+        if (sectionId === 'education') return (
+        <SortableAccordionItem key={sectionId}
           openSection={openSection}
           toggleSection={toggleSection}
           id="education"
@@ -538,12 +637,12 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             onSave={handleSaveEducation}
             initialData={editingEduId ? data.education?.find(e => e.id === editingEduId) : null}
           />
-        </AccordionSection>
-        )}
+        </SortableAccordionItem>
+        );
 
-        {/* EXPERIENCE */}
-        {addedSections.includes('experience') && (
-        <AccordionSection
+        /* EXPERIENCE */
+        if (sectionId === 'experience') return (
+        <SortableAccordionItem key={sectionId}
           openSection={openSection}
           toggleSection={toggleSection}
           id="experience"
@@ -587,61 +686,12 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             onSave={handleSaveExperience}
             initialData={editingExpId ? data.experience?.find(e => e.id === editingExpId) : null}
           />
-        </AccordionSection>
-        )}
+        </SortableAccordionItem>
+        );
 
-        {/* SOCIAL LINKS */}
-        {addedSections.includes('social') && (
-        <AccordionSection
-          openSection={openSection}
-          toggleSection={toggleSection}
-          id="social"
-          title="Media Sosial"
-          icon={Share2}
-          badgeCount={data.social?.length ?? 0}
-        >
-          {(data.social || []).map((soc, index) => (
-            <div key={soc.id} className="group flex items-center justify-between p-3 border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
-              <div className="flex-1 min-w-0 pr-4">
-                <h4 className="font-semibold text-slate-800 text-sm truncate">{soc.platform}</h4>
-                <p className="text-xs text-slate-500 truncate">{soc.username}</p>
-              </div>
-              <div className="flex items-center gap-1">
-                <button 
-                  onClick={() => handleEditSocial(soc.id)} 
-                  className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors"
-                  title="Edit"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                </button>
-                <button 
-                  onClick={() => handleDeleteSocial(index)} 
-                  className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
-                  title="Hapus"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            </div>
-          ))}
-          <div className="pt-2">
-            <Button variant="outline" size="sm" className="w-full flex gap-2 h-11 border-dashed border-2 text-emerald-600 border-emerald-200 bg-emerald-50/50 hover:bg-emerald-50 font-medium" onClick={() => { setEditingSocId(null); setSocModalOpen(true); }}>
-              <Plus size={16} /> Tambah Media Sosial Baru
-            </Button>
-          </div>
-
-          <SocialModal 
-            isOpen={socModalOpen}
-            onClose={() => setSocModalOpen(false)}
-            onSave={handleSaveSocial}
-            initialData={editingSocId ? data.social?.find(s => s.id === editingSocId) : null}
-          />
-        </AccordionSection>
-        )}
-
-        {/* SKILLS */}
-        {addedSections.includes('skills') && (
-        <AccordionSection
+        /* SKILLS */
+        if (sectionId === 'skills') return (
+        <SortableAccordionItem key={sectionId}
           openSection={openSection}
           toggleSection={toggleSection}
           id="skills"
@@ -677,12 +727,12 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             initialSkillsStr={data.skills || ""}
             onSave={(newSkills) => handleChange('skills', '', newSkills)}
           />
-        </AccordionSection>
-        )}
+        </SortableAccordionItem>
+        );
 
-        {/* ORGANIZATION */}
-        {addedSections.includes('organization') && (
-        <AccordionSection
+        /* ORGANIZATION */
+        if (sectionId === 'organization') return (
+        <SortableAccordionItem key={sectionId}
           openSection={openSection}
           toggleSection={toggleSection}
           id="organization"
@@ -734,12 +784,12 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             onSave={handleSaveOrganization}
             initialData={editingOrgId ? data.organization?.find(o => o.id === editingOrgId) : null}
           />
-        </AccordionSection>
-        )}
+        </SortableAccordionItem>
+        );
 
-        {/* PROJECTS */}
-        {addedSections.includes('projects') && (
-        <AccordionSection
+        /* PROJECTS */
+        if (sectionId === 'projects') return (
+        <SortableAccordionItem key={sectionId}
           openSection={openSection}
           toggleSection={toggleSection}
           id="projects"
@@ -794,12 +844,12 @@ export function PortfolioDataForm({ data, onChange }: Props) {
             onSave={handleSaveProject}
             initialData={editingProjId ? data.projects?.find(p => p.id === editingProjId) : null}
           />
-        </AccordionSection>
-        )}
+        </SortableAccordionItem>
+        );
 
-        {/* CERTIFICATIONS */}
-        {((data.certifications?.length ?? 0) > 0 || addedSections.includes('certifications')) && (
-          <AccordionSection
+        /* CERTIFICATIONS */
+        if (sectionId === 'certifications') return (
+          <SortableAccordionItem key={sectionId}
             openSection={openSection}
             toggleSection={toggleSection}
             id="certifications"
@@ -847,12 +897,12 @@ export function PortfolioDataForm({ data, onChange }: Props) {
               onSave={handleSaveCertification}
               initialData={editingCertId ? data.certifications?.find(c => c.id === editingCertId) : null}
             />
-          </AccordionSection>
-        )}
+          </SortableAccordionItem>
+        );
 
-        {/* AWARDS */}
-        {((data.awards?.length ?? 0) > 0 || addedSections.includes('awards')) && (
-          <AccordionSection
+        /* AWARDS */
+        if (sectionId === 'awards') return (
+          <SortableAccordionItem key={sectionId}
             openSection={openSection}
             toggleSection={toggleSection}
             id="awards"
@@ -901,12 +951,12 @@ export function PortfolioDataForm({ data, onChange }: Props) {
               onSave={handleSaveAward}
               initialData={editingAwardId ? data.awards?.find(a => a.id === editingAwardId) : null}
             />
-          </AccordionSection>
-        )}
+          </SortableAccordionItem>
+        );
 
-        {/* SERVICES */}
-        {((data.services?.length ?? 0) > 0 || addedSections.includes('services')) && (
-          <AccordionSection
+        /* SERVICES */
+        if (sectionId === 'services') return (
+          <SortableAccordionItem key={sectionId}
             openSection={openSection}
             toggleSection={toggleSection}
             id="services"
@@ -957,9 +1007,12 @@ export function PortfolioDataForm({ data, onChange }: Props) {
               onSave={handleSaveService}
               initialData={editingServiceId ? data.services?.find(s => s.id === editingServiceId) : null}
             />
-          </AccordionSection>
-        )}
-
+          </SortableAccordionItem>
+        );
+              return null;
+            })}
+          </SortableContext>
+        </DndContext>
         {/* BOTTOM ADD SECTION BUTTON */}
         <button 
           className="mt-4 w-full border-2 border-dashed border-slate-200 text-slate-500 rounded-xl py-3 flex items-center justify-center gap-2 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-600 transition-all font-medium"
