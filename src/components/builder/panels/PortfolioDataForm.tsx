@@ -80,7 +80,7 @@ const AccordionSection = ({
 
 const SortableAccordionItem = ({ id, ...props }: any) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
-  const style = { transform: CSS.Transform.toString(transform), transition, zIndex: isDragging ? 10 : 1, position: isDragging ? 'relative' : 'static' };
+  const style: React.CSSProperties = { transform: CSS.Transform.toString(transform), transition, zIndex: isDragging ? 10 : 1, position: isDragging ? 'relative' : 'static' };
   return (
     <div ref={setNodeRef} style={style}>
       <AccordionSection id={id} dragHandleProps={attributes} dragListeners={listeners} {...props} />
