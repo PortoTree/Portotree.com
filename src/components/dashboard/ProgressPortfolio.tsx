@@ -8,7 +8,7 @@ import { getMyPortfolio } from "@/app/actions/portfolio";
 
 export default function ProgressPortfolio() {
   const [data, setData] = useState<PortfolioData | null>(null);
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     async function fetchProgress() {

@@ -83,7 +83,7 @@ export default function DashboardMainPage() {
       `}</style>
       
       {/* LEFT COLUMN: Lottie & Instructions */}
-      <div className="relative w-full lg:flex-1 h-[600px] md:h-[700px] flex items-center justify-center md:bg-white md:rounded-3xl md:shadow-sm md:border md:border-slate-200 md:overflow-hidden">
+      <div className="relative w-full lg:flex-1 h-[600px] md:h-[700px] flex items-center justify-center">
         
         {/* Lottie Animation (Center) */}
         <div className="w-full max-w-[320px] md:max-w-sm absolute inset-0 m-auto flex items-center justify-center z-0 opacity-90">
@@ -187,7 +187,7 @@ export default function DashboardMainPage() {
         <AnnouncementCarousel />
 
         {/* Block 2: Recent Articles */}
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex-1 flex flex-col min-h-0">
+        <div className="bg-white rounded-3xl p-6 shadow-xl border border-slate-200 flex-1 flex flex-col min-h-0">
           <div className="flex items-center justify-between mb-5 shrink-0">
             <div className="flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-emerald-600" />

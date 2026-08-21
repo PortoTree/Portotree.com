@@ -490,7 +490,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
                 <RichTextEditor 
                   value={data.personal.bio} 
                   onChange={(val) => handleChange('personal', 'bio', val)} 
-                  placeholder="Tell us about yourself and your professional journey..."
+                  placeholder="Ceritakan tentang diri Anda dan perjalanan karir profesional Anda..."
                 />
               </div>
             </div>

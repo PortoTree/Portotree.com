@@ -589,7 +589,7 @@ export function CVDataForm({ data, onChange, isCVMode = false, activeTemplateId 
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-sm text-slate-700">Fullname <span className="text-red-500">*</span></Label>
+              <Label className="text-sm text-slate-700">Nama Lengkap <span className="text-red-500">*</span></Label>
               <Input 
                 value={data.personal?.name || [data.personal?.firstName, data.personal?.lastName].filter(Boolean).join(' ') || ''} 
                 onChange={(e) => {
@@ -614,7 +614,7 @@ export function CVDataForm({ data, onChange, isCVMode = false, activeTemplateId 
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm text-slate-700">Professional Title <span className="text-red-500">*</span></Label>
+              <Label className="text-sm text-slate-700">Profesi / Posisi <span className="text-red-500">*</span></Label>
               <Input value={data.personal?.headline} onChange={(e) => handleChange('personal', 'headline', e.target.value)} placeholder="Senior Developer" className={`h-11 ${!data.personal?.headline ? 'border-red-500 focus-visible:ring-red-500' : ''}`} />
             </div>
           </div>
@@ -701,7 +701,7 @@ export function CVDataForm({ data, onChange, isCVMode = false, activeTemplateId 
                 <RichTextEditor 
                   value={data.personal?.bio} 
                   onChange={(val) => handleChange('personal', 'bio', val)} 
-                  placeholder="Tell us about yourself and your professional journey..."
+                  placeholder="Ceritakan tentang diri Anda dan perjalanan karir profesional Anda..."
                 />
               </div>
             </div>

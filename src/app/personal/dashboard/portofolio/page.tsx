@@ -219,7 +219,7 @@ export default function PortfolioPage() {
           </div>
 
           {/* KOLOM KANAN: PORTFOLIO INFO */}
-          <div className="w-full lg:w-72 flex-shrink-0">
+          <div className="w-full lg:w-[340px] flex-shrink-0">
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
             <div className="flex items-center gap-2 mb-4">
               <Settings className="w-4 h-4 text-emerald-500" />
