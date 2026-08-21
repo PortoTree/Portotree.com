@@ -48,6 +48,12 @@ export default function UserProfileDropdown({
   const handleClientLogout = async () => {
     try {
       await signOut(auth);
+      // Clear all local caches to prevent cross-account data leakage
+      if (typeof window !== 'undefined') {
+        sessionStorage.clear();
+        localStorage.removeItem('draft_template_sections');
+        localStorage.removeItem('draft_template_config');
+      }
       await logoutAction();
     } catch (error) {
       console.error("Logout error:", error);

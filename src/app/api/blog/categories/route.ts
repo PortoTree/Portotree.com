@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getPublishedCategories } from "@/app/actions/blog";
 
-export const revalidate = 3600; // cache 1 jam
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const result = await getPublishedCategories();

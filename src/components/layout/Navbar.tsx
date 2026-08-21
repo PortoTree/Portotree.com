@@ -115,6 +115,12 @@ export function Navbar() {
     try {
       await signOut(auth);
       await removeSession();
+      // Clear all local caches to prevent cross-account data leakage
+      if (typeof window !== 'undefined') {
+        sessionStorage.clear();
+        localStorage.removeItem('draft_template_sections');
+        localStorage.removeItem('draft_template_config');
+      }
       setIsLoggedIn(false);
       setPhotoUrl(null);
       router.push('/');
