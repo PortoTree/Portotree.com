@@ -119,10 +119,12 @@ export default function ResumeDashboardPage() {
         <p className="text-sm md:text-base text-slate-500">Kelola resume professional anda.</p>
       </div>
 
-      <div className="space-y-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         
-        {/* PREVIEW KARTU FULL WIDTH */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+        {/* KOLOM KIRI: Preview CV & CTA */}
+        <div className="flex-1 min-w-0 space-y-6">
+          {/* PREVIEW KARTU */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
             <div className="bg-slate-100 relative overflow-hidden border-b border-slate-200" style={{ height: '340px' }}>
               {data && (
                 <div 
@@ -155,29 +157,23 @@ export default function ResumeDashboardPage() {
             </div>
           </div>
 
-        {/* CTA GANTI TEMPLATE */}
-        <div className="bg-gradient-to-r from-blue-900 to-slate-900 rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between shadow-lg border border-slate-800">
-          <div>
-            <h3 className="text-xl font-bold mb-1">Ingin Mengganti Desain CV?</h3>
-            <p className="text-slate-300 text-sm">Jelajahi galeri template kami dan temukan desain yang paling cocok untuk karir Anda.</p>
+          {/* CTA GANTI TEMPLATE */}
+          <div className="bg-gradient-to-r from-blue-900 to-slate-900 rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between shadow-lg border border-slate-800">
+            <div>
+              <h3 className="text-xl font-bold mb-1">Ingin Mengganti Desain CV?</h3>
+              <p className="text-slate-300 text-sm">Jelajahi galeri template kami dan temukan desain yang paling cocok untuk karir Anda.</p>
+            </div>
+            <a href="/personal/dashboard/resume/template" className="mt-4 sm:mt-0 whitespace-nowrap bg-white text-slate-900 font-bold py-3 px-6 rounded-xl hover:bg-slate-100 transition-colors shadow-md flex items-center gap-2">
+              Lihat Template
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
           </div>
-          <a href="/personal/dashboard/resume/template" className="mt-4 sm:mt-0 whitespace-nowrap bg-white text-slate-900 font-bold py-3 px-6 rounded-xl hover:bg-slate-100 transition-colors shadow-md flex items-center gap-2">
-            Lihat Template
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-          </a>
         </div>
 
-        {/* ROW BAWAH: Progress Kiri, Info Kanan */}
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
-          
-          {/* KOLOM KIRI: PROGRESS RESUME */}
-          <div className="flex-1 min-w-0 w-full">
-            <ProgressResume />
-          </div>
-
-          {/* KOLOM KANAN: RESUME INFO */}
-          <div className="w-full lg:w-72 flex-shrink-0">
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+        {/* KOLOM KANAN: Info & Progress */}
+        <div className="w-full lg:w-[340px] flex-shrink-0 space-y-6">
+          {/* RESUME INFO */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
             <div className="flex items-center gap-2 mb-4">
               <Settings className="w-4 h-4 text-blue-600" />
               <h3 className="font-bold text-slate-800 text-sm">Resume Info</h3>
@@ -198,8 +194,12 @@ export default function ResumeDashboardPage() {
               </div>
             </div>
           </div>
+
+          {/* PROGRESS RESUME */}
+          <div className="w-full">
+            <ProgressResume />
+          </div>
         </div>
-      </div>
       </div>
 
       {/* Paywall Modal */}

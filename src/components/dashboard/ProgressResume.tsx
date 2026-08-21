@@ -9,7 +9,7 @@ import Link from "next/link";
 
 export default function ProgressResume() {
   const [data, setData] = useState<CVDataPayload | null>(null);
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
