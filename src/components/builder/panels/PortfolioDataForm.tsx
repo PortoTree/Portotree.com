@@ -34,7 +34,7 @@ interface Props {
 const AccordionSection = ({ 
   id, title, icon: Icon, badgeCount, hasError, children, openSection, toggleSection, dragHandleProps, dragListeners 
 }: { 
-  id: string, title: string, icon: any, badgeCount?: number, hasError?: boolean, children: React.ReactNode, openSection: string, toggleSection: (id: string) => void, dragHandleProps?: any, dragListeners?: any
+  id: string, title: string, icon: any, badgeCount?: number, hasError?: boolean, children: React.ReactNode, openSection: string, toggleSection: (id: string) => void, dragHandleProps?: any, dragListeners?: any, 
 }) => {
   const isActive = openSection === id;
   return (
@@ -92,6 +92,17 @@ export function PortfolioDataForm({ data, onChange }: Props) {
   const { showConfirm } = useUI();
   const searchParams = useSearchParams();
   const [openSection, setOpenSection] = React.useState<string>('');
+  
+  React.useEffect(() => {
+    const handleOpenAdd = (e: any) => setAddSectionModalOpen(e.detail);
+    const handleOpenFirst = () => setOpenSection(data.activeSections && data.activeSections.length > 0 ? data.activeSections[0] : 'personal');
+    window.addEventListener('tour-open-add-section', handleOpenAdd);
+    window.addEventListener('tour-open-first-accordion', handleOpenFirst);
+    return () => {
+      window.removeEventListener('tour-open-add-section', handleOpenAdd);
+      window.removeEventListener('tour-open-first-accordion', handleOpenFirst);
+    };
+  }, [data.activeSections]);
 
   useEffect(() => {
     const sectionParam = searchParams.get('section');
@@ -490,7 +501,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
 
           <div className="space-y-2">
             <Label className="text-sm text-slate-700">Nama lengkap <span className="text-red-500">*</span></Label>
-            <Input value={data.personal.name} onChange={(e) => handleChange('personal', 'name', e.target.value)} className={`h-11 ${!data.personal.name ? 'border-red-500 focus-visible:ring-red-500' : ''}`} placeholder="worldfarm" />
+            <Input value={data.personal.name} onChange={(e) => handleChange('personal', 'name', e.target.value)} className={`h-11 ${!data.personal.name ? 'border-red-500 focus-visible:ring-red-500' : ''}`} placeholder="Budi Santoso" />
           </div>
 
           <div className="space-y-2">
@@ -1014,8 +1025,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
           </SortableContext>
         </DndContext>
         {/* BOTTOM ADD SECTION BUTTON */}
-        <button 
-          className="mt-4 w-full border-2 border-dashed border-slate-200 text-slate-500 rounded-xl py-3 flex items-center justify-center gap-2 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-600 transition-all font-medium"
+        <button className="mt-4 w-full border-2 border-dashed border-slate-200 text-slate-500 rounded-xl py-3 flex items-center justify-center gap-2 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-600 transition-all font-medium"
           onClick={() => setAddSectionModalOpen(true)}
         >
           <Plus size={18} /> Tambah Bagian

@@ -108,9 +108,7 @@ export default function UsernamePicker({ isOpen, onComplete, onCancel, suggested
               Username / Link
             </label>
             <div className="relative">
-              <input
-                type="text"
-                value={username}
+              <input type="text" value={username}
                 onChange={(e) => {
                   const val = e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, "");
                   setUsername(val);
@@ -155,8 +153,7 @@ export default function UsernamePicker({ isOpen, onComplete, onCancel, suggested
 
           {/* Buttons */}
           <div className="space-y-3">
-            <button
-              onClick={handlePublish}
+            <button onClick={handlePublish}
               disabled={status !== "available" || isPublishing}
               className={`w-full py-3.5 rounded-xl font-bold text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
                 status === "available" && !isPublishing

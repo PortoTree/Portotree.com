@@ -10,6 +10,7 @@ import { PortfolioViewer } from "./PortfolioViewer";
 import { PortfolioData, defaultPortfolioData } from "@/lib/portfolioData";
 import { useRouter } from "next/navigation";
 import UsernamePicker from "./UsernamePicker";
+
 import { getMyPortfolio, savePortfolio } from "@/app/actions/portfolio";
 
 function BuilderContent() {
@@ -33,6 +34,12 @@ function BuilderContent() {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [myUsername, setMyUsername] = useState<string | null>(null);
   const [showUsernamePicker, setShowUsernamePicker] = useState(false);
+
+  useEffect(() => {
+    const handleTourUsername = (e) => setShowUsernamePicker(e.detail);
+    window.addEventListener('tour-open-username-picker', handleTourUsername);
+    return () => window.removeEventListener('tour-open-username-picker', handleTourUsername);
+  }, []);
   const [firestoreSaving, setFirestoreSaving] = useState(false);
 
   // Set default preview mode to mobile on small screens
@@ -186,7 +193,8 @@ function BuilderContent() {
   }
 
   return (
-    <div className={`fixed inset-0 bg-slate-100 flex flex-col overflow-hidden`}>
+    <>
+      <div className={`fixed inset-0 bg-slate-100 flex flex-col overflow-hidden`}>
       {/* HEADER */}
       <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 shrink-0 z-50">
         <div className="flex items-center gap-3">
@@ -309,6 +317,8 @@ function BuilderContent() {
         />
       )}
     </div>
+    </>
+
   );
 }
 
