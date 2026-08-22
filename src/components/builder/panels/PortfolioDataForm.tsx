@@ -134,7 +134,7 @@ export function PortfolioDataForm({ data, onChange }: Props) {
 
   const [addSectionModalOpen, setAddSectionModalOpen] = React.useState(false);
   const [addedSections, setAddedSections] = React.useState<string[]>(() => {
-    let initial = data.activeSections || ['education', 'experience', 'organization', 'projects', 'social', 'skills', 'certifications', 'awards', 'services'];
+    let initial = data.activeSections || ['social', 'skills', 'services', 'projects'];
     if (data.activeSections && data.activeSections.length === 6 && !data.activeSections.includes('services')) {
       initial = [...data.activeSections, 'certifications', 'awards', 'services'];
     }

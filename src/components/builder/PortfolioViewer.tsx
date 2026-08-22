@@ -16,7 +16,7 @@ export function PortfolioViewer({
   showPlaceholders?: boolean;
   username?: string;
 }) {
-  let activeSections = rawData.activeSections || ['education', 'experience', 'organization', 'projects', 'social', 'skills', 'certifications', 'awards', 'services'];
+  let activeSections = rawData.activeSections || ['social', 'skills', 'services', 'projects'];
   
   // Auto-upgrade legacy activeSections (which only had 6 items) for existing users
   if (rawData.activeSections && rawData.activeSections.length === 6 && !rawData.activeSections.includes('services')) {

@@ -10,6 +10,7 @@ import { PortfolioViewer } from "./PortfolioViewer";
 import { PortfolioData, defaultPortfolioData } from "@/lib/portfolioData";
 import { useRouter } from "next/navigation";
 import UsernamePicker from "./UsernamePicker";
+import TutorialModal from "./TutorialModal";
 
 import { getMyPortfolio, savePortfolio } from "@/app/actions/portfolio";
 
@@ -332,6 +333,7 @@ export default function VisualPageBuilder() {
         </div>
       </div>
     }>
+      <TutorialModal />
       <BuilderContent />
     </Suspense>
   );
