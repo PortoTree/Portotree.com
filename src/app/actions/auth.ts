@@ -69,7 +69,12 @@ export async function validateTurnstile(token: string) {
 
 export async function removeSession() {
   const cookieStore = await cookies();
-  cookieStore.delete("session");
+  const isProd = process.env.NODE_ENV === "production";
+  cookieStore.set("session", "", {
+    maxAge: 0,
+    path: "/",
+    ...(isProd ? { domain: ".portotree.com" } : {})
+  });
   return { success: true };
 }
 

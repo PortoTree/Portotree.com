@@ -5,7 +5,7 @@ import { CVViewer } from "@/components/cv-builder/CVViewer";
 import { CVDataForm } from "@/components/cv-builder/CVDataForm";
 import { Navbar } from "@/components/layout/Navbar"; // Assume this exists
 import { Button } from "@/components/ui/button";
-import { Loader2, Eye, EyeOff, Download, ArrowLeft, Edit, Palette, Info, Check, Crown, Sparkles } from "lucide-react";
+import { Loader2, Eye, EyeOff, Download, ArrowLeft, Edit, Palette, Info, Check, Crown, Sparkles, XCircle, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState, Suspense } from "react";
 import { useUI } from "@/components/ui/UIProvider";
@@ -35,7 +35,7 @@ function CVBuilderContent() {
   const router = useRouter();
   const [isCheckingLimit, setIsCheckingLimit] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
-  const [showTemplateUpsell, setShowTemplateUpsell] = useState<{show: boolean, type: 'premium' | 'exclusive' | null, price?: number}>({show: false, type: null});
+  const [showTemplateUpsell, setShowTemplateUpsell] = useState<{show: boolean, type: 'premium' | 'exclusive' | null, price?: number, origin?: 'paywall'}>({show: false, type: null});
   const [showPricingModal, setShowPricingModal] = useState(false);
   const [userStatus, setUserStatus] = useState<{isPremium: boolean, purchasedTemplates: string[]}>({isPremium: false, purchasedTemplates: []});
 
@@ -350,187 +350,200 @@ function CVBuilderContent() {
         }
       `}} />
 
-      {/* Paywall Modal */}
-      {showPaywall && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 p-4 animate-in fade-in duration-200 print:hidden">
-          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 p-6 flex flex-col items-center text-center">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
-              <Download className="w-8 h-8 text-red-600" />
-            </div>
-            <h3 className="text-xl font-bold text-slate-800 mb-2">Limit Unduh Gratis Habis!</h3>
-            <p className="text-slate-600 mb-6 leading-relaxed">
-              Anda telah menggunakan jatah 1x unduh gratis untuk CV. Dapatkan akses cetak <span className="font-semibold text-slate-800">sepuasnya tanpa batas dan tanpa watermark</span> dengan berlangganan Paket Premium.
-            </p>
-            
-            <div className="flex flex-col gap-3 w-full">
-              <button 
-                onClick={() => router.push('/personal/dashboard/langganan')}
-                className="w-full py-3 px-4 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all active:scale-95 shadow-md shadow-emerald-200 flex items-center justify-center gap-2"
-              >
-                Lihat Paket Langganan
-              </button>
-              <button 
-                onClick={() => setShowPaywall(false)}
-                className="w-full py-3 px-4 bg-white text-slate-500 font-medium rounded-xl hover:bg-slate-50 transition-all active:scale-95 border border-slate-200"
-              >
-                Nanti Dulu
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Template Upsell Modal */}
-      {showTemplateUpsell.show && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 p-4 animate-in fade-in duration-200 print:hidden overflow-y-auto">
-          {showTemplateUpsell.type === 'premium' ? (
-            showPricingModal ? (
-              <div className="bg-white rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200 relative overflow-hidden">
-                
-                {/* Fixed Header with Close Button */}
-                <div className="flex justify-end p-4 pb-0 shrink-0 relative z-10 bg-white">
-                  <button 
-                    onClick={() => {
-                      setShowTemplateUpsell({show: false, type: null});
-                      setShowPricingModal(false);
-                    }}
-                    className="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full transition-all"
-                  >
-                    ✕
-                  </button>
-                </div>
-                
-                {/* Scrollable Content */}
-                <div className="p-5 md:p-8 pt-0 md:pt-2 overflow-y-auto custom-scrollbar">
+      
+        {/* Unified Modal Wrapper */}
+        {(showPaywall || showTemplateUpsell.show) && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 p-4 animate-in fade-in duration-200 print:hidden overflow-y-auto">
+            {showPricingModal ? (
+                <div className="bg-white rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200 relative overflow-hidden">
                   
-                  {/* Header Section */}
-                  <div className="text-center mb-6 md:mb-10">
-                    <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-amber-100 mb-3 md:mb-4">
-                      <Crown className="w-6 h-6 md:w-8 md:h-8 text-amber-500" />
-                    </div>
-                    <h1 className="text-xl md:text-3xl font-extrabold text-slate-800 mb-2 md:mb-3 leading-tight">Upgrade ke Premium</h1>
-                    <p className="text-xs md:text-base text-slate-500 max-w-lg mx-auto leading-relaxed px-2 md:px-0">
-                      Template ini khusus untuk member Premium. Buka akses tanpa batas ke semua fitur PortoTree, termasuk template ini.
-                    </p>
+                  {/* Fixed Header with Close Button */}
+                  <div className="flex justify-end p-4 pb-0 shrink-0 relative z-10 bg-white">
+                    <button 
+                      onClick={() => {
+                        setShowTemplateUpsell({show: false, type: null});
+                        setShowPricingModal(false);
+                      }}
+                      className="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full transition-all"
+                    >
+                      <XCircle className="w-6 h-6" />
+                    </button>
                   </div>
-
-                  <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
-                    
-                    {/* Left: Features */}
-                    <div className="flex-1 bg-white border border-slate-200 rounded-2xl p-5 md:p-6 shadow-sm">
-                      <h2 className="text-base md:text-xl font-bold text-slate-800 mb-4 md:mb-6 flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-emerald-500" />
-                        Fitur Paket Premium
-                      </h2>
-                      
-                      <ul className="space-y-3 md:space-y-4">
-                        {features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-2.5 md:gap-3">
-                            <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mt-0.5">
-                              <Check className="w-3.5 h-3.5 md:w-4 md:h-4 text-emerald-600" />
-                            </div>
-                            <span className="text-xs md:text-sm text-slate-700 font-medium leading-snug">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <div className="mt-6 md:mt-8 p-3 md:p-4 bg-blue-50 rounded-xl border border-blue-100">
-                        <p className="text-[11px] md:text-sm text-blue-800 font-medium leading-relaxed">
-                          <strong>Info:</strong> Paket ini adalah langganan berjangka (Sekali Bayar). Tidak otomatis memotong saldo.
-                        </p>
+                  
+                  <div className="p-4 md:p-8 pt-0 overflow-y-auto custom-scrollbar flex-1 relative z-0">
+                    <div className="text-center mb-8 relative">
+                      <div className="w-16 h-16 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Crown className="w-8 h-8" />
                       </div>
+                      <h2 className="text-2xl md:text-3xl font-extrabold text-slate-800 mb-3 tracking-tight">Upgrade ke Premium</h2>
+                      <p className="text-slate-600 text-sm md:text-base max-w-lg mx-auto">
+                        Buka akses tanpa batas ke semua fitur PortoTree.
+                      </p>
                     </div>
-
-                    {/* Right: Pricing Plans */}
-                    <div className="flex-1 flex flex-col gap-2.5 md:gap-4">
-                      {plans.map((plan) => (
-                        <div 
-                          key={plan.id}
-                          onClick={() => setSelectedPlan(plan.id)}
-                          className={`relative border-2 rounded-xl md:rounded-2xl p-3.5 md:p-5 cursor-pointer transition-all duration-200 ${
-                            selectedPlan === plan.id 
-                              ? 'border-emerald-500 bg-emerald-50/50 shadow-md md:scale-[1.02]' 
-                              : 'border-slate-200 bg-white hover:border-emerald-200 hover:bg-slate-50'
-                          }`}
-                        >
-                          {plan.popular && (
-                            <div className="absolute -top-2.5 right-3 bg-amber-500 text-white text-[9px] md:text-[10px] font-bold uppercase tracking-wider px-2 md:px-3 py-0.5 md:py-1 rounded-full shadow-sm">
-                              Populer
-                            </div>
-                          )}
-                          
-                          <div className="flex items-center gap-3 md:gap-4">
-                            {/* Radio check visualization */}
-                            <div className={`w-4 h-4 md:w-5 md:h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                              selectedPlan === plan.id ? 'border-emerald-500' : 'border-slate-300'
-                            }`}>
-                              {selectedPlan === plan.id && <div className="w-2 h-2 md:w-2.5 md:h-2.5 bg-emerald-500 rounded-full" />}
-                            </div>
-
-                            <div className="flex-1 flex items-center justify-between gap-1.5 md:gap-2">
-                              <div>
-                                <h3 className={`font-bold text-sm md:text-lg mb-0 md:mb-1 ${selectedPlan === plan.id ? 'text-emerald-700' : 'text-slate-800'}`}>
-                                  {plan.name}
-                                </h3>
-                                <p className="text-[10px] md:text-sm text-slate-500">{plan.duration}</p>
+                    
+                    <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-3xl mx-auto">
+                      <div className="bg-emerald-50 rounded-2xl p-6 border border-emerald-100 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+                        <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2 text-lg">
+                          <Sparkles className="w-5 h-5 text-emerald-500" />
+                          Fitur Paket Premium
+                        </h3>
+                        <ul className="space-y-4">
+                          {[
+                            "Akses & Download Semua Template CV Premium",
+                            "Unlimited Download CV / Resume",
+                            "Unlimited Download Semua Jenis Surat",
+                            "Tanpa Watermark 'Made with PortoTree'",
+                            "Unlock Semua Kustomisasi Premium",
+                            "Dukungan Pelanggan (Customer Support)"
+                          ].map((feature, idx) => (
+                            <li key={idx} className="flex items-start gap-3">
+                              <div className="shrink-0 mt-0.5 w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                               </div>
-                              
-                              <div className="text-right">
-                                {plan.originalPrice && (
-                                  <div className="text-[9px] md:text-xs text-slate-400 line-through mb-0 md:mb-0.5">
-                                    Rp {plan.originalPrice.toLocaleString('id-ID')}
-                                  </div>
-                                )}
-                                <div className="font-extrabold text-sm md:text-xl text-slate-800 leading-tight">
-                                  Rp {plan.price.toLocaleString('id-ID')}
+                              <span className="text-sm text-slate-700 font-medium leading-relaxed">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      
+                      <div className="flex flex-col gap-4">
+                        {[
+                          { id: '1_month', label: '1 Bulan', duration: '30 Hari', price: 12000, oldPrice: 20000, save: 8000 },
+                          { id: '3_months', label: '3 Bulan', duration: '90 Hari', price: 32000, oldPrice: 48000, save: 16000, popular: true },
+                          { id: '6_months', label: '6 Bulan', duration: '180 Hari', price: 55000, oldPrice: 85000, save: 30000 }
+                        ].map((pkg) => (
+                          <div 
+                            key={pkg.id}
+                            className={`relative p-4 rounded-xl border-2 transition-all cursor-pointer hover:shadow-md ${
+                              '3_months' === pkg.id 
+                                ? 'border-emerald-500 bg-emerald-50/30' 
+                                : 'border-slate-200 hover:border-emerald-200'
+                            }`}
+                          >
+                            {pkg.popular && (
+                              <div className="absolute -top-3 right-4 bg-amber-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm">
+                                POPULER
+                              </div>
+                            )}
+                            <div className="flex justify-between items-center">
+                              <div className="flex items-center gap-3">
+                                <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                                  '3_months' === pkg.id ? 'border-emerald-500' : 'border-slate-300'
+                                }`}>
+                                  {'3_months' === pkg.id && <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full" />}
                                 </div>
-                                {plan.savings && (
-                                  <div className="text-[9px] md:text-xs font-semibold text-emerald-600 mt-0 md:mt-1">
-                                    {plan.savings}
-                                  </div>
-                                )}
+                                <div>
+                                  <div className="font-bold text-slate-800">{pkg.label}</div>
+                                  <div className="text-xs text-slate-500">Akses {pkg.duration}</div>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-xs text-slate-400 line-through decoration-slate-300">Rp {pkg.oldPrice.toLocaleString('id-ID')}</div>
+                                <div className="font-extrabold text-slate-800 text-lg">Rp {pkg.price.toLocaleString('id-ID')}</div>
+                                <div className="text-[10px] font-bold text-emerald-600">Hemat Rp {pkg.save.toLocaleString('id-ID')}</div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
-
-                      {/* Checkout Button */}
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="mt-8 max-w-3xl mx-auto flex flex-col sm:flex-row gap-3">
                       <button 
-                        onClick={handleCheckout}
-                        disabled={isProcessing}
-                        className="w-full mt-3 md:mt-4 py-3 md:py-4 px-4 md:px-6 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all active:scale-[0.98] shadow-md shadow-emerald-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-sm md:text-lg"
+                        onClick={() => {
+                          const msg = `Halo admin, saya ingin berlangganan Paket Premium PortoTree (3 Bulan - Rp 32.000).`;
+                          window.open(`https://wa.me/6283132987065?text=${encodeURIComponent(msg)}`, '_blank');
+                        }}
+                        className="flex-1 py-3.5 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg active:scale-[0.98] text-sm md:text-base flex items-center justify-center gap-2"
                       >
                         Beli Paket Premium Sekarang
                       </button>
                       <button 
-                        onClick={() => setShowPricingModal(false)}
-                        className="w-full py-2.5 md:py-3 px-4 bg-white text-slate-500 font-medium rounded-xl hover:bg-slate-50 transition-all active:scale-95 border border-slate-200 text-xs md:text-base"
+                        onClick={() => {
+                            setShowPricingModal(false);
+                            if (showPaywall) {
+                              setShowTemplateUpsell({show: false, type: null});
+                            }
+                          }}
+                        className="w-full sm:w-auto py-3 px-6 bg-white text-slate-500 font-medium rounded-xl hover:bg-slate-50 transition-all active:scale-[0.98] border border-slate-200 text-sm md:text-base"
                       >
                         Kembali
                       </button>
-                      
                     </div>
                   </div>
                 </div>
+            ) : showPaywall ? (
+              <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 p-6 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                  <Download className="w-8 h-8 text-red-600" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-800 mb-2">Limit Unduh Gratis Habis!</h3>
+                <p className="text-slate-600 mb-6 leading-relaxed">
+                  Anda telah menggunakan jatah 1x unduh gratis untuk CV. Dapatkan akses cetak <span className="font-semibold text-slate-800">sepuasnya tanpa batas dan tanpa watermark</span> dengan berlangganan Paket Premium.
+                </p>
+                <div className="flex flex-col gap-3 w-full">
+                  <button 
+                    onClick={() => {
+                        setShowTemplateUpsell({show: true, type: 'premium'});
+                        setShowPricingModal(true);
+                      }}
+                    className="w-full py-3 px-4 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all active:scale-95 shadow-md shadow-emerald-200 flex items-center justify-center gap-2"
+                  >Download sekarang</button>
+                  <button 
+                    onClick={() => setShowPaywall(false)}
+                    className="w-full py-3 px-4 bg-white text-slate-500 font-medium rounded-xl hover:bg-slate-50 transition-all active:scale-95 border border-slate-200"
+                  >
+                    Nanti Dulu
+                  </button>
+                </div>
+              </div>
+            ) : showTemplateUpsell.type === 'premium' ? (
+              <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 p-6 flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-amber-100 text-amber-500">
+                    <Palette className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-800 mb-2">Template Terkunci</h3>
+                  <p className="text-slate-600 mb-6 leading-relaxed">
+                    Anda sedang menggunakan <span className="font-semibold text-slate-800">Template Premium</span>. Untuk mengunduh CV dengan desain ini, silakan upgrade ke Paket Premium atau pilih template ATS secara <span className="font-bold italic">gratis</span>.
+                  </p>
+                  <div className="flex flex-col gap-3 w-full">
+                    <button 
+                      onClick={() => setShowPricingModal(true)}
+                      className="w-full py-3 px-4 font-bold rounded-xl text-white transition-all active:scale-95 flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 shadow-md shadow-amber-200"
+                    >
+                      Upgrade ke Premium
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setShowTemplateUpsell({show: false, type: null});
+                        setShowPricingModal(false);
+                      }}
+                      className="w-full py-3 px-4 bg-white text-slate-500 font-medium rounded-xl hover:bg-slate-50 transition-all active:scale-95 border border-slate-200"
+                    >
+                      Kembali Edit
+                    </button>
+                  </div>
               </div>
             ) : (
               <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 p-6 flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-amber-100 text-amber-500">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-purple-100 text-purple-600">
                   <Palette className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-800 mb-2">Template Terkunci</h3>
-                
                 <p className="text-slate-600 mb-6 leading-relaxed">
-                  Anda sedang menggunakan <span className="font-semibold text-slate-800">Template Premium</span>. Untuk mengunduh CV dengan desain ini, silakan upgrade ke Paket Premium.
+                  Anda sedang menggunakan <span className="font-semibold text-slate-800">Template Exclusive</span>. Template ini dapat dibeli secara terpisah seharga <span className="font-bold text-slate-900">Rp {(showTemplateUpsell.price || 0).toLocaleString('id-ID')}</span>.
                 </p>
-                
                 <div className="flex flex-col gap-3 w-full">
                   <button 
-                    onClick={() => setShowPricingModal(true)}
-                    className="w-full py-3 px-4 font-bold rounded-xl text-white transition-all active:scale-95 flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 shadow-md shadow-amber-200"
+                    onClick={() => {
+                      const activeTpl = CV_TEMPLATES.find(t => t.id === data?.config.templateId);
+                      const msg = `Halo admin, saya ingin membeli Template CV Exclusive: ${activeTpl?.name} seharga Rp ${(activeTpl?.price || 0).toLocaleString('id-ID')}`;
+                      window.open(`https://wa.me/6283132987065?text=${encodeURIComponent(msg)}`, '_blank');
+                    }}
+                    className="w-full py-3 px-4 font-bold rounded-xl text-white transition-all active:scale-95 flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 shadow-md shadow-purple-200"
                   >
-                    Upgrade ke Premium
+                    Beli Template Sekarang
                   </button>
                   <button 
                     onClick={() => {
@@ -543,45 +556,10 @@ function CVBuilderContent() {
                   </button>
                 </div>
               </div>
-            )
-          ) : (
-            <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 p-6 flex flex-col items-center text-center">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-purple-100 text-purple-600">
-                <Palette className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-800 mb-2">Template Terkunci</h3>
-              
-              <p className="text-slate-600 mb-6 leading-relaxed">
-                Anda sedang menggunakan <span className="font-semibold text-slate-800">Template Exclusive</span>. Template ini dapat dibeli secara terpisah seharga <span className="font-bold text-slate-900">Rp {(showTemplateUpsell.price || 0).toLocaleString('id-ID')}</span>.
-              </p>
-              
-              <div className="flex flex-col gap-3 w-full">
-                <button 
-                  onClick={() => {
-                    const activeTpl = CV_TEMPLATES.find(t => t.id === data?.config.templateId);
-                    const msg = `Halo admin, saya ingin membeli Template CV Exclusive: ${activeTpl?.name} seharga Rp ${(activeTpl?.price || 0).toLocaleString('id-ID')}`;
-                    window.open(`https://wa.me/6283132987065?text=${encodeURIComponent(msg)}`, '_blank');
-                  }}
-                  className="w-full py-3 px-4 font-bold rounded-xl text-white transition-all active:scale-95 flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 shadow-md shadow-purple-200"
-                >
-                  Beli Template Sekarang
-                </button>
-                <button 
-                  onClick={() => {
-                    setShowTemplateUpsell({show: false, type: null});
-                    setShowPricingModal(false);
-                  }}
-                  className="w-full py-3 px-4 bg-white text-slate-500 font-medium rounded-xl hover:bg-slate-50 transition-all active:scale-95 border border-slate-200"
-                >
-                  Kembali Edit
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Loading Overlay saat Cek Limit */}
+            )}
+          </div>
+        )}
+\n        {/* Loading Overlay saat Cek Limit */}
       {isCheckingLimit && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/95 backdrop-blur-md print:hidden">
           <div className="flex flex-col items-center gap-3">

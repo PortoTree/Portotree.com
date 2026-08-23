@@ -11,7 +11,7 @@ import { auth } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Trash2, ChevronDown, GripVertical, User, GraduationCap, Briefcase, Share2, Wrench, Users, FolderGit2, UploadCloud, Crop, ImageIcon, Bold, Italic, List, Link as LinkIcon, AlignLeft, ChevronLeft, ChevronRight, Sparkles, MapPin, Award, Trophy, Building2 } from "lucide-react";
+import { Plus, Trash2, ChevronDown, GripVertical, User, GraduationCap, Briefcase, Share2, Wrench, Users, FolderGit2, UploadCloud, Crop, ImageIcon, Bold, Italic, List, Link as LinkIcon, AlignLeft, ChevronLeft, ChevronRight, Sparkles, MapPin, Award, Trophy, Building2 , Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/ui/ImageUpload";
 import { RichTextEditor } from "@/components/ui/RichTextEditor";
@@ -449,13 +449,23 @@ export function PortfolioDataForm({ data, onChange }: Props) {
   return (
     <div className="flex flex-col h-full w-full bg-white md:border-r">
       <div className="hidden md:block p-4 border-b flex-shrink-0 bg-white">
-        <h2 className="text-lg font-bold text-slate-800">Data Portofolio</h2>
+        <div className="flex items-center justify-between">
+      <h2 className="text-lg font-bold text-slate-800">Data Portofolio</h2>
+      <button onClick={() => window.dispatchEvent(new CustomEvent('open-tutorial-modal'))} className="p-1.5 text-slate-500 hover:text-emerald-600 bg-slate-100 hover:bg-emerald-100 rounded-full transition-all" title="Bantuan & Panduan">
+        <Info className="w-5 h-5" />
+      </button>
+    </div>
         <p className="text-sm text-slate-500">Isi data diri Anda di sini.</p>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 pb-24 space-y-3 custom-scrollbar">
         <div className="md:hidden pb-2">
-          <h2 className="text-lg font-bold text-slate-800">Data Portofolio</h2>
+          <div className="flex items-center justify-between">
+      <h2 className="text-lg font-bold text-slate-800">Data Portofolio</h2>
+      <button onClick={() => window.dispatchEvent(new CustomEvent('open-tutorial-modal'))} className="p-1.5 text-slate-500 hover:text-emerald-600 bg-slate-100 hover:bg-emerald-100 rounded-full transition-all" title="Bantuan & Panduan">
+        <Info className="w-5 h-5" />
+      </button>
+    </div>
           <p className="text-sm text-slate-500">Isi data diri Anda di sini.</p>
         </div>
         

@@ -53,7 +53,12 @@ export default async function DashboardLayout({
     "use server";
     const { cookies: nextCookies } = await import("next/headers");
     const cookieStore = await nextCookies();
-    cookieStore.delete("session");
+    const isProd = process.env.NODE_ENV === "production";
+    cookieStore.set("session", "", {
+      maxAge: 0,
+      path: "/",
+      ...(isProd ? { domain: ".portotree.com" } : {})
+    });
     redirect("/login");
   }
 

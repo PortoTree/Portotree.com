@@ -101,7 +101,7 @@ export default function Home() {
                   <div className="absolute inset-0 animate-ping">
                     <div className="w-full h-full bg-green-500 opacity-75 animate-blob-shape"></div>
                   </div>
-                  <Link href="https://portotree.com/register" className="relative z-10 w-32 h-32 p-0 text-lg font-bold animate-blob-shape flex flex-col items-center justify-center hover:scale-110 transition-all duration-300 shadow-[0_0_30px_rgba(22,163,74,0.5)] hover:shadow-[0_0_50px_rgba(22,163,74,0.7)] bg-green-600 hover:bg-green-500 text-white border-0 outline-none select-none">
+                  <Link href="https://portotree.com/login" className="relative z-10 w-32 h-32 p-0 text-lg font-bold animate-blob-shape flex flex-col items-center justify-center hover:scale-110 transition-all duration-300 shadow-[0_0_30px_rgba(22,163,74,0.5)] hover:shadow-[0_0_50px_rgba(22,163,74,0.7)] bg-green-600 hover:bg-green-500 text-white border-0 outline-none select-none">
                     <span className="leading-tight">Mulai</span>
                     <span className="leading-tight">Gratis</span>
                     <ArrowRight className="mt-1 h-6 w-6 group-hover:translate-x-1.5 group-hover:scale-110 transition-all duration-300" />

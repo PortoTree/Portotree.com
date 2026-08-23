@@ -16,6 +16,14 @@ export default function TutorialModal() {
     if (!hideTutorial) {
       setIsOpen(true);
     }
+
+    const handleOpenTutorial = () => {
+      setCurrentStep(0);
+      setIsOpen(true);
+    };
+
+    window.addEventListener('open-tutorial-modal', handleOpenTutorial);
+    return () => window.removeEventListener('open-tutorial-modal', handleOpenTutorial);
   }, []);
 
   const handleClose = () => {

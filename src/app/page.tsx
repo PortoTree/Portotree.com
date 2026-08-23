@@ -111,7 +111,7 @@ export default function Home() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto justify-center lg:justify-start items-center">
-                  <Link href="/register" className="w-full sm:w-auto">
+                  <Link href="/login" className="w-full sm:w-auto">
                     <Button size="lg" className="w-full h-14 px-8 text-base font-bold bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg hover:shadow-green-600/30 transition-all hover:-translate-y-1">
                       Mulai Sekarang - Gratis
                       <ArrowRight className="w-5 h-5 ml-2" />
@@ -331,7 +331,7 @@ export default function Home() {
                   <li className="flex items-center gap-3"><CheckCircle2 className="text-green-400 w-6 h-6" /> SEO Friendly</li>
                 </ul>
                 <div className="pt-6">
-                  <Link href="/register">
+                  <Link href="/login">
                     <Button className="bg-green-500 hover:bg-green-600 text-white rounded-full px-8 h-12 font-bold">
                       Coba sekarang
                     </Button>

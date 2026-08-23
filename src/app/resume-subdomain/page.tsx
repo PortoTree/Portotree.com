@@ -98,7 +98,7 @@ export default function ResumeSubdomain() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center mb-10">
-                <Button onClick={() => window.location.href = 'https://portotree.com/register'} className="h-14 px-8 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-base font-bold shadow-lg shadow-amber-600/20 transition-all hover:-translate-y-1 w-full sm:w-auto">
+                <Button onClick={() => window.location.href = 'https://portotree.com/login'} className="h-14 px-8 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-base font-bold shadow-lg shadow-amber-600/20 transition-all hover:-translate-y-1 w-full sm:w-auto">
                   Buat CV Sekarang
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
@@ -686,7 +686,7 @@ export default function ResumeSubdomain() {
                 Bergabunglah dengan ribuan profesional lain yang telah meningkatkan peluang panggilan interview mereka menggunakan CV dari PortoTree.
               </p>
               
-              <Button onClick={() => window.location.href = 'https://portotree.com/register'} size="lg" className="bg-white hover:bg-slate-50 text-amber-600 font-bold px-8 h-14 rounded-2xl text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex items-center gap-3">
+              <Button onClick={() => window.location.href = 'https://portotree.com/login'} size="lg" className="bg-white hover:bg-slate-50 text-amber-600 font-bold px-8 h-14 rounded-2xl text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex items-center gap-3">
                 Mulai Buat CV Gratis <FileText className="w-5 h-5" />
               </Button>
             </div>
