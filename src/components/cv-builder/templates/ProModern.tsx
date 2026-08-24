@@ -97,7 +97,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
     ] as any;
   }
 
-  const visibleProjects = projects?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  
   const visibleAwards = awards?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   const visibleOrg = organization?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   const visibleInternship = internship?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
@@ -315,41 +315,7 @@ export function ProModern({ data, showPlaceholders = true }: { data: CVDataPaylo
         )}
 
         {/* PROJECTS */}
-        {visibleProjects.length > 0 && (
-          <div className={!projects || projects.length === 0 ? 'print:hidden' : ''}>
-            <SectionHeader title="PROJECTS" icon={Folder} />
-            <div className="flex flex-col gap-5">
-              {visibleProjects.map((proj: any) => (
-                <div key={proj.id} className={(proj as any).isDummy ? 'text-gray-400 opacity-70 grayscale' : ''}>
-                  <div className={`font-bold text-[11pt] mb-0.5 ${(proj as any).isDummy ? 'text-gray-500' : 'text-slate-900'}`}>
-                    {proj.title}
-                  </div>
-                  {proj.link && (
-                    <div className="mb-2">
-                      <a href={proj.link} target="_blank" rel="noopener noreferrer" className={`text-[9pt] hover:underline ${(proj as any).isDummy ? 'text-gray-400' : 'text-blue-600'}`}>
-                        {proj.link}
-                      </a>
-                    </div>
-                  )}
-                  {proj.description && (
-                    <div className={`text-[9.5pt] ml-4 ${(proj as any).isDummy ? 'text-gray-400' : 'text-slate-700'}`}>
-                      {proj.description.split('\n').map((line: any, i: any) => {
-                        const cleanLine = line.trim();
-                        if (!cleanLine) return null;
-                        return (
-                          <div key={i} className="flex gap-2 mb-1">
-                            <span className="select-none text-slate-400">•</span>
-                            <span>{cleanLine.replace(/^[-•]\s*/, '')}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        
 
         {/* ORGANIZATIONS */}
         {visibleOrg.length > 0 && (

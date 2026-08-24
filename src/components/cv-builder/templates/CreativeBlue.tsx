@@ -394,35 +394,7 @@ export const CreativeBlue: React.FC<{ data: CVDataPayload, showPlaceholders?: bo
           )}
 
           {/* PROYEK */}
-          {projects.length > 0 && (
-            <div className="mb-6">
-              <div className="relative bg-[#558ed5] text-white py-1.5 px-6 mr-[-16px] ml-6 mb-4 shadow-sm print:!bg-[#558ed5]">
-                <h2 className="text-[11pt] font-bold uppercase tracking-widest">PROYEK</h2>
-                <div className="absolute top-full right-0 w-0 h-0 border-t-[8px] border-r-[16px] border-t-[#2b4f7a] border-r-transparent"></div>
-              </div>
-              
-              <div className="px-8 flex flex-col gap-4">
-                {projects.map((proj: any) => (
-                  <div key={proj.id} className="text-[9pt] leading-relaxed text-[#333]">
-                    <div className="font-bold text-[10pt] text-[#2b4f7a]">{proj.title}</div>
-                    <div className="flex justify-between items-center mb-1">
-                      <div className="flex items-center gap-1.5 font-bold">
-                        <span className="text-[12pt] mt-[-2px]">✓</span> {proj.role || 'Kontributor'}
-                      </div>
-                      <div className="font-bold">
-                        {proj.startYear} - {proj.endYear || 'Sekarang'}
-                      </div>
-                    </div>
-                    {proj.description && (
-                      <div className="pl-5 text-justify">
-                        {proj.description}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          
 
           {/* ORGANISASI */}
           {organization.length > 0 && (

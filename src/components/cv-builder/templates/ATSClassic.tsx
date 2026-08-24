@@ -77,7 +77,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
       }
     ] as any;
   }
-  const visibleProjects = projects?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  
   const visibleCerts = certifications?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   const visibleAwards = awards?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   const visibleOrg = organization?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
@@ -278,28 +278,7 @@ export function ATSClassic({ data, showPlaceholders = true }: { data: CVDataPayl
         </div>
       )}
 
-      {visibleProjects.length > 0 && (
-        <div className="mb-6">
-          <SectionHeader title="PROJECTS" />
-          <div className="space-y-5">
-            {visibleProjects.map((proj: any) => (
-              <div key={proj.id} className="break-inside-avoid mb-4">
-                <div className="flex justify-between items-baseline mb-0.5">
-                  <div className="font-bold">{proj.title}</div>
-                </div>
-                <div className="text-blue-600 mb-1.5 italic"><a href={proj.link} target="_blank" rel="noopener noreferrer" className="hover:underline">{proj.link}</a></div>
-                {proj.description && (
-                  <ul className="list-disc pl-5 space-y-1">
-                    {proj.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line: any, i: any) => (
-                      <li key={i} className="pl-1">{line.replace(/^-\s*/, '')}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      
 
       {visibleCerts.length > 0 && (
         <div className="mb-6">

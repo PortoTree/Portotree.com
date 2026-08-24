@@ -61,7 +61,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
     ] as any;
   }
   const visibleInternship = internship?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
-  const visibleProjects = projects?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
+  
   const visibleOrganization = organization?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   const visibleCertifications = certifications?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
   const visibleAwards = awards?.filter((item: any) => !config.hiddenItems.includes(item.id)) || [];
@@ -352,34 +352,7 @@ export function ATSModern({ data, showPlaceholders = true }: { data: CVDataPaylo
             </div>
           )}
 
-          {visibleProjects.length > 0 && (
-            <div className="cv-section">
-              <hr className="border-t border-gray-300 mb-6" />
-              <div>
-                <h3 className="text-[12pt] font-bold uppercase tracking-widest mb-5">Projects</h3>
-                <div className="pl-1">
-                  <div className="border-l-[1px] border-gray-300 pl-5 space-y-6 py-1">
-                    {visibleProjects.map((proj: any) => (
-                      <div key={proj.id} className="relative break-inside-avoid mb-4">
-                        <div className="absolute -left-[24.5px] top-1.5 w-2 h-2 bg-gray-600 rounded-full" />
-                        <h4 className="font-bold uppercase text-[10pt] tracking-wider mb-1">{proj.title}</h4>
-                        <div className="text-[9.5pt] text-gray-700 mb-2 font-medium">
-                          <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{proj.link}</a>
-                        </div>
-                        {proj.description && (
-                          <ul className="list-disc pl-4 space-y-1 text-[9.5pt] text-gray-700 leading-relaxed">
-                            {proj.description.replace(/<[^>]+>/g, '').split('\n').filter(Boolean).map((line: any, i: any) => (
-                              <li key={i}>{line.replace(/^-/, '').trim()}</li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+          
 
           {visibleOrganization.length > 0 && (
             <div className="cv-section">
