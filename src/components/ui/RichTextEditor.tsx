@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Bold, Italic, Link as LinkIcon, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronDown, RotateCcw, Table as TableIcon, Search, X, ChevronUp } from 'lucide-react';
+import { Bold, Italic, Link as LinkIcon, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronDown, RotateCcw, Table as TableIcon, Search, X, ChevronUp, Quote } from 'lucide-react';
 
 interface RichTextEditorProps {
   value: string;
@@ -170,13 +170,40 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
     // Parse line by line for Lists and Tables
     const lines = html.split('\n');
     let inTable = false;
-    let listType: 'ul' | 'ol' | null = null;
+      let inBlockquote = false;
+      let listType: 'ul' | 'ol' | null = null;
     const result = [];
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
 
-      // Table parsing
+      
+        // Blockquote parsing
+        if (line.startsWith('&gt;')) {
+          if (listType) { result.push(`</${listType}>`); listType = null; }
+          if (inTable) { result.push('</tbody></table>'); inTable = false; }
+          
+          if (!inBlockquote) {
+            result.push('<blockquote>');
+            inBlockquote = true;
+          }
+          
+          const textStr = line.replace(/^&gt;\s*/, '');
+          if (textStr) {
+            result.push(textStr + '<br>');
+          } else {
+            result.push('<br>');
+          }
+          continue;
+        } else if (inBlockquote && line === '') {
+          result.push('<br>');
+          continue;
+        } else if (inBlockquote) {
+          result.push('</blockquote>');
+          inBlockquote = false;
+        }
+
+        // Table parsing
       if (line.startsWith('|') && line.endsWith('|')) {
         if (listType) { result.push(`</${listType}>`); listType = null; }
         
@@ -234,6 +261,7 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
     }
 
     if (inTable) result.push('</tbody></table>');
+    if (inBlockquote) result.push('</blockquote>');
     if (listType) result.push(`</${listType}>`);
 
     const finalHtml = result.join('');
@@ -438,6 +466,11 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
         <button type="button" disabled={!hasSelection} onClick={handleOpenLinkModal} className="p-1.5 hover:bg-slate-200 disabled:hover:bg-transparent rounded transition-colors text-slate-600 disabled:text-slate-300 disabled:cursor-not-allowed" title="Link (Ctrl+K)">
           <LinkIcon size={16} />
         </button>
+          
+          <button type="button" disabled={!hasSelection} onClick={() => exec('formatBlock', 'blockquote')} className="p-1.5 hover:bg-slate-200 disabled:hover:bg-transparent rounded transition-colors text-slate-600 disabled:text-slate-300 disabled:cursor-not-allowed" title="Blockquote">
+            <Quote size={16} />
+          </button>
+
         
         <div className="w-[1px] h-4 bg-slate-300 mx-1"></div>
         

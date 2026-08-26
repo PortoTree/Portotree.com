@@ -336,3 +336,10 @@
 \ n \ n # #   K a t e g o r i :   B a c k e n d   ( A d s . t x t ) \ n -   * * S t a t u s : * *   S e l e s a i \ n -   * * P e r u b a h a n : * * \ n     -   M e m p e r b a r u i   m a t c h e r   d i   m i d d l e w a r e . t s   a g a r   m e n g e c u a l i k a n   e k s t e n s i   f i l e   . t x t   d a n   . x m l   s e h i n g g a   a d s . t x t   d a n   r o b o t s . t x t   b i s a   d i a k s e s   l a n g s u n g   t a n p a   t e r k e n a   i n t e r c e p t   m i d d l e w a r e . \ n -   * * F i l e   T e r d a m p a k : * * \ n     -   c : / P o r t o T r e e / s r c / m i d d l e w a r e . t s   [ M O D I F I E D ] \ n -   [ x ]   I m p l e m e n t   S t a t i c   I m a g e   C a r o u s e l   M o d a l   f o r   O n b o a r d i n g   T o u r   ( P o r t f o l i o   B u i l d e r )  
  -   [ x ]   U p d a t e   P o r t f o l i o   D e f a u l t   A c t i v e   S e c t i o n s   &   T o u r   F l o w   ( B a c k e n d / F r o n t e n d   l o g i c   f i x )  
  
+
+## Kategori: Frontend (Blog Editor Blockquote & Paste Bugfix)
+- **Status:** Selesai
+- **Perubahan:**
+  - Memperbaiki parser Markdown untuk Blockquote di RichTextEditor pada saat paste text. Menangani baris kosong di tengah blockquote dan mereset isi editor secara bersih jika melakukan Ctrl+A + Paste untuk menghindari *wrapper* blockquote tertinggal.
+- **File Terdampak:**
+  - src/components/ui/RichTextEditor.tsx
