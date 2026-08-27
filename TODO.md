@@ -362,3 +362,23 @@
   - Menghapus pembatasan limit(10) pada fungsi getPublishedBlogs() di server action untuk memperbaiki bug dimana in-memory pagination di halaman publik hanya bisa memproses 10 blog saja meskipun di dashboard terdapat lebih dari 10 blog yang sudah ter-publish.
 - **File Terdampak:**
   - src/app/actions/blog.ts
+
+
+## Kategori: Frontend (Navbar Redesign)
+- **Status:** Selesai
+- **Perubahan:**
+  - Mengubah desain Navbar utama dari model floating pill (rounded-full) menjadi model Chunky Rounded Box (rounded-2xl dengan shadow tebal, border-2 slate-200/60, dan background putih transparant/backdrop-blur).
+  - Menambahkan px-6 untuk margin pada mobile agar lebih proporsional.
+- **File Terdampak:**
+  - src/components/layout/Navbar.tsx
+
+
+## Kategori: Backend (Dynamic Cookie Domain)
+- **Status:** Selesai
+- **Perubahan:**
+  - Menghapus hardcode `.portotree.com` pada konfigurasi cookie session di fungsi `createSession` dan `removeSession` (`src/app/actions/auth.ts`).
+  - Menerapkan logika dinamis menggunakan `headers().get("host")` untuk mendeteksi base/root domain saat ini.
+  - Menambahkan pengecualian untuk menghindari setting cookie di suffix `.vercel.app` karena ditolak oleh browser.
+  - Ini memperbaiki masalah gagal login di custom domain (`own.domain.com`) saat mode production aktif.
+- **File Terdampak:**
+  - `src/app/actions/auth.ts`

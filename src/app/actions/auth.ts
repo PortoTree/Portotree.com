@@ -10,7 +10,7 @@ export async function createSession(idToken: string) {
     const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
     const sessionCookie = await adminAuth.createSessionCookie(idToken, { expiresIn });
     const cookieStore = await cookies();
-    const isProd = process.env.NODE_ENV === "production";
+        const isProd = process.env.NODE_ENV === "production";
     const cookieOptions: any = {
       maxAge: expiresIn / 1000,
       httpOnly: true,
@@ -18,8 +18,20 @@ export async function createSession(idToken: string) {
       path: "/",
     };
     
-    if (isProd) {
-      cookieOptions.domain = ".portotree.com";
+    // Dynamically get the host to set the correct root domain cookie
+    const headersList = await require("next/headers").headers();
+    const host = headersList.get("host") || "";
+    const domainParts = host.split(':')[0].split('.');
+    
+    if (isProd && domainParts.length >= 2) {
+      // Set to root domain so it's shared across subdomains
+      // For example: own.domain.com -> .domain.com
+      const rootDomain = '.' + domainParts.slice(-2).join('.');
+      
+      // Prevent setting invalid domains for Vercel app (Public Suffix List restriction)
+      if (!rootDomain.endsWith('.vercel.app')) {
+         cookieOptions.domain = rootDomain;
+      }
     }
     // Note: Do not set domain for localhost. Browsers reject domain="localhost".
     // Omitting the domain will automatically set it to the current hostname (e.g., own.localhost), which works perfectly.
@@ -69,12 +81,24 @@ export async function validateTurnstile(token: string) {
 
 export async function removeSession() {
   const cookieStore = await cookies();
-  const isProd = process.env.NODE_ENV === "production";
-  cookieStore.set("session", "", {
-    maxAge: 0,
-    path: "/",
-    ...(isProd ? { domain: ".portotree.com" } : {})
-  });
+    const isProd = process.env.NODE_ENV === "production";
+    const headersList = await require("next/headers").headers();
+    const host = headersList.get("host") || "";
+    const domainParts = host.split(':')[0].split('.');
+    
+    let domainOpt = {};
+    if (isProd && domainParts.length >= 2) {
+      const rootDomain = '.' + domainParts.slice(-2).join('.');
+      if (!rootDomain.endsWith('.vercel.app')) {
+        domainOpt = { domain: rootDomain };
+      }
+    }
+    
+    cookieStore.set("session", "", {
+      maxAge: 0,
+      path: "/",
+      ...domainOpt
+    });
   return { success: true };
 }
 
