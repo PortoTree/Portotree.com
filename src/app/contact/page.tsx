@@ -84,8 +84,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-bold text-slate-900 text-base md:text-lg mb-1">Partnership & Bisnis</h3>
                     <p className="text-slate-500 text-sm mb-2">Tertarik bekerja sama atau berkolaborasi dengan platform kami?</p>
-                    <a href="mailto:teamportotree@gmail.com" className="text-emerald-600 font-semibold hover:underline">
-                      teamportotree@gmail.com
+                    <a href="mailto:csportotree@gmail.com" className="text-emerald-600 font-semibold hover:underline">
+                      csportotree@gmail.com
                     </a>
                   </div>
                 </div>
