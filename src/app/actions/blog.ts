@@ -72,7 +72,7 @@ export async function getPublishedBlogs(): Promise<{ success: boolean; data?: Bl
       .collection("blogs")
       .where("status", "==", "published")
       .orderBy("createdAt", "desc")
-      .limit(10)
+      
       .get();
     
     const blogs: BlogPost[] = snapshot.docs.map(doc => ({
@@ -232,3 +232,68 @@ export async function getPublishedCategories(): Promise<{
   }
 }
 
+
+
+// CUSTOM CATEGORIES MANAGEMENT
+export async function getCustomCategories(): Promise<{ success: boolean; data?: {id: string, label: string}[]; error?: string }> {
+  try {
+    const doc = await adminDb.collection('settings').doc('blogCategories').get();
+    if (!doc.exists) return { success: true, data: [] };
+    return { success: true, data: doc.data()?.categories || [] };
+  } catch (error: any) {
+    console.error('[getCustomCategories] Error:', error);
+    return { success: false, error: 'Gagal mengambil kategori kustom.' };
+  }
+}
+
+export async function saveCustomCategory(label: string): Promise<{ success: boolean; id?: string; error?: string }> {
+  try {
+    const docRef = adminDb.collection('settings').doc('blogCategories');
+    const doc = await docRef.get();
+    const id = Date.now().toString();
+    const newCat = { id, label: label.trim() };
+    
+    if (!doc.exists) {
+      await docRef.set({ categories: [newCat] });
+    } else {
+      const cats = doc.data()?.categories || [];
+      if (cats.some((c: any) => c.label.toLowerCase() === label.trim().toLowerCase())) {
+        return { success: false, error: 'Kategori sudah ada.' };
+      }
+      await docRef.update({ categories: FieldValue.arrayUnion(newCat) });
+    }
+    return { success: true, id };
+  } catch (error: any) {
+    return { success: false, error: 'Gagal menyimpan kategori.' };
+  }
+}
+
+export async function updateCustomCategory(id: string, newLabel: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const docRef = adminDb.collection('settings').doc('blogCategories');
+    const doc = await docRef.get();
+    if (doc.exists) {
+      const cats = doc.data()?.categories || [];
+      const updated = cats.map((c: any) => c.id === id ? { ...c, label: newLabel.trim() } : c);
+      await docRef.update({ categories: updated });
+    }
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: 'Gagal mengubah kategori.' };
+  }
+}
+
+export async function deleteCustomCategory(id: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const docRef = adminDb.collection('settings').doc('blogCategories');
+    const doc = await docRef.get();
+    if (doc.exists) {
+      const cats = doc.data()?.categories || [];
+      const updated = cats.filter((c: any) => c.id !== id);
+      await docRef.update({ categories: updated });
+    }
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: 'Gagal menghapus kategori.' };
+  }
+}

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createBlog } from "@/app/actions/blog";
+import { createBlog, getCustomCategories, saveCustomCategory, updateCustomCategory, deleteCustomCategory } from "@/app/actions/blog";
+import { Pencil } from "lucide-react";
 import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { ImageUpload } from "@/components/ui/ImageUpload";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -20,6 +21,54 @@ export default function CreateBlogPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newCategory, setNewCategory] = useState("");
+  const [customCats, setCustomCats] = useState<{id: string, label: string}[]>([]);
+  const [isCatDialogOpen, setIsCatDialogOpen] = useState(false);
+  const [editingCatId, setEditingCatId] = useState<string | null>(null);
+
+  require("react").useEffect(() => {
+    getCustomCategories().then(res => {
+      if (res.success && res.data) setCustomCats(res.data);
+    });
+  }, []);
+  
+  const handleSaveCategory = async () => {
+    if (!newCategory.trim()) return;
+    
+    if (editingCatId) {
+      const res = await updateCustomCategory(editingCatId, newCategory);
+      if (res.success) {
+        setCustomCats(prev => prev.map(c => c.id === editingCatId ? { ...c, label: newCategory.trim() } : c));
+        if (formData.category === customCats.find(c => c.id === editingCatId)?.label) {
+          setFormData(prev => ({ ...prev, category: newCategory.trim() }));
+        }
+        toast.success("Kategori berhasil diubah");
+      } else {
+        toast.error(res.error || "Gagal mengubah kategori");
+      }
+    } else {
+      const res = await saveCustomCategory(newCategory);
+      if (res.success && res.id) {
+        setCustomCats(prev => [...prev, { id: res.id!, label: newCategory.trim() }]);
+        setFormData(prev => ({ ...prev, category: newCategory.trim() }));
+        toast.success("Kategori berhasil ditambahkan");
+      } else {
+        toast.error(res.error || "Gagal menambah kategori");
+      }
+    }
+    setIsCatDialogOpen(false);
+  };
+  
+  const handleDeleteCat = async (id: string, label: string) => {
+    if (!confirm("Hapus kategori ini?")) return;
+    const res = await deleteCustomCategory(id);
+    if (res.success) {
+      setCustomCats(prev => prev.filter(c => c.id !== id));
+      if (formData.category === label) {
+        setFormData(prev => ({ ...prev, category: "Karier" }));
+      }
+      toast.success("Kategori dihapus");
+    }
+  };
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -133,10 +182,10 @@ export default function CreateBlogPage() {
                   </SelectContent>
                 </Select>
 
-                <Dialog>
+                <Dialog open={isCatDialogOpen} onOpenChange={setIsCatDialogOpen}>
                   <DialogTrigger 
                     className={buttonVariants({ variant: "outline", className: "shrink-0 px-3" })}
-                    onClick={() => setNewCategory(formData.category)} 
+                    onClick={() => { setEditingCatId(null); setNewCategory(""); }} 
                     title="Custom Kategori"
                   >
                     <Plus className="w-4 h-4" />
@@ -158,11 +207,7 @@ export default function CreateBlogPage() {
                     <DialogFooter>
                       <DialogClose 
                         className={buttonVariants({ variant: "default" })}
-                        onClick={() => {
-                          if (newCategory.trim()) {
-                            setFormData(prev => ({ ...prev, category: newCategory.trim() }));
-                          }
-                        }}
+                        onClick={handleSaveCategory}
                       >
                         Gunakan Kategori Ini
                       </DialogClose>

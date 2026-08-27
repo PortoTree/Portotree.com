@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getBlogById, updateBlog, deleteBlog } from "@/app/actions/blog";
+import { getBlogById, updateBlog, deleteBlog, getCustomCategories, saveCustomCategory, updateCustomCategory, deleteCustomCategory } from "@/app/actions/blog";
+import { Pencil } from "lucide-react";
 import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { ImageUpload } from "@/components/ui/ImageUpload";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -25,6 +26,54 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newCategory, setNewCategory] = useState("");
+  const [customCats, setCustomCats] = useState<{id: string, label: string}[]>([]);
+  const [isCatDialogOpen, setIsCatDialogOpen] = useState(false);
+  const [editingCatId, setEditingCatId] = useState<string | null>(null);
+
+  require("react").useEffect(() => {
+    getCustomCategories().then(res => {
+      if (res.success && res.data) setCustomCats(res.data);
+    });
+  }, []);
+  
+  const handleSaveCategory = async () => {
+    if (!newCategory.trim()) return;
+    
+    if (editingCatId) {
+      const res = await updateCustomCategory(editingCatId, newCategory);
+      if (res.success) {
+        setCustomCats(prev => prev.map(c => c.id === editingCatId ? { ...c, label: newCategory.trim() } : c));
+        if (formData.category === customCats.find(c => c.id === editingCatId)?.label) {
+          setFormData(prev => ({ ...prev, category: newCategory.trim() }));
+        }
+        toast.success("Kategori berhasil diubah");
+      } else {
+        toast.error(res.error || "Gagal mengubah kategori");
+      }
+    } else {
+      const res = await saveCustomCategory(newCategory);
+      if (res.success && res.id) {
+        setCustomCats(prev => [...prev, { id: res.id!, label: newCategory.trim() }]);
+        setFormData(prev => ({ ...prev, category: newCategory.trim() }));
+        toast.success("Kategori berhasil ditambahkan");
+      } else {
+        toast.error(res.error || "Gagal menambah kategori");
+      }
+    }
+    setIsCatDialogOpen(false);
+  };
+  
+  const handleDeleteCat = async (id: string, label: string) => {
+    if (!confirm("Hapus kategori ini?")) return;
+    const res = await deleteCustomCategory(id);
+    if (res.success) {
+      setCustomCats(prev => prev.filter(c => c.id !== id));
+      if (formData.category === label) {
+        setFormData(prev => ({ ...prev, category: "Karier" }));
+      }
+      toast.success("Kategori dihapus");
+    }
+  };
   const [isDeleting, setIsDeleting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -197,18 +246,51 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
                     <SelectItem value="Dokumen (CV/Surat)">Dokumen (CV/Surat)</SelectItem>
                     <SelectItem value="Portofolio">Portofolio</SelectItem>
                     {/* Render existing custom category if selected */}
+                    {customCats.map(cat => (
+                      <div key={cat.id} className="relative flex w-full items-center">
+                        <SelectItem value={cat.label} className="flex-1 pr-16">{cat.label}</SelectItem>
+                        <div className="absolute right-6 top-0 bottom-0 flex items-center gap-2 z-10">
+                          <button 
+                            type="button"
+                            onPointerDown={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setEditingCatId(cat.id);
+                              setNewCategory(cat.label);
+                              setIsCatDialogOpen(true);
+                            }}
+                            className="text-slate-400 hover:text-emerald-600 transition-colors p-1"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                          </button>
+                          <button 
+                            type="button"
+                            onPointerDown={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleDeleteCat(cat.id, cat.label);
+                            }}
+                            className="text-slate-400 hover:text-red-600 transition-colors p-1"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                    {/* Fallback for category from DB that is not in customCats or master */}
                     {![
-                      "Karier", "Tips & Trik", "Edukasi", "Info & Berita", "Dokumen (CV/Surat)", "Portofolio"
+                      "Karier", "Tips & Trik", "Edukasi", "Info & Berita", "Dokumen (CV/Surat)", "Portofolio",
+                      ...customCats.map(c => c.label)
                     ].includes(formData.category) && formData.category && (
                       <SelectItem value={formData.category}>{formData.category}</SelectItem>
                     )}
                   </SelectContent>
                 </Select>
 
-                <Dialog>
+                <Dialog open={isCatDialogOpen} onOpenChange={setIsCatDialogOpen}>
                   <DialogTrigger 
                     className={buttonVariants({ variant: "outline", className: "shrink-0 px-3" })}
-                    onClick={() => setNewCategory(formData.category)} 
+                    onClick={() => { setEditingCatId(null); setNewCategory(""); }} 
                     title="Custom Kategori"
                   >
                     <Plus className="w-4 h-4" />
@@ -230,11 +312,7 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
                     <DialogFooter>
                       <DialogClose 
                         className={buttonVariants({ variant: "default" })}
-                        onClick={() => {
-                          if (newCategory.trim()) {
-                            setFormData(prev => ({ ...prev, category: newCategory.trim() }));
-                          }
-                        }}
+                        onClick={handleSaveCategory}
                       >
                         Gunakan Kategori Ini
                       </DialogClose>

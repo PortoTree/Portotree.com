@@ -343,3 +343,22 @@
   - Memperbaiki parser Markdown untuk Blockquote di RichTextEditor pada saat paste text. Menangani baris kosong di tengah blockquote dan mereset isi editor secara bersih jika melakukan Ctrl+A + Paste untuk menghindari *wrapper* blockquote tertinggal.
 - **File Terdampak:**
   - src/components/ui/RichTextEditor.tsx
+
+## Kategori: Backend (Dynamic Blog Categories)
+- **Status:** Selesai
+- **Perubahan:**
+  - Menambahkan koleksi blogCategories di Firestore untuk menyimpan custom category secara permanen.
+  - Membuat fungsi CRUD saveCustomCategory, updateCustomCategory, deleteCustomCategory di server actions.
+  - Mengintegrasikan UI Edit dan Hapus kategori langsung ke dalam komponen SelectContent di halaman Create & Edit Blog.
+- **File Terdampak:**
+  - src/app/actions/blog.ts
+  - src/app/own-subdomain/(protected)/blogs/create/page.tsx
+  - src/app/own-subdomain/(protected)/blogs/[id]/edit/page.tsx
+
+
+## Kategori: Backend (Blog Limit Bugfix)
+- **Status:** Selesai
+- **Perubahan:**
+  - Menghapus pembatasan limit(10) pada fungsi getPublishedBlogs() di server action untuk memperbaiki bug dimana in-memory pagination di halaman publik hanya bisa memproses 10 blog saja meskipun di dashboard terdapat lebih dari 10 blog yang sudah ter-publish.
+- **File Terdampak:**
+  - src/app/actions/blog.ts
