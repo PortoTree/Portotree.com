@@ -47,6 +47,11 @@ export function middleware(req: NextRequest) {
     return NextResponse.rewrite(new URL(`/surat-subdomain${url.pathname}`, req.url));
   }
 
+  // Logic for job/networking subdomain
+  if (domain === 'job.portotree.com' || domain === 'job.localhost') {
+    return NextResponse.rewrite(new URL(`/job-subdomain${url.pathname}`, req.url));
+  }
+
   // Logic for owner dashboard subdomain
   if (isOwnSubdomain) {
     return NextResponse.rewrite(new URL(`/own-subdomain${url.pathname}`, req.url));

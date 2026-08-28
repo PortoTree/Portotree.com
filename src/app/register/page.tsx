@@ -6,13 +6,25 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Eye, EyeOff, Mail, CheckCircle2 } from "lucide-react";
-import { auth } from "@/lib/firebase/client";
+import { auth, db } from "@/lib/firebase/client";
+import { doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { sendVerification, verifyOTP, createSession, validateTurnstile } from "@/app/actions/auth";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
+    const [urlRole, setUrlRole] = useState<string | null>(null);
+    const [selectedRole, setSelectedRole] = useState<"pengguna" | "recruiter">("pengguna");
+
+    useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      const role = params.get('role');
+      if (role === 'recruiter' || role === 'pengguna') {
+        setUrlRole(role);
+        setSelectedRole(role);
+      }
+    }, []);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
@@ -198,12 +210,14 @@ export default function RegisterPage() {
             className="mx-auto mb-6"
           />
           <h1 className="text-2xl font-bold text-slate-900">
-            {isVerificationMode ? "Verifikasi Email" : "Buat akun baru"}
+            {isVerificationMode ? "Verifikasi Email" : (
+              selectedRole === "recruiter" ? "Buat Akun Recruiter" : "Buat Akun Pengguna"
+            )}
           </h1>
           <p className="text-slate-500 mt-2">
             {isVerificationMode 
               ? `Kami telah mengirim 6 digit kode ke ${email}`
-              : "Mulai bangun portofolio Anda secara gratis"
+              : (selectedRole === "recruiter" ? "Kemudahan mencari talent profesional" : "Kebutuhan Karier anda dalam 1 platform")
             }
           </p>
         </div>
@@ -214,7 +228,25 @@ export default function RegisterPage() {
           </div>
         )}
 
-        <form onSubmit={handleRegister} className="space-y-5 relative">
+        {!isVerificationMode && !urlRole && (
+              <div className="flex bg-slate-100 p-1.5 rounded-xl mb-6">
+                <button 
+                  type="button" 
+                  onClick={() => setSelectedRole("pengguna")} 
+                  className={`flex-1 text-sm font-bold py-2.5 rounded-lg transition-all ${selectedRole === "pengguna" ? "bg-white text-emerald-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                >
+                  Pengguna
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => setSelectedRole("recruiter")} 
+                  className={`flex-1 text-sm font-bold py-2.5 rounded-lg transition-all ${selectedRole === "recruiter" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                >
+                  Recruiter
+                </button>
+              </div>
+            )}
+            <form onSubmit={handleRegister} className="space-y-5 relative">
           <div className="space-y-1.5">
             <label className="text-sm font-bold text-slate-700">Alamat Email</label>
             <input 

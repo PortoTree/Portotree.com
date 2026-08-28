@@ -382,3 +382,119 @@
   - Ini memperbaiki masalah gagal login di custom domain (`own.domain.com`) saat mode production aktif.
 - **File Terdampak:**
   - `src/app/actions/auth.ts`
+
+
+## Kategori: Frontend (Job/Networking Community UI)
+- **Status:** Dalam Pengerjaan (Mockup UI Selesai)
+- **Perubahan:**
+  - Menambahkan routing job.domain.com (serta job.localhost) di src/middleware.ts untuk mengarah ke /job-subdomain.
+  - Membuat kerangka UI halaman Job Feed/Komunitas di src/app/job-subdomain/layout.tsx (Sidebar navigasi & grup berbasis lokasi).
+  - Membuat *placeholder* komponen Create Post dan kartu postingan simulasi untuk Rekruter (Tombol Lamar & Profil Perusahaan) dan Worker (Tombol Hire & CV) di src/app/job-subdomain/page.tsx.
+- **File Terdampak:**
+  - src/middleware.ts
+  - src/app/job-subdomain/layout.tsx (Baru)
+  - src/app/job-subdomain/page.tsx (Baru)
+
+
+## Kategori: Frontend (Job/Networking Community UI)
+- **Status:** Selesai
+- **Perubahan:**
+  - Memindahkan posisi komponen 'Lengkapi Profil' dari sidebar kanan ke sidebar kiri.
+  - Merombak ulang (redesign) komponen tersebut menjadi bergaya User Profile Card (terdapat banner, foto profil, nama, email terverifikasi, dan link portofolio) mirip seperti tampilan pada situs profesional.
+  - Progress bar 'Lengkapi Profil' tetap dipertahankan di bagian bawah Profile Card tersebut.
+  - Menambahkan *placeholder* 'Top Perusahaan' di sidebar kanan agar layout 3-kolom tetap seimbang.
+- **File Terdampak:**
+  - src/app/job-subdomain/layout.tsx
+
+
+## Kategori: Frontend (Sinkronisasi User Data di Job Subdomain)
+- **Status:** Selesai
+- **Perubahan:**
+  - Memodifikasi Profile Card di src/app/job-subdomain/layout.tsx agar tersinkronisasi dinamis dengan akun user (menarik data dari *session cookie*).
+  - Menghapus komponen *progress bar* Lengkapi Profil dan tautan portofolio di kartu profil untuk menjadikannya lebih ringkas.
+  - Menampilkan nama asli (diambil dari data adminDb), email, dan lokasi.
+- **File Terdampak:**
+  - src/app/job-subdomain/layout.tsx
+
+
+## Kategori: Frontend (Auth Modal di Job Subdomain)
+- **Status:** Selesai
+- **Perubahan:**
+  - Membuat komponen JobAuthModal interaktif dengan 2 opsi utama (Mencari Kerja vs Membuka Lowongan).
+  - Menerapkan transisi UI perpindahan ke form *login* spesifik masing-masing *role* secara mulus tanpa me-*reload* halaman.
+  - Memasukkan komponen modal ini ke dalam src/app/job-subdomain/layout.tsx.
+  - Modal hanya akan muncul (dengan overlay *blur*) jika variabel sessionCookie kosong/tidak terdeteksi.
+- **File Terdampak:**
+  - src/components/job/JobAuthModal.tsx (Baru)
+  - src/app/job-subdomain/layout.tsx
+
+
+## Kategori: Frontend (Penyederhanaan UI Modal Job)
+- **Status:** Selesai
+- **Perubahan:**
+  - Menghapus banner dekorasi hijau (beserta teks promosi) pada komponen JobAuthModal.
+  - Mengubah warna latar belakang (*overlay*) modal dari warna gelap (g-slate-900/60) menjadi efek kaca transparan yang terang (g-white/40 backdrop-blur-md).
+  - Membuat tampilan pop-up jauh lebih minimalis dan fokus langsung pada 2 opsi *role*.
+- **File Terdampak:**
+  - src/components/job/JobAuthModal.tsx
+
+
+## Kategori: Frontend (Revisi Background Modal Job)
+- **Status:** Selesai
+- **Perubahan:**
+  - Menghapus efek ackdrop-blur pada modal *Role Selection* agar *background* halaman utama tetap terlihat jelas (tidak rabun).
+  - Mengganti *overlay* transparan cerah menjadi warna gelap g-black/40 sesuai instruksi untuk menjaga kontras dan kenyamanan visual.
+- **File Terdampak:**
+  - src/components/job/JobAuthModal.tsx
+
+
+## Kategori: Frontend (Optimasi Mobile UI Modal Job)
+- **Status:** Selesai
+- **Perubahan:**
+  - Menyesuaikan *grid layout* pada opsi *Role Selection* agar tetap mempertahankan format 2 kolom secara horizontal (bersebelahan) di perangkat *mobile* (menghapus sifat *stacking* vertikal sm:grid-cols-2).
+  - Memperkecil ukuran *padding*, teks, dan *icon* khusus untuk layar *mobile* (pakai breakpoint *sm:*) agar desain menjadi jauh lebih *compact* dan tidak memakan terlalu banyak ruang layar.
+- **File Terdampak:**
+  - src/components/job/JobAuthModal.tsx
+
+
+## Kategori: Frontend (Password Toggle JobAuthModal)
+- **Status:** Selesai
+- **Perubahan:**
+  - Menambahkan *state* internal showPassword pada komponen JobAuthModal.
+  - Menyuntikkan interaksi ikon Eye dan EyeOff (dari *lucide-react*) pada input kata sandi pencari kerja dan rekruter.
+  - Ikon kini dapat diklik untuk menyembunyikan/menampilkan teks input *password* secara *real-time*.
+- **File Terdampak:**
+  - src/components/job/JobAuthModal.tsx
+
+
+## Kategori: Backend (Integrasi Autentikasi Modal Job)
+- **Status:** Selesai
+- **Perubahan:**
+  - Menghubungkan form otentikasi di dalam JobAuthModal dengan SDK Client Firebase (signInWithEmailAndPassword).
+  - Memanggil *server action* createSession untuk men-*set* *cookie* sesi secara aman (Server-Side) setelah token ID Firebase didapatkan.
+  - Menambahkan *state* penanganan pesan *error* dinamis (jika *password* salah).
+  - Jika proses *login* berhasil, halaman otomatis memuat ulang (*reload*) dan modal akan tertutup karena status isLoggedIn menjadi 	rue.
+- **File Terdampak:**
+  - src/components/job/JobAuthModal.tsx
+
+
+## Kategori: Frontend (Penyesuaian Lebar Sidebar Job Subdomain)
+- **Status:** Selesai
+- **Perubahan:**
+  - Memperbarui sistem *Grid Layout* di src/app/job-subdomain/layout.tsx.
+  - Mengganti alokasi kolom md:grid-cols-4 (dimana *sidebar* mengambil 25%) menjadi sistem ukuran absolut kustom lg:grid-cols-[240px_1fr_280px] agar *sidebar* profil di sisi kiri mengecil menjadi 240px dan bersifat permanen (tidak melar).
+  - Menyesuaikan batas kemunculan *sidebar* kanan menjadi mode Desktop/Laptop luas (lg:block) agar tidak berantakan di layar menengah.
+- **File Terdampak:**
+  - src/app/job-subdomain/layout.tsx
+ 
+ # #   K a t e g o r i :   F r o n t e n d   ( J o b   S u b d o m a i n   R i g h t   S i d e b a r   &   L a y o u t   R e d e s i g n )  
+ -   * * S t a t u s : * *   S e l e s a i  
+ -   * * P e r u b a h a n : * *  
+     -   M e n g u b a h   S i d e b a r   K a n a n   ( T o p   P e r u s a h a a n )   m e n j a d i   d a f t a r   A r t i k e l   K a r i r   T e r b a r u   y a n g   t e r h u b u n g   d i n a m i s   k e   d a t a b a s e   b l o g   C M S   d e n g a n   r e g e x / n o d e   s c r i p t .  
+     -   M e n g g a n t i   i c o n   L i n k   m e n j a d i   i c o n   G l o b e   p a d a   a r e a   l a m p i r a n   C r e a t e   P o s t   d i   F e e d C l i e n t .  
+     -   M e n a m b a h k a n   t o m b o l   f i t u r   S u r a t   d i   f o r m   C r e a t e   P o s t   ( F e e d C l i e n t ) .  
+     -   M e r o m b a k   L e f t   S i d e b a r   m e n j a d i   d a s h b o a r d - s t y l e   ( f i x e d   p o s i t i o n ,   f u l l   h e i g h t ,   m e n y a t u   d e n g a n   k i r i   d a n   t o p   n a v b a r ,   b a c k g r o u n d   a b u - a b u   # F 2 F 2 F 2 ) .  
+ -   * * F i l e   T e r d a m p a k : * *  
+     -   s r c / a p p / j o b - s u b d o m a i n / l a y o u t . t s x  
+     -   s r c / c o m p o n e n t s / j o b / F e e d C l i e n t . t s x  
+ 

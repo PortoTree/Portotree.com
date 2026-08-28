@@ -87,8 +87,14 @@ export default function AnnouncementCarousel() {
   }, [announcements.length, isLoading]);
 
   const handleNext = () => {
-    setIsTransitioning(true);
-    setCurrentIndex((prev) => prev + 1);
+    setCurrentIndex((prev) => {
+      if (prev >= announcements.length) {
+        setIsTransitioning(false);
+        return 0;
+      }
+      setIsTransitioning(true);
+      return prev + 1;
+    });
   };
 
   const handlePrev = () => {
@@ -115,7 +121,7 @@ export default function AnnouncementCarousel() {
 
   if (isLoading) {
     return (
-      <div className="bg-slate-900 rounded-3xl p-6 shadow-md border border-slate-800 text-white h-[220px] flex items-center justify-center">
+      <div className="bg-slate-900 rounded-3xl p-6 shadow-md border border-slate-800 text-white min-h-[220px] flex items-center justify-center">
         <div className="animate-pulse flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
           <span className="text-sm text-slate-400">Memuat info...</span>
@@ -131,9 +137,10 @@ export default function AnnouncementCarousel() {
 
   // Real active index (untuk dots)
   const activeDotIndex = currentIndex === announcements.length ? 0 : currentIndex;
+  console.log("Carousel state:", { currentIndex, activeDotIndex, length: announcements.length, isClient: typeof window !== "undefined" });
 
   return (
-    <div className="relative rounded-3xl shadow-md overflow-hidden group h-[220px] bg-slate-900 border border-slate-800">
+    <div className="relative rounded-3xl shadow-md overflow-hidden group min-h-[220px] bg-slate-900 border border-slate-800">
       
       {/* Track container for sliding effect */}
       <div 
@@ -156,11 +163,11 @@ export default function AnnouncementCarousel() {
                 <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold mb-4 border ${theme.badgeBg}`}>
                   <IconComponent className="w-3.5 h-3.5" /> {ann.badgeText}
                 </div>
-                <h3 className="text-xl font-bold mb-2 line-clamp-1">{ann.title}</h3>
-                <p className="text-slate-300 text-sm leading-relaxed mb-4 line-clamp-2">
+                <h3 className="text-xl font-bold mb-2">{ann.title}</h3>
+                <p className="text-slate-300 text-sm leading-relaxed mb-4">
                   {ann.description}
                 </p>
-                <Link href={ann.linkUrl} className={`text-sm font-semibold transition-colors flex items-center gap-1 w-fit ${theme.btn}`}>
+                <Link href={ann.linkUrl?.startsWith("/") ? `https://portotree.com${ann.linkUrl}` : (ann.linkUrl || "#")} className={`text-sm font-semibold transition-colors flex items-center gap-1 w-fit ${theme.btn}`}>
                   Pelajari Selengkapnya <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
