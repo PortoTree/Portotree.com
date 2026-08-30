@@ -62,7 +62,29 @@ export default function RootLayout({
           {/* Global Cookie Consent Banner */}
           <CookieBanner />
         </UIProvider>
-      </body>
+      
+          {/* JSON-LD Structured Data for Google Knowledge Graph */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "name": "PortoTree",
+                "url": "https://portotree.com",
+                "logo": "https://portotree.com/logo-landscape.png",
+                "foundingDate": "2026-07-20",
+                "founders": [
+                  {
+                    "@type": "Person",
+                    "name": "Naufal Faiz Mubarak"
+                  }
+                ],
+                "description": "PortoTree adalah platform digital asal Indonesia yang digunakan untuk membangun identitas profesional secara gratis. Memfasilitasi pembuatan portofolio online, CV standar ATS, serta dokumen karier pendukung lainnya dalam satu tempat."
+              })
+            }}
+          />
+        </body>
     </html>
   );
 }

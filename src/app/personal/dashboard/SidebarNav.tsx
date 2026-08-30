@@ -53,7 +53,7 @@ export default function SidebarNav({ isPortofind }: { isPortofind?: boolean }) {
         {/* DESKTOP FOOTER */}
         <div className={`p-5 mt-auto border-t border-slate-200 bg-slate-50/80 transition-all duration-300 ${isPortofind ? 'opacity-0 hidden group-hover/sidebar:opacity-100 group-hover/sidebar:block' : 'opacity-100 block'}`}>
           <a 
-            href="https://chat.whatsapp.com/EinEUnLQthc3M0wrlyRuhR"
+            href="https://t.me/csportotree"
             target="_blank"
             rel="noopener noreferrer"
             className="block group bg-white border border-slate-200 p-3 rounded-xl shadow-sm hover:bg-red-50 hover:border-red-200 hover:shadow-md transition-all"
@@ -63,7 +63,7 @@ export default function SidebarNav({ isPortofind }: { isPortofind?: boolean }) {
               <span>Mengalami masalah?</span>
             </div>
             <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-              Join grub whatsapp kami untuk memberikan pesan kritik dan saran
+              Hubungi telegram kami untuk memberikan pesan, kritik, dan saran
             </p>
           </a>
         </div>
@@ -135,7 +135,7 @@ export default function SidebarNav({ isPortofind }: { isPortofind?: boolean }) {
             {/* MOBILE FOOTER */}
             <div className="p-5 mt-auto border-t border-slate-200 bg-slate-50/80">
               <a 
-                href="https://chat.whatsapp.com/EinEUnLQthc3M0wrlyRuhR"
+                href="https://t.me/csportotree"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block group bg-white border border-slate-200 p-3 rounded-xl shadow-sm hover:bg-red-50 hover:border-red-200 hover:shadow-md transition-all"
@@ -145,7 +145,7 @@ export default function SidebarNav({ isPortofind }: { isPortofind?: boolean }) {
                   <span>Mengalami masalah?</span>
                 </div>
                 <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                  Join grub whatsapp kami untuk memberikan pesan kritik dan saran
+                  Hubungi telegram kami untuk memberikan pesan, kritik, dan saran
                 </p>
               </a>
             </div>

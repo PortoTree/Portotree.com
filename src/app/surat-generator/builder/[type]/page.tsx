@@ -574,11 +574,11 @@ export default function SuratBuilderPage({ params }: { params: Promise<{ type: s
           
           <div className="hidden lg:block h-6 w-px bg-slate-200 mx-1"></div>
           <a 
-            href="https://chat.whatsapp.com/EinEUnLQthc3M0wrlyRuhR"
+            href="https://t.me/csportotree"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors border border-red-100 hover:border-red-200 group shrink-0"
-            title="Join grub whatsapp kami untuk memberikan pesan kritik dan saran"
+            title="Hubungi telegram kami untuk memberikan pesan, kritik, dan saran"
           >
             <Info className="w-4 h-4 group-hover:text-red-700 transition-colors shrink-0" />
             <span className="text-[10px] md:text-xs font-bold group-hover:text-red-700 transition-colors whitespace-nowrap">

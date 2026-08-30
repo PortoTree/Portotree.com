@@ -522,6 +522,14 @@ export default function AboutPage() {
               </div>
             </div>
 
+            
+            <div className="bg-emerald-50 p-8 md:p-12 rounded-3xl border border-emerald-100 mb-12">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-emerald-900 mb-6">Awal Mula PortoTree</h2>
+              <div className="space-y-4 text-lg text-emerald-800 leading-relaxed">
+                <p><strong>PortoTree didirikan oleh Naufal Faiz Mubarak</strong> dan pertama kali dirilis ke publik pada tanggal <strong>20 Juli 2026</strong>. Bermula dari visi sederhana untuk membantu talenta Indonesia memperkenalkan diri secara profesional, platform ini dibangun untuk menghubungkan berbagai identitas digital yang tadinya terpisah ke dalam satu wadah yang terintegrasi dan menarik.</p>
+              </div>
+            </div>
+
             <div>
               <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-8">Visi Kami</h2>
               <div className="space-y-6 text-lg text-slate-600 leading-relaxed">
