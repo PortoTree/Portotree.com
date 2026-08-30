@@ -6,14 +6,14 @@ import { usePathname } from "next/navigation";
 import { Home, BarChart2, Settings, User, Globe, FileText, CreditCard, Briefcase, Mail, Info } from "lucide-react";
 
 const navItems = [
-  { href: "/personal/dashboard", label: "Dashboard", icon: Home, exact: true },
-  { href: "/personal/dashboard/statistik", label: "Statistik", icon: BarChart2, exact: true },
-  // { href: "/personal/dashboard/portofind", label: "Portofind", icon: Briefcase, badge: "Progress" },
-  { href: "/personal/dashboard/portofolio", label: "Portofolio", icon: Globe },
-  { href: "/personal/dashboard/resume", label: "CV Builder", icon: FileText },
-  { href: "/personal/dashboard/surat-generator", label: "Surat generator", icon: Mail },
-  { href: "/personal/dashboard/langganan", label: "Langganan", icon: CreditCard },
-  { href: "/personal/dashboard/account", label: "Akun", icon: User },
+  { href: "/p/dashboard", label: "Dashboard", icon: Home, exact: true },
+  { href: "/p/statistik", label: "Statistik", icon: BarChart2, exact: true },
+  // { href: "/p/portofind", label: "Portofind", icon: Briefcase, badge: "Progress" },
+  { href: "/p/portofolio", label: "Portofolio", icon: Globe },
+  { href: "/p/resume", label: "CV Builder", icon: FileText },
+  { href: "/p/surat-generator", label: "Surat generator", icon: Mail },
+  { href: "/p/langganan", label: "Langganan", icon: CreditCard },
+  { href: "/p/account", label: "Akun", icon: User },
 ];
 
 export default function SidebarNav({ isPortofind }: { isPortofind?: boolean }) {

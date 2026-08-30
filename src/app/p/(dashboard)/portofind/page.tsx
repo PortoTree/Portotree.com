@@ -60,7 +60,7 @@ export default async function PortofindPage() {
             Untuk dapat mengakses dan menggunakan fitur <strong className="text-emerald-400">Portofind</strong> (Job Portal), Anda wajib memiliki setidaknya satu <strong className="text-slate-200">Portofolio</strong> atau <strong className="text-slate-200">Resume/CV</strong> di PortoTree.
           </p>
           <div className="flex flex-col w-full gap-3">
-            <Link href="/personal/dashboard/portofolio" className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-emerald-600 text-white font-bold rounded-2xl shadow-md shadow-emerald-900/20 hover:bg-emerald-500 hover:shadow-lg hover:-translate-y-0.5 transition-all border border-emerald-500">
+            <Link href="/p/portofolio" className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-emerald-600 text-white font-bold rounded-2xl shadow-md shadow-emerald-900/20 hover:bg-emerald-500 hover:shadow-lg hover:-translate-y-0.5 transition-all border border-emerald-500">
               <Briefcase className="w-5 h-5" />
               Buat Portofolio Sekarang
             </Link>
@@ -69,7 +69,7 @@ export default async function PortofindPage() {
               <span className="flex-shrink-0 mx-4 text-slate-500 text-sm font-medium">ATAU</span>
               <div className="flex-grow border-t border-slate-800"></div>
             </div>
-            <Link href="/personal/dashboard/resume" className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-transparent text-blue-400 font-bold rounded-2xl border-2 border-slate-700 hover:border-blue-500 hover:bg-blue-950/30 transition-all">
+            <Link href="/p/resume" className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-transparent text-blue-400 font-bold rounded-2xl border-2 border-slate-700 hover:border-blue-500 hover:bg-blue-950/30 transition-all">
               <FileText className="w-5 h-5" />
               Buat Resume / CV
             </Link>

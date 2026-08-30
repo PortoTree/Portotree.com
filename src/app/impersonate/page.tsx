@@ -24,7 +24,7 @@ function ImpersonateContent() {
         const idToken = await userCred.user.getIdToken();
         const res = await createSession(idToken);
         if (res.success) {
-          router.replace("/personal/dashboard");
+          router.replace("/p/dashboard");
         } else {
           setError(res.error || "Gagal membuat sesi");
         }

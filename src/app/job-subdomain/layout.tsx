@@ -93,10 +93,10 @@ export default async function JobLayout({ children }: { children: React.ReactNod
                     </div>
                   )}
                   <div className="mt-4 flex justify-center gap-2">
-                    <Link href="https://portotree.com/personal/dashboard/account" className="px-5 py-1.5 bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100 hover:text-slate-800 font-semibold text-xs rounded-full transition-colors flex items-center gap-1.5">
+                    <Link href="https://portotree.com/p/account" className="px-5 py-1.5 bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100 hover:text-slate-800 font-semibold text-xs rounded-full transition-colors flex items-center gap-1.5">
                       Profil
                     </Link>
-                    <Link href="https://portotree.com/personal/dashboard" className="px-5 py-1.5 bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100 hover:text-emerald-700 font-semibold text-xs rounded-full transition-colors flex items-center gap-1.5">
+                    <Link href="https://portotree.com/p" className="px-5 py-1.5 bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100 hover:text-emerald-700 font-semibold text-xs rounded-full transition-colors flex items-center gap-1.5">
                       Dashboard
                     </Link>
                   </div>

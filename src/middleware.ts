@@ -14,7 +14,7 @@ export function middleware(req: NextRequest) {
 
   // List of paths that require authentication on the main domain
   const protectedPaths = [
-    '/personal/dashboard',
+    '/p',
     '/resume-builder',
     '/surat-generator'
   ];

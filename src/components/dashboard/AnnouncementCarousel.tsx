@@ -43,7 +43,7 @@ const defaultAnnouncements: Announcement[] = [
     title: "Tingkatkan Peluang Karir",
     description: "Dapatkan akses ke 50+ template CV eksklusif standar HR dengan melakukan upgrade akun Anda hari ini.",
     badgeText: "Promo Spesial",
-    linkUrl: "/personal/dashboard/langganan",
+    linkUrl: "/p/langganan",
     themeStyle: "amber",
     iconType: "Gift",
     isActive: true,

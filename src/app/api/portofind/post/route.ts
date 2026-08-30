@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
     const attachments = [];
-    if (showCv) attachments.push({ type: 'cv', label: 'CV / Resume', url: `/personal/dashboard/resume` });
+    if (showCv) attachments.push({ type: 'cv', label: 'CV / Resume', url: `/p/resume` });
     if (showPortfolio) attachments.push({ type: 'portfolio', label: 'Portofolio', url: `/p/${author.username}` });
 
     const docRef = await adminDb.collection('portofind_posts').add({

@@ -15,7 +15,7 @@ const DUMMY_CHATS = [
 
 export default function DashboardRightSidebarClient() {
   const pathname = usePathname();
-  const isPortofind = pathname === "/personal/dashboard/portofind" || pathname.startsWith("/personal/dashboard/portofind/");
+  const isPortofind = pathname === "/p/portofind" || pathname.startsWith("/p/portofind/");
   const [isLocked, setIsLocked] = useState(false);
 
   // Determine if it should act as collapsible

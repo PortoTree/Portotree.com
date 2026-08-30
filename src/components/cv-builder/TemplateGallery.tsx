@@ -67,7 +67,7 @@ export function TemplateGallery({ isPublic = false }: { isPublic?: boolean }) {
         <div className="mb-6 md:mb-8">
           <div className="flex items-center gap-3 md:gap-4 mb-1.5 md:mb-2">
             <a 
-              href="/personal/dashboard/resume" 
+              href="/p/resume" 
               className="p-2 -ml-2 rounded-full hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors"
               title="Kembali ke CV Builder"
             >

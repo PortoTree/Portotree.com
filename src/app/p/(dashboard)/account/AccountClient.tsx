@@ -181,7 +181,7 @@ export default function AccountClient({ user, stats, portfolioData }: { user: an
                       <Clock className="w-4 h-4" />
                       AKUN REGULER (FREE)
                     </div>
-                    <Link href="/personal/dashboard/langganan" className="text-[11px] font-bold text-emerald-600 hover:text-emerald-700 underline underline-offset-2 mt-1">
+                    <Link href="/p/langganan" className="text-[11px] font-bold text-emerald-600 hover:text-emerald-700 underline underline-offset-2 mt-1">
                       Upgrade ke Premium
                     </Link>
                   </div>

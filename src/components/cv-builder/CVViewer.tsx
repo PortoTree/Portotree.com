@@ -191,7 +191,7 @@ export function CVViewer({ data, forceScale, hideZoomControls, isPremium }: CVVi
             
             <div className="flex flex-col gap-3">
               <button 
-                onClick={() => router.push('/personal/dashboard/langganan')}
+                onClick={() => router.push('/p/langganan')}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg active:scale-[0.98]"
               >
                 Lihat Paket Langganan

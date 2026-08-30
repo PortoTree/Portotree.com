@@ -16,7 +16,7 @@ export default function DashboardSidebarClient({
   logoutAction: () => Promise<void>;
 }) {
   const pathname = usePathname();
-  const isPortofind = pathname === "/personal/dashboard/portofind" || pathname.startsWith("/personal/dashboard/portofind/");
+  const isPortofind = pathname === "/p/portofind" || pathname.startsWith("/p/portofind/");
 
   // The wrapper occupies fixed width to push the main content
   const wrapperWidthClass = isPortofind ? "md:w-[80px]" : "md:w-64";

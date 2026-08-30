@@ -704,7 +704,7 @@ export default function SuratGeneratorPage() {
             
             <div className="flex flex-col gap-3 w-full">
               <button 
-                onClick={() => router.push('/personal/dashboard/langganan')}
+                onClick={() => router.push('/p/langganan')}
                 className="w-full py-3 px-4 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all active:scale-95 shadow-md shadow-emerald-200 flex items-center justify-center gap-2"
               >
                 Lihat Paket Langganan

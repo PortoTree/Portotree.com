@@ -31,7 +31,7 @@ const DUMMY_REELS = [
     description: 'Sebuah eksplorasi desain untuk aplikasi e-commerce fashion lokal. Fokus ke clean UI dan seamless checkout experience.',
     skills: ['Figma', 'UI Design', 'Prototyping'],
     attachments: [
-      { type: 'portfolio', label: 'Portofolio', url: '/personal/dashboard/portofolio' }
+      { type: 'portfolio', label: 'Portofolio', url: '/p/portofolio' }
     ],
   },
   {
@@ -302,13 +302,13 @@ export default function PortofindClient() {
             setShowOwnPostModal(false);
           } else {
             alert('Postingan tidak ditemukan atau sudah kedaluwarsa');
-            window.history.replaceState(null, '', '/personal/dashboard/portofind');
+            window.history.replaceState(null, '', '/p/portofind');
           }
           hasCheckedUrl.current = true;
         })
         .catch(err => {
           console.error('[PortofindClient] Gagal load shared post:', err);
-          window.history.replaceState(null, '', '/personal/dashboard/portofind');
+          window.history.replaceState(null, '', '/p/portofind');
           hasCheckedUrl.current = true;
         });
     }
@@ -589,7 +589,7 @@ export default function PortofindClient() {
     if (id) {
       window.history.replaceState(null, '', `?v=${id}`);
     } else {
-      window.history.replaceState(null, '', '/personal/dashboard/portofind');
+      window.history.replaceState(null, '', '/p/portofind');
     }
   };
 

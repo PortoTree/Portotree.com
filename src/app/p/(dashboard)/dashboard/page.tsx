@@ -100,7 +100,7 @@ export default function DashboardMainPage() {
         {/* Step 3: Kiri Atas (Top Left) */}
         <div className={`transition-all duration-1000 absolute top-16 left-4 md:top-20 md:left-12 lg:left-16 max-w-[200px] md:max-w-[260px] z-10 ${activeStep >= 3 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95 pointer-events-none'}`}>
           <Link 
-            href="/personal/dashboard/portofolio"
+            href="/p/portofolio"
             className={`block bg-emerald-50/95 backdrop-blur-sm border border-emerald-200 p-2.5 md:p-4 rounded-xl md:rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all ${activeStep >= 3 ? 'anim-float-delay-2' : ''}`}
           >
             <div className="flex flex-row md:flex-col items-center md:items-start gap-2.5 md:gap-0">
@@ -124,7 +124,7 @@ export default function DashboardMainPage() {
         {/* Step 2: Kanan Tengah/Atas (Right Side, Middle) */}
         <div className={`transition-all duration-1000 absolute top-[40%] md:top-[35%] right-2 md:right-8 max-w-[200px] md:max-w-[260px] z-10 ${activeStep >= 2 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95 pointer-events-none'}`}>
           <Link 
-            href="/personal/dashboard/surat-generator"
+            href="/p/surat-generator"
             className={`block bg-blue-50/95 backdrop-blur-sm border border-blue-200 p-2.5 md:p-4 rounded-xl md:rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all ${activeStep >= 2 ? 'anim-float-delay-1' : ''}`}
           >
             <div className="flex flex-row md:flex-col items-center md:items-start gap-2.5 md:gap-0">
@@ -148,7 +148,7 @@ export default function DashboardMainPage() {
         {/* Step 1: Kiri Bawah (Bottom Left) */}
         <div className={`transition-all duration-1000 absolute bottom-[22%] left-6 md:bottom-[15%] md:left-12 lg:left-24 max-w-[200px] md:max-w-[260px] z-10 ${activeStep >= 1 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95 pointer-events-none'}`}>
           <Link 
-            href="/personal/dashboard/resume"
+            href="/p/resume"
             className={`block bg-amber-50/95 backdrop-blur-sm border border-amber-200 p-2.5 md:p-4 rounded-xl md:rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all ${activeStep >= 1 ? 'anim-float' : ''}`}
           >
             <div className="flex flex-row md:flex-col items-center md:items-start gap-2.5 md:gap-0">

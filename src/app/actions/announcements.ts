@@ -92,7 +92,7 @@ export async function saveAnnouncement(data: Omit<Announcement, "id" | "createdA
       });
     }
     
-    revalidatePath("/personal/dashboard");
+    revalidatePath("/p/dashboard");
     revalidatePath("/own-subdomain/announcements");
     return { success: true };
   } catch (error: any) {
@@ -104,7 +104,7 @@ export async function saveAnnouncement(data: Omit<Announcement, "id" | "createdA
 export async function deleteAnnouncement(id: string): Promise<{ success: boolean; error?: string }> {
   try {
     await adminDb.collection(COLLECTION).doc(id).delete();
-    revalidatePath("/personal/dashboard");
+    revalidatePath("/p/dashboard");
     revalidatePath("/own-subdomain/announcements");
     return { success: true };
   } catch (error: any) {
@@ -118,7 +118,7 @@ export async function toggleAnnouncementStatus(id: string, currentStatus: boolea
     await adminDb.collection(COLLECTION).doc(id).update({
       isActive: !currentStatus
     });
-    revalidatePath("/personal/dashboard");
+    revalidatePath("/p/dashboard");
     revalidatePath("/own-subdomain/announcements");
     return { success: true };
   } catch (error: any) {

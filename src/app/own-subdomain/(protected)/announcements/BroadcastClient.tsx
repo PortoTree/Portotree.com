@@ -60,7 +60,7 @@ export default function BroadcastClient({ initialData }: { initialData: Announce
         title: "",
         description: "",
         badgeText: "Fitur Baru",
-        linkUrl: "/personal/dashboard",
+        linkUrl: "/p/dashboard",
         themeStyle: "indigo",
         iconType: "Sparkles",
         isActive: true
@@ -210,7 +210,7 @@ export default function BroadcastClient({ initialData }: { initialData: Announce
                     required
                     value={formData.linkUrl}
                     onChange={(e) => setFormData({...formData, linkUrl: e.target.value})}
-                    placeholder="Contoh: /personal/dashboard/langganan"
+                    placeholder="Contoh: /p/langganan"
                     className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none"
                   />
                 </div>

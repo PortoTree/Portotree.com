@@ -36,7 +36,7 @@ export default function LoginPage() {
       }
 
       // 4. Redirect to dashboard
-      router.push("/personal/dashboard");
+      router.push("/p/dashboard");
     } catch (err: any) {
       console.error("Login error:", err);
       const code = err.code;
