@@ -19,6 +19,23 @@ export default function SuratGeneratorPage() {
   const itemsPerPage = 5;
 
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (activeDropdown) {
+        const target = event.target as Element;
+        if (!target.closest('.action-dropdown-container')) {
+          setActiveDropdown(null);
+        }
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [activeDropdown]);
+
   const [renameModalOpen, setRenameModalOpen] = useState(false);
   const [renameDraft, setRenameDraft] = useState<any>(null);
   const [newTitle, setNewTitle] = useState("");
@@ -188,11 +205,18 @@ export default function SuratGeneratorPage() {
   }, []);
 
   const handleDelete = (draftKey: string) => {
-    if (confirm("Apakah Anda yakin ingin menghapus draft surat ini?")) {
-      localStorage.removeItem(draftKey);
-      setSavedLetters(prev => prev.filter(s => s.draftKey !== draftKey));
-      setActiveDropdown(null);
-    }
+    showConfirm({
+      title: "Hapus Surat",
+      message: "Apakah Anda yakin ingin menghapus draft surat ini? Tindakan ini tidak dapat dibatalkan.",
+      variant: "danger",
+      confirmText: "Ya, Hapus",
+      cancelText: "Batal",
+      onConfirm: () => {
+        localStorage.removeItem(draftKey);
+        setSavedLetters(prev => prev.filter(s => s.draftKey !== draftKey));
+      }
+    });
+    setActiveDropdown(null);
   };
 
   const handleDuplicate = (letter: any) => {
@@ -351,14 +375,14 @@ export default function SuratGeneratorPage() {
         <div className="mb-10">
           <h2 className="text-xl font-bold text-slate-800 mb-6">Surat kamu</h2>
           
-          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hidden md:block">
-            <div className="overflow-x-auto">
+          <div className="bg-white border border-slate-200 rounded-xl shadow-sm hidden md:block">
+            <div className="w-full">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-slate-50 border-b border-slate-200 text-sm text-slate-500">
-                    <th className="py-4 px-6 font-semibold w-[40%]">Nama Surat</th>
+                    <th className="py-4 px-6 font-semibold w-[40%] rounded-tl-xl">Nama Surat</th>
                     <th className="py-4 px-6 font-semibold whitespace-nowrap">Terakhir Diubah</th>
-                    <th className="py-4 px-6 font-semibold text-right">Aksi</th>
+                    <th className="py-4 px-6 font-semibold text-right rounded-tr-xl">Aksi</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -405,7 +429,7 @@ export default function SuratGeneratorPage() {
                           </button>
                           
                           {/* Three dots menu */}
-                          <div className="relative">
+                          <div className="relative action-dropdown-container">
                             <button
                               onClick={() => setActiveDropdown(activeDropdown === letter.draftKey ? null : letter.draftKey)}
                               className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-all active:scale-95 ml-1"
@@ -422,20 +446,20 @@ export default function SuratGeneratorPage() {
                                     setRenameModalOpen(true);
                                     setActiveDropdown(null);
                                   }}
-                                  className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                                  className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center gap-2 font-medium"
                                 >
                                   <Pencil className="w-4 h-4 text-slate-400" /> Rename
                                 </button>
                                 <button
                                   onClick={() => handleDuplicate(letter)}
-                                  className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                                  className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center gap-2 font-medium"
                                 >
                                   <Copy className="w-4 h-4 text-slate-400" /> Duplicate
                                 </button>
                                 <div className="h-px bg-slate-100 my-1"></div>
                                 <button
                                   onClick={() => handleDelete(letter.draftKey)}
-                                  className="w-full text-left px-4 py-2 text-[13px] text-red-600 hover:bg-red-50 flex items-center gap-2"
+                                  className="w-full text-left px-4 py-2 text-[13px] text-red-600 hover:bg-red-100 hover:text-red-700 transition-colors flex items-center gap-2 font-medium"
                                 >
                                   <Trash2 className="w-4 h-4 text-red-400" /> Delete
                                 </button>
@@ -461,7 +485,7 @@ export default function SuratGeneratorPage() {
                     <h3 className="font-semibold text-slate-800 text-[15px] leading-tight line-clamp-2">{letter.title}</h3>
                   </div>
                   {/* three dots absolute to top right */}
-                  <div className="absolute top-3 right-2">
+                  <div className="absolute top-3 right-2 action-dropdown-container">
                     <button
                       onClick={() => setActiveDropdown(activeDropdown === letter.draftKey ? null : letter.draftKey)}
                       className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-all active:scale-95"
@@ -478,20 +502,20 @@ export default function SuratGeneratorPage() {
                             setRenameModalOpen(true);
                             setActiveDropdown(null);
                           }}
-                          className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                          className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center gap-2 font-medium"
                         >
                           <Pencil className="w-4 h-4 text-slate-400" /> Rename
                         </button>
                         <button
                           onClick={() => handleDuplicate(letter)}
-                          className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                          className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center gap-2 font-medium"
                         >
                           <Copy className="w-4 h-4 text-slate-400" /> Duplicate
                         </button>
                         <div className="h-px bg-slate-100 my-1"></div>
                         <button
                           onClick={() => handleDelete(letter.draftKey)}
-                          className="w-full text-left px-4 py-2 text-[13px] text-red-600 hover:bg-red-50 flex items-center gap-2"
+                          className="w-full text-left px-4 py-2 text-[13px] text-red-600 hover:bg-red-100 hover:text-red-700 transition-colors flex items-center gap-2 font-medium"
                         >
                           <Trash2 className="w-4 h-4 text-red-400" /> Delete
                         </button>

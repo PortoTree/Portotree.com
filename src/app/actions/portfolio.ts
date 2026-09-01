@@ -40,6 +40,16 @@ export async function checkUsername(username: string): Promise<{ available: bool
       return { available: false, error: "Username maksimal 30 karakter" };
     }
 
+    const restrictedKeywords = [
+      'dashboard', 'account', 'portofolio', 'resume', 'settings', 
+      'statistik', 'surat-generator', 'langganan', 'portofind',
+      'api', 'blog', 'admin', 'login', 'register', 'auth', 'p'
+    ];
+    
+    if (restrictedKeywords.includes(username.toLowerCase())) {
+      return { available: false, error: `Username "${username}" tidak dapat digunakan karena merupakan kata kunci sistem.` };
+    }
+
     const doc = await adminDb.collection("usernames").doc(username).get();
     if (doc.exists) {
       return { available: false, error: "Username sudah dipakai" };
