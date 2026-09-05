@@ -216,8 +216,24 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
 
       <div className="flex flex-col xl:flex-row gap-6 items-start">
         <div className="flex-1 w-full space-y-6 min-w-0">
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+          <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 min-h-[calc(100vh-140px)] flex flex-col">
             <div className="space-y-2">
+              <h2 className="text-xl font-extrabold text-slate-800 mb-4 border-b border-slate-100 pb-4">Kanvas Artikel</h2>
+              <RichTextEditor 
+                value={formData.content}
+                onChange={(html) => setFormData(prev => ({ ...prev, content: html }))}
+                placeholder="Tulis artikel Anda di sini..."
+                className="min-h-[400px] flex-1"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full xl:w-[380px] shrink-0 space-y-6 xl:sticky xl:top-6 xl:h-[calc(100vh-48px)] xl:overflow-y-auto no-scrollbar pb-6">
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <div className="space-y-4">
+              <h3 className="font-bold text-slate-900 border-b border-slate-100 pb-2">Informasi Utama</h3>
+              <div className="space-y-2">
               <Label htmlFor="title" className="text-slate-700 font-bold">Judul Artikel</Label>
               <Input 
                 id="title" 
@@ -322,56 +338,11 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
               </div>
             </div>
             
-            <div className="space-y-2">
-              <Label htmlFor="content" className="text-slate-700 font-bold">Isi Artikel</Label>
-              <RichTextEditor 
-                value={formData.content}
-                onChange={(html) => setFormData(prev => ({ ...prev, content: html }))}
-                placeholder="Tulis artikel Anda di sini..."
-                className="min-h-[400px]"
-              />
+            
             </div>
           </div>
-        </div>
 
-        <div className="w-full xl:w-[380px] shrink-0 space-y-6">
-          {/* Actions Sidebar */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-            <div className="space-y-4">
-              <h3 className="font-bold text-slate-900 border-b border-slate-100 pb-2">Perbarui</h3>
-              
-              <Button 
-                onClick={() => handleSave("published")} 
-                disabled={isSubmitting || isDeleting}
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-500/20"
-              >
-                {isSubmitting && formData.status === 'published' ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-                {formData.status === 'published' ? 'Perbarui Publikasi' : 'Publikasikan Sekarang'}
-              </Button>
-              
-              <Button 
-                onClick={() => handleSave("draft")} 
-                disabled={isSubmitting || isDeleting}
-                variant="outline"
-                className={`w-full text-slate-600 hover:text-slate-900 ${formData.status === 'draft' ? 'bg-slate-50' : ''}`}
-              >
-                {isSubmitting && formData.status === 'draft' ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-                Simpan ke Draft
-              </Button>
-
-              <div className="pt-4 border-t border-slate-100">
-                <Button 
-                  onClick={handleDelete} 
-                  disabled={isSubmitting || isDeleting}
-                  variant="ghost"
-                  className="w-full text-red-600 hover:text-red-700 hover:bg-red-50"
-                >
-                  {isDeleting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Trash2 className="w-4 h-4 mr-2" />}
-                  Hapus Artikel
-                </Button>
-              </div>
-            </div>
-          </div>
+          
 
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div className="space-y-4">
@@ -433,6 +404,45 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
                   placeholder="Ringkasan singkat artikel ini..."
                   className="text-sm resize-none h-24 focus-visible:ring-cyan-500"
                 />
+              </div>
+            </div>
+          </div>
+
+          {/* Actions Sidebar dipindah ke bawah */}
+          {/* Actions Sidebar */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <div className="space-y-4">
+              <h3 className="font-bold text-slate-900 border-b border-slate-100 pb-2">Perbarui</h3>
+              
+              <Button 
+                onClick={() => handleSave("published")} 
+                disabled={isSubmitting || isDeleting}
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-500/20"
+              >
+                {isSubmitting && formData.status === 'published' ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                {formData.status === 'published' ? 'Perbarui Publikasi' : 'Publikasikan Sekarang'}
+              </Button>
+              
+              <Button 
+                onClick={() => handleSave("draft")} 
+                disabled={isSubmitting || isDeleting}
+                variant="outline"
+                className={`w-full text-slate-600 hover:text-slate-900 ${formData.status === 'draft' ? 'bg-slate-50' : ''}`}
+              >
+                {isSubmitting && formData.status === 'draft' ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+                Simpan ke Draft
+              </Button>
+
+              <div className="pt-4 border-t border-slate-100">
+                <Button 
+                  onClick={handleDelete} 
+                  disabled={isSubmitting || isDeleting}
+                  variant="ghost"
+                  className="w-full text-red-600 hover:text-red-700 hover:bg-red-50"
+                >
+                  {isDeleting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Trash2 className="w-4 h-4 mr-2" />}
+                  Hapus Artikel
+                </Button>
               </div>
             </div>
           </div>

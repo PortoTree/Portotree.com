@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Bold, Italic, Link as LinkIcon, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronDown, RotateCcw, Table as TableIcon, Search, X, ChevronUp, Quote } from 'lucide-react';
+import { getPublishedBlogs } from "@/app/actions/blog";
+import { Bold, Italic, Link as LinkIcon, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronDown, RotateCcw, Table as TableIcon, Search, X, ChevronUp, Quote, FileSearch } from 'lucide-react';
 
 interface RichTextEditorProps {
   value: string;
@@ -24,6 +25,64 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
   
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  const handleOpenArticleModal = () => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      setSavedSelection(selection.getRangeAt(0));
+    } else {
+      setSavedSelection(null);
+    }
+    setShowArticleModal(true);
+  };
+  
+  const [showArticleModal, setShowArticleModal] = useState(false);
+  const [articleSearchQuery, setArticleSearchQuery] = useState("");
+  const [availableArticles, setAvailableArticles] = useState<any[]>([]);
+  const [isFetchingArticles, setIsFetchingArticles] = useState(false);
+
+  useEffect(() => {
+    if (showArticleModal && availableArticles.length === 0) {
+      setIsFetchingArticles(true);
+      getPublishedBlogs().then(res => {
+        if (res.success && res.data) {
+          setAvailableArticles(res.data);
+        }
+        setIsFetchingArticles(false);
+      });
+    }
+  }, [showArticleModal, availableArticles.length]);
+
+  const filteredArticles = availableArticles.filter(article => 
+    article.title.toLowerCase().includes(articleSearchQuery.toLowerCase()) || 
+    (article.category && article.category.toLowerCase().includes(articleSearchQuery.toLowerCase()))
+  );
+
+  const handleInsertArticle = (article: any) => {
+    const articleHtml = `<a href="https://portotree.com/blog/${article.slug}" target="_blank">${article.title}</a>&nbsp;`;
+    
+    // Restore selection FIRST
+    if (savedSelection) {
+      const selection = window.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(savedSelection);
+      }
+    } else {
+      editorRef.current?.focus();
+    }
+
+    // DO NOT use exec() here because exec() calls editorRef.current?.focus() which resets collapsed selections!
+    document.execCommand('insertHTML', false, articleHtml);
+    
+    if (editorRef.current) {
+      onChange(editorRef.current.innerHTML);
+    }
+    
+    setShowArticleModal(false);
+    setArticleSearchQuery("");
+  };
+
 
   // Sync value when changed externally (e.g. opening different items or resetting form)
   useEffect(() => {
@@ -400,6 +459,13 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
       }
     }
 
+    // Ctrl+Alt+A for inserting article
+    if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a') {
+      e.preventDefault();
+      setShowArticleModal(true);
+      return;
+    }
+    
     if (e.ctrlKey || e.metaKey) {
       // Shortcuts for formatting block (Headings & Paragraph)
       if (e.altKey && e.key >= '0' && e.key <= '6') {
@@ -527,8 +593,16 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
 
         <button 
           type="button" 
+          onMouseDown={(e) => { e.preventDefault(); handleOpenArticleModal(); }}
+          className={`p-1.5 rounded transition-colors text-slate-600 ml-auto ${showArticleModal ? 'bg-emerald-100 text-emerald-700' : 'hover:bg-slate-200'}`} 
+          title="Sisipkan Artikel Terkait (Ctrl+Alt+A)"
+        >
+          <FileSearch size={16} />
+        </button>
+        <button 
+          type="button" 
           onClick={() => setShowSearch(!showSearch)} 
-          className={`p-1.5 rounded transition-colors text-slate-600 ml-auto ${showSearch ? 'bg-emerald-100 text-emerald-700' : 'hover:bg-slate-200'}`} 
+          className={`p-1.5 rounded transition-colors text-slate-600 ml-1 ${showSearch ? 'bg-emerald-100 text-emerald-700' : 'hover:bg-slate-200'}`} 
           title="Cari (Ctrl+F)"
         >
           <Search size={16} />
@@ -592,6 +666,57 @@ export function RichTextEditor({ value, onChange, placeholder, className = "" }:
         data-placeholder={placeholder}
       />
       
+      
+      {showArticleModal && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[80vh]">
+            <div className="px-4 py-3 border-b border-slate-100 flex justify-between items-center">
+              <h3 className="font-semibold text-slate-800">Sisipkan Artikel Terkait</h3>
+              <button type="button" onClick={() => setShowArticleModal(false)} className="text-slate-400 hover:text-slate-600">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-4 border-b border-slate-100">
+              <div className="relative">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input 
+                  autoFocus
+                  type="text" 
+                  value={articleSearchQuery}
+                  onChange={(e) => setArticleSearchQuery(e.target.value)}
+                  placeholder="Cari judul atau kategori artikel..." 
+                  className="w-full border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg pl-9 pr-4 py-2 outline-none text-slate-700 text-sm"
+                />
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto p-2">
+              {isFetchingArticles ? (
+                <div className="text-center p-4 text-sm text-slate-500">Memuat artikel...</div>
+              ) : filteredArticles.length > 0 ? (
+                <div className="space-y-1">
+                  {filteredArticles.map(article => (
+                    <button
+                      key={article.id}
+                      type="button"
+                      onClick={() => handleInsertArticle(article)}
+                      className="w-full text-left p-3 hover:bg-slate-50 rounded-lg transition-colors flex flex-col gap-1 border border-transparent hover:border-slate-100"
+                    >
+                      <span className="font-semibold text-slate-800 text-sm">{article.title}</span>
+                      <div className="flex items-center gap-2 text-xs text-slate-500">
+                        <span className="bg-slate-100 px-2 py-0.5 rounded">{article.category}</span>
+                        <span>{new Date(article.createdAt).toLocaleDateString('id-ID')}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center p-4 text-sm text-slate-500">Tidak ada artikel yang cocok.</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {showLinkModal && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-sm overflow-hidden">

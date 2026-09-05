@@ -24,6 +24,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://portotree.com"),
   title: "PortoTree - Web Portofolio Online",
   description: "Buat web portofolio online profesional tanpa coding dengan PortoTree.",
   openGraph: {
