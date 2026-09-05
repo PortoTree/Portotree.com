@@ -346,6 +346,36 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
 
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div className="space-y-4">
+              <h3 className="font-bold text-slate-900 border-b border-slate-100 pb-2">SEO & Meta</h3>
+              
+              <div className="space-y-2">
+                <Label htmlFor="slug" className="text-sm font-semibold text-slate-700">URL Slug</Label>
+                <Input 
+                  id="slug" 
+                  value={formData.slug}
+                  onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-") }))}
+                  className="text-sm focus-visible:ring-cyan-500"
+                />
+                <p className="text-[11px] text-slate-500 break-all">portotree.com/blog/{formData.slug}</p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="excerpt" className="text-sm font-semibold text-slate-700">Kutipan Pendek (Excerpt)</Label>
+                <Textarea 
+                  id="excerpt" 
+                  value={formData.excerpt}
+                  onChange={(e) => setFormData(prev => ({ ...prev, excerpt: e.target.value }))}
+                  placeholder="Ringkasan singkat artikel ini..."
+                  className="text-sm resize-none h-24 focus-visible:ring-cyan-500"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Actions Sidebar dipindah ke bawah */}
+          {/* Actions Sidebar */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <div className="space-y-4">
               <h3 className="font-bold text-slate-900 border-b border-slate-100 pb-2">Gambar Sampul</h3>
               
               {formData.coverImage ? (
@@ -380,36 +410,6 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-            <div className="space-y-4">
-              <h3 className="font-bold text-slate-900 border-b border-slate-100 pb-2">SEO & Meta</h3>
-              
-              <div className="space-y-2">
-                <Label htmlFor="slug" className="text-sm font-semibold text-slate-700">URL Slug</Label>
-                <Input 
-                  id="slug" 
-                  value={formData.slug}
-                  onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-") }))}
-                  className="text-sm focus-visible:ring-cyan-500"
-                />
-                <p className="text-[11px] text-slate-500 break-all">portotree.com/blog/{formData.slug}</p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="excerpt" className="text-sm font-semibold text-slate-700">Kutipan Pendek (Excerpt)</Label>
-                <Textarea 
-                  id="excerpt" 
-                  value={formData.excerpt}
-                  onChange={(e) => setFormData(prev => ({ ...prev, excerpt: e.target.value }))}
-                  placeholder="Ringkasan singkat artikel ini..."
-                  className="text-sm resize-none h-24 focus-visible:ring-cyan-500"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Actions Sidebar dipindah ke bawah */}
-          {/* Actions Sidebar */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div className="space-y-4">
               <h3 className="font-bold text-slate-900 border-b border-slate-100 pb-2">Perbarui</h3>

@@ -4,7 +4,7 @@ import { getPublishedBlogs, getPublishedCategories } from "@/app/actions/blog";
 import { labelToSlug } from "@/lib/blogCategories";
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, User, ArrowRight, Search, Calendar } from "lucide-react";
+import { Clock, User, ArrowRight, Search, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { NewsletterForm } from "@/components/blog/NewsletterForm";
 
 export const metadata = {
@@ -205,61 +205,84 @@ export default async function BlogPage({
                   ))}
                   
                   {/* PAGINATION UI */}
-                  {totalPages > 1 && (
-                    <div className="flex justify-center items-center gap-2 mt-10">
-                      {currentPage > 1 && (
-                        <Link 
-                          href={`/blog?page=${currentPage - 1}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
-                          className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
-                        >
-                          Sebelumnya
-                        </Link>
-                      )}
-                      
-                      <div className="flex items-center gap-1 mx-2">
-                        {Array.from({ length: totalPages }).map((_, i) => {
-                          const pageNum = i + 1;
-                          const isActive = pageNum === currentPage;
-                          // Simple truncation logic for many pages
-                          if (
-                            totalPages > 5 && 
-                            pageNum !== 1 && 
-                            pageNum !== totalPages && 
-                            (pageNum < currentPage - 1 || pageNum > currentPage + 1)
-                          ) {
-                            if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
-                              return <span key={pageNum} className="text-slate-400 px-1">...</span>;
+                    {totalPages > 1 && (
+                      <div className="flex justify-center items-center gap-1 md:gap-2 mt-10">
+                        
+                        {/* PREV BUTTON */}
+                        {currentPage > 1 ? (
+                          <Link 
+                            href={`/blog?page=${currentPage - 1}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
+                            className="flex items-center justify-center w-9 h-9 md:w-auto md:px-4 md:py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+                            aria-label="Halaman Sebelumnya"
+                          >
+                            <ChevronLeft className="w-4 h-4 md:hidden" />
+                            <span className="hidden md:block">Sebelumnya</span>
+                          </Link>
+                        ) : (
+                          <div className="w-9 h-9 md:w-[104px]"></div>
+                        )}
+                        
+                        {/* NUMBERS */}
+                        <div className="flex items-center gap-1 mx-1 md:mx-2 flex-wrap justify-center">
+                          {Array.from({ length: totalPages }).map((_, i) => {
+                            const pageNum = i + 1;
+                            const isActive = pageNum === currentPage;
+                            
+                            let showPage = false;
+                            let showEllipsis = false;
+
+                            if (totalPages <= 5) {
+                              showPage = true;
+                            } else {
+                              if (pageNum === 1 || pageNum === totalPages || pageNum === currentPage || pageNum === currentPage - 1 || pageNum === currentPage + 1) {
+                                showPage = true;
+                              } else if (pageNum === 2 && currentPage > 3) {
+                                showEllipsis = true;
+                              } else if (pageNum === totalPages - 1 && currentPage < totalPages - 2) {
+                                showEllipsis = true;
+                              }
+                            }
+
+                            if (showEllipsis) {
+                              return <span key={`ellipsis-${pageNum}`} className="text-slate-400 px-1 text-sm">...</span>;
+                            }
+                            
+                            if (showPage) {
+                              return (
+                                <Link
+                                  key={pageNum}
+                                  href={`/blog?page=${pageNum}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
+                                  className={`w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}
+                                >
+                                  {pageNum}
+                                </Link>
+                              );
                             }
                             return null;
-                          }
-                          
-                          return (
-                            <Link
-                              key={pageNum}
-                              href={`/blog?page=${pageNum}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
-                              className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}
-                            >
-                              {pageNum}
-                            </Link>
-                          );
-                        })}
+                          })}
+                        </div>
+  
+                        {/* NEXT BUTTON */}
+                        {currentPage < totalPages ? (
+                          <Link 
+                            href={`/blog?page=${currentPage + 1}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
+                            className="flex items-center justify-center w-9 h-9 md:w-auto md:px-4 md:py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+                            aria-label="Halaman Selanjutnya"
+                          >
+                            <span className="hidden md:block">Selanjutnya</span>
+                            <ChevronRight className="w-4 h-4 md:hidden" />
+                          </Link>
+                        ) : (
+                          <div className="w-9 h-9 md:w-[104px]"></div>
+                        )}
+                        
                       </div>
-
-                      {currentPage < totalPages && (
-                        <Link 
-                          href={`/blog?page=${currentPage + 1}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
-                          className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
-                        >
-                          Selanjutnya
-                        </Link>
-                      )}
-                    </div>
+                    )}
+                  </div>
                   )}
                 </div>
-                )}
-              </div>
-
-              {/* RIGHT COLUMN: Sticky Sidebar */}
+  
+                {/* RIGHT COLUMN: Sticky Sidebar */}
               <div className="hidden lg:block lg:col-span-1">
                 <div className="sticky top-24">
                   <NewsletterForm />
