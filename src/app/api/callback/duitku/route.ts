@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     const apiKey = process.env.DUITKU_API_KEY || 'API_KEY_DUITKU_LU_DISINI'; 
 
     // Generate signature untuk divalidasi
-    const stringToSign = \`\${merchantCode}\${amount}\${merchantOrderId}\`;
+    const stringToSign = `${merchantCode}${amount}${merchantOrderId}`;
     const calcSignature = crypto.createHmac('sha256', apiKey).update(stringToSign).digest('hex');
 
     // Validasi apakah signature cocok (Memastikan ini beneran dikirim dari server Duitku)
@@ -36,10 +36,10 @@ export async function POST(req: NextRequest) {
       if (resultCode === '00') {
         // TODO: UPDATE DATABASE LU DI SINI
         // Contoh: await db.order.update({ where: { id: merchantOrderId }, data: { status: 'PAID' } })
-        console.log(\`✅ [DUITKU] Pembayaran SUKSES! Order ID: \${merchantOrderId}, Ref: \${reference}\`);
+        console.log(`✅ [DUITKU] Pembayaran SUKSES! Order ID: ${merchantOrderId}, Ref: ${reference}`);
       } else {
         // Pembayaran gagal / kedaluwarsa
-        console.log(\`❌ [DUITKU] Pembayaran GAGAL/EXPIRED! Order ID: \${merchantOrderId}\`);
+        console.log(`❌ [DUITKU] Pembayaran GAGAL/EXPIRED! Order ID: ${merchantOrderId}`);
       }
 
       // Wajib dibalas HTTP 200 biar Duitku nggak ngirim ulang (maks 5x)
